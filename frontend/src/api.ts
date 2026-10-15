@@ -1,3 +1,4 @@
+import { reactive } from 'vue'
 import type { Assessment, Chunk, Fragment } from './types'
 
 export class ApiError extends Error {
@@ -9,9 +10,16 @@ export class ApiError extends Error {
   }
 }
 
+// Hosted demo gate state; App.vue shows the invite form while `needed` is true.
+export const invite = reactive({ checked: false, required: false, needed: false })
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, { ...init, headers: { Accept: 'application/json', ...init?.headers } })
   if (!res.ok) {
+    if (res.status === 401 && res.headers.get('content-type')?.includes('json')) {
+      const body = await res.clone().json().catch(() => null)
+      if (body?.detail === 'invite_required') invite.needed = true
+    }
     let detail = res.statusText
     try {
       const body = await res.json()
@@ -57,3 +65,17 @@ export const decide = (id: number, decision: 'approved' | 'rejected', note: stri
     headers: { 'Content-Type': 'application/json', ...auth() },
     body: JSON.stringify({ decision, note }),
   })
+
+export async function checkInvite() {
+  const r = await request<{ required: boolean; ok: boolean }>('/api/invite')
+  Object.assign(invite, { checked: true, required: r.required, needed: r.required && !r.ok })
+}
+
+export async function submitInvite(code: string) {
+  await request<{ ok: boolean }>('/api/invite', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code }),
+  })
+  invite.needed = false
+}

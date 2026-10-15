@@ -1,5 +1,6 @@
 stages:
   - secrets
+  - check
 
 gitleaks:
   stage: secrets
@@ -10,3 +11,28 @@ gitleaks:
     GIT_DEPTH: 0
   script:
     - gitleaks git --redact --verbose .
+
+# Lint and unit tests. Tests that need the loaded database (API, golden parcels, adversarial) skip
+# themselves when no database is reachable; run them locally against a loaded database.
+backend:
+  stage: check
+  image: python:3.13-slim
+  variables:
+    UV_PROJECT_ENVIRONMENT: /tmp/venv
+  before_script:
+    - pip install --quiet uv==0.11.32
+    - cd backend && uv sync --frozen
+  script:
+    - uv run ruff check .
+    - uv run ruff format --check .
+    - uv run pytest -q
+
+frontend:
+  stage: check
+  image: node:22-slim
+  before_script:
+    - cd frontend && npm ci --no-audit --no-fund
+  script:
+    - npx vue-tsc --noEmit
+    - npx vitest run
+    - npx vite build
