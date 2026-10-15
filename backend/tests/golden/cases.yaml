@@ -1,0 +1,54 @@
+# Golden cases: self-selected parcels (vacant or City-owned lots where possible), identified by APN only.
+# Expected values were worked out by hand from the cited code text and the parcel's own data (lot area from
+# the County layer; width and depth from the fitted rectangle), not copied from the engine's output.
+# Hand calculations by Claude Code; Paawan checks them against the code text (decision D17).
+# A value of null means "the engine must not show a number here".
+cases:
+  - apn: "2121005008"   # vacant, Reseda, R1-1, ~60 x 135 ft, 8,100 sq ft
+    status: ok
+    expect:
+      front_yard: 20.0        # LAMC 12.08 C.1: min(20% x 135 = 27, 20)
+      side_yard: 5.0          # 12.08 C.2(a): width 60 >= 50
+      rear_yard: 15.0         # 12.08 C.3
+      max_rfa: 3645           # 12.08 C.5(a): 0.45 x 8,100
+      max_height: 33.0        # 12.21.1: R1, flat land
+      guest_house: false      # 12.08 A.7(a): 8,100 < 10,000
+      lot_minimums: true      # 12.08 C.4: 8,100 >= 5,000 and 60 >= 50
+      adu_state_detached: 800.0
+      jadu: 500.0
+    flags_include: [sb9]
+    flags_exclude: [hillside, fire_rebuild]
+  - apn: "2121016012"   # vacant, Reseda, R1-1, ~50 x 110 ft, 5,452 sq ft
+    status: ok
+    expect:
+      front_yard: 20.0        # min(22, 20)
+      side_yard: 5.0          # width exactly 50 -> not "less than 50 feet"
+      max_rfa: 2453           # 0.45 x 5,452 = 2,453.4
+      lot_minimums: true
+  - apn: "2121002004"   # vacant, Reseda, R1-1, ~25 x 130 ft, 3,249 sq ft (substandard lot)
+    status: ok
+    expect:
+      side_yard: 3.0          # 12.08 C.2(a): 10% x 25 = 2.5, but not less than 3 ft
+      max_rfa: 1462           # 0.45 x 3,249 = 1,462.05
+      lot_minimums: false     # 3,249 < 5,000 and 25 < 50
+  - apn: "4359016023"   # vacant, R1-1, 16,403 sq ft, inside a specific plan
+    status: ok
+    expect:
+      guest_house: true       # 16,403 >= 10,000
+      max_rfa: 7381           # 0.45 x 16,403 = 7,381.35
+    flags_include: [overlay_plan]
+  - apn: "4412014028"   # vacant, Pacific Palisades, R1-1, hillside + coastal + 2025 fire perimeter
+    status: ok
+    expect:
+      front_yard: null        # hillside: flat-land yards withheld
+      max_rfa: null
+      max_height: null
+      guest_house: true       # 11,793 >= 10,000 (12.08 A.7 still applies; hillside rules not modeled)
+    flags_include: [fire_rebuild, hillside, coastal, vhfhsz]
+  - apn: "2126005015"   # vacant, R1-2-RIO: supplemental district not modeled
+    status: ok
+    flags_include: [zone_unmodeled]
+  - apn: "5179003026"   # Boyle Heights: Chapter 1A in effect
+    status: regime_not_modeled
+  - apn: "4327028024"   # Beverly Hills: outside the City
+    status: outside_city

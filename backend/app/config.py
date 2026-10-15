@@ -22,6 +22,11 @@ class Settings(BaseSettings):
 
     log_id_salt: SecretStr = SecretStr("dev-only-salt")
 
+    # Admin review screen. Both must be set or the admin endpoints stay disabled (503).
+    # The hash is "scrypt$<salt hex>$<hash hex>"; create one with `python -m app.api.auth`.
+    admin_username: str | None = None
+    admin_password_scrypt: SecretStr | None = None
+
     # Polite access to public ArcGIS services.
     arcgis_page_delay_s: float = 0.25
     http_user_agent: str = "cover-regulatory-poc/0.1 (research prototype)"
