@@ -134,8 +134,9 @@ def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None
             fy,
             front,
             "ft",
-            f"The lesser of {fy.value('pct')}% of lot depth ({depth:.0f} ft) and {fy.value('max_ft')} ft. Prevailing "
-            "setbacks on the block can require more; not evaluated."
+            f"The lesser of {fy.value('pct')}% of lot depth ({depth:.0f} ft) and {fy.value('max_ft')} ft. Where the block "
+            "has a prevailing setback, the average of neighbouring front yards applies instead (up to 40 ft); not "
+            "evaluated."
             if depth
             else "Lot depth unknown.",
         )
@@ -153,8 +154,11 @@ def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None
                 f"Lot is {width:.0f} ft wide (under 50 ft): {sy.value('narrow_pct')}% of width, but not less "
                 f"than {sy.value('narrow_min_ft')} ft."
             )
-        if sy.value("per_story_ft"):
-            why += f" Add {sy.value('per_story_ft')} ft per story above the second."
+        why += (
+            " This is for a building up to 18 ft tall. For new construction on flat land, each side yard grows by "
+            "1 ft for every 10 ft (or part of 10 ft) of height above 18 ft (LAMC 12.08 C.2(b)), so a 28 ft house "
+            "needs 1 ft more and a 33 ft house 2 ft more."
+        )
     else:
         why = "Lot width unknown."
     items.append(_rule_item("side_yard", "r1_envelope", "Side yards (each, minimum)", sy, side, "ft", why))
@@ -174,7 +178,8 @@ def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None
             rfa_val,
             "sqft",
             f"{rfa.value('ratio')} x lot area ({lot_area:,.0f} sq ft), for a lot outside the Hillside Area and Coastal "
-            "Zone. Some floor area (e.g. part of a garage) is exempt; not evaluated."
+            "Zone. Some floor area (e.g. part of a garage) is exempt, and an encroachment plane starting 20 ft "
+            "above the front and side yards shapes the upper floor; neither is evaluated."
             if lot_area
             else None,
         )
@@ -184,12 +189,19 @@ def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None
     hmax, hlow = h.value("max_ft"), h.value("low_roof_ft")
     hd = (ctx.zone.height_district or "") if ctx.zone else ""
     district = "HD_VL" if hd.endswith("VL") else "HD_XL" if hd.endswith("XL") else None
-    why = f"{hmax} ft, or {hlow} ft where the roof is flat or slopes less than 25%." if hmax and hlow else None
+    why = (
+        f"{hmax} ft, or {hlow} ft where the roof is flat or slopes less than 25%. Where 40% of the homes on the block "
+        "are taller, their average height may apply instead; not evaluated."
+        if hmax and hlow
+        else None
+    )
     if district:
         d = R.load(district, conn)
         if d.value("max_ft") is not None and hmax is not None and d.value("max_ft") < hmax:
             hmax = d.value("max_ft")
             why = f"Height District {hd} limits buildings to {hmax} ft (lower than the R1 limit)."
+            if hlow is not None and hlow < hmax:
+                why += f" The R1 limit of {hlow} ft still applies where the roof is flat or slopes less than 25%."
         h.found.update({f"district_{k}": v for k, v in d.found.items()})
     items.append(_rule_item("max_height", "r1_envelope", "Maximum height", h, hmax, "ft", why))
 
@@ -247,7 +259,7 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[It
             "sqft",
             (
                 f"One detached new ADU up to {st.value('max_sqft'):.0f} sq ft, with side and rear setbacks of no more than "
-                f"{st.value('setback_ft'):.0f} ft and a height up to {st.value('height_ft'):.0f} ft, approved "
+                f"{st.value('setback_ft'):.0f} ft, and a height of at least {st.value('height_ft'):.0f} ft allowed, approved "
                 "ministerially on a lot with a single-family home. Taller limits near transit are not evaluated."
             )
             if None not in (st.value("max_sqft"), st.value("setback_ft"), st.value("height_ft"))
