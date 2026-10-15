@@ -1,98 +1,91 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import {
-  ApiError,
-  clearCredentials,
-  decide,
-  fragments,
-  hasCredentials,
-  setCredentials,
-} from "../api";
-import AppHeader from "../components/AppHeader.vue";
-import QuoteInContext from "../components/QuoteInContext.vue";
-import type { Fragment } from "../types";
+import { computed, ref, watch } from 'vue'
+import { ApiError, clearCredentials, decide, fragments, hasCredentials, setCredentials } from '../api'
+import AppHeader from '../components/AppHeader.vue'
+import QuoteInContext from '../components/QuoteInContext.vue'
+import type { Fragment } from '../types'
 
-type Status = Fragment["status"];
+type Status = Fragment['status']
 const TABS: [Status, string][] = [
-  ["pending", "Waiting for review"],
-  ["invalid", "Failed checks"],
-  ["approved", "Approved"],
-  ["rejected", "Rejected"],
-];
+  ['pending', 'Waiting for review'],
+  ['invalid', 'Failed checks'],
+  ['approved', 'Approved'],
+  ['rejected', 'Rejected'],
+]
 
 const VALIDATION: Record<string, string> = {
-  ok: "Checks passed",
-  unknown_chunk_id: "Cited text not found",
-  quote_not_in_chunk: "Quote not in the source",
-  unknown_parameter: "Unknown parameter",
-  value_not_in_quote: "Number not in quote",
-  unit_mismatch: "Unit mismatch",
-  no_value: "No value",
-  numeric_value_for_non_numeric_parameter: "Number where text expected",
-  stale_chunk: "Source text changed",
-};
+  ok: 'Checks passed',
+  unknown_chunk_id: 'Cited text not found',
+  quote_not_in_chunk: 'Quote not in the source',
+  unknown_parameter: 'Unknown parameter',
+  value_not_in_quote: 'Number not in quote',
+  unit_mismatch: 'Unit mismatch',
+  no_value: 'No value',
+  numeric_value_for_non_numeric_parameter: 'Number where text expected',
+  stale_chunk: 'Source text changed',
+}
 
 // Advisory results of the three-way check (source text, a second model, official sources). Only a person decides.
-const CHECK: Record<NonNullable<Fragment["check_recommendation"]>, string> = {
-  approve: "Checks suggest approve",
-  approve_with_note: "Checks suggest approve, with a note",
-  reject: "Checks suggest reject",
-};
+const CHECK: Record<NonNullable<Fragment['check_recommendation']>, string> = {
+  approve: 'Checks suggest approve',
+  approve_with_note: 'Checks suggest approve, with a note',
+  reject: 'Checks suggest reject',
+}
 const VERDICT: Record<string, string> = {
-  agree: "agrees",
-  agree_with_caveat: "agrees, with a caveat",
-  disagree: "disagrees",
-};
+  agree: 'agrees',
+  agree_with_caveat: 'agrees, with a caveat',
+  disagree: 'disagrees',
+}
 
-const signedIn = ref(hasCredentials());
-const user = ref("");
-const password = ref("");
-const authError = ref<string | null>(null);
-const tab = ref<Status>("pending");
-const family = ref("");
-const advice = ref("");
+const signedIn = ref(hasCredentials())
+const user = ref('')
+const password = ref('')
+const authError = ref<string | null>(null)
+const tab = ref<Status>('pending')
+const family = ref('')
+const advice = ref('')
 const lists = ref<Record<Status, Fragment[]>>({
   pending: [],
   invalid: [],
   approved: [],
   rejected: [],
-});
-const pickedId = ref<number | null>(null);
-const note = ref("");
-const busy = ref(false);
-const actionError = ref<string | null>(null);
+})
+const pickedId = ref<number | null>(null)
+const note = ref('')
+const busy = ref(false)
+const actionError = ref<string | null>(null)
 
 async function loadAll() {
-  const out = { ...lists.value };
-  await Promise.all(TABS.map(async ([s]) => (out[s] = await fragments(s))));
-  lists.value = out;
+  const out = { ...lists.value }
+  await Promise.all(TABS.map(async ([s]) => (out[s] = await fragments(s))))
+  lists.value = out
 }
 
 async function signIn() {
-  authError.value = null;
-  setCredentials(user.value, password.value);
-  password.value = "";
+  authError.value = null
+  setCredentials(user.value, password.value)
+  password.value = ''
   try {
-    await loadAll();
-    signedIn.value = true;
+    await loadAll()
+    signedIn.value = true
   } catch (e) {
-    clearCredentials();
+    clearCredentials()
     authError.value =
       e instanceof ApiError && e.status === 503
         ? "Admin sign-in isn't set up on the server. Set ADMIN_USERNAME and ADMIN_PASSWORD_SCRYPT."
         : e instanceof ApiError && e.status === 401
-          ? "Wrong username or password."
-          : "Could not reach the server.";
+          ? 'Wrong username or password.'
+          : 'Could not reach the server.'
   }
 }
 
 function signOut() {
-  clearCredentials();
-  signedIn.value = false;
-  lists.value = { pending: [], invalid: [], approved: [], rejected: [] };
+  clearCredentials()
+  signedIn.value = false
+  lists.value = { pending: [], invalid: [], approved: [], rejected: [] }
 }
 
-if (signedIn.value) loadAll().catch(signOut);
+if (signedIn.value) loadAll().catch(signOut)
 
 const families = computed(() =>
   [
@@ -102,108 +95,75 @@ const families = computed(() =>
         .map((f) => f.rule_family),
     ),
   ].sort(),
-);
+)
 const list = computed(() =>
   lists.value[tab.value].filter(
-    (f) =>
-      (!family.value || f.rule_family === family.value) &&
-      (!advice.value || f.check_recommendation === advice.value),
+    (f) => (!family.value || f.rule_family === family.value) && (!advice.value || f.check_recommendation === advice.value),
   ),
-);
-const selected = computed(
-  () =>
-    list.value.find((f) => f.id === pickedId.value) ?? list.value[0] ?? null,
-);
+)
+const selected = computed(() => list.value.find((f) => f.id === pickedId.value) ?? list.value[0] ?? null)
 
 watch([tab, family, advice], () => {
-  pickedId.value = null;
-});
+  pickedId.value = null
+})
 watch(selected, () => {
-  note.value = "";
-  actionError.value = null;
-});
+  note.value = ''
+  actionError.value = null
+})
 
 const value = (f: Fragment) =>
-  f.value_numeric != null
-    ? `${f.value_numeric}${f.unit ? ` ${f.unit === "sqft" ? "sq ft" : f.unit}` : ""}`
-    : (f.value_text ?? "—");
+  f.value_numeric != null ? `${f.value_numeric}${f.unit ? ` ${f.unit === 'sqft' ? 'sq ft' : f.unit}` : ''}` : (f.value_text ?? '—')
 
-const short = (t: string, n = 70) =>
-  t.length > n ? t.slice(0, n - 1) + "…" : t;
+const short = (t: string, n = 70) => (t.length > n ? t.slice(0, n - 1) + '…' : t)
 
 // applies_to / conditions may arrive as a JSON array string.
 const listText = (v: string | null) => {
-  if (!v) return null;
+  if (!v) return null
   try {
-    const a = JSON.parse(v);
-    if (Array.isArray(a)) return a.join(", ");
+    const a = JSON.parse(v)
+    if (Array.isArray(a)) return a.join(', ')
   } catch {
     /* plain text */
   }
-  return v;
-};
+  return v
+}
 
-async function act(decision: "approved" | "rejected") {
-  const f = selected.value;
-  if (!f) return;
-  busy.value = true;
-  actionError.value = null;
+async function act(decision: 'approved' | 'rejected') {
+  const f = selected.value
+  if (!f) return
+  busy.value = true
+  actionError.value = null
   try {
-    await decide(f.id, decision, note.value || null);
-    const i = list.value.indexOf(f);
-    const next = list.value[i + 1] ?? list.value[i - 1] ?? null;
-    lists.value[f.status] = lists.value[f.status].filter((x) => x.id !== f.id);
-    lists.value[decision] = [
-      ...lists.value[decision],
-      { ...f, status: decision, review_note: note.value || null },
-    ];
-    pickedId.value = next?.id ?? null;
+    await decide(f.id, decision, note.value || null)
+    const i = list.value.indexOf(f)
+    const next = list.value[i + 1] ?? list.value[i - 1] ?? null
+    lists.value[f.status] = lists.value[f.status].filter((x) => x.id !== f.id)
+    lists.value[decision] = [...lists.value[decision], { ...f, status: decision, review_note: note.value || null }]
+    pickedId.value = next?.id ?? null
   } catch (e) {
-    actionError.value =
-      e instanceof ApiError ? e.message : "Could not save the decision.";
+    actionError.value = e instanceof ApiError ? e.message : 'Could not save the decision.'
   } finally {
-    busy.value = false;
+    busy.value = false
   }
 }
 </script>
 
 <template>
   <div>
-    <AppHeader
-      title="Rule review"
-      :subtitle="signedIn ? 'Admin · signed in' : 'Admin'"
-    >
+    <AppHeader title="Rule review" :subtitle="signedIn ? 'Admin · signed in' : 'Admin'">
       <span class="spacer" />
-      <button v-if="signedIn" type="button" class="link small" @click="signOut">
-        Sign out
-      </button>
+      <button v-if="signedIn" type="button" class="link small" @click="signOut">Sign out</button>
       <RouterLink to="/" class="small">Back to assessment</RouterLink>
     </AppHeader>
 
     <main class="page">
       <form v-if="!signedIn" class="card signin" @submit.prevent="signIn">
         <h1>Sign in to review rules</h1>
-        <p class="small muted">
-          Rule candidates are used in assessments only after a reviewer approves
-          them here.
-        </p>
+        <p class="small muted">Rule candidates are used in assessments only after a reviewer approves them here.</p>
         <label for="u" class="small">Username</label>
-        <input
-          id="u"
-          v-model="user"
-          class="field"
-          autocomplete="username"
-          required
-        />
+        <input id="u" v-model="user" class="field" autocomplete="username" required />
         <label for="p" class="small">Password</label>
-        <input
-          id="p"
-          v-model="password"
-          class="field"
-          type="password"
-          autocomplete="current-password"
-          required
-        />
+        <input id="p" v-model="password" class="field" type="password" autocomplete="current-password" required />
         <button type="submit" class="btn btn-primary">Sign in</button>
         <p v-if="authError" class="small err" role="alert">{{ authError }}</p>
       </form>
@@ -234,9 +194,7 @@ async function act(decision: "approved" | "rejected") {
             </option>
           </select>
           <span class="spacer" />
-          <span class="small muted"
-            >Nothing is used in an assessment until it is approved here.</span
-          >
+          <span class="small muted">Nothing is used in an assessment until it is approved here.</span>
         </div>
 
         <div class="cols">
@@ -252,46 +210,27 @@ async function act(decision: "approved" | "rejected") {
             >
               <span class="top">
                 <span class="mono small">{{ f.parameter }}</span>
-                <span
-                  class="strong"
-                  :class="{ txt: f.value_numeric == null }"
-                  >{{ short(value(f)) }}</span
-                >
+                <span class="strong" :class="{ txt: f.value_numeric == null }">{{ short(value(f)) }}</span>
               </span>
               <span class="small muted"
-                >{{ f.section_id }} ·
-                {{ VALIDATION[f.validation] ?? f.validation
-                }}<template
-                  v-if="
-                    f.check_recommendation &&
-                    f.check_recommendation !== 'approve'
-                  "
-                >
+                >{{ f.section_id }} · {{ VALIDATION[f.validation] ?? f.validation
+                }}<template v-if="f.check_recommendation && f.check_recommendation !== 'approve'">
                   ·
                   <span :class="'chk-' + f.check_recommendation">{{
-                    f.check_recommendation === "reject"
-                      ? "Suggest reject"
-                      : "Note"
+                    f.check_recommendation === 'reject' ? 'Suggest reject' : 'Note'
                   }}</span></template
                 ></span
               >
             </button>
           </section>
 
-          <section
-            v-if="selected"
-            aria-label="Selected rule"
-            class="card detail"
-          >
+          <section v-if="selected" aria-label="Selected rule" class="card detail">
             <div class="dhead">
               <h1 :class="{ txt: selected.value_numeric == null }">
                 {{ value(selected) }}
                 <span class="mono param">{{ selected.parameter }}</span>
               </h1>
-              <span
-                class="badge"
-                :class="selected.validation === 'ok' ? 'ok' : 'bad'"
-              >
+              <span class="badge" :class="selected.validation === 'ok' ? 'ok' : 'bad'">
                 {{ VALIDATION[selected.validation] ?? selected.validation }}
               </span>
             </div>
@@ -302,105 +241,57 @@ async function act(decision: "approved" | "rejected") {
               </div>
               <div>
                 <dt>Applies to</dt>
-                <dd>{{ listText(selected.applies_to) ?? "Not stated" }}</dd>
+                <dd>{{ listText(selected.applies_to) ?? 'Not stated' }}</dd>
               </div>
               <div>
                 <dt>Read by</dt>
-                <dd class="mono">
-                  {{ selected.served_model }} · {{ selected.prompt_version }}
-                </dd>
+                <dd class="mono">{{ selected.served_model }} · {{ selected.prompt_version }}</dd>
               </div>
               <div>
                 <dt>Conditions</dt>
-                <dd>{{ listText(selected.conditions) || "None stated" }}</dd>
+                <dd>{{ listText(selected.conditions) || 'None stated' }}</dd>
               </div>
             </dl>
-            <aside
-              v-if="selected.check_recommendation"
-              class="check"
-              :class="'chk-box-' + selected.check_recommendation"
-            >
-              <span
-                class="strong"
-                :class="'chk-' + selected.check_recommendation"
-                >{{ CHECK[selected.check_recommendation] }}</span
-              >
+            <aside v-if="selected.check_recommendation" class="check" :class="'chk-box-' + selected.check_recommendation">
+              <span class="strong" :class="'chk-' + selected.check_recommendation">{{ CHECK[selected.check_recommendation] }}</span>
               <p v-if="selected.check_note" class="small">
                 {{ selected.check_note }}
               </p>
               <p v-if="selected.checks" class="small muted">
                 Source text check
-                {{ VERDICT[selected.checks.source_text ?? ""] ?? "—" }} · second
-                model {{ VERDICT[selected.checks.second_model ?? ""] ?? "—" }} ·
-                official sources: {{ selected.checks.web ?? "—" }}
-                <template v-if="selected.checked_on">
-                  · checked {{ selected.checked_on }}</template
-                >
+                {{ VERDICT[selected.checks.source_text ?? ''] ?? '—' }} · second model
+                {{ VERDICT[selected.checks.second_model ?? ''] ?? '—' }} · official sources:
+                {{ selected.checks.web ?? '—' }}
+                <template v-if="selected.checked_on"> · checked {{ selected.checked_on }}</template>
               </p>
-              <p class="small muted">
-                Advice only. Your decision is what counts.
-              </p>
+              <p class="small muted">Advice only. Your decision is what counts.</p>
             </aside>
             <div class="stack">
               <span class="eyebrow">Full section text, quote highlighted</span>
-              <QuoteInContext
-                :text="selected.chunk_text"
-                :start="selected.quote_start"
-                :end="selected.quote_end"
-              />
-              <a
-                v-if="selected.source_url"
-                :href="selected.source_url"
-                class="small"
-                target="_blank"
-                rel="noopener noreferrer"
+              <QuoteInContext :text="selected.chunk_text" :start="selected.quote_start" :end="selected.quote_end" />
+              <a v-if="selected.source_url" :href="selected.source_url" class="small" target="_blank" rel="noopener noreferrer"
                 >Open the source document</a
               >
             </div>
             <p v-if="selected.reviewed_by" class="small muted">
-              {{ selected.status === "approved" ? "Approved" : "Rejected" }} by
-              {{ selected.reviewed_by
-              }}<template v-if="selected.review_note"
-                >: {{ selected.review_note }}</template
-              >
+              {{ selected.status === 'approved' ? 'Approved' : 'Rejected' }} by {{ selected.reviewed_by
+              }}<template v-if="selected.review_note">: {{ selected.review_note }}</template>
             </p>
-            <template
-              v-if="
-                selected.status === 'pending' || selected.status === 'invalid'
-              "
-            >
+            <template v-if="selected.status === 'pending' || selected.status === 'invalid'">
               <div class="stack">
                 <label for="note" class="small">Note (optional)</label>
-                <textarea
-                  id="note"
-                  v-model="note"
-                  rows="2"
-                  class="field"
-                  maxlength="2000"
-                />
+                <textarea id="note" v-model="note" rows="2" class="field" maxlength="2000" />
               </div>
               <div class="actions">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  :disabled="busy || selected.status !== 'pending'"
-                  @click="act('approved')"
-                >
+                <button type="button" class="btn btn-primary" :disabled="busy || selected.status !== 'pending'" @click="act('approved')">
                   Approve
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  :disabled="busy"
-                  @click="act('rejected')"
-                >
-                  Reject
-                </button>
+                <button type="button" class="btn btn-danger" :disabled="busy" @click="act('rejected')">Reject</button>
                 <span class="small muted">
                   {{
-                    selected.status === "invalid"
-                      ? "This failed a deterministic check, so it can only be rejected."
-                      : "Approve only if the value and conditions match the highlighted text. To correct a value, reject it and say why."
+                    selected.status === 'invalid'
+                      ? 'This failed a deterministic check, so it can only be rejected.'
+                      : 'Approve only if the value and conditions match the highlighted text. To correct a value, reject it and say why.'
                   }}
                 </span>
               </div>

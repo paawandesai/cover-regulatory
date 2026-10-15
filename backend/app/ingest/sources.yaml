@@ -142,3 +142,17 @@ datasets:
     target: overlay
     overlay_kind: fire_perimeter_2025
     scope: all
+
+  - id: ms_global_building_footprints
+    name: Global ML Building Footprints (United States, quadkey 023012311)
+    publisher: Microsoft
+    service_url: https://minedbuildings.z5.web.core.windows.net/global-buildings/2026-02-03/global-buildings.geojsonl/RegionName=UnitedStates/quadkey=023012311/part-00015-4feead82-d499-422b-94cb-c036c212127a.c000.csv.gz
+    license: Open Data Commons Open Database License (ODbL) v1.0
+    terms_url: https://github.com/microsoft/GlobalMLBuildingFootprints
+    attribution: Building footprints © Microsoft, ODbL
+    target: footprint_odbl
+    scope: study_areas
+    notes: >-
+      Machine-learned outlines from imagery, so they can miss or merge buildings. Kept in their own table
+      (ODbL share-alike applies to that table only) and shown as "approximate existing building". The tile
+      covers every study area; the index of tiles is dataset-links.csv in the same bucket.

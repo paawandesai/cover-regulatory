@@ -47,7 +47,7 @@ Places where a project guardrail overrides a requirement in the brief. The brief
 | Rules approved by a person before use | In this demo the 230 rule candidates were reviewed by AI, at the project owner's instruction: a three-way check (source text, a second model, official sources) decided each one, and 8 were rejected. Values labelled "Derived from rule" therefore rest on an AI review, which the source panel says. A person should re-review before relying on them (see `AI_USAGE.md`). |
 | Feedback that improves future answers | Feedback is queued for a reviewer and never edits rules, prompts or retrieval automatically. |
 | Scaling to LA County, California and beyond | Only LA City, Chapter I, R1 is implemented. The design is jurisdiction-pluggable (jurisdiction → code regime → rule set → sources), but nothing else is modeled. |
-| Visualizing existing buildings | Not yet: the County building outlines' license is unclear, and the ODbL Microsoft footprints are not loaded. |
+| Visualizing existing buildings | Uses Microsoft's machine-learned footprints (ODbL), kept in their own table and labelled approximate. The County building outlines were not used because their license is unclear. Footprints can miss, merge or misplace buildings. |
 
 ## Data sources and licenses
 See `LICENSES.md` for code dependencies and `backend/app/ingest/sources.yaml` for every dataset and document, with its license, item id, and retrieval date.

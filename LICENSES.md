@@ -17,6 +17,7 @@ non-commercial or research-only, nothing archived or with open critical CVEs.
 | PostgreSQL | PostgreSQL License | Separate server process |
 | PostGIS | GPL-2.0 | Separate server process (database extension), not linked into the app |
 | pgvector | PostgreSQL License | Database extension |
+| Microsoft Global ML Building Footprints (data) | ODbL 1.0 | Loaded into its own table (`building_footprint_odbl`), never merged with other data, and attributed wherever it is shown ("Building outlines © Microsoft, ODbL"). Share-alike applies to that table if it is redistributed |
 
 ## Development tooling (not shipped)
 | Tool | License | Use |

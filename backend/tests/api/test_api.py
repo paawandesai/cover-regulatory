@@ -176,3 +176,16 @@ def test_ai_review_only_decides_pending_fragments(tmp_path):
     path = tmp_path / "v.json"
     path.write_text(json.dumps({"checked_on": "2026-10-15", "candidates": [c]}))
     assert apply(path, "test") == {"approved": 0, "rejected": 0, "skipped": 1}
+
+
+def test_existing_buildings_are_returned_with_attribution(client):
+    with connect() as conn:
+        if not conn.execute("SELECT 1 FROM building_footprint_odbl LIMIT 1").fetchone():
+            pytest.skip("footprints not loaded")
+    r = client.get("/api/assess?q=2104024009").json()
+    item = next(i for i in r["items"] if i["id"] == "existing_footprint")
+    assert item["value"].startswith("1 building")
+    assert "ODbL" in item["source"]["attribution"]
+    assert len(r["geometry"]["buildings"]) == 1
+    vacant = client.get("/api/assess?q=2121005008").json()
+    assert next(i for i in vacant["items"] if i["id"] == "existing_footprint")["value"] == "None found"

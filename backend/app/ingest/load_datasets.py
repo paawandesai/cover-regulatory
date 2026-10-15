@@ -7,9 +7,11 @@ Each run replaces that source's rows, records last_modified / retrieved_at in `s
 Parcel owner and valuation fields are never requested (see the allowlist in sources.yaml).
 """
 
+import gzip
 import json
 import re
 import sys
+import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -100,6 +102,7 @@ def load(ds: dict, areas: list[dict]) -> int:
             "boundary": "boundary",
             "overlay": "overlay",
             "address_point": "address_point",
+            "footprint_odbl": "building_footprint_odbl",
         }[target]
         conn.execute(f"DELETE FROM {table} WHERE source_id = %s", (ds["id"],))
 
@@ -188,6 +191,23 @@ def load(ds: dict, areas: list[dict]) -> int:
                     ),
                 )
                 n += 1
+        elif target == "footprint_odbl":
+            # One GeoJSON feature per line; height is -1 when unknown. Keep only footprints in a study area.
+            boxes = [a["bbox"] for a in areas]
+            with urllib.request.urlopen(ds["service_url"], timeout=300) as resp, gzip.open(resp, "rt") as lines:
+                for line in lines:
+                    f = json.loads(line)
+                    ring = f["geometry"]["coordinates"][0]
+                    lon, lat = ring[0]
+                    if not any(w <= lon <= e and s <= lat <= n_ for w, s, e, n_ in boxes):
+                        continue
+                    h = f["properties"].get("height")
+                    conn.execute(
+                        "INSERT INTO building_footprint_odbl (geom, height_m, source_id, fetched_at) "
+                        "VALUES (ST_SetSRID(ST_GeomFromGeoJSON(%s), 4326), %s, %s, %s)",
+                        (json.dumps(f["geometry"]), h if h and h > 0 else None, ds["id"], now),
+                    )
+                    n += 1
         conn.commit()
     return n
 

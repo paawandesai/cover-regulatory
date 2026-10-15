@@ -54,7 +54,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 
 | Part | Where | What it does |
 |---|---|---|
-| Dataset loaders | `backend/app/ingest/load_datasets.py`, `sources.yaml` | Pull public ArcGIS layers for the study areas, drop owner fields, and record source, license and fetch time. |
+| Dataset loaders | `backend/app/ingest/load_datasets.py`, `sources.yaml` | Pull public ArcGIS layers for the study areas, drop owner fields, and record source, license and fetch time. Microsoft's ODbL building footprints come from one tile filtered to the study areas, into their own table. |
 | Regulation ingestion | `backend/app/ingest/regtext/` | Parse ordinance PDFs and saved HTML into chunks keyed by section id. Each chunk keeps a content hash. |
 | Search | `backend/app/search/` | Exact section-id lookup first, then pgvector cosine search over local embeddings. Full-text search is the fallback. |
 | Extraction | `backend/app/extract/` | Claude (model id from config, structured output) reads groups of chunks into rule fragments. Regulation text is wrapped as data. The schema has no field for status or confidence. |
