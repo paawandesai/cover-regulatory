@@ -1,0 +1,15 @@
+# Small, self-selected areas loaded for development and tests. Bounding boxes are [west, south, east, north]
+# in WGS84. Chosen to exercise each code path, not to represent the City.
+study_areas:
+  - id: reseda_flat_r1
+    purpose: Flat-land R1 lots in the San Fernando Valley (main "derived" path)
+    bbox: [-118.545, 34.185, -118.515, 34.205]
+  - id: boyle_heights
+    purpose: Chapter 1A in effect; regime check must stop zone lookup
+    bbox: [-118.215, 34.030, -118.200, 34.045]
+  - id: pacific_palisades
+    purpose: January 2025 fire perimeter, Coastal Zone, Hillside Area
+    bbox: [-118.540, 34.035, -118.520, 34.050]
+  - id: westside_city_edge
+    purpose: Boundary with Beverly Hills and unincorporated County (outside-City path)
+    bbox: [-118.430, 34.060, -118.415, 34.075]

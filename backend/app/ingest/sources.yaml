@@ -1,0 +1,144 @@
+# Every dataset the engine ingests. `license` is what the publisher states on the item page, quoted or
+# summarized; `terms` notes anything that restricts use. Loaders record last_modified and retrieved_at
+# in the `source` table at load time.
+#
+# Never add: Google Maps/Places/Geocoding, Regrid, ATTOM, Zillow, Redfin, LARIAC imagery, or any
+# ArcGIS layer marked "Administrative Draft" (e.g. Zone_Builder_Database_*).
+
+datasets:
+  - id: lacity_zoning
+    name: Zoning (City of Los Angeles)
+    publisher: Los Angeles City Planning (GIS@LADCP)
+    item_id: f2b84d74972a4084aac79fbe504d9b11
+    service_url: https://services5.arcgis.com/7nsPwEMP38bSkCjy/arcgis/rest/services/Zoning/FeatureServer/15
+    license: City Planning web terms (public service, "as is", no warranty; no use restriction stated)
+    terms_url: https://www.arcgis.com/home/item.html?id=f2b84d74972a4084aac79fbe504d9b11
+    target: zoning
+    scope: study_areas
+    fields: {Zoning: zone_string, CATEGORY: category, OBJECTID: source_object_id}
+    notes: >-
+      Live layer, edited daily. Preferred over the CC0 data.gov copy, which is older. Contains both
+      Chapter I and Chapter 1A zone strings.
+
+  - id: lacity_city_boundary
+    name: City Boundary (City of Los Angeles)
+    publisher: LA Bureau of Engineering (NavigateLA)
+    item_id: 09f503229d37414a8e67a7b6ceb9ec43
+    service_url: https://maps.lacity.org/lahub/rest/services/Boundaries/MapServer/7
+    license: CC BY 4.0
+    attribution: City of Los Angeles, Bureau of Engineering
+    target: boundary
+    boundary_kind: city_limit
+    name_value: City of Los Angeles
+    scope: all
+
+  - id: lacity_community_plan_areas
+    name: Community Plan Areas
+    publisher: Los Angeles City Planning (GIS@LADCP)
+    item_id: 85f6c625014a40ad9dfcfdaf9f751aae
+    service_url: https://services5.arcgis.com/7nsPwEMP38bSkCjy/arcgis/rest/services/Community_Plan_Areas/FeatureServer/0
+    license: City Planning public-service terms ("as is", no warranty)
+    target: boundary
+    boundary_kind: community_plan_area
+    name_field: NAME_ALF
+    scope: all
+
+  - id: lacounty_parcels
+    name: LA County Parcels (Assessor)
+    publisher: LA County Office of the Assessor / eGIS
+    item_id: 6d85cb5f5f5641c6aa95203849ca05bb
+    service_url: https://public.gis.lacounty.gov/public/rest/services/LACounty_Cache/LACounty_Parcel/MapServer/0
+    license: >-
+      LA County terms of use: "informational purposes, may not be suitable for legal, engineering, or
+      surveying intents". That disclaimer travels with every output that uses these parcels.
+    target: parcel
+    scope: study_areas
+    # Allowlist. Roll values, exemptions (incl. homeowner exemption), legal descriptions and anything
+    # owner-related are never requested, so they never reach the database.
+    fields:
+      APN: apn
+      SitusHouseNo: situs_house_no
+      SitusFraction: situs_fraction
+      SitusDirection: situs_direction
+      SitusStreet: situs_street
+      SitusUnit: situs_unit
+      SitusCity: situs_city
+      SitusZIP: situs_zip
+      UseCode: use_code
+      UseType: use_type
+      UseDescription: use_description
+      YearBuilt1: year_built
+      Units1: units
+      Bedrooms1: bedrooms
+      Bathrooms1: bathrooms
+      SQFTmain1: sqft_main
+
+  - id: lacounty_address_points
+    name: Address Points (Countywide Address Management System)
+    publisher: LA County eGIS
+    item_id: ed1937ab15214b5d937ef4fe4cb55f44
+    service_url: https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/eGIS_Addressing_ADDRESS_POINTSv2/FeatureServer/0
+    license: LA County terms of use (informational; not for legal, engineering or surveying use)
+    target: address_point
+    scope: study_areas
+
+  - id: lacity_hillside_area
+    name: Hillside Ordinance area
+    publisher: City of Los Angeles (LA GeoHub)
+    item_id: 3ac07567df1c4f3b916ac258e426e3f5
+    service_url: https://maps.lacity.org/lahub/rest/services/Special_Areas/MapServer/6
+    license: Not stated on the item (license field blank). Used for flagging only.
+    target: overlay
+    overlay_kind: hillside
+    scope: study_areas
+
+  - id: lacity_vhfhsz
+    name: Very High Fire Hazard Severity Zones
+    publisher: City of Los Angeles (LA GeoHub)
+    item_id: b29c71016bab4384923f0336ca5d040f
+    service_url: https://maps.lacity.org/lahub/rest/services/Special_Areas/MapServer/11
+    license: Not stated on the item (license field blank). Used for flagging only.
+    target: overlay
+    overlay_kind: vhfhsz
+    scope: study_areas
+
+  - id: lacity_hpoz
+    name: Historic Preservation Overlay Zones
+    publisher: Los Angeles City Planning (GIS@LADCP)
+    item_id: 3e17436bc26b444dabfbc83e95d24a68
+    service_url: https://services5.arcgis.com/7nsPwEMP38bSkCjy/arcgis/rest/services/Historic_Preservation_Overlay_Zones/FeatureServer/5
+    license: City Planning web terms (public service, "as is", no warranty)
+    target: overlay
+    overlay_kind: hpoz
+    scope: study_areas
+
+  - id: lacity_specific_plans
+    name: Specific Plan Areas
+    publisher: Los Angeles City Planning (GIS@LADCP)
+    item_id: f38468988a8d439a950797e36c1bb743
+    service_url: https://services5.arcgis.com/7nsPwEMP38bSkCjy/arcgis/rest/services/Specific_Plan_Areas/FeatureServer/6
+    license: City Planning web terms (public service, "as is", no warranty)
+    target: overlay
+    overlay_kind: specific_plan
+    scope: study_areas
+
+  - id: lacounty_coastal_zone
+    name: Coastal Zone - LA County (California Coastal Commission boundary)
+    publisher: LA County Regional Planning
+    item_id: 479368aa95a941cc85a986ae9485ae6b
+    service_url: https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/CA_COASTAL_COMMISION_ZONES_LACO/FeatureServer/0
+    license: LA County terms of use (informational; not for legal, engineering or surveying use)
+    notes: The Coastal Commission's own statewide layer is a polyline, so the County's polygon version is used.
+    target: overlay
+    overlay_kind: coastal_zone
+    scope: study_areas
+
+  - id: lacounty_fire_perimeters_2025
+    name: Palisades Fire perimeter (2025-01-21), from Palisades and Eaton Dissolved Fire Perimeters
+    publisher: LA County Public Works
+    item_id: ad51845ea5fb4eb483bc2a7c38b2370c
+    service_url: https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/Palisades_and_Eaton_Dissolved_Fire_Perimeters_as_of_20250121/FeatureServer/1
+    license: LA County terms of use (informational; not for legal, engineering or surveying use)
+    target: overlay
+    overlay_kind: fire_perimeter_2025
+    scope: all
