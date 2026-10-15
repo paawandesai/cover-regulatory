@@ -22,6 +22,7 @@ import yaml
 from app.config import get_settings
 from app.db.connection import connect
 from app.ingest.regtext.chunk import (
+    FAQ_HEADING,
     Chunk,
     Page,
     chunk_by_headings,
@@ -119,6 +120,8 @@ def chunk_document(doc: dict, pages: list[Page]) -> list[Chunk]:
         return chunk_lamc(pages)
     if doc["doc_type"] == "statute":
         return chunk_statute(pages, _label(doc))
+    if doc.get("headings") == "faq":
+        return chunk_by_headings(pages, _label(doc), pattern=FAQ_HEADING)
     return chunk_by_headings(pages, _label(doc))
 
 
