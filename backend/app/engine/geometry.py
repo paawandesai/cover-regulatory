@@ -130,5 +130,6 @@ def envelope(frame: LotFrame, front_ft: float, side_ft: float, rear_ft: float) -
         "lot": mapping(transform(_TO_LL, frame.lot_ft)),
         "envelope": mapping(transform(_TO_LL, env_ft)) if not env_ft.is_empty else None,
         "envelope_area_sqft": round(env_ft.area) if not env_ft.is_empty else 0,
+        "front_mid": mapping(transform(_TO_LL, Point(frame.front_mid)))["coordinates"],
         "label": "illustrative, not survey-grade",
     }

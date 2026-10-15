@@ -9,7 +9,7 @@ import uuid
 from datetime import UTC, datetime
 from typing import Annotated, Literal
 
-from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
 from pydantic import BaseModel, Field
 
 from app.api.auth import require_admin
@@ -106,6 +106,23 @@ def assess_parcel(q: str = Query(min_length=3, max_length=200, description="APN 
         return assess(q)
     except ParcelNotFound as e:
         raise HTTPException(404, str(e)) from e
+
+
+@app.get("/api/parcels/{apn}/nearby")
+def nearby_parcels(apn: str = Path(pattern=r"^[0-9]{10}$"), radius_m: float = Query(60, ge=10, le=150)):
+    """Outlines of neighbouring parcels for map context. Geometry and APN only, no situs or assessor fields."""
+    with connect() as conn:
+        rows = conn.execute(
+            """SELECT n.apn, ST_AsGeoJSON(n.geom, 7)::json AS geometry
+               FROM parcel p JOIN parcel n
+                 ON n.apn <> p.apn AND ST_DWithin(n.geom::geography, p.geom::geography, %s)
+               WHERE p.apn = %s LIMIT 400""",
+            (radius_m, apn),
+        ).fetchall()
+    return {
+        "type": "FeatureCollection",
+        "features": [{"type": "Feature", "properties": {"apn": r["apn"]}, "geometry": r["geometry"]} for r in rows],
+    }
 
 
 class FeedbackIn(BaseModel):

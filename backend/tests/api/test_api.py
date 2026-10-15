@@ -72,3 +72,18 @@ def test_invalid_fragment_cannot_be_approved(client):
 def test_chunk_lookup(client):
     r = client.get("/api/chunks/does-not-exist")
     assert r.status_code == 404
+
+
+def test_nearby_parcels_return_geometry_only(client):
+    r = client.get("/api/parcels/2121005008/nearby")
+    assert r.status_code == 200
+    feats = r.json()["features"]
+    assert feats and all(set(f["properties"]) == {"apn"} for f in feats)
+    assert client.get("/api/parcels/not-an-apn/nearby").status_code == 422
+
+
+def test_assessment_returns_lot_outline_when_yards_are_withheld(client):
+    # Hillside parcel: flat-land yards withheld, but the lot outline is still drawn with no envelope.
+    g = client.get("/api/assess", params={"q": "4412014028"}).json()["geometry"]
+    assert g["lot"]["type"] in ("Polygon", "MultiPolygon")
+    assert g["envelope"] is None and g["yards_ft"] is None
