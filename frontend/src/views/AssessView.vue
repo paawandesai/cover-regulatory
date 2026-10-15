@@ -8,7 +8,7 @@ import LotDiagram from '../components/LotDiagram.vue'
 import SourcePanel from '../components/SourcePanel.vue'
 import StopState from '../components/StopState.vue'
 import { citeLabel, formatApn, formatDate, formatExisting, formatValue } from '../format'
-import type { Assessment, Item } from '../types'
+import type { Assessment, Item, Label } from '../types'
 
 // MapLibre is large; load it only when the map view is opened.
 const LotMap = defineAsyncComponent(() => import('../components/LotMap.vue'))
@@ -76,9 +76,9 @@ const dims = computed(() => item('lot_dimensions'))
 const facts = computed(() => {
   const r = result.value
   if (!r) return []
-  const rows: { k: string; v: string; item: Item; text?: string }[] = []
-  const add = (it: Item | undefined, k: string, v?: string, text?: string) =>
-    it && rows.push({ k, v: v ?? formatValue(it), item: it, text })
+  const rows: { k: string; v: string; item: Item; text?: string; badge?: Label }[] = []
+  const add = (it: Item | undefined, k: string, v?: string, text?: string, badge?: Label) =>
+    it && rows.push({ k, v: v ?? formatValue(it), item: it, text, badge })
   add(parcelItem('lot_area'), 'Lot area')
   add(dims.value, 'Lot width x depth', undefined, 'Derived (parcel shape)')
   add(parcelItem('community_plan_area'), 'Community plan area')
@@ -86,7 +86,8 @@ const facts = computed(() => {
   add(regime, 'Zoning code in effect', regime?.value === 'I' ? 'Chapter I' : regime?.value === '1A' ? 'Chapter 1A' : undefined)
   const existing = parcelItem('existing')
   add(existing, 'Existing building (Assessor)', formatExisting(existing?.value))
-  add(item('existing_footprint'), 'Existing buildings (outline)', undefined, 'Approximate (imagery)')
+  // Machine-learned outlines: a neutral badge, so they don't read as verified records.
+  add(item('existing_footprint'), 'Existing buildings (outline)', undefined, 'Approximate (imagery)', 'derived')
   return rows
 })
 
@@ -212,7 +213,7 @@ const stop = computed(() => {
                 <span class="small muted">{{ f.k }}</span>
                 <span class="strong">{{ f.v }}</span>
               </span>
-              <LabelBadge :label="f.item.label" :text="f.text" />
+              <LabelBadge :label="f.badge ?? f.item.label" :text="f.text" />
             </button>
           </div>
 
@@ -460,7 +461,7 @@ h2 {
   background: var(--accent-subtle);
 }
 .rt {
-  flex: 1 1 220px;
+  flex: 1 1 180px;
   min-width: 0;
 }
 .rv {

@@ -31,6 +31,7 @@ LABEL_TEXT = {
     "derived": "Derived from rule {rule}",
     "interpretive": "Interpretation, confirm with the jurisdiction",
     "uncited": "No cited source found",
+    "withheld": "Not modeled here",
     "mock": "MOCK data",
 }
 
@@ -548,7 +549,7 @@ def assess(query: str) -> dict:
             if kind in kinds:
                 for i in r1:
                     if i.id in ids and i.value is not None:
-                        i.value, i.label, i.coverage = None, "uncited", None
+                        i.value, i.label, i.coverage = None, "withheld", None
                         i.explanation = "Not modeled here: the flat-land rule does not apply in the " + (
                             "Hillside Area." if kind == "hillside" else "Coastal Zone."
                         )
