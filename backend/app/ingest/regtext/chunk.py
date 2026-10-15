@@ -40,6 +40,8 @@ _PARAGRAPH = re.compile(r"Paragraph\s+\(([a-z]{1,2})\)", re.IGNORECASE)
 _SUBPARAGRAPH = re.compile(r"Subparagraph\s+\((\d+)\)")
 _LETTER_PARA = re.compile(r"^\s*\(([a-z])\)\s+", re.MULTILINE)
 _ROMAN_HEADING = re.compile(r"^\s*([IVX]{1,5})\.\s+(\S.*)$", re.MULTILINE)
+# FAQ documents: "Q11. Can I build an Accessory Dwelling Unit ...?"
+FAQ_HEADING = re.compile(r"^\s*(Q\d{1,3})\.\s+(\S.*)$", re.MULTILINE)
 _STATUTE_SECTION = re.compile(r"^\s*(\d{5}(?:\.\d+)?)\.\s", re.MULTILINE)
 
 

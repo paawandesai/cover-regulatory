@@ -1,0 +1,14 @@
+# Sections the extraction step reads, as section-id prefixes (a prefix also covers its children).
+# Each group is sent to the model together so cross-references inside a section stay in view.
+groups:
+  r1_use:        ["LAMC 12.08 A"]
+  r1_area:       ["LAMC 12.08 C.1", "LAMC 12.08 C.2", "LAMC 12.08 C.3", "LAMC 12.08 C.4"]
+  r1_rfa:        ["LAMC 12.08 C.5"]
+  height:        ["LAMC 12.21.1 A"]
+  accessory_yards: ["LAMC 12.21 C.5"]
+  city_adu:      ["LAMC 12.22 A.33"]
+  state_adu_defs: ["Gov. Code 66313"]
+  state_adu_local_limits: ["Gov. Code 66314", "Gov. Code 66321"]
+  state_adu_by_right: ["Gov. Code 66323"]
+  state_jadu:    ["Gov. Code 66333"]
+  za_memo_143:   ["ZA Memo 143 I", "ZA Memo 143 II"]

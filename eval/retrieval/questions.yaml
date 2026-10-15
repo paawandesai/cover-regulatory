@@ -1,0 +1,75 @@
+# Retrieval question set for recall@k. Each question lists the section ids that answer it; a hit counts
+# when its section id is one of these or a child of one ("LAMC 12.08 C" covers "LAMC 12.08 C.2(a)").
+# Labels were written by hand from the ingested text (Claude Code drafted them; Paawan to spot-check).
+# Questions name no parcel, address or person.
+questions:
+  # R1 envelope
+  - q: How deep must the front yard be on an R1 lot?
+    expect: [LAMC 12.08 C.1]
+  - q: What side yard is required in the R1 zone?
+    expect: [LAMC 12.08 C.2]
+  - q: Minimum rear yard for a one-family R1 lot
+    expect: [LAMC 12.08 C.3]
+  - q: Minimum lot area and lot width in R1
+    expect: [LAMC 12.08 C.4]
+  - q: maximum residential floor area for an R1 lot outside the hillside area
+    expect: [LAMC 12.08 C.5]
+  - q: What is the encroachment plane for R1 variable-mass zones?
+    expect: [LAMC 12.08 C.5(b)]
+  - q: rear-mass R1R zone massing standards
+    expect: [LAMC 12.08 C.5(d)]
+  - q: What uses are allowed by right in the R1 one-family zone?
+    expect: [LAMC 12.08 A]
+  - q: height limits for single-family zones in the hillside area
+    expect: [LAMC 12.21 C.10]
+  - q: How is residential floor area defined?
+    expect: [LAMC 12.03, LAMC 12.08 C.7]
+  # Guest house (accessory living quarters)
+  - q: Can I build a guest house without a kitchen on an R1 lot?
+    expect: [LAMC 12.08 A.7, LAMC 12.03]
+  - q: minimum lot size for accessory living quarters
+    expect: [LAMC 12.08 A.7]
+  # ADU / JADU, state
+  - q: Which ADUs must a city approve ministerially within a single-family lot?
+    expect: [Gov. Code 66323]
+  - q: What is the maximum size of a junior accessory dwelling unit?
+    expect: [Gov. Code 66313(d), Gov. Code 66333]
+  - q: What setbacks can a city require for a detached ADU?
+    expect: [Gov. Code 66314(d), Gov. Code 66321(b), Gov. Code 66323(a)]
+  - q: Can the city require parking for an ADU near public transit?
+    expect: [Gov. Code 66314(d), Gov. Code 66322, ZA Memo 143 IV]
+  - q: How long does the permitting agency have to approve an ADU application?
+    expect: [Gov. Code 66317(a)]
+  - q: Is owner occupancy required for an ADU?
+    expect: [Gov. Code 66315, Gov. Code 66323(e), Gov. Code 66314]
+  - q: definition of accessory dwelling unit
+    expect: [Gov. Code 66313(a), LAMC 12.03]
+  - q: maximum height of a detached ADU
+    expect: [Gov. Code 66321(b), ZA Memo 143 II, ZA Memo 143 IV]
+  - q: impact fees on ADUs under 750 square feet
+    expect: [Gov. Code 66311.5(c), ZA Memo 143 III]
+  # ADU, City
+  - q: Los Angeles ADU development standards in the City code
+    expect: [LAMC 12.22 A.33]
+  - q: movable tiny house as an accessory dwelling unit
+    expect: [LAMC 12.22 A.33(f), ZA Memo 143 IV]
+  - q: Which City ADU provisions are superseded by state law according to the zoning administrator?
+    expect: [ZA Memo 143 introduction, ZA Memo 143 II, ZA Memo 143 I]
+  - q: How is the height of an ADU measured?
+    expect: [ZA Memo 143 IV]
+  # SB 9 and fire rebuilds (flags)
+  - q: urban lot split for two units on a single-family lot
+    expect: [Gov. Code 66411.7, Gov. Code 65852.21]
+  - q: two-unit development ministerial approval in single-family zones
+    expect: [Gov. Code 65852.21]
+  - q: like-for-like rebuild after the Palisades fire
+    expect: [Palisades Rebuild FAQ]
+  - q: Can I build an ADU with my rebuilt house after the fire?
+    expect: [Palisades Rebuild FAQ]
+  # Exact references
+  - q: LAMC 12.22 A.33
+    expect: [LAMC 12.22 A.33]
+  - q: Gov Code 66323(a)
+    expect: [Gov. Code 66323(a)]
+  - q: what does section 12.08 C.2 say
+    expect: [LAMC 12.08 C.2]

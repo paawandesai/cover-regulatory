@@ -3,6 +3,8 @@ name = "regengine"
 version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
+    "anthropic==1.14.0",
+    "fastembed==0.9.0",
     "httpx>=0.28",
     "pdfplumber>=0.11",
     "psycopg[binary]>=3.2",

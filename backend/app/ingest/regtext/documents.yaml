@@ -54,6 +54,7 @@ documents:
     effective_date: 2026-01-30
     effective_note: FAQ dated 2026-01-30; summarizes Emergency Executive Orders. Orders change; re-check before use.
     ocr_text: false
+    headings: faq
 
   # Saved by hand (leginfo refuses automated requests; LAMC consolidated text is only on amlegal's viewer).
   - id: gov_66310_article1
