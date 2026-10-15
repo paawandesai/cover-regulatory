@@ -32,15 +32,15 @@ class Chunk:
         return hashlib.sha256(self.text.encode()).hexdigest()
 
 
-_ORD_SECTION = re.compile(r"^\s*(?:Section|Sec)\.?\s*(\d+)\.\s+(.*)$", re.M)
+_ORD_SECTION = re.compile(r"^\s*(?:Section|Sec)\.?\s*(\d+)\.\s+(.*)$", re.MULTILINE)
 _SECTION_NUM = re.compile(r"Section\s+(\d+\.\d+(?:\.\d+)?)")
 _SUBSECTION = re.compile(r"Subsection\s+([A-Z]{1,2})\b")
 _SUBDIVISION = re.compile(r"Subdivision\s+(\d+)")
-_PARAGRAPH = re.compile(r"Paragraph\s+\(([a-z]{1,2})\)", re.I)
+_PARAGRAPH = re.compile(r"Paragraph\s+\(([a-z]{1,2})\)", re.IGNORECASE)
 _SUBPARAGRAPH = re.compile(r"Subparagraph\s+\((\d+)\)")
-_LETTER_PARA = re.compile(r"^\s*\(([a-z])\)\s+", re.M)
-_ROMAN_HEADING = re.compile(r"^\s*([IVX]{1,5})\.\s+(\S.*)$", re.M)
-_STATUTE_SECTION = re.compile(r"^\s*(\d{5}(?:\.\d+)?)\.\s", re.M)
+_LETTER_PARA = re.compile(r"^\s*\(([a-z])\)\s+", re.MULTILINE)
+_ROMAN_HEADING = re.compile(r"^\s*([IVX]{1,5})\.\s+(\S.*)$", re.MULTILINE)
+_STATUTE_SECTION = re.compile(r"^\s*(\d{5}(?:\.\d+)?)\.\s", re.MULTILINE)
 
 
 def clean_page_text(text: str) -> str:
@@ -56,7 +56,7 @@ def clean_page_text(text: str) -> str:
             continue
         if re.fullmatch(r"\d{1,3}", s):  # page number
             continue
-        if letters < 3 and not re.search(r"\d+\s*(feet|ft|%|percent)", s, re.I):
+        if letters < 3 and not re.search(r"\d+\s*(feet|ft|%|percent)", s, re.IGNORECASE):
             continue  # figure fragments such as "/", "5 FT", "• •"
         keep.append(s)
     return re.sub(r"\n{3,}", "\n\n", "\n".join(keep)).strip()

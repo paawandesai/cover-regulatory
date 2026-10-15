@@ -10,9 +10,10 @@ removed counts in `ingest_run`. Manual documents are skipped (with a message) un
 import hashlib
 import re
 import sys
-from html.parser import HTMLParser
 from datetime import UTC, datetime
+from html.parser import HTMLParser
 from pathlib import Path
+from typing import ClassVar
 
 import httpx
 import pdfplumber
@@ -51,7 +52,7 @@ def _local_file(doc: dict) -> Path | None:
 class _HTMLText(HTMLParser):
     """HTML to plain text with a line break at every block element; scripts and styles dropped."""
 
-    BLOCK = {"p", "div", "br", "h1", "h2", "h3", "h4", "h5", "h6", "li", "tr", "table", "section"}
+    BLOCK: ClassVar[set[str]] = {"p", "div", "br", "h1", "h2", "h3", "h4", "h5", "h6", "li", "tr", "table", "section"}
 
     def __init__(self) -> None:
         super().__init__()

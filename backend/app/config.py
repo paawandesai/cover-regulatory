@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 
-from pydantic import SecretStr
+from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,7 +13,10 @@ class Settings(BaseSettings):
 
     llm_provider: str = "anthropic"
     llm_model_id: str = "claude-opus-5-5"
-    anthropic_api_key: SecretStr | None = None
+    # The project environment provides ANTHROPIC_COVER_API_KEY; ANTHROPIC_API_KEY also works locally.
+    anthropic_api_key: SecretStr | None = Field(
+        default=None, validation_alias=AliasChoices("ANTHROPIC_COVER_API_KEY", "ANTHROPIC_API_KEY")
+    )
 
     embedding_model: str = "nomic-ai/nomic-embed-text-v1.5"
 
