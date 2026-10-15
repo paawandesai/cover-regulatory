@@ -110,12 +110,17 @@ documents:
     fetch: manual
     url: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7
     local_path: data/manual/gov_66411_7.html
-  - id: lamc_consolidated_r1
-    title: LAMC Chapter I sections 12.03 (excerpt), 12.08, 12.21 C.10, 12.22 A.33 (consolidated, as amended)
-    publisher: American Legal Publishing (free public viewer), read manually
+  - id: lamc_chapter1
+    title: LAMC Chapter I, Sections 12.00-13.xx (consolidated zoning regulations, as amended)
+    publisher: American Legal Publishing (free public viewer), saved by hand
     doc_type: code_section
     jurisdiction: City of Los Angeles
     code_chapter: I
     fetch: manual
-    url: https://codelibrary.amlegal.com/codes/los_angeles/latest/lamc/0-0-0-422835
-    local_path: data/manual/lamc_consolidated_r1.pdf
+    url: https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924
+    local_path: data/manual/lamc_chapter1.html
+    effective_date: 2026-06-30
+    effective_note: >-
+      Saved 2026-10-15 from the viewer's current edition (2026 Rev. 9, "current through legislation
+      effective June 30, 2026" per its cover page). The publisher notes postings can lag legislation by up
+      to three months. Only Sections 12.x and 13.x are ingested.

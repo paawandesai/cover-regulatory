@@ -20,7 +20,17 @@ from app.ingest.arcgis import item_last_modified, iter_features
 from app.parcel.apn import InvalidAPN, normalize_apn
 
 HERE = Path(__file__).parent
-OVERLAY_NAME_FIELDS = ("NAME", "Name", "SPA_NM", "SPECIFIC_PLAN", "HPOZ_NAME", "FIRE_NAME", "H_TYPE", "NAME_ALF", "ZONE")
+OVERLAY_NAME_FIELDS = (
+    "NAME",
+    "Name",
+    "SPA_NM",
+    "SPECIFIC_PLAN",
+    "HPOZ_NAME",
+    "FIRE_NAME",
+    "H_TYPE",
+    "NAME_ALF",
+    "ZONE",
+)
 
 POLY = "ST_Multi(ST_CollectionExtract(ST_MakeValid(ST_SetSRID(ST_GeomFromGeoJSON(%s), 4326)), 3))"
 POINT = "ST_SetSRID(ST_GeomFromGeoJSON(%s), 4326)"
@@ -42,8 +52,19 @@ def _upsert_source(conn, ds: dict, retrieved_at: datetime) -> None:
              item_id=EXCLUDED.item_id, license=EXCLUDED.license, terms_url=EXCLUDED.terms_url,
              attribution=EXCLUDED.attribution, last_modified=EXCLUDED.last_modified,
              retrieved_at=EXCLUDED.retrieved_at, notes=EXCLUDED.notes""",
-        (ds["id"], ds["name"], ds["publisher"], ds["service_url"], ds.get("item_id"), ds["license"],
-         ds.get("terms_url"), ds.get("attribution"), modified, retrieved_at, ds.get("notes")),
+        (
+            ds["id"],
+            ds["name"],
+            ds["publisher"],
+            ds["service_url"],
+            ds.get("item_id"),
+            ds["license"],
+            ds.get("terms_url"),
+            ds.get("attribution"),
+            modified,
+            retrieved_at,
+            ds.get("notes"),
+        ),
     )
 
 
@@ -73,8 +94,13 @@ def load(ds: dict, areas: list[dict]) -> int:
     n = 0
     with connect() as conn:
         _upsert_source(conn, ds, now)
-        table = {"parcel": "parcel", "zoning": "zoning", "boundary": "boundary",
-                 "overlay": "overlay", "address_point": "address_point"}[target]
+        table = {
+            "parcel": "parcel",
+            "zoning": "zoning",
+            "boundary": "boundary",
+            "overlay": "overlay",
+            "address_point": "address_point",
+        }[target]
         conn.execute(f"DELETE FROM {table} WHERE source_id = %s", (ds["id"],))
 
         if target == "parcel":
@@ -150,8 +176,16 @@ def load(ds: dict, areas: list[dict]) -> int:
                 conn.execute(
                     f"INSERT INTO address_point (normalized, house_no, street, zip, geom, source_id, source_object_id, fetched_at) "
                     f"VALUES (%s,%s,%s,%s,{POINT},%s,%s,%s) ON CONFLICT (source_id, source_object_id) DO NOTHING",
-                    (normalized, str(p.get("Number")), street, p.get("ZipCode"), json.dumps(f["geometry"]),
-                     ds["id"], p["__oid"], now),
+                    (
+                        normalized,
+                        str(p.get("Number")),
+                        street,
+                        p.get("ZipCode"),
+                        json.dumps(f["geometry"]),
+                        ds["id"],
+                        p["__oid"],
+                        now,
+                    ),
                 )
                 n += 1
         conn.commit()

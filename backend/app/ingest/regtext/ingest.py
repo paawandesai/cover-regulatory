@@ -21,7 +21,15 @@ import yaml
 
 from app.config import get_settings
 from app.db.connection import connect
-from app.ingest.regtext.chunk import Chunk, Page, chunk_by_headings, chunk_ordinance, chunk_statute
+from app.ingest.regtext.chunk import (
+    Chunk,
+    Page,
+    chunk_by_headings,
+    chunk_lamc,
+    chunk_ordinance,
+    chunk_statute,
+    indent_marker,
+)
 
 HERE = Path(__file__).parent
 REPO = HERE.parents[3]
@@ -54,16 +62,21 @@ class _HTMLText(HTMLParser):
 
     BLOCK: ClassVar[set[str]] = {"p", "div", "br", "h1", "h2", "h3", "h4", "h5", "h6", "li", "tr", "table", "section"}
 
-    def __init__(self) -> None:
+    def __init__(self, indent_markers: bool = False) -> None:
         super().__init__()
         self.parts: list[str] = []
         self._skip = 0
+        self._indent_markers = indent_markers
 
     def handle_starttag(self, tag, attrs):
         if tag in ("script", "style", "noscript"):
             self._skip += 1
         elif tag in self.BLOCK:
             self.parts.append("\n")
+            # The code publisher's HTML marks list depth with classes L2..L7; keep it for the LAMC chunker.
+            cls = dict(attrs).get("class") or ""
+            if self._indent_markers and (m := re.fullmatch(r"L(\d+)", cls)):
+                self.parts.append(indent_marker(int(m.group(1))))
 
     def handle_endtag(self, tag):
         if tag in ("script", "style", "noscript"):
@@ -81,9 +94,9 @@ class _HTMLText(HTMLParser):
         return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
 
 
-def _pages(path: Path) -> list[Page]:
+def _pages(path: Path, indent_markers: bool = False) -> list[Page]:
     if path.suffix.lower() in (".html", ".htm"):
-        parser = _HTMLText()
+        parser = _HTMLText(indent_markers)
         parser.feed(path.read_text(encoding="utf-8", errors="ignore"))
         return [Page(1, parser.text())]
     with pdfplumber.open(path) as pdf:
@@ -102,6 +115,8 @@ def _label(doc: dict) -> str:
 def chunk_document(doc: dict, pages: list[Page]) -> list[Chunk]:
     if doc["doc_type"] == "ordinance":
         return chunk_ordinance(pages, _label(doc))
+    if doc["doc_type"] == "code_section":
+        return chunk_lamc(pages)
     if doc["doc_type"] == "statute":
         return chunk_statute(pages, _label(doc))
     return chunk_by_headings(pages, _label(doc))
@@ -118,7 +133,7 @@ def ingest(doc: dict) -> dict | None:
         return None
     data = path.read_bytes()
     sha = hashlib.sha256(data).hexdigest()
-    pages = _pages(path)
+    pages = _pages(path, indent_markers=doc.get("doc_type") == "code_section")
     chunks = chunk_document(doc, pages)
     retrieved = datetime.fromtimestamp(path.stat().st_mtime, UTC)
 
@@ -141,12 +156,27 @@ def ingest(doc: dict) -> dict | None:
                    effective_date=EXCLUDED.effective_date, effective_note=EXCLUDED.effective_note,
                    manual_retrieval=EXCLUDED.manual_retrieval, ocr_text=EXCLUDED.ocr_text,
                    file_sha256=EXCLUDED.file_sha256, pages=EXCLUDED.pages""",
-            (doc["id"], doc["title"], doc["publisher"], doc["doc_type"], doc["jurisdiction"], doc.get("code_chapter"),
-             doc["url"], retrieved, doc.get("effective_date"), doc.get("effective_note"), doc["fetch"] == "manual",
-             bool(doc.get("ocr_text")), sha, len(pages)),
+            (
+                doc["id"],
+                doc["title"],
+                doc["publisher"],
+                doc["doc_type"],
+                doc["jurisdiction"],
+                doc.get("code_chapter"),
+                doc["url"],
+                retrieved,
+                doc.get("effective_date"),
+                doc.get("effective_note"),
+                doc["fetch"] == "manual",
+                bool(doc.get("ocr_text")),
+                sha,
+                len(pages),
+            ),
         )
-        existing = {r["id"]: r["content_hash"] for r in
-                    conn.execute("SELECT id, content_hash FROM reg_chunk WHERE document_id=%s", (doc["id"],))}
+        existing = {
+            r["id"]: r["content_hash"]
+            for r in conn.execute("SELECT id, content_hash FROM reg_chunk WHERE document_id=%s", (doc["id"],))
+        }
         new_ids = {cid for cid, _ in rows}
         added = changed = unchanged = 0
         for cid, c in rows:
@@ -166,8 +196,20 @@ def ingest(doc: dict) -> dict | None:
                        text=EXCLUDED.text, page_start=EXCLUDED.page_start, page_end=EXCLUDED.page_end,
                        retrieved_at=EXCLUDED.retrieved_at, effective_date=EXCLUDED.effective_date,
                        content_hash=EXCLUDED.content_hash, embedding=NULL""",
-                (cid, doc["id"], c.section_id, c.heading, c.text, c.page_start, c.page_end, doc["url"], retrieved,
-                 doc.get("effective_date"), doc.get("code_chapter"), h),
+                (
+                    cid,
+                    doc["id"],
+                    c.section_id,
+                    c.heading,
+                    c.text,
+                    c.page_start,
+                    c.page_end,
+                    doc["url"],
+                    retrieved,
+                    doc.get("effective_date"),
+                    doc.get("code_chapter"),
+                    h,
+                ),
             )
         removed = [cid for cid in existing if cid not in new_ids]
         if removed:
@@ -177,8 +219,14 @@ def ingest(doc: dict) -> dict | None:
             (doc["id"], sha, added, changed, len(removed), unchanged),
         )
         conn.commit()
-    return {"doc": doc["id"], "chunks": len(rows), "added": added, "changed": changed,
-            "removed": len(removed), "unchanged": unchanged}
+    return {
+        "doc": doc["id"],
+        "chunks": len(rows),
+        "added": added,
+        "changed": changed,
+        "removed": len(removed),
+        "unchanged": unchanged,
+    }
 
 
 def main(argv: list[str]) -> None:

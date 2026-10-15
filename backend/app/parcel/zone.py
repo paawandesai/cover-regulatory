@@ -71,7 +71,7 @@ def parse_zone(raw: str) -> ParsedZone:
         if not m:
             break
         prefixes.append(m.group(1).strip("()[]"))
-        s = s[m.end():]
+        s = s[m.end() :]
 
     parts = s.split("-") if s else []
     base = parts[0] if parts else None
