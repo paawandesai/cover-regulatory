@@ -106,3 +106,56 @@ def test_invite_gate(monkeypatch, client):
 
 def test_no_gate_without_code(client):
     assert client.get("/api/invite").json() == {"required": False, "ok": True}
+
+
+def test_verification_is_shown_but_never_changes_status(client, tmp_path):
+    import json
+
+    from app.extract.verification import load
+
+    with connect() as conn:
+        f = conn.execute("SELECT id, chunk_id, parameter, status FROM rule_fragment ORDER BY id LIMIT 1").fetchone()
+        before = conn.execute("SELECT * FROM fragment_verification WHERE fragment_id = %s", (f["id"],)).fetchone()
+    data = {
+        "checked_on": "2026-10-15",
+        "candidates": [
+            {
+                **{k: f[k] for k in ("chunk_id", "parameter")},
+                "fragment_id": f["id"],
+                "recommendation": "reject",
+                "note": "test note",
+                "checks": {"web": "outdated or wrong"},
+            },
+            {
+                "fragment_id": f["id"],
+                "chunk_id": "elsewhere",
+                "parameter": "x",
+                "recommendation": "approve",
+                "note": None,
+                "checks": {},
+            },
+        ],
+    }
+    path = tmp_path / "v.json"
+    path.write_text(json.dumps(data))
+    try:
+        assert load(path) == (1, 1)
+        rows = client.get(f"/api/admin/fragments?status={f['status']}", headers=auth()).json()
+        row = next(r for r in rows if r["id"] == f["id"])
+        assert row["check_recommendation"] == "reject" and row["check_note"] == "test note"
+        assert row["status"] == f["status"]
+    finally:
+        with connect() as conn:
+            conn.execute("DELETE FROM fragment_verification WHERE fragment_id = %s", (f["id"],))
+            if before:
+                conn.execute(
+                    "INSERT INTO fragment_verification VALUES (%s, %s, %s, %s, %s)",
+                    (
+                        before["fragment_id"],
+                        before["checked_on"],
+                        before["recommendation"],
+                        before["note"],
+                        json.dumps(before["checks"]),
+                    ),
+                )
+            conn.commit()
