@@ -11,8 +11,18 @@ from app.config import get_settings
 CENSUS_URL = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress"
 
 _SUFFIXES = {
-    "STREET": "ST", "AVENUE": "AVE", "BOULEVARD": "BLVD", "DRIVE": "DR", "ROAD": "RD", "PLACE": "PL",
-    "LANE": "LN", "COURT": "CT", "TERRACE": "TER", "CIRCLE": "CIR", "WAY": "WAY", "PARKWAY": "PKWY",
+    "STREET": "ST",
+    "AVENUE": "AVE",
+    "BOULEVARD": "BLVD",
+    "DRIVE": "DR",
+    "ROAD": "RD",
+    "PLACE": "PL",
+    "LANE": "LN",
+    "COURT": "CT",
+    "TERRACE": "TER",
+    "CIRCLE": "CIR",
+    "WAY": "WAY",
+    "PARKWAY": "PKWY",
 }
 _DIRS = {"NORTH": "N", "SOUTH": "S", "EAST": "E", "WEST": "W"}
 

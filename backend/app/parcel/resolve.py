@@ -100,7 +100,9 @@ def resolve(query: str) -> ParcelContext:
             "apn": apn,
             "matched_by": matched_by,
             "lot_area_sqft": Sourced(round(p["lot_area_sqft"]), sid, fetched),
-            "use": Sourced({"code": p["use_code"], "type": p["use_type"], "description": p["use_description"]}, sid, fetched),
+            "use": Sourced(
+                {"code": p["use_code"], "type": p["use_type"], "description": p["use_description"]}, sid, fetched
+            ),
             "existing": Sourced(
                 {k: p[k] for k in ("year_built", "units", "bedrooms", "bathrooms", "sqft_main")}, sid, fetched
             ),
@@ -136,7 +138,7 @@ def resolve(query: str) -> ParcelContext:
             (apn,),
         ).fetchone()
         cpa_val = Sourced(cpa["name"], cpa["source_id"], cpa["fetched_at"]) if cpa else None
-        regime = (cpa["regime"] if cpa and cpa["regime"] else "I")
+        regime = cpa["regime"] if cpa and cpa["regime"] else "I"
         regime_val = Sourced(
             regime,
             "code_regime_area" if cpa and cpa["regime"] else None,
@@ -169,7 +171,9 @@ def resolve(query: str) -> ParcelContext:
 
         notes = []
         if len({z["zone_string"] for z in zones}) > 1:
-            notes.append("Parcel is split-zoned; the zone at the parcel's interior point is used, and the others are listed.")
+            notes.append(
+                "Parcel is split-zoned; the zone at the parcel's interior point is used, and the others are listed."
+            )
         if not zones:
             notes.append("No zoning polygon found for this parcel in the loaded data.")
 
