@@ -36,4 +36,9 @@ defineProps<{ label: Label; text?: string }>()
   color: var(--danger);
   border-color: var(--danger);
 }
+.withheld {
+  color: var(--ink-muted);
+  border-color: var(--line-strong);
+  border-style: dashed;
+}
 </style>

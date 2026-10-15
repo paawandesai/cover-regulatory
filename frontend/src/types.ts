@@ -1,6 +1,6 @@
 // Shapes returned by the FastAPI backend (backend/app/api/main.py, backend/app/engine/assess.py).
 
-export type Label = 'verified' | 'derived' | 'interpretive' | 'uncited'
+export type Label = 'verified' | 'derived' | 'interpretive' | 'uncited' | 'withheld'
 
 export interface Citation {
   fragment_id: number | null
@@ -76,8 +76,8 @@ export interface Fragment {
   id: number
   rule_family: string
   parameter: string
-  applies_to: string | null
-  conditions: string | null
+  applies_to: string | string[] | null
+  conditions: string | string[] | null
   value_numeric: number | null
   unit: string | null
   value_text: string | null

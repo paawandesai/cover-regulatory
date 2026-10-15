@@ -14,7 +14,7 @@ const TABS: [Status, string][] = [
 ]
 
 const VALIDATION: Record<string, string> = {
-  ok: 'Checks passed',
+  ok: 'Quote check passed',
   unknown_chunk_id: 'Cited text not found',
   quote_not_in_chunk: 'Quote not in the source',
   unknown_parameter: 'Unknown parameter',
@@ -117,8 +117,9 @@ const value = (f: Fragment) =>
 const short = (t: string, n = 70) => (t.length > n ? t.slice(0, n - 1) + '…' : t)
 
 // applies_to / conditions may arrive as a JSON array string.
-const listText = (v: string | null) => {
+const listText = (v: string | string[] | null) => {
   if (!v) return null
+  if (Array.isArray(v)) return v.join(', ')
   try {
     const a = JSON.parse(v)
     if (Array.isArray(a)) return a.join(', ')

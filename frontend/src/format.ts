@@ -5,6 +5,7 @@ export const LABEL_TEXT: Record<Label, string> = {
   derived: 'Derived from rule',
   interpretive: 'Interpretation, confirm with City',
   uncited: 'No cited source',
+  withheld: 'Not modeled here',
 }
 
 const num = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 })
