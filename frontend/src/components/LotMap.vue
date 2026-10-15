@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { nearby } from '../api'
 import { bounds, rings } from '../geo'
@@ -60,7 +60,7 @@ onMounted(() => {
     const m = map!
     for (const id of ['nearby', 'lot', 'envelope']) m.addSource(id, { type: 'geojson', data: feature(null) })
     m.addLayer({ id: 'nearby-fill', type: 'fill', source: 'nearby', paint: { 'fill-color': '#ffffff' } })
-    m.addLayer({ id: 'nearby-line', type: 'line', source: 'nearby', paint: { 'line-color': '#e2dfd8', 'line-width': 1 } })
+    m.addLayer({ id: 'nearby-line', type: 'line', source: 'nearby', paint: { 'line-color': '#b9b5ac', 'line-width': 1 } })
     m.addLayer({ id: 'lot-fill', type: 'fill', source: 'lot', paint: { 'fill-color': '#ffffff' } })
     m.addLayer({ id: 'lot-line', type: 'line', source: 'lot', paint: { 'line-color': '#1c1b19', 'line-width': 2 } })
     m.addLayer({ id: 'env-fill', type: 'fill', source: 'envelope', paint: { 'fill-color': '#fbe9df' } })

@@ -8,5 +8,6 @@ export default defineConfig({
     port: 5173,
     proxy: { '/api': { target: process.env.API_URL ?? 'http://127.0.0.1:8000', changeOrigin: false } },
   },
+  worker: { format: 'es' },
   test: { environment: 'jsdom' },
 })
