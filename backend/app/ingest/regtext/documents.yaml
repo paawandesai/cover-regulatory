@@ -1,0 +1,121 @@
+# Regulatory documents. `fetch: url` documents are downloaded by code; `fetch: manual` documents are saved
+# by a person from a site that refuses or must not receive automated requests, and placed at `local_path`.
+# Never fetch by code: codelibrary.amlegal.com, Municode, UpCodes, codes.iccsafe.org.
+documents:
+  - id: ord_184802_bmo
+    title: Ordinance No. 184,802 (single-family zone regulations, R1 Variation Zones, RG district)
+    publisher: Los Angeles City Clerk
+    doc_type: ordinance
+    jurisdiction: City of Los Angeles
+    code_chapter: I
+    fetch: url
+    url: https://cityclerk.lacity.org/onlinedocs/2014/14-0656_ORD_184802_3-13-17.pdf
+    effective_date: null
+    effective_note: >-
+      Certification dates in the scanned PDF are illegible (OCR). Council file 14-0656 posts the ordinance
+      as 3-13-17. Confirm the effective date before relying on it. Later ordinances may have amended these
+      sections; the consolidated code (manual save) takes precedence once ingested.
+    ocr_text: true
+
+  - id: ord_186481_adu
+    title: Ordinance No. 186,481 (Accessory Dwelling Units; adds LAMC 12.22 A.33)
+    publisher: Los Angeles City Clerk
+    doc_type: ordinance
+    jurisdiction: City of Los Angeles
+    code_chapter: I
+    fetch: url
+    url: https://cityclerk.lacity.org/onlinedocs/2016/16-1468_ORD_186481_12-19-2019.pdf
+    effective_date: 2019-12-19
+    effective_note: >-
+      HCD found this ordinance non-compliant with State ADU law (letter 2024-11-19). ZA Memo 143 states which
+      provisions still apply to State ADUs. Read together with that memo.
+    ocr_text: true
+
+  - id: za_memo_143
+    title: ZA Memorandum No. 143, Implementation of 2019 ADU Ordinance and State ADU Law
+    publisher: Los Angeles City Planning, Office of Zoning Administration
+    doc_type: memo
+    jurisdiction: City of Los Angeles
+    code_chapter: I
+    fetch: url
+    url: https://planning.lacity.gov/odocument/184600d8-71d7-4d74-baf1-1f9cd2603320/ZA_Memo_No_143.pdf
+    effective_date: 2024-12-30
+    effective_note: Memo dated 2024-12-30; supersedes prior City ADU/JADU implementation documents.
+    ocr_text: false
+
+  - id: palisades_rebuild_faq
+    title: Frequently Asked Questions Related to Palisades Fire Rebuilds
+    publisher: Los Angeles City Planning
+    doc_type: guidance
+    jurisdiction: City of Los Angeles
+    code_chapter: null
+    fetch: url
+    url: https://planning.lacity.gov/odocument/e36a2c30-8689-46b7-840c-9de3619b4a50/Palisades_Rebuild_FAQs.pdf
+    effective_date: 2026-01-30
+    effective_note: FAQ dated 2026-01-30; summarizes Emergency Executive Orders. Orders change; re-check before use.
+    ocr_text: false
+
+  # Saved by hand (leginfo refuses automated requests; LAMC consolidated text is only on amlegal's viewer).
+  - id: gov_66310_article1
+    title: Gov. Code Title 7, Div. 1, Ch. 13, Art. 1 (ADU law, findings and definitions)
+    publisher: California Legislative Information
+    doc_type: statute
+    jurisdiction: State of California
+    code_chapter: null
+    fetch: manual
+    url: https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=GOV&division=1.&title=7.&chapter=13.&article=1.
+    local_path: data/manual/gov_ch13_art1.html
+  - id: gov_66310_article2
+    title: Gov. Code Title 7, Div. 1, Ch. 13, Art. 2 (ADU approvals)
+    publisher: California Legislative Information
+    doc_type: statute
+    jurisdiction: State of California
+    code_chapter: null
+    fetch: manual
+    url: https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=GOV&division=1.&title=7.&chapter=13.&article=2.
+    local_path: data/manual/gov_ch13_art2.html
+  - id: gov_66310_article3
+    title: Gov. Code Title 7, Div. 1, Ch. 13, Art. 3 (JADUs)
+    publisher: California Legislative Information
+    doc_type: statute
+    jurisdiction: State of California
+    code_chapter: null
+    fetch: manual
+    url: https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=GOV&division=1.&title=7.&chapter=13.&article=3.
+    local_path: data/manual/gov_ch13_art3.html
+  - id: gov_66310_article4
+    title: Gov. Code Title 7, Div. 1, Ch. 13, Art. 4 (ADU sales)
+    publisher: California Legislative Information
+    doc_type: statute
+    jurisdiction: State of California
+    code_chapter: null
+    fetch: manual
+    url: https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=GOV&division=1.&title=7.&chapter=13.&article=4.
+    local_path: data/manual/gov_ch13_art4.html
+  - id: gov_65852_21
+    title: Gov. Code 65852.21 (SB 9 two-unit development)
+    publisher: California Legislative Information
+    doc_type: statute
+    jurisdiction: State of California
+    code_chapter: null
+    fetch: manual
+    url: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21
+    local_path: data/manual/gov_65852_21.html
+  - id: gov_66411_7
+    title: Gov. Code 66411.7 (SB 9 urban lot split)
+    publisher: California Legislative Information
+    doc_type: statute
+    jurisdiction: State of California
+    code_chapter: null
+    fetch: manual
+    url: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7
+    local_path: data/manual/gov_66411_7.html
+  - id: lamc_consolidated_r1
+    title: LAMC Chapter I sections 12.03 (excerpt), 12.08, 12.21 C.10, 12.22 A.33 (consolidated, as amended)
+    publisher: American Legal Publishing (free public viewer), read manually
+    doc_type: code_section
+    jurisdiction: City of Los Angeles
+    code_chapter: I
+    fetch: manual
+    url: https://codelibrary.amlegal.com/codes/los_angeles/latest/lamc/0-0-0-422835
+    local_path: data/manual/lamc_consolidated_r1.pdf
