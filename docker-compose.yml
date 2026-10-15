@@ -18,13 +18,25 @@ services:
 
   api:
     build: ./backend
+    image: cover-regulatory-api
     environment:
       DATABASE_URL: postgresql://regengine:${POSTGRES_PASSWORD}@db:5432/regengine
       LLM_MODEL_ID: ${LLM_MODEL_ID:-claude-opus-5-5}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-}
       ADMIN_PASSWORD_SCRYPT: ${ADMIN_PASSWORD_SCRYPT:-}
+      DEMO_INVITE_CODE: ${DEMO_INVITE_CODE:-}
     depends_on:
       db: { condition: service_healthy }
+    restart: unless-stopped
+
+  # Deletes feedback older than FEEDBACK_RETENTION_DAYS, once a day.
+  purge:
+    image: cover-regulatory-api
+    command: ["sh", "-c", "while true; do python -m app.api.purge; sleep 86400; done"]
+    environment:
+      DATABASE_URL: postgresql://regengine:${POSTGRES_PASSWORD}@db:5432/regengine
+      FEEDBACK_RETENTION_DAYS: ${FEEDBACK_RETENTION_DAYS:-14}
+    depends_on: [api]
     restart: unless-stopped
 
   web:

@@ -3,13 +3,16 @@
 The default access log is off because it prints query strings (addresses, questions). The middleware below
 logs only the route template, status code and an opaque request id."""
 
+import hashlib
+import hmac
 import logging
 import time
 import uuid
 from datetime import UTC, datetime
 from typing import Annotated, Literal
 
-from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request, Response
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from app.api.auth import require_admin
@@ -18,6 +21,27 @@ from app.db.connection import connect
 
 log = logging.getLogger("app.api")
 app = FastAPI(title="Home Building Regulatory Engine (PoC)", docs_url="/api/docs", openapi_url="/api/openapi.json")
+
+
+INVITE_COOKIE = "demo_invite"
+_OPEN_PATHS = {"/api/health", "/api/invite"}
+
+
+def _invite_token(code: str) -> str:
+    # The cookie holds a keyed hash of the code, never the code itself.
+    return hmac.new(code.encode(), b"regengine-demo-invite", hashlib.sha256).hexdigest()
+
+
+@app.middleware("http")
+async def invite_gate(request: Request, call_next):
+    """Hosted demo only: with DEMO_INVITE_CODE set, API routes need the invite cookie."""
+    code = get_settings().demo_invite_code
+    path = request.url.path
+    if code and path.startswith("/api/") and path not in _OPEN_PATHS:
+        cookie = request.cookies.get(INVITE_COOKIE, "")
+        if not hmac.compare_digest(cookie, _invite_token(code.get_secret_value())):
+            return JSONResponse({"detail": "invite_required"}, status_code=401)
+    return await call_next(request)
 
 
 @app.middleware("http")
@@ -67,6 +91,37 @@ def health():
         "admin_configured": bool(s.admin_username and s.admin_password_scrypt),
         **{k: (v.isoformat() if isinstance(v, datetime) else v) for k, v in row.items()},
     }
+
+
+class InviteIn(BaseModel):
+    code: str = Field(max_length=200)
+
+
+@app.get("/api/invite")
+def invite_status(request: Request):
+    code = get_settings().demo_invite_code
+    if code is None:
+        return {"required": False, "ok": True}
+    ok = hmac.compare_digest(request.cookies.get(INVITE_COOKIE, ""), _invite_token(code.get_secret_value()))
+    return {"required": True, "ok": ok}
+
+
+@app.post("/api/invite")
+def invite(body: InviteIn, request: Request, response: Response):
+    code = get_settings().demo_invite_code
+    if code is None:
+        return {"ok": True}
+    if not hmac.compare_digest(body.code.strip().encode(), code.get_secret_value().encode()):
+        raise HTTPException(403, "wrong invite code")
+    response.set_cookie(
+        INVITE_COOKIE,
+        _invite_token(code.get_secret_value()),
+        max_age=7 * 24 * 3600,
+        httponly=True,
+        samesite="strict",
+        secure=request.url.scheme == "https" or request.headers.get("x-forwarded-proto") == "https",
+    )
+    return {"ok": True}
 
 
 # --- regulation text --------------------------------------------------------------------------------------

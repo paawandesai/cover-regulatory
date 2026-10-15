@@ -87,3 +87,22 @@ def test_assessment_returns_lot_outline_when_yards_are_withheld(client):
     g = client.get("/api/assess", params={"q": "4412014028"}).json()["geometry"]
     assert g["lot"]["type"] in ("Polygon", "MultiPolygon")
     assert g["envelope"] is None and g["yards_ft"] is None
+
+
+def test_invite_gate(monkeypatch, client):
+    monkeypatch.setenv("DEMO_INVITE_CODE", "blue heron")
+    get_settings.cache_clear()
+    assert client.get("/api/health").status_code == 200
+    r = client.get("/api/assess", params={"q": "2121005008"})
+    assert r.status_code == 401 and r.json()["detail"] == "invite_required"
+    assert r.headers["X-Robots-Tag"].startswith("noindex")
+    assert client.post("/api/invite", json={"code": "wrong"}).status_code == 403
+    r = client.post("/api/invite", json={"code": "blue heron"})
+    assert r.status_code == 200
+    assert "blue heron" not in r.headers["set-cookie"]
+    assert client.get("/api/invite").json() == {"required": True, "ok": True}
+    assert client.get("/api/assess", params={"q": "2121005008"}).status_code == 200
+
+
+def test_no_gate_without_code(client):
+    assert client.get("/api/invite").json() == {"required": False, "ok": True}

@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     admin_username: str | None = None
     admin_password_scrypt: SecretStr | None = None
 
+    # Hosted demo gate. When set, every /api route except health and the invite check needs the invite cookie.
+    demo_invite_code: SecretStr | None = None
+    # Feedback older than this many days is deleted by `python -m app.api.purge`.
+    feedback_retention_days: int = 14
+
     # Polite access to public ArcGIS services.
     arcgis_page_delay_s: float = 0.25
     http_user_agent: str = "cover-regulatory-poc/0.1 (research prototype)"
