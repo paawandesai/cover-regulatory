@@ -72,7 +72,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Label | Meaning |
 |---|---|
 | Verified parcel data | Read straight from a named dataset, with its fetch date. |
-| Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. |
+| Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. In the hosted demo the reviewer is an AI review applied on the owner's instruction (`reviewed_by = 'ai-review'`), and the source panel says so. |
 | Interpretation, confirm with City | Same computation, but at least one input fragment is still pending review. Shows the share of inputs found. |
 | No cited source | An input is missing, ambiguous or withheld. No number is shown. |
 

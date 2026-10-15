@@ -10,6 +10,7 @@ export interface Citation {
   quote_start: number | null;
   quote_end: number | null;
   review_status: "pending" | "approved" | "code-cited" | string;
+  reviewed_by?: string | null;
   source_url: string | null;
   retrieved_at: string | null;
 }

@@ -159,3 +159,20 @@ def test_verification_is_shown_but_never_changes_status(client, tmp_path):
                     ),
                 )
             conn.commit()
+
+
+def test_ai_review_only_decides_pending_fragments(tmp_path):
+    import json
+
+    from app.extract.apply_review import apply
+
+    with connect() as conn:
+        f = conn.execute(
+            "SELECT id, chunk_id, parameter FROM rule_fragment WHERE status <> 'pending' ORDER BY id LIMIT 1"
+        ).fetchone()
+    if f is None:
+        pytest.skip("no decided fragment to test with")
+    c = {"fragment_id": f["id"], "chunk_id": f["chunk_id"], "parameter": f["parameter"], "recommendation": "reject"}
+    path = tmp_path / "v.json"
+    path.write_text(json.dumps({"checked_on": "2026-10-15", "candidates": [c]}))
+    assert apply(path, "test") == {"approved": 0, "rejected": 0, "skipped": 1}

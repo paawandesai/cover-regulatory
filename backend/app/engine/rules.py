@@ -118,7 +118,7 @@ def load(rule_id: str, conn=None) -> RuleInputs:
     for need in RULES[rule_id]:
         clause, arg = _section_clause(need.section)
         rows = conn.execute(
-            f"""SELECT f.id, f.status, f.value_numeric, f.source_quote, f.quote_start, f.quote_end, f.chunk_id,
+            f"""SELECT f.id, f.status, f.reviewed_by, f.value_numeric, f.source_quote, f.quote_start, f.quote_end, f.chunk_id,
                        c.section_id, c.source_url, c.retrieved_at::text AS retrieved_at
                 FROM rule_fragment f JOIN reg_chunk c ON c.id = f.chunk_id
                 WHERE {clause} AND f.parameter = %s AND f.status IN ('approved', 'pending')
@@ -152,6 +152,7 @@ def load(rule_id: str, conn=None) -> RuleInputs:
                     "quote_start": r["quote_start"],
                     "quote_end": r["quote_end"],
                     "review_status": r["status"],
+                    "reviewed_by": r["reviewed_by"],
                     "source_url": r["source_url"],
                     "retrieved_at": r["retrieved_at"],
                 }
