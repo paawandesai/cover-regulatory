@@ -1,0 +1,41 @@
+# Local or single-server run: Postgres (PostGIS + pgvector), the API, and the web app behind Caddy.
+#   docker compose up -d --build
+#   docker compose run --rm api python -m app.db.migrate
+# Data loading is described in README "Running with Docker".
+services:
+  db:
+    build: { context: deploy, dockerfile: db.Dockerfile }
+    environment:
+      POSTGRES_DB: regengine
+      POSTGRES_USER: regengine
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U regengine -d regengine"]
+      interval: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://regengine:${POSTGRES_PASSWORD}@db:5432/regengine
+      LLM_MODEL_ID: ${LLM_MODEL_ID:-claude-opus-5-5}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_PASSWORD_SCRYPT: ${ADMIN_PASSWORD_SCRYPT:-}
+    depends_on:
+      db: { condition: service_healthy }
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    ports: ["${WEB_PORT:-8080}:80", "${TLS_PORT:-8443}:443"]
+    volumes: [caddy_data:/data]
+    depends_on: [api]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  caddy_data:

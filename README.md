@@ -58,3 +58,23 @@ Vue 3 + TypeScript + MapLibre, styled with the Forge design tokens (`frontend/sr
 Two pages: the assessment (`/?q=<APN or address>`) and rule review (`/review`, admin sign-in).
 The map draws County parcel outlines only, with no basemap tiles, so no third-party tile host is contacted.
 Admin credentials are held in memory for the session and never written to browser storage.
+
+
+### Running with Docker
+
+```sh
+cp .env.example .env                 # set POSTGRES_PASSWORD and the admin values
+docker compose up -d --build         # db (PostGIS + pgvector), api, web on http://localhost:8080
+docker compose exec api python -m app.db.migrate
+```
+
+The database starts empty. Load it either way:
+
+- **From a dump** of a loaded database: `scripts/db-dump.sh regengine.dump` on the source machine, then
+  `scripts/db-restore.sh regengine.dump`. The dump contains regulation text saved by hand, so it stays out of git.
+- **From the sources**: run the loaders inside the api container (`python -m app.ingest.load_datasets`,
+  `python -m app.ingest.regtext.ingest`, `python -m app.search.index`). The regulation text step needs the
+  hand-saved files in `data/manual/`.
+
+The api image includes the embedding model, so containers never download it at runtime. Builds behind a
+TLS-inspecting proxy can pass that proxy's CA bundle as the build secret `extra_ca`.

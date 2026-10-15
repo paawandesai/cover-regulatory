@@ -1,0 +1,19 @@
+# SITE_ADDRESS is ":80" locally; on a server set it to a hostname and Caddy gets a TLS certificate.
+{$SITE_ADDRESS::80} {
+	encode zstd gzip
+	header {
+		X-Robots-Tag "noindex, nofollow"
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		-Server
+	}
+	# Request logs are off: query strings hold addresses.
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
