@@ -437,9 +437,9 @@ def assess(query: str) -> dict:
         "ai_disclosure": AI_DISCLOSURE,
     }
     if ctx.status == "outside_city":
-        result["notes"].append(
+        result["notes"] = [
             f"Outside the City of Los Angeles ({ctx.jurisdiction_hint}). This tool models City zoning only."
-        )
+        ]
         return result
     if ctx.status == "regime_not_modeled":
         result["notes"].append(
@@ -507,6 +507,13 @@ def assess(query: str) -> dict:
     if frame and None not in (front, side, rear):
         result["geometry"] = envelope(frame, front, side, rear) | {
             "yards_ft": {"front": front, "side": side, "rear": rear}
+        }
+    elif frame:
+        result["geometry"] = envelope(frame, 0, 0, 0) | {
+            "envelope": None,
+            "envelope_area_sqft": None,
+            "yards_ft": None,
+            "note": "yards not determined; no buildable area drawn",
         }
     result["items"] = [asdict(i) | {"label_text": i.label_text} for i in items]
     return result

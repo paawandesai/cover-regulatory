@@ -107,3 +107,14 @@ table at load time. Summary:
 | HPOZ, Specific Plans | LA City Planning | City Planning web terms |
 | Coastal Zone | LA County Regional Planning (Coastal Commission boundary) | County terms |
 | Palisades Fire perimeter 2025 | LA County Public Works | County terms |
+
+## Frontend runtime dependencies (npm)
+
+| Package | Version | License |
+|---|---|---|
+| vue | 3.5.43 | MIT |
+| vue-router | 5.3.1 | MIT |
+| maplibre-gl | 6.11.2 | BSD-3-Clause |
+| @fontsource/ibm-plex-sans, @fontsource/ibm-plex-mono (IBM Plex fonts) | 5.3.0 | OFL-1.1 |
+
+Dev-only tooling (vite, vitest, typescript, vue-tsc, jsdom) is not shipped in the build.

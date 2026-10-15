@@ -30,4 +30,31 @@ _TBD_ (golden tests, adversarial evaluation, latency)
 This tool uses an LLM to extract rule fragments from regulatory text and to write explanations. Every AI-produced output is labeled in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
 
 ## Development
-_TBD_
+
+Requirements: Python 3.13 with `uv`, Postgres 16 with PostGIS and pgvector, Node 22.
+
+### API
+
+```sh
+cd backend
+cp ../.env.example .env            # set DATABASE_URL; secrets come from the environment, never the repo
+uv run python -m app.api.auth      # prints a scrypt hash for ADMIN_PASSWORD_SCRYPT (rule review sign-in)
+uv run uvicorn app.api.main:app --no-access-log --port 8000
+```
+
+`--no-access-log` matters: the default access log prints query strings, which hold addresses.
+
+### Web app
+
+```sh
+cd frontend
+npm ci
+npm run dev        # http://localhost:5173, proxies /api to :8000 (override with API_URL)
+npm test           # unit tests
+npm run build      # typecheck + production build into frontend/dist
+```
+
+Vue 3 + TypeScript + MapLibre, styled with the Forge design tokens (`frontend/src/tokens.css`).
+Two pages: the assessment (`/?q=<APN or address>`) and rule review (`/review`, admin sign-in).
+The map draws County parcel outlines only, with no basemap tiles, so no third-party tile host is contacted.
+Admin credentials are held in memory for the session and never written to browser storage.
