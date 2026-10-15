@@ -13,6 +13,7 @@ RUN --mount=type=secret,id=extra_ca \
 
 COPY app ./app
 COPY migrations ./migrations
+COPY data/verification ./data/verification
 
 # Bake the embedding model into the image so the container never downloads it at runtime.
 RUN --mount=type=secret,id=extra_ca \

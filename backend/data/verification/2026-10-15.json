@@ -1,0 +1,2766 @@
+{
+ "checked_on": "2026-10-15",
+ "method": "Each candidate was checked against its source chunk by Claude Opus 5.5, independently by Claude Sonnet 5.5, and against official sources on the web (City Clerk ordinances, CP-7150, ZA Memo 143 Rev. 1, Gov. Code via california.public.law).",
+ "candidates": [
+  {
+   "fragment_id": 1,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+   "parameter": "front_yard_pct_lot_depth",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 2,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+   "parameter": "front_yard_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The numeric value 20 and unit ft match the text, but the parameter name is misleading.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 3,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+   "parameter": "front_yard_min_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 4,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+   "parameter": "front_yard_min_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 5,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague, and the value_text calls it the maximum required front yard under the averaging provisions, which is roughly right but incomplete.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 6,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague, so a specific name like key_lot_reduced_front_yard_max_distance would be better.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 7,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 8,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 9,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "side_yard_pct_lot_width",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 10,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name overstates the scope, and the conditions field mentions only the narrow-lot floor and omits the 5 ft baseline, the 10 percent computation, the story and height additions, and the precedence rules.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 11,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "side_yard_extra_per_story_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 12,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 13,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Applies to new construction on flat land only: +1 ft per 10 ft (or part) above 18 ft.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 14,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 15,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is a catch-all and does not name what is regulated, a rooftop deck setback inward from the minimum required side yard.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 16,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-3#1",
+   "parameter": "rear_yard_min_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 17,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-4#1",
+   "parameter": "lot_width_min_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 18,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 19,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-4#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 20,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-4#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 21,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-1#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 22,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-7#1",
+   "parameter": "alq_allowed",
+   "recommendation": "reject",
+   "note": "No value: a yes/no with no answer. The 10,000 sq ft rule is #23.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "disagree",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 23,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-7#1",
+   "parameter": "alq_min_lot_area_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 24,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-7#1",
+   "parameter": "stories_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 25,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-7#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague and the rule_family 'guest_house' is not supported by the text.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 26,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-7#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 27,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 28,
+   "chunk_id": "lamc_chapter1#lamc-12-08-a-4#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 29,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-a#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 30,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-a#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 31,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-a#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 32,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 33,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 34,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 35,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 36,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 37,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 38,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 39,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'height_max_ft' is too generic.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 40,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 41,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 42,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 43,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 44,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 45,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 46,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 47,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 48,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The Front Mass maximum heights (24', 24', 20', 18' for R1R1–R1R4) match Table 12.08 C.5.(d), and feet is the correct unit.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 49,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 50,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 51,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 52,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-e#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 53,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-e#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 54,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'rfa_ratio' is somewhat misleading because the clause is a pointer, not a ratio.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 55,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 56,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve_with_note",
+   "note": "A Floor Area ratio against Buildable Area, Coastal Zone outside Hillside only.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 57,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "stories_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 58,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "Hillside 1-SS lots may differ (CP-7150 shows 22 ft).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 59,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 60,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "stories_max",
+   "recommendation": "approve_with_note",
+   "note": "Story limit does not apply to all-residential buildings (#66).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 61,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 62,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "stories_max",
+   "recommendation": "approve_with_note",
+   "note": "Story limit does not apply to all-residential buildings (#66).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 63,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "1-VL lots also in RAS3/RAS4 are capped at 50 ft.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 64,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "stories_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 65,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 66,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 67,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-8#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 68,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-b#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter is labeled 'other', which is vague but not wrong; it is really a rear-half location limit with a 55 ft cap on the required distance from the front lot line.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 69,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-b#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. Side_yard_min_ft reads as a general side yard minimum, while the excerpt regulates the distance of accessory buildings from the side street lot line.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 70,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-c#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'side_yard_min_ft' is too generic: the text sets an accessory building setback on a reversed corner lot, not the side yard requirement for the zone.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 71,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-d#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague; the text regulates minimum building-to-building separation between accessory buildings and main buildings or accessory living quarters, so a specific name would be better.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 72,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-d#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague; it should be named something like accessory-to-main-building separation (reduced).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 73,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-e#1",
+   "parameter": "rear_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name rear_yard_min_ft implies a general rear yard requirement, while the text sets a minimum rear-lot-line setback for specific accessory buildings (recreation rooms in accessory buildings and accessory buildings used as residential or l",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 74,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-e#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name side_yard_min_ft suggests a yard for the main building, when the text regulates the minimum side setback of residential or living-quarters accessory buildings, measured by reference to the main-building side yard at the same height.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 75,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-f#1",
+   "parameter": "rear_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name rear_yard_min_ft implies the general rear yard requirement for the lot, whereas the text only regulates the rear setback for two-story accessory buildings.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 76,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-f#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 77,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-g#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 78,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-i#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 79,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-j#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague: the text regulates the permitted location of accessory buildings within required rear and side yards, and 30 ft is a depth threshold for side yard encroachment rather than a standalone dimension.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 80,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-j#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'side_yard_min_ft' suggests a general side yard setback for accessory buildings, while the text is a permission for placement in a side yard required for a building over two stories, with a 5 ft clearance from the side lot line.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 81,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-j#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague, and the single value 75 is only one of two paired distance conditions (75 ft to the front lot line and 10 ft to the main building).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 82,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-k#1",
+   "parameter": "front_yard_min_ft",
+   "recommendation": "reject",
+   "note": "Wrong label: 25 ft is the most an accessory building on a through lot must be set back, not a minimum front yard.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "disagree",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 83,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-k#1",
+   "parameter": "front_yard_pct_lot_depth",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name is too generic: it is really an accessory building setback from the front lot line on shallow through lots, not a front yard requirement.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 84,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-k#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 85,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-l#1",
+   "parameter": "front_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The number 5 and unit ft match the text, but the parameter name misdescribes the rule.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 86,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-l#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name side_yard_min_ft is misleading, though.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 87,
+   "chunk_id": "lamc_chapter1#lamc-12-21-c-5-m#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is too vague: the text regulates yard setbacks (front, side, rear) for accessory tennis/paddle tennis courts, so a yard/setback parameter fits better.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 88,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter label 'other' does not describe what is regulated.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 89,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 90,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 91,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#1",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Outdated: state law now sets ADU height (16 ft, 18 ft near transit, +2 ft for matching roof pitch), Gov. Code 66321(b)(4).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 92,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#1",
+   "parameter": "adu_approval_days",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 93,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 94,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 95,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#2",
+   "parameter": "adu_allowed",
+   "recommendation": "approve_with_note",
+   "note": "Applies to Ordinance ADUs only (ZA Memo 143 Q.42).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 97,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#2",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Applies to Ordinance ADUs only; City may not impose conflicting conditions (ZA Memo 143 Q.42).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 98,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#2",
+   "parameter": "adu_count_max",
+   "recommendation": "reject",
+   "note": "Misstates current law: State and Ordinance ADUs can be combined, plus a JADU (ZA Memo 143 §I.A).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 99,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 100,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#2",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name adu_side_rear_setback_ft suggests a fixed setback, but the text sets a maximum of 4 ft that may be required.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 101,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#2",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. It implies a numeric side/rear setback, but the sentence covers setbacks generally and applies only to converted or same-location, same-dimension structures.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 102,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 103,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#3",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 105,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-c#3",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Understated: exemption also covers demolished garages, carports and uncovered spaces (ZA Memo 143 Table 1 note 8).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 106,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-d#1",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 107,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-d#1",
+   "parameter": "stories_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 108,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 109,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-e#1",
+   "parameter": "adu_max_floor_area_pct_primary",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 110,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-e#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 111,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-f#1",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name is too broad because the text regulates Movable Tiny Houses specifically, not ADUs in general.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 112,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-f#1",
+   "parameter": "stories_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 113,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-f#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 114,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-f#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 115,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-g#1",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Quote is verbatim but cites repealed Gov. Code 65852.2/65852.22; now 66323 / 66333-66339.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 116,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-g#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "reject",
+   "note": "Outdated: same as #91; ZA Memo 143 Rev. 1 applies Gov. Code 66321(b)(4).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 117,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-g#1",
+   "parameter": "adu_allowed",
+   "recommendation": "reject",
+   "note": "Superseded: SB 1211 / Gov. Code 66323(b) bars this fire-zone ban for State ADUs (ZA Memo 143 Rev. 1 §II.A, Q.42).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 118,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-h#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' does not describe what is regulated: a maximum floor area for a newly constructed dwelling unit placed behind a converted ADU/JADU.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 119,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-h#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Gov. Code 66341 allows separate sale in limited cases (qualified nonprofits).",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 120,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-h#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 121,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-h#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 122,
+   "chunk_id": "lamc_chapter1#lamc-12-22-a-33-b#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Quote is verbatim but cites repealed Gov. Code 65852.2; now 66323(a).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 123,
+   "chunk_id": "gov_66310_article1#gov--code-66313-d#1",
+   "parameter": "jadu_max_floor_area_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 124,
+   "chunk_id": "gov_66310_article2#gov--code-66314#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_allowed' overstates the text, which is an enabling authorization for local agencies ('may, by ordinance') rather than a determination that an ADU is allowed on a given lot.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 125,
+   "chunk_id": "gov_66310_article2#gov--code-66314-a#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 126,
+   "chunk_id": "gov_66310_article2#gov--code-66314-b#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter label 'other' is not wrong, but it does not describe what the text regulates.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 127,
+   "chunk_id": "gov_66310_article2#gov--code-66314-b#1",
+   "parameter": "adu_parking_required",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_parking_required' implies a requirement, whereas the text only grants local agencies discretion to reduce or eliminate parking requirements.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 128,
+   "chunk_id": "gov_66310_article2#gov--code-66314-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 129,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 130,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 131,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+   "parameter": "adu_max_floor_area_pct_primary",
+   "recommendation": "approve_with_note",
+   "note": "Floors override the 50%: at least 850 sq ft (1,000 with 2+ bedrooms), 66321(b)(2)-(3).",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 132,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name adu_max_floor_area_sqft is generic, while the text limits only the total floor area of a detached ADU; attached ADUs have a different cap (50 percent of the existing primary dwelling).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 133,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is a generic catch-all and does not describe what the text regulates.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 134,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_side_rear_setback_ft' is ambiguous because it implies a general side/rear setback in feet, while this record is only the exemption for conversions and same-footprint rebuilds.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 135,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The most the City may require; no setback for conversions or same-footprint rebuilds (#134).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 136,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#2",
+   "parameter": "adu_parking_required",
+   "recommendation": "approve_with_note",
+   "note": "Does not apply to ADUs in 66322 cases (near transit, historic district, conversions etc.), where no parking may be required.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 137,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 138,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#2",
+   "parameter": "adu_parking_required",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The weakness is the parameter name, which is too broad.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 139,
+   "chunk_id": "gov_66310_article2#gov--code-66314-d#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 140,
+   "chunk_id": "gov_66310_article2#gov--code-66314-f#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 141,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "adu_min_floor_area_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 144,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 145,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "A minimum height the City must allow, not a maximum.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "disagree",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 146,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "A minimum the City must allow; only within 1/2 mile of major transit.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 147,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "reject",
+   "note": "Mis-conditioned: the extra 2 ft applies only in the transit case (18 + 2 = 20 ft), not generally.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 148,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "A minimum the City must allow; only on lots with a multistory multifamily building.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 149,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "A minimum the City must allow; attached ADUs only.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 150,
+   "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague, since the text concerns a story-count limit within the attached ADU height rule (D).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 151,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The excerpt is a general ministerial-approval mandate, not a single boolean allowance.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 152,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_count_max' misstates the rule, though.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 153,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "jadu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'jadu_count_max' mischaracterizes the provision.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 154,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 155,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 156,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_side_rear_setback_ft' implies a numeric foot-based setback applying to ADUs generally, while the text states a qualitative condition only for conversion-type ADUs/JADUs under (a)(1).",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 157,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name adu_count_max is too broad, since it implies a total ADU limit, while the text limits only the detached new-construction unit under (a)(2).",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 158,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_side_rear_setback_ft' is ambiguous because the text caps the setback a local agency can require at 4 ft ('does not exceed'); a name like adu_max_required_side_rear_setback_ft would be more accurate.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 159,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 160,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 161,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 162,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_count_max' frames the rule as a ceiling, while the statute is a mandate on what local agencies 'shall allow': at least one and up to 25%.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 163,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "Missing cap: no more ADUs than existing units on the lot (66323(a)(4)(A)(ii)).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 164,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name is too generic: the text regulates only detached ADUs on lots with a proposed multifamily dwelling.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 165,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#2",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 166,
+   "chunk_id": "gov_66310_article2#gov--code-66323-a#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 167,
+   "chunk_id": "gov_66310_article2#gov--code-66323-b#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 168,
+   "chunk_id": "gov_66310_article2#gov--code-66323-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 169,
+   "chunk_id": "gov_66310_article2#gov--code-66323-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 170,
+   "chunk_id": "gov_66310_article2#gov--code-66323-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 171,
+   "chunk_id": "gov_66310_article2#gov--code-66323-e#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 172,
+   "chunk_id": "gov_66310_article2#gov--code-66323-f#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 173,
+   "chunk_id": "gov_66310_article3#gov--code-66333#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 174,
+   "chunk_id": "gov_66310_article3#gov--code-66333-a#1",
+   "parameter": "jadu_count_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 175,
+   "chunk_id": "gov_66310_article3#gov--code-66333-b#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 176,
+   "chunk_id": "gov_66310_article3#gov--code-66333-b#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is generic and does not name the regulated subject (owner-occupancy requirement for JADUs), and the conditions field only says 'Exception to owner-occupancy requirement' without stating the main rule: owner-occupancy is required ",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 177,
+   "chunk_id": "gov_66310_article3#gov--code-66333-c#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 178,
+   "chunk_id": "gov_66310_article3#gov--code-66333-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 179,
+   "chunk_id": "gov_66310_article3#gov--code-66333-e#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 180,
+   "chunk_id": "gov_66310_article3#gov--code-66333-f#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 181,
+   "chunk_id": "gov_66310_article3#gov--code-66333-g#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is a vague catch-all; a more specific name like jadu_min_rental_term would describe what is regulated.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 182,
+   "chunk_id": "gov_66310_article3#gov--code-66333-5-a#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 183,
+   "chunk_id": "gov_66310_article3#gov--code-66333-5-b#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 184,
+   "chunk_id": "gov_66310_article3#gov--code-66333-5-d#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 185,
+   "chunk_id": "za_memo_143#za-memo-143-i#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 186,
+   "chunk_id": "za_memo_143#za-memo-143-i#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague, though, and a specific name such as jadu_eligibility would describe the regulated subject better.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 187,
+   "chunk_id": "za_memo_143#za-memo-143-i#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The generic parameter 'other' does not describe what is regulated, which is the allowable pairings of State ADU types under GC § 66323(a); something like 'state_adu_allowed_combinations' would fit.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 188,
+   "chunk_id": "za_memo_143#za-memo-143-i#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 189,
+   "chunk_id": "za_memo_143#za-memo-143-i#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 190,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Inverted: 800 sq ft is a size floor-area limits cannot block, not an ADU maximum.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "disagree",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 191,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name implies a standalone ADU setback standard, whereas the excerpt only says that lot floor area limits cannot preclude an 800 sq ft ADU with 4 ft side and rear setbacks, in the concurrent-permitting context (new dwelling or addition).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 192,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague, and the candidate captures only half of a two-tier rule.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 193,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague and the excerpt actually describes a floor-area-limit exception (a minimum ADU floor area that lot floor-area limits cannot preclude) when permitted concurrently with a new dwelling or addition.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 194,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name adu_count_max is too broad because the text regulates only detached ADUs in conjunction with a new multifamily structure in multiple-family zones.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 195,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "ZA Memo 143 Rev. 1 rewrote the next sentence (attached ADU options with the duplex).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 196,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 197,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The value 1 and count unit match the text, but the text says one ADU and one JADU, so a single adu_count_max=1 conflates two counts.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 198,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "jadu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The value (1) and unit (count) match the quoted text, 'One ADU and one JADU per lot with a proposed or existing single-family dwelling, if all of the following apply.' The parameter name is a problem.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 199,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter 'other' is vague; it should be something like a maximum expansion beyond the existing accessory structure's dimensions.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "disagree",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 200,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 201,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 202,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 203,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 204,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 205,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 206,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name adu_count_max is too generic: the text regulates the maximum number of detached ADUs on a lot with an existing multifamily dwelling, so a name like detached_adu_count_max_existing_multifamily would be more accurate.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 207,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name drops the 'detached' qualifier, so it overstates scope as a total ADU cap.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 208,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The parameter name 'adu_side_rear_setback_ft' with conditions set to null does not capture that the text limits what the agency may impose (\"no more than four feet\").",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 209,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 210,
+   "chunk_id": "za_memo_143#za-memo-143-ii#3",
+   "parameter": "adu_count_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 211,
+   "chunk_id": "za_memo_143#za-memo-143-ii#3",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 212,
+   "chunk_id": "za_memo_143#za-memo-143-ii#3",
+   "parameter": "jadu_max_floor_area_sqft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 213,
+   "chunk_id": "za_memo_143#za-memo-143-ii#3",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 214,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "jadu_count_max",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 215,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Outdated: since 2026-01-01 (AB 1154) owner-occupancy applies only when the JADU shares sanitation. Use #175/#176.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "outdated or wrong"
+   }
+  },
+  {
+   "fragment_id": 216,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Deed restriction still required, but the owner-occupancy wording conflicts with current 66333(b).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 217,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 218,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 219,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 220,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 221,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "The value is right, but the label is misleading. The caveats are about structure: the parameter is the vague 'other' rather than a specific one such as 'parking_required' or 'jadu_parking_spaces' (0).",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 222,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 223,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 224,
+   "chunk_id": "za_memo_143#za-memo-143-ii#5",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 225,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 226,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 227,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 228,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 229,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "Flat land only; not in R1V/R1F/R1R; block-average exception.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 230,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "Flat land only; not in R1V/R1F/R1R; block-average exception.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 231,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "Flat land only; not in R1V/R1F/R1R.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 232,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "Flat land only; not in R1V/R1F/R1R.",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed, with a condition"
+   }
+  },
+  {
+   "fragment_id": 233,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  },
+  {
+   "fragment_id": 234,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": null,
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed"
+   }
+  }
+ ]
+}

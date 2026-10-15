@@ -219,8 +219,10 @@ def list_fragments(
             """SELECT f.id, f.rule_family, f.parameter, f.applies_to, f.conditions, f.value_numeric, f.unit,
                       f.value_text, f.source_quote, f.quote_start, f.quote_end, f.validation, f.status,
                       f.reviewed_by, f.reviewed_at, f.review_note, f.chunk_id, c.section_id, c.text AS chunk_text,
-                      c.source_url, r.served_model, r.prompt_version
+                      c.source_url, r.served_model, r.prompt_version,
+                      v.recommendation AS check_recommendation, v.note AS check_note, v.checks, v.checked_on
                FROM rule_fragment f JOIN reg_chunk c ON c.id = f.chunk_id JOIN extraction_run r ON r.id = f.run_id
+               LEFT JOIN fragment_verification v ON v.fragment_id = f.id
                WHERE f.status = %s AND (%s::text IS NULL OR f.rule_family = %s)
                ORDER BY c.section_id, f.id""",
             (status, family, family),
