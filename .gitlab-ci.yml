@@ -1,0 +1,12 @@
+stages:
+  - secrets
+
+gitleaks:
+  stage: secrets
+  image:
+    name: zricethezav/gitleaks:v8.28.0
+    entrypoint: [""]
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - gitleaks git --redact --verbose .

@@ -1,0 +1,39 @@
+# Secrets: never committed
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Source documents that must not be redistributed
+*PRD*.pdf
+*PRD*.docx
+Fullstack_Project_*.pdf
+
+# Raw downloaded data (re-fetched by the loaders, recorded in sources.yaml)
+data/raw/
+data/cache/
+*.pmtiles
+*.gpkg
+*.zip
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
