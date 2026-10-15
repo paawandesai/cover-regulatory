@@ -4,10 +4,25 @@ Decision support for licensed architects and engineers. Given a City of Los Ange
 
 **This is not a zoning determination.** Outputs must be reviewed by a licensed professional and confirmed with the jurisdiction before they are relied on or shared with a client. Parcel geometry from the County carries its disclaimer: not for legal, engineering, or surveying use.
 
-> Status: under construction. Sections marked _TBD_ are filled in as the work lands.
+> Status: proof of concept, built 2026-10-15. Hosted demo (invite only): https://34-213-114-35.sslip.io. Architecture: [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ## What it does
-_TBD_
+Enter an APN or a street address. The engine:
+
+1. **Finds the parcel and stops early when it must.** Outside the City, under Chapter 1A, or not an R1-family zone each gets an explicit result instead of wrong rules.
+2. **Reports the R1 envelope:** front, side and rear yards, maximum residential floor area, height, and whether the lot meets the R1 minimums.
+3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU, a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more).
+4. **Flags what it does not apply:** Hillside Area, Coastal Zone, Very High Fire Hazard Severity Zone, the January 2025 fire rebuild orders, overlay plans, zone conditions and SB 9. Where a flag means the flat-land rule is wrong (Hillside, Coastal Zone floor area), the value is withheld, not shown.
+5. **Labels every value** with how it was established:
+   - **Verified parcel data:** read from a named dataset with its fetch date.
+   - **Derived from rule:** computed from regulation text that a reviewer approved.
+   - **Interpretation, confirm with City:** computed from text that an AI read but no reviewer has approved yet. It shows how many of the rule's inputs were found.
+   - **No cited source:** an input is missing or the rule doesn't apply. No number is shown.
+6. **Shows the source.** Clicking any value opens the regulation text with the supporting quote highlighted, plus a link to the official source.
+7. **Draws the lot.** A diagram or map shows the lot and the buildable area left after yards. It is labeled illustrative, not survey-grade.
+8. **Takes feedback without letting it change anything.** "Report a problem" queues a note for a reviewer. Rule review (`/review`, password-protected) is the only way a rule becomes "Derived".
+
+No AI model runs when you ask for an assessment. The AI work happens once, at ingestion: a model reads the regulation text into candidate rule fragments, each with a verbatim quote. A deterministic check rejects any fragment whose quote is not in the text or whose number is not in the quote. Answers are therefore repeatable and fast.
 
 ## What it does NOT do
 - It does not cover jurisdictions outside the City of Los Angeles. Such parcels get an explicit "outside City of Los Angeles" result.
@@ -15,19 +30,62 @@ _TBD_
 - It models only the R1 zone family. Hillside Area, R1 Variation Zones, HPOZs, specific plans, the Coastal Zone, fire hazard zones, SB 9, and the January 2025 fire rebuild orders are detected and flagged, not applied.
 - Setback and buildable-area geometry is illustrative, not survey-grade.
 - It does not consider private covenants (CC&Rs), demographic data, or owner information.
+- It does not show existing building footprints yet. The Assessor's building attributes are shown when recorded.
+- There is no chat. The plan's read-only follow-up chat was not built.
+- Prevailing front-yard setbacks, garage floor-area exemptions, transit-proximity ADU height increases and multi-story side-yard increments are named in the explanations but not computed.
 
 ## Known constraints
 Places where a project guardrail overrides a requirement in the brief. The brief is paraphrased, not quoted.
-_TBD_
+
+| The brief asks for | What this tool does instead, and why |
+|---|---|
+| Cutting regulatory research effort to zero | It cuts the time to a **validated** answer. It is decision support: a licensed professional reviews the cited output and confirms with the City. "Zero" is neither safe nor measurable. |
+| Possibly GCP for geocoding | No Google services. The APN path needs no geocoder. Addresses resolve through City address points, then County parcel situs, then the US Census Geocoder (public domain). |
+| The latest AI technology | A generally available model, pinned by id in configuration (`LLM_MODEL_ID`), used only at ingestion. |
+| Testing on parcels Cover would provide | None were delivered. The golden cases are **self-selected** parcels (vacant or City-owned where possible), identified by APN only. |
+| More specific resources from Cover | None were invented. Sources are official City, County and State publications. The LAMC text was saved by hand from the City's code publisher, not crawled. |
+| Feedback that improves future answers | Feedback is queued for a reviewer and never edits rules, prompts or retrieval automatically. |
+| Scaling to LA County, California and beyond | Only LA City, Chapter I, R1 is implemented. The design is jurisdiction-pluggable (jurisdiction → code regime → rule set → sources), but nothing else is modeled. |
+| Visualizing existing buildings | Not yet: the County building outlines' license is unclear, and the ODbL Microsoft footprints are not loaded. |
 
 ## Data sources and licenses
 See `LICENSES.md` for code dependencies and `backend/app/ingest/sources.yaml` for every dataset and document, with its license, item id, and retrieval date.
 
 ## Measured results
-_TBD_ (golden tests, adversarial evaluation, latency)
+Measured 2026-10-15 on the development machine (4 CPU cores, no GPU, Postgres on the same machine).
+
+**Golden parcels** (`backend/tests/golden/`): 8 of 8 pass. The expected values were worked out by hand from the code text and the parcel data, then compared with the engine. They still need a human check (decision D17).
+
+| APN | Case | Front / side / rear (ft) | Max floor area (sq ft) | Height (ft) | Guest house | Flags |
+|---|---|---|---|---|---|---|
+| 2121-005-008 | Reseda R1-1, 60 x 135 ft | 20 / 5 / 15 | 3,645 | 33 | Not allowed | SB 9 |
+| 2121-016-012 | Reseda R1-1, exactly 50 ft wide | 20 / 5 / 15 | 2,453 | 33 | Not allowed | SB 9 |
+| 2121-002-004 | Reseda R1-1, 25 ft wide (substandard) | 20 / 3 / 15 | 1,462 | 33 | Not allowed | SB 9 |
+| 4359-016-023 | R1-1, 16,403 sq ft, inside a specific plan | 20 / 5 / 15 | 7,381 | 33 | Allowed | Overlay plan, SB 9 |
+| 4412-014-028 | Pacific Palisades, Hillside + Coastal + fire | Withheld | Withheld | Withheld | Allowed | Fire rebuild, Hillside, Coastal, VHFHSZ, SB 9 |
+| 2126-005-015 | R1-2-RIO (supplemental district) | 20 / 5 / 15 | 5,517 | 33 | Allowed | Zone conditions, SB 9 |
+| 5179-003-026 | Boyle Heights (Chapter 1A) | Stop: code regime not modeled | | | | |
+| 4327-028-024 | Beverly Hills | Stop: outside the City | | | | |
+
+**Adversarial checks** (`backend/tests/adversarial/`, `eval/adversarial/`): all pass.
+- Regulation text containing injected instructions can produce at most a pending candidate, never a rule.
+- An injected "exemption" cannot produce a zero setback.
+- Feedback cannot change a rule.
+- The extraction schema has no status or confidence field for a model to set.
+
+**Retrieval** (`eval/retrieval/results.md`, 32 questions): recall@5 is 0.781 and MRR is 0.631 with embeddings plus section-id lookup. The question set is small and was written by the search code's author, so treat these numbers as a sanity check.
+
+**Latency**, in process, after warm-up:
+
+| Operation | Runs | p50 | p95 |
+|---|---|---|---|
+| Full assessment (`assess`) over the 8 golden parcels | 80 | 135 ms | 205 ms |
+| Regulation search | 60 | 47 ms | 84 ms |
+
+**Test suites:** backend 46 passed, frontend 7 passed. CI runs the secrets scan, lint, unit tests, type checks and a production build. Tests that need the loaded database skip in CI and run locally.
 
 ## AI disclosure
-This tool uses an LLM to extract rule fragments from regulatory text and to write explanations. Every AI-produced output is labeled in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
+This tool uses an LLM only at ingestion, to extract candidate rule fragments from regulatory text. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
 
 ## Development
 
