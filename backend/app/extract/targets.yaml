@@ -5,6 +5,7 @@ groups:
   r1_area:       ["LAMC 12.08 C.1", "LAMC 12.08 C.2", "LAMC 12.08 C.3", "LAMC 12.08 C.4"]
   r1_rfa:        ["LAMC 12.08 C.5"]
   height:        ["LAMC 12.21.1 A"]
+  height_intro:  ["=LAMC 12.21.1"]
   accessory_yards: ["LAMC 12.21 C.5"]
   city_adu:      ["LAMC 12.22 A.33"]
   state_adu_defs: ["Gov. Code 66313"]
