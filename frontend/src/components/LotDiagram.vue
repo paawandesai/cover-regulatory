@@ -34,6 +34,7 @@ const drawing = computed(() => {
   const project = toLocal(origin, angle)
   const lot = lotRings.map((r) => r.map(project))
   const env = g.envelope ? rings(g.envelope).map((r) => r.map(project)) : []
+  const bldg = (g.buildings ?? []).flatMap((b) => rings(b).map((r) => r.map(project)))
   const [minx, miny, maxx, maxy] = bounds(lot)
   // Extra room at the bottom for the FRONT and STREET labels.
   const scale = Math.min((W - 2 * PAD) / (maxx - minx), (H - 2 * PAD - 24) / (maxy - miny))
@@ -44,6 +45,7 @@ const drawing = computed(() => {
   return {
     lot: path(lot),
     env: env.length ? path(env) : null,
+    bldg: bldg.length ? path(bldg) : null,
     top: sy(maxy),
     bottom: sy(miny),
     left: sx(minx),
@@ -57,26 +59,19 @@ const drawing = computed(() => {
 })
 
 const yards = computed(() => props.geometry.yards_ft)
-const area = computed(() =>
-  props.geometry.envelope_area_sqft != null ? props.geometry.envelope_area_sqft.toLocaleString('en-US') : null,
-)
+const area = computed(() => (props.geometry.envelope_area_sqft != null ? props.geometry.envelope_area_sqft.toLocaleString('en-US') : null))
 const ariaLabel = computed(() => {
   const base = `Lot outline${props.dims ? `, about ${props.dims.replace(' x ', ' by ')} feet` : ''}`
-  return drawing.value.env ? `${base}, with the buildable area inside the front, side and rear yards` : base
+  const withEnv = drawing.value.env ? `${base}, with the buildable area inside the front, side and rear yards` : base
+  return drawing.value.bldg ? `${withEnv}, and the approximate outline of the existing buildings` : withEnv
 })
 </script>
 
 <template>
   <svg :viewBox="`0 0 ${W} ${H}`" role="img" :aria-label="ariaLabel" class="diagram">
     <path :d="drawing.lot" fill="#ffffff" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round" />
-    <path
-      v-if="drawing.env"
-      :d="drawing.env"
-      fill="var(--accent-subtle)"
-      stroke="var(--accent)"
-      stroke-width="2"
-      stroke-dasharray="6 4"
-    />
+    <path v-if="drawing.env" :d="drawing.env" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 4" />
+    <path v-if="drawing.bldg" :d="drawing.bldg" fill="var(--ink-muted)" fill-opacity="0.35" stroke="var(--ink-muted)" stroke-width="1" />
     <g v-if="drawing.oriented" class="lbl">
       <text v-if="yards" :x="W / 2" :y="drawing.top - 8" text-anchor="middle">REAR {{ yards.rear }} FT</text>
       <text v-if="yards" :x="W / 2" :y="drawing.bottom + 16" text-anchor="middle">FRONT {{ yards.front }} FT</text>
@@ -93,9 +88,7 @@ const ariaLabel = computed(() => {
     </g>
     <g v-if="drawing.env">
       <text :x="drawing.labelX" :y="drawing.midY - 4" :text-anchor="drawing.labelAnchor" class="big">Buildable area</text>
-      <text v-if="area" :x="drawing.labelX" :y="drawing.midY + 14" :text-anchor="drawing.labelAnchor" class="lbl-t">
-        {{ area }} SQ FT
-      </text>
+      <text v-if="area" :x="drawing.labelX" :y="drawing.midY + 14" :text-anchor="drawing.labelAnchor" class="lbl-t">{{ area }} SQ FT</text>
     </g>
   </svg>
 </template>

@@ -22,8 +22,9 @@ TOOL_DISCLAIMER = (
 )
 AI_DISCLOSURE = (
     "AI was used to read the regulation text into rule candidates. Values labeled 'Interpretation' come from those "
-    "readings and have not been reviewed yet; values labeled 'Derived' come from readings a person approved. "
-    "No AI model is used to compute this assessment."
+    "readings and have not been reviewed yet; values labeled 'Derived' come from readings that passed review. In this "
+    "demo that review was an AI review applied on the project owner's instruction, not a person's; each value's "
+    "source panel says which. No AI model is used to compute this assessment."
 )
 LABEL_TEXT = {
     "verified": "Verified parcel data",
@@ -51,6 +52,49 @@ class Item:
     @property
     def label_text(self) -> str:
         return LABEL_TEXT[self.label].format(rule=self.rule_id)
+
+
+def _footprints(conn, apn: str) -> tuple[list[dict], Item]:
+    """Existing buildings from the ODbL footprint table: those mostly (over half) inside this parcel."""
+    rows = conn.execute(
+        """SELECT ST_AsGeoJSON(b.geom)::json AS geom, ST_Area(b.geom::geography) * 10.7639 AS sqft, b.height_m,
+                  s.retrieved_at, s.attribution
+           FROM parcel p JOIN building_footprint_odbl b ON ST_Intersects(p.geom, b.geom)
+           JOIN source s ON s.id = b.source_id
+           WHERE p.apn = %s AND ST_Area(ST_Intersection(p.geom, b.geom)) > 0.5 * ST_Area(b.geom)
+           ORDER BY sqft DESC""",
+        (apn,),
+    ).fetchall()
+    src = conn.execute(
+        "SELECT id, retrieved_at, attribution FROM source WHERE id = 'ms_global_building_footprints'"
+    ).fetchone()
+    if src is None:
+        return [], Item(
+            "existing_footprint",
+            "parcel",
+            "Existing buildings (outline)",
+            None,
+            None,
+            "uncited",
+            explanation="Building footprints are not loaded.",
+        )
+    total = round(sum(r["sqft"] for r in rows))
+    value = f"{len(rows)} building{'s' if len(rows) != 1 else ''}, about {total:,} sq ft" if rows else "None found"
+    return [r["geom"] for r in rows], Item(
+        "existing_footprint",
+        "parcel",
+        "Existing buildings (outline)",
+        value,
+        None,
+        "verified",
+        explanation="Approximate outlines traced from imagery by machine learning; they can miss, merge or "
+        "misplace buildings and may predate recent demolition or construction. Not a survey.",
+        source={
+            "dataset": src["id"],
+            "fetched_at": src["retrieved_at"].isoformat() if src["retrieved_at"] else None,
+            "attribution": src["attribution"],
+        },
+    )
 
 
 def _sourced(item_id: str, title: str, s: Sourced | None, unit: str | None = None) -> Item:
@@ -485,6 +529,8 @@ def assess(query: str) -> dict:
             else "Could not tell which side faces the street.",
         )
         items.append(dims)
+        buildings, fp_item = _footprints(conn, ctx.apn)
+        items.append(fp_item)
         if not ctx.zone.is_plain_r1:
             result["notes"].append(
                 f"{ctx.zone.raw} is an R1 variation or carries conditions; the standard R1 values "
@@ -527,5 +573,7 @@ def assess(query: str) -> dict:
             "yards_ft": None,
             "note": "yards not determined; no buildable area drawn",
         }
+    if result["geometry"] is not None:
+        result["geometry"]["buildings"] = buildings
     result["items"] = [asdict(i) | {"label_text": i.label_text} for i in items]
     return result

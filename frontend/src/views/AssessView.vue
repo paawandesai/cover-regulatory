@@ -86,6 +86,7 @@ const facts = computed(() => {
   add(regime, 'Zoning code in effect', regime?.value === 'I' ? 'Chapter I' : regime?.value === '1A' ? 'Chapter 1A' : undefined)
   const existing = parcelItem('existing')
   add(existing, 'Existing building (Assessor)', formatExisting(existing?.value))
+  add(item('existing_footprint'), 'Existing buildings (outline)', undefined, 'Approximate (imagery)')
   return rows
 })
 
@@ -100,7 +101,11 @@ const groups = computed(() => {
       sub: isHillside.value ? 'Hillside Area: flat-land values withheld' : 'Flat-land R1, two stories or less',
       rows: of(['r1_envelope']),
     },
-    { title: 'What can be built', sub: 'Single-family home within the envelope above, plus', rows: of(['guest_house', 'adu', 'jadu']) },
+    {
+      title: 'What can be built',
+      sub: 'Single-family home within the envelope above, plus',
+      rows: of(['guest_house', 'adu', 'jadu']),
+    },
     { title: 'Flags', sub: 'Shown, not evaluated', rows: of(['flag']) },
   ].filter((g) => g.rows.length)
 })
@@ -155,15 +160,16 @@ const stop = computed(() => {
           spellcheck="false"
           maxlength="200"
         />
-        <button type="submit" class="btn btn-primary" :disabled="loading">{{ loading ? 'Assessing…' : 'Assess' }}</button>
+        <button type="submit" class="btn btn-primary" :disabled="loading">
+          {{ loading ? 'Assessing…' : 'Assess' }}
+        </button>
       </form>
       <RouterLink to="/review" class="small">Rule review</RouterLink>
     </AppHeader>
 
     <div class="disclaimer">
       <p class="small">
-        Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City
-        Planning and LADBS.
+        Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS.
       </p>
     </div>
 
@@ -215,9 +221,7 @@ const stop = computed(() => {
               <button type="button" :aria-pressed="view === 'diagram'" :class="{ on: view === 'diagram' }" @click="view = 'diagram'">
                 Diagram
               </button>
-              <button type="button" :aria-pressed="view === 'map'" :class="{ on: view === 'map' }" @click="view = 'map'">
-                Map
-              </button>
+              <button type="button" :aria-pressed="view === 'map'" :class="{ on: view === 'map' }" @click="view = 'map'">Map</button>
             </div>
             <LotDiagram v-if="view === 'diagram'" :geometry="result.geometry" :dims="(dims?.value as string) ?? null" />
             <LotMap v-else :apn="result.parcel.apn" :geometry="result.geometry" />
@@ -225,12 +229,15 @@ const stop = computed(() => {
               Illustrative, not survey-grade. Front taken as the street-facing side.
               <template v-if="result.geometry.note"> {{ result.geometry.note[0].toUpperCase() + result.geometry.note.slice(1) }}.</template>
               <template v-if="view === 'map'"> Neighbouring parcel outlines from LA County Assessor data; no basemap.</template>
+              <template v-if="result.geometry.buildings?.length">
+                Grey shapes are existing buildings, traced from imagery by machine learning (Microsoft, ODbL); approximate.</template
+              >
             </figcaption>
           </figure>
 
           <p class="small muted">
-            Parcel data: LA County Assessor open parcels, fetched {{ parcelFetched }}. Informational only; not suitable
-            for legal, engineering or surveying use.
+            Parcel data: LA County Assessor open parcels, fetched
+            {{ parcelFetched }}. Informational only; not suitable for legal, engineering or surveying use.
           </p>
         </section>
 
@@ -239,7 +246,9 @@ const stop = computed(() => {
             <strong>{{ fire.title }}</strong>
             <p class="small">{{ fire.explanation }}</p>
           </div>
-          <div v-for="n in result.notes" :key="n" class="card note small">{{ n }}</div>
+          <div v-for="n in result.notes" :key="n" class="card note small">
+            {{ n }}
+          </div>
 
           <div v-for="g in groups" :key="g.title" class="card">
             <div class="ghead">
@@ -270,8 +279,8 @@ const stop = computed(() => {
       <section v-else-if="!loading" class="card intro">
         <h1>Check what can be built on a City of LA R1 lot</h1>
         <p>
-          Enter a 10-digit APN or a street address. You get the R1 envelope, ADU, JADU and guest house limits, each with
-          the regulation text it comes from and a label saying how much to trust it.
+          Enter a 10-digit APN or a street address. You get the R1 envelope, ADU, JADU and guest house limits, each with the regulation text
+          it comes from and a label saying how much to trust it.
         </p>
         <p class="small muted">Try 2121-005-008 (Reseda), 4412-014-028 (Pacific Palisades) or 5179-003-026 (Boyle Heights).</p>
       </section>

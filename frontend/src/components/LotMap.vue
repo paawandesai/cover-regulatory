@@ -29,10 +29,17 @@ const style: maplibregl.StyleSpecification = {
 async function draw() {
   if (!map) return
   const m = map
-  const set = (id: string, data: GeoJSON.FeatureCollection) =>
-    (m.getSource(id) as maplibregl.GeoJSONSource | undefined)?.setData(data)
+  const set = (id: string, data: GeoJSON.FeatureCollection) => (m.getSource(id) as maplibregl.GeoJSONSource | undefined)?.setData(data)
   set('lot', feature(props.geometry.lot))
   set('envelope', feature(props.geometry.envelope))
+  set('buildings', {
+    type: 'FeatureCollection',
+    features: (props.geometry.buildings ?? []).map((g) => ({
+      type: 'Feature',
+      properties: {},
+      geometry: g,
+    })),
+  })
   const [minx, miny, maxx, maxy] = bounds(rings(props.geometry.lot))
   m.fitBounds(
     [
@@ -52,23 +59,67 @@ onMounted(() => {
   map = new maplibregl.Map({
     container: el.value!,
     style,
-    attributionControl: { compact: true, customAttribution: 'Parcels: LA County Assessor open data' },
+    attributionControl: {
+      compact: true,
+      customAttribution: 'Parcels: LA County Assessor open data · Building outlines © Microsoft, ODbL',
+    },
     dragRotate: false,
   })
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
   map.on('load', () => {
     const m = map!
-    for (const id of ['nearby', 'lot', 'envelope']) m.addSource(id, { type: 'geojson', data: feature(null) })
-    m.addLayer({ id: 'nearby-fill', type: 'fill', source: 'nearby', paint: { 'fill-color': '#ffffff' } })
-    m.addLayer({ id: 'nearby-line', type: 'line', source: 'nearby', paint: { 'line-color': '#b9b5ac', 'line-width': 1 } })
-    m.addLayer({ id: 'lot-fill', type: 'fill', source: 'lot', paint: { 'fill-color': '#ffffff' } })
-    m.addLayer({ id: 'lot-line', type: 'line', source: 'lot', paint: { 'line-color': '#1c1b19', 'line-width': 2 } })
-    m.addLayer({ id: 'env-fill', type: 'fill', source: 'envelope', paint: { 'fill-color': '#fbe9df' } })
+    for (const id of ['nearby', 'lot', 'envelope', 'buildings']) m.addSource(id, { type: 'geojson', data: feature(null) })
+    m.addLayer({
+      id: 'nearby-fill',
+      type: 'fill',
+      source: 'nearby',
+      paint: { 'fill-color': '#ffffff' },
+    })
+    m.addLayer({
+      id: 'nearby-line',
+      type: 'line',
+      source: 'nearby',
+      paint: { 'line-color': '#b9b5ac', 'line-width': 1 },
+    })
+    m.addLayer({
+      id: 'lot-fill',
+      type: 'fill',
+      source: 'lot',
+      paint: { 'fill-color': '#ffffff' },
+    })
+    m.addLayer({
+      id: 'lot-line',
+      type: 'line',
+      source: 'lot',
+      paint: { 'line-color': '#1c1b19', 'line-width': 2 },
+    })
+    m.addLayer({
+      id: 'env-fill',
+      type: 'fill',
+      source: 'envelope',
+      paint: { 'fill-color': '#fbe9df' },
+    })
     m.addLayer({
       id: 'env-line',
       type: 'line',
       source: 'envelope',
-      paint: { 'line-color': '#c2410c', 'line-width': 2, 'line-dasharray': [3, 2] },
+      paint: {
+        'line-color': '#c2410c',
+        'line-width': 2,
+        'line-dasharray': [3, 2],
+      },
+    })
+    m.addLayer({
+      id: 'bldg-fill',
+      type: 'fill',
+      source: 'buildings',
+      paint: { 'fill-color': '#8a857b', 'fill-opacity': 0.45 },
+    })
+    m.addLayer({
+      id: 'bldg-line',
+      type: 'line',
+      source: 'buildings',
+      paint: { 'line-color': '#57534e', 'line-width': 1 },
     })
     draw()
   })
@@ -79,7 +130,7 @@ onBeforeUnmount(() => map?.remove())
 </script>
 
 <template>
-  <div ref="el" class="map" role="img" aria-label="Map of the lot and neighbouring parcels" />
+  <div ref="el" class="map" role="img" aria-label="Map of the lot, its existing buildings and neighbouring parcels" />
 </template>
 
 <style scoped>

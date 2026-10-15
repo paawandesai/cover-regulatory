@@ -1,66 +1,64 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { chunk as fetchChunk } from "../api";
-import { citeLabel, formatDate, formatValue } from "../format";
-import type { Chunk, Citation, Item } from "../types";
-import FeedbackForm from "./FeedbackForm.vue";
-import LabelBadge from "./LabelBadge.vue";
-import QuoteInContext from "./QuoteInContext.vue";
+import { computed, ref, watch } from 'vue'
+import { chunk as fetchChunk } from '../api'
+import { citeLabel, formatDate, formatValue } from '../format'
+import type { Chunk, Citation, Item } from '../types'
+import FeedbackForm from './FeedbackForm.vue'
+import LabelBadge from './LabelBadge.vue'
+import QuoteInContext from './QuoteInContext.vue'
 
-const props = defineProps<{ item: Item; apn: string }>();
+const props = defineProps<{ item: Item; apn: string }>()
 
 // Several fragments can quote the same passage; show each passage once.
 const citations = computed(() => {
-  const seen = new Set<string>();
+  const seen = new Set<string>()
   return props.item.citations.filter((c) => {
-    const key = `${c.chunk_id}|${c.quote_start}|${c.quote_end}|${c.section_id}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-});
-const index = ref(0);
-const current = computed<Citation | undefined>(
-  () => citations.value[index.value],
-);
-const chunk = ref<Chunk | null>(null);
-const loading = ref(false);
+    const key = `${c.chunk_id}|${c.quote_start}|${c.quote_end}|${c.section_id}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+})
+const index = ref(0)
+const current = computed<Citation | undefined>(() => citations.value[index.value])
+const chunk = ref<Chunk | null>(null)
+const loading = ref(false)
 
 watch(
   () => props.item.id,
   () => {
-    index.value = 0;
+    index.value = 0
   },
-);
+)
 
 watch(
   current,
   async (c) => {
-    chunk.value = null;
-    if (!c?.chunk_id) return;
-    loading.value = true;
+    chunk.value = null
+    if (!c?.chunk_id) return
+    loading.value = true
     try {
-      chunk.value = await fetchChunk(c.chunk_id);
+      chunk.value = await fetchChunk(c.chunk_id)
     } catch {
-      chunk.value = null;
+      chunk.value = null
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   },
   { immediate: true },
-);
+)
 
 const REVIEW: Record<string, string> = {
-  pending: "Not yet reviewed",
-  approved: "Approved by a reviewer",
-  "code-cited": "Cited by code (flag)",
-};
+  pending: 'Not yet reviewed',
+  approved: 'Approved by a reviewer',
+  'code-cited': 'Cited by code (flag)',
+}
 
 const coverage = computed(() => {
-  const c = props.item.coverage;
-  if (c == null) return "n/a";
-  return c >= 1 ? "All found" : `${Math.round(c * 100)}% found`;
-});
+  const c = props.item.coverage
+  if (c == null) return 'n/a'
+  return c >= 1 ? 'All found' : `${Math.round(c * 100)}% found`
+})
 </script>
 
 <template>
@@ -77,18 +75,13 @@ const coverage = computed(() => {
     <template v-if="item.label === 'verified' && item.source">
       <p class="small">
         From the
-        <span class="mono">{{ item.source.dataset ?? "derived" }}</span>
+        <span class="mono">{{ item.source.dataset ?? 'derived' }}</span>
         dataset, fetched {{ formatDate(item.source.fetched_at) }}.
       </p>
     </template>
 
     <template v-else-if="current">
-      <div
-        v-if="citations.length > 1"
-        class="pager"
-        role="group"
-        aria-label="Citations"
-      >
+      <div v-if="citations.length > 1" class="pager" role="group" aria-label="Citations">
         <button
           v-for="(c, i) in citations"
           :key="i"
@@ -101,13 +94,7 @@ const coverage = computed(() => {
           {{ i + 1 }}. {{ c.section_id }}
         </button>
       </div>
-      <QuoteInContext
-        v-if="chunk"
-        :text="chunk.text"
-        :start="current.quote_start"
-        :end="current.quote_end"
-        :context="320"
-      />
+      <QuoteInContext v-if="chunk" :text="chunk.text" :start="current.quote_start" :end="current.quote_end" :context="320" />
       <blockquote v-else-if="current.quote" class="source">
         <mark>{{ current.quote }}</mark>
       </blockquote>
@@ -115,12 +102,7 @@ const coverage = computed(() => {
       <dl class="facts small">
         <div>
           <dt>Document</dt>
-          <dd>
-            {{ chunk?.document_title ?? current.section_id
-            }}<template v-if="chunk?.manual_retrieval">
-              (saved by hand)</template
-            >
-          </dd>
+          <dd>{{ chunk?.document_title ?? current.section_id }}<template v-if="chunk?.manual_retrieval"> (saved by hand)</template></dd>
         </div>
         <div>
           <dt>Retrieved</dt>
@@ -130,8 +112,7 @@ const coverage = computed(() => {
           <dt>Review</dt>
           <dd>
             {{
-              current.review_status === "approved" &&
-              current.reviewed_by === "ai-review"
+              current.review_status === 'approved' && current.reviewed_by === 'ai-review'
                 ? "Approved in an AI review (three-way check), on the project owner's instruction"
                 : (REVIEW[current.review_status] ?? current.review_status)
             }}
@@ -142,12 +123,7 @@ const coverage = computed(() => {
           <dd>{{ coverage }}</dd>
         </div>
       </dl>
-      <a
-        v-if="current.source_url"
-        class="small"
-        :href="current.source_url"
-        target="_blank"
-        rel="noopener noreferrer"
+      <a v-if="current.source_url" class="small" :href="current.source_url" target="_blank" rel="noopener noreferrer"
         >Open the official source</a
       >
     </template>
