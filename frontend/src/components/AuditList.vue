@@ -24,6 +24,8 @@ watch(
 const ACTION: Record<string, string> = {
   fragment_approved: 'Approved rule text',
   fragment_rejected: 'Rejected rule text',
+  fragment_to_pending: 'Sent rule text back to review (source changed)',
+  fragment_retired: 'Retired rule text (quote gone from the source)',
   feedback_reviewed: 'Marked feedback reviewed',
   feedback_dismissed: 'Dismissed feedback',
   report_signed: 'Signed a client report',
@@ -31,7 +33,8 @@ const ACTION: Record<string, string> = {
   reviewer_added: 'Added or reset a reviewer',
   reviewer_deactivated: 'Deactivated a reviewer',
 }
-const who = (r: AuditRow) => (r.actor === 'ai-review' ? 'AI review' : (r.display_name ?? r.actor))
+const who = (r: AuditRow) =>
+  r.actor === 'ai-review' ? 'AI review' : r.actor === 'source-refresh' ? 'Weekly source check' : (r.display_name ?? r.actor)
 const extra = (r: AuditRow) => {
   const d = r.detail as Record<string, string | null>
   if (d.instructed_by) return `on ${d.instructed_by}'s instruction (${d.file})`

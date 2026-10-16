@@ -356,3 +356,20 @@ def audit(
                ORDER BY a.id DESC LIMIT %(n)s""",
             {"t": object_type, "a": actor, "n": limit},
         ).fetchall()
+
+
+@app.get("/api/admin/sources")
+def sources(_admin: Annotated[str, Depends(require_admin)]):
+    """The latest scheduled check of each regulation document, so a reviewer sees changed or stale sources."""
+    with connect() as conn:
+        return conn.execute(
+            """SELECT d.id, d.title, d.source_url, d.retrieved_at, d.manual_retrieval,
+                      s.checked_at, s.outcome, s.detail,
+                      (SELECT count(*) FROM rule_fragment f JOIN reg_chunk c ON c.id = f.chunk_id
+                        WHERE c.document_id = d.id AND f.status = 'pending') AS pending
+               FROM reg_document d
+               LEFT JOIN LATERAL (SELECT * FROM source_check s WHERE s.document_id = d.id
+                                  ORDER BY s.checked_at DESC LIMIT 1) s ON true
+               WHERE NOT d.mock
+               ORDER BY (s.outcome IN ('changed', 'failed', 'manual_due')) DESC NULLS LAST, d.title"""
+        ).fetchall()

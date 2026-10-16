@@ -8,6 +8,7 @@ removed counts in `ingest_run`. Manual documents are skipped (with a message) un
 """
 
 import hashlib
+import os
 import re
 import sys
 from datetime import UTC, datetime
@@ -36,7 +37,8 @@ from app.ingest.regtext.chunk import (
 
 HERE = Path(__file__).parent
 REPO = HERE.parents[3]
-RAW = REPO / "data" / "raw" / "regtext"
+# Downloaded PDFs; the scheduled refresh in the API image points this at a writable directory.
+RAW = Path(os.environ.get("REGTEXT_RAW_DIR") or REPO / "data" / "raw" / "regtext")
 NEVER_FETCH = ("amlegal.com", "municode.com", "upcodes.com", "iccsafe.org")
 
 

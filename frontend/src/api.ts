@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import type { Assessment, Chunk, Fragment, ProjectInputs, Report, ReportRow, ChatAnswer, Me, AuditRow } from './types'
+import type { Assessment, Chunk, Fragment, ProjectInputs, Report, ReportRow, ChatAnswer, Me, AuditRow, SourceRow } from './types'
 
 export class ApiError extends Error {
   constructor(
@@ -151,3 +151,5 @@ export const whoAmI = () => request<Me>('/api/admin/me', { headers: auth() })
 
 export const auditLog = (objectType: AuditRow['object_type'] | '') =>
   request<AuditRow[]>(`/api/admin/audit${objectType ? `?object_type=${objectType}` : ''}`, { headers: auth() })
+
+export const sourceChecks = () => request<SourceRow[]>('/api/admin/sources', { headers: auth() })

@@ -185,3 +185,15 @@ export interface AuditRow {
   object_id: string
   detail: Record<string, unknown>
 }
+
+export interface SourceRow {
+  id: string
+  title: string
+  source_url: string
+  retrieved_at: string
+  manual_retrieval: boolean
+  checked_at: string | null
+  outcome: 'unchanged' | 'changed' | 'failed' | 'manual_due' | 'manual_ok' | null
+  detail: Record<string, number | string | null> | null
+  pending: number
+}

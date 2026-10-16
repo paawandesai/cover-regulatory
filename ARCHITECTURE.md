@@ -60,6 +60,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Slope bands | `backend/app/ingest/slope.py` | For each Hillside Area parcel, samples the USGS 3DEP elevation model on a grid of about 3 ft, computes slope per cell and stores the area in each LAMC 12.21 C.10(b) slope band (`parcel_slope`). An estimate of the surveyed slope analysis map. |
 | Table reader | `backend/app/extract/tables.py` | Reads the R1 variation and Hillside tables cell by cell (no model) into pending candidates, checked like model output. |
 | Regulation ingestion | `backend/app/ingest/regtext/` | Parse ordinance PDFs and saved HTML into chunks keyed by section id. Each chunk keeps a content hash. |
+| Source check | `backend/app/ingest/regtext/refresh.py`, `source_check` table | Weekly (compose `refresh` service): re-downloads each `fetch: url` document and compares SHA-256. A changed file is re-ingested; each decided rule on a changed chunk goes back to pending if its quote is still verbatim, or is retired if not, with an audit entry. Hand-saved sources are never fetched and are listed as due after 90 days. Results show on the Sources tab of Rule review. |
 | Search | `backend/app/search/` | Exact section-id lookup first, then pgvector cosine search over local embeddings. Full-text search is the fallback. |
 | Extraction | `backend/app/extract/` | Claude (model id from config, structured output) reads groups of chunks into rule fragments. Regulation text is wrapped as data. The schema has no field for status or confidence. |
 | Deterministic checks | `backend/app/extract/validate.py` | Rejects a fragment whose quote is not verbatim in the chunk, whose number is not in the quote, or whose unit doesn't match. Re-running marks fragments stale when their chunk's text changes. |
@@ -142,8 +143,9 @@ How this would run in production on AWS. Nothing below is built; the PoC runs as
 ```
 
 What changes from the PoC:
-- Ingestion becomes scheduled and incremental: a changed source re-extracts only changed chunks, and any rule
-  whose chunk hash changed drops back to pending until it is re-reviewed.
+- Ingestion is scheduled (built for downloadable sources: a weekly check re-ingests a changed file and sends
+  every rule whose chunk changed back to review). Next: re-extract only the changed chunks automatically, and
+  alert by email or chat rather than only on the Sources tab.
 - Review moves from local named accounts (built) to SSO through the organisation's identity provider, keeping the
   same audit log, and licensed reviewers replace the demo's AI review.
 - The assessment API stays stateless and deterministic, so it scales horizontally; results are cached per

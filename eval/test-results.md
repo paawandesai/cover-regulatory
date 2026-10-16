@@ -11,6 +11,6 @@ Run 2026-10-16 on the `wave5` branch, on the development machine against the loa
 | Frontend | `frontend/src/__tests__/` | 7 | 7 | Value formatting and labels |
 | **Total** | | **109** | **109** | |
 
-CI (GitLab) runs the secrets scan, lint, type checks, a production build, the unit tests and the frontend tests on every push, and publishes JUnit reports. The golden, adversarial-feedback and API suites need the loaded database. The database holds hand-saved regulation text that stays out of git, so those suites skip in CI and are run locally before each merge.
+CI (GitLab) runs the secrets scan, lint, type checks, a production build, the unit tests and the frontend tests on every push, and publishes JUnit reports. The `db-tests` job also runs the golden, API and adversarial suites on every push: it restores the latest database dump from the project's private package registry (the dump holds hand-saved regulation text, so it stays out of git) into a throwaway Postgres with PostGIS and pgvector, and fails rather than skips if the database is missing. There are no browser tests in CI yet; the pages were checked by hand in headless Chromium for each wave.
 
 Retrieval quality and latency are reported in the README (Measured results) and `eval/retrieval/results.md`.

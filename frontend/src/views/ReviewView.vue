@@ -5,6 +5,7 @@ import AppHeader from '../components/AppHeader.vue'
 import FeedbackList from '../components/FeedbackList.vue'
 import AuditList from '../components/AuditList.vue'
 import ReportList from '../components/ReportList.vue'
+import SourceList from '../components/SourceList.vue'
 import QuoteInContext from '../components/QuoteInContext.vue'
 import type { Fragment, Me } from '../types'
 
@@ -45,7 +46,7 @@ const user = ref('')
 const password = ref('')
 const authError = ref<string | null>(null)
 const tab = ref<Status>('pending')
-const mode = ref<'rules' | 'feedback' | 'reports' | 'audit'>('rules')
+const mode = ref<'rules' | 'feedback' | 'reports' | 'audit' | 'sources'>('rules')
 
 // From the feedback queue: jump to a rule candidate wherever it is listed.
 async function openFragment(id: number) {
@@ -231,6 +232,9 @@ async function act(decision: 'approved' | 'rejected') {
           <button type="button" class="tab" :class="{ on: mode === 'audit' }" :aria-pressed="mode === 'audit'" @click="mode = 'audit'">
             Audit log
           </button>
+          <button type="button" class="tab" :class="{ on: mode === 'sources' }" :aria-pressed="mode === 'sources'" @click="mode = 'sources'">
+            Sources
+          </button>
           <template v-if="mode === 'rules'">
             <label for="fam" class="sr-only">Rule family</label>
             <select id="fam" v-model="family" class="field small">
@@ -252,6 +256,7 @@ async function act(decision: 'approved' | 'rejected') {
         <FeedbackList v-if="mode === 'feedback'" @open-fragment="openFragment" />
         <ReportList v-else-if="mode === 'reports'" />
         <AuditList v-else-if="mode === 'audit'" @open-fragment="openFragment" />
+        <SourceList v-else-if="mode === 'sources'" />
         <div v-else class="cols">
           <section aria-label="Candidate rules" class="card listcol">
             <p v-if="!list.length" class="empty small muted">Nothing here.</p>
