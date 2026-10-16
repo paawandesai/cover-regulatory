@@ -6,6 +6,7 @@ export const router = createRouter({
   routes: [
     { path: '/', component: AssessView },
     { path: '/review', component: () => import('./views/ReviewView.vue') },
+    { path: '/report/:token', component: () => import('./views/ReportView.vue') },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
 })

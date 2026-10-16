@@ -17,11 +17,15 @@ from pydantic import BaseModel, Field
 
 from app.api import ratelimit
 from app.api.auth import require_admin
+from app.api.chat import router as chat_router
+from app.api.reports import router as reports_router
 from app.config import get_settings
 from app.db.connection import connect
 
 log = logging.getLogger("app.api")
 app = FastAPI(title="Home Building Regulatory Engine (PoC)", docs_url="/api/docs", openapi_url="/api/openapi.json")
+app.include_router(reports_router)
+app.include_router(chat_router)
 
 
 INVITE_COOKIE = "demo_invite"
@@ -38,7 +42,9 @@ async def invite_gate(request: Request, call_next):
     """Hosted demo only: with DEMO_INVITE_CODE set, API routes need the invite cookie."""
     code = get_settings().demo_invite_code
     path = request.url.path
-    if code and path.startswith("/api/") and path not in _OPEN_PATHS:
+    # A signed client report opens by its unguessable link without the invite, so the client can read it.
+    report_link = request.method == "GET" and path.startswith("/api/reports/")
+    if code and path.startswith("/api/") and path not in _OPEN_PATHS and not report_link:
         cookie = request.cookies.get(INVITE_COOKIE, "")
         if not hmac.compare_digest(cookie, _invite_token(code.get_secret_value())):
             return JSONResponse({"detail": "invite_required"}, status_code=401)

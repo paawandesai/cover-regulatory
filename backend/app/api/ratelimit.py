@@ -23,6 +23,8 @@ LIMITS = {
     "auth_fail": (10, 15 * 60),
     "invite_fail": (10, 15 * 60),
     "feedback": (30, 60 * 60),
+    "report": (20, 60 * 60),
+    "chat": (30, 60 * 60),
 }
 
 

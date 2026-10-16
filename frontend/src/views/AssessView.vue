@@ -6,6 +6,9 @@ import AppHeader from '../components/AppHeader.vue'
 import LabelBadge from '../components/LabelBadge.vue'
 import LotDiagram from '../components/LotDiagram.vue'
 import ProjectForm from '../components/ProjectForm.vue'
+import ChatPanel from '../components/ChatPanel.vue'
+import ReportRequest from '../components/ReportRequest.vue'
+import ScenarioPanel from '../components/ScenarioPanel.vue'
 import SummaryCard from '../components/SummaryCard.vue'
 import SourcePanel from '../components/SourcePanel.vue'
 import StopState from '../components/StopState.vue'
@@ -315,6 +318,7 @@ const stop = computed(() => {
           <section aria-label="Assessment" class="mid">
             <SummaryCard v-if="result.summary" :summary="result.summary" />
             <ProjectForm :inputs="project" :checks="result.project?.checks ?? []" @apply="applyProject" @pick="pick" />
+            <ScenarioPanel :apn="result.parcel.apn" :inputs="project" @load="applyProject" />
             <div v-for="n in result.notes" :key="n" class="card note small">
               {{ n }}
             </div>
@@ -340,6 +344,8 @@ const stop = computed(() => {
               </button>
             </div>
             <p class="small muted">{{ result.ai_disclosure }}</p>
+            <ChatPanel :apn="result.parcel.apn" :items="result.items" />
+            <ReportRequest :apn="result.parcel.apn" :inputs="project" />
           </section>
 
           <SourcePanel v-if="picked" ref="panel" class="right" :item="picked" :apn="result.parcel.apn" />

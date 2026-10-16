@@ -1,6 +1,7 @@
 """API tests against the local database. Skipped when it is not reachable."""
 
 import base64
+import re
 
 import pytest
 from fastapi.testclient import TestClient
@@ -259,3 +260,103 @@ def test_wrong_passwords_are_rate_limited(client):
     assert client.get("/api/admin/feedback", headers=auth(pw="wrong")).status_code == 429
     # Even the right password waits until the window passes, so guessing can't continue.
     assert client.get("/api/admin/feedback", headers=auth()).status_code == 429
+
+
+def test_report_locked_until_signed(client):
+    r = client.post("/api/reports", json={"apn": "2121005008", "project": {"height_ft": 30}})
+    assert r.status_code == 201
+    token = r.json()["token"]
+    try:
+        # Before sign-off the link shows only its status.
+        locked = client.get(f"/api/reports/{token}").json()
+        assert locked["status"] == "awaiting_signoff" and "snapshot" not in locked
+        assert client.get(f"/api/admin/reports/{token}").status_code == 401
+        preview = client.get(f"/api/admin/reports/{token}", headers=auth()).json()
+        assert preview["snapshot"]["parcel"]["apn"] == "2121005008" and preview["signed"] is None
+        sign = {"signer_name": "A. Reviewer", "signer_license": "CA Architect C-00000", "statement_accepted": False}
+        assert client.post(f"/api/admin/reports/{token}/sign", json=sign, headers=auth()).status_code == 422
+        sign["statement_accepted"] = True
+        assert client.post(f"/api/admin/reports/{token}/sign", json=sign).status_code == 401
+        assert client.post(f"/api/admin/reports/{token}/sign", json=sign, headers=auth()).status_code == 200
+        # Signing twice is refused; the signed report now opens by link, with the AI disclosure kept.
+        assert client.post(f"/api/admin/reports/{token}/sign", json=sign, headers=auth()).status_code == 409
+        done = client.get(f"/api/reports/{token}").json()
+        assert done["signed"]["name"] == "A. Reviewer" and done["snapshot"]["ai_disclosure"]
+        assert client.post(f"/api/admin/reports/{token}/withdraw", headers=auth()).status_code == 200
+        assert client.get(f"/api/reports/{token}").status_code == 404
+    finally:
+        with connect() as conn:
+            conn.execute("DELETE FROM report WHERE token = %s", (token,))
+            conn.commit()
+
+
+def test_report_needs_an_apn_not_an_address(client):
+    assert client.post("/api/reports", json={"apn": "7100 Reseda Blvd"}).status_code == 422
+    assert client.get("/api/reports/short").status_code == 422
+
+
+def test_report_link_skips_the_invite_but_creating_one_does_not(monkeypatch, client):
+    monkeypatch.setenv("DEMO_INVITE_CODE", "blue heron")
+    get_settings.cache_clear()
+    assert client.get("/api/reports/" + "x" * 24).status_code == 404  # reached the route: no invite needed
+    assert client.post("/api/reports", json={"apn": "2121005008"}).status_code == 401
+
+
+def test_chat_needs_a_key(monkeypatch, client):
+    monkeypatch.setenv("ANTHROPIC_COVER_API_KEY", "")
+    get_settings.cache_clear()
+    r = client.post("/api/chat", json={"apn": "2121005008", "question": "Can I build a guest house?"})
+    assert r.status_code == 503 and r.json()["detail"] == "chat_not_configured"
+    assert client.post("/api/chat", json={"apn": "7100 Reseda Blvd", "question": "hi there"}).status_code == 422
+
+
+def test_chat_keeps_only_checked_quotes_and_never_sends_the_apn(monkeypatch, client):
+    from types import SimpleNamespace
+
+    from app.api import chat as chat_mod
+
+    sent = {}
+
+    class FakeMessages:
+        def parse(self, **kw):
+            sent.update(kw)
+            doc = re.search(r'chunk_id="([^"]+)"[^>]*>\n(.{40})', kw["messages"][0]["content"])
+            real = chat_mod.Answer(
+                sentences=[
+                    chat_mod.Sentence(text="Grounded.", quotes=[chat_mod.Quote(chunk_id=doc[1], quote=doc[2])]),
+                    chat_mod.Sentence(
+                        text="Made up.", quotes=[chat_mod.Quote(chunk_id=doc[1], quote="no such words here")]
+                    ),
+                    chat_mod.Sentence(text="Restates a value.", items=["max_height"]),
+                    chat_mod.Sentence(text="Unsupported."),
+                    chat_mod.Sentence(text="Invented item.", items=["not_an_item"]),
+                ]
+            )
+            return SimpleNamespace(parsed_output=real, stop_reason="end_turn", model="fake")
+
+    monkeypatch.setenv("ANTHROPIC_COVER_API_KEY", "test-key-not-real")
+    get_settings.cache_clear()
+    monkeypatch.setattr(chat_mod.anthropic, "Anthropic", lambda **_: SimpleNamespace(messages=FakeMessages()))
+    r = client.post("/api/chat", json={"apn": "2121005008", "question": "What about parcel 2121005008 height?"})
+    assert r.status_code == 200
+    body = r.json()
+    assert [s["text"] for s in body["sentences"]] == ["Grounded.", "Restates a value."]
+    assert body["dropped"] == 3 and body["sentences"][0]["citations"][0]["section_id"]
+    prompt = sent["messages"][0]["content"] + sent["system"]
+    assert "2121005008" not in prompt and "Reseda" not in prompt
+
+
+def test_chat_with_nothing_checked_says_not_found():
+    from app.api import chat as chat_mod
+
+    ans = chat_mod.Answer(
+        sentences=[chat_mod.Sentence(text="x", quotes=[chat_mod.Quote(chunk_id="c1", quote="absent text")])]
+    )
+    assert (
+        chat_mod.verify(
+            ans,
+            [{"id": "c1", "text": "Some  other\ntext", "section_id": "s", "source_url": "", "page_start": None}],
+            [],
+        )
+        == []
+    )
