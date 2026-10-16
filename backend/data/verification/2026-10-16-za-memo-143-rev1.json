@@ -1,0 +1,402 @@
+{
+ "checked_on": "2026-10-16",
+ "method": "Candidates re-extracted from ZA Memo 143 Revision 1 (2025-08-01, supplied by the project owner). Each new candidate was checked against its source chunk by Claude Opus 5.5 (via Claude Code) and independently by Claude Sonnet 5.5 (Anthropic API); the source document itself is the official Revision 1. Candidates whose parameter, value and quote are identical to a candidate decided in the 2026-10-15 review carry that decision, because their text did not change.",
+ "candidates": [
+  {
+   "fragment_id": 235,
+   "chunk_id": "za_memo_143#za-memo-143-i#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #185 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 236,
+   "chunk_id": "za_memo_143#za-memo-143-i#1",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #186 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 237,
+   "chunk_id": "za_memo_143#za-memo-143-i#2",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Second model: ",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 238,
+   "chunk_id": "za_memo_143#za-memo-143-i#3",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Second model: Applies only when the ADU is proposed concurrently with a new dwelling unit or an addition to an existing dwelling (or accessory building), per the section B heading and bullet; 800 sq ft is a protected minimum (a floor on what lot floor-area limits may preclude), not a cap on ADU size",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 239,
+   "chunk_id": "za_memo_143#za-memo-143-i#3",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #192 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 240,
+   "chunk_id": "za_memo_143#za-memo-143-i#3",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #193 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 241,
+   "chunk_id": "za_memo_143#za-memo-143-i#3",
+   "parameter": "adu_count_max",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #194 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 242,
+   "chunk_id": "za_memo_143#za-memo-143-i#3",
+   "parameter": "adu_count_max",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #195 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 243,
+   "chunk_id": "za_memo_143#za-memo-143-i#3",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #196 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 244,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "adu_count_max",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #197 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 245,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "jadu_count_max",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #198 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 246,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "reject",
+   "note": "A qualitative requirement ('sufficient for fire and safety') under a feet-valued parameter; the same requirement is kept as text elsewhere.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "disagree",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 247,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Second model: Applies only to State ADUs under GC 66323(a)(1), not Ordinance ADUs or new construction; Requires an existing accessory structure; the ADU must be within its existing space and the expansion is measured beyond its same physical dimensions",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 248,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #202 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 249,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "Second model: ADU must not exceed four-foot side and rear yard setbacks (setback cap is part of the allowance); local agency may limit total floor area to not more than 800 square feet",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 250,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #203 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 251,
+   "chunk_id": "za_memo_143#za-memo-143-ii#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #204 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 253,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "Second model: ADUs must be detached from the multifamily dwelling; Detached ADUs are subject to the height limitation in GC 66321(b)(4)(A), (B), or (C), as applicable",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 254,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_count_max",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #207 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 255,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #208 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 256,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Second model: Approval applies only if the ADU/JADU complies with all applicable provisions of State law, not just building and health and safety codes; The exemption is qualified by \"except as described below\", and the excerpt cuts off before listing those exceptions",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 257,
+   "chunk_id": "za_memo_143#za-memo-143-ii#2",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #211 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 258,
+   "chunk_id": "za_memo_143#za-memo-143-ii#3",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Second model: Limit applies to a maximum of one detached new-construction ADU per lot (quantity cap); The 800 sq ft figure supersedes local floor area limits such as RFA or HPOZ standards that would otherwise limit the ADU to a smaller size (e.g., 700 sq ft), so it acts as a state-law floor, not a cap on what local rules may allow",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 259,
+   "chunk_id": "za_memo_143#za-memo-143-ii#3",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Second model: Applies only when there is an existing multifamily dwelling building(s) on the Lot; the counting rule is for establishing the cap on detached ADUs under Subparagraph (4); Purpose of the count: the number of detached ADUs is capped at eight and may not exceed the number of existing units",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 260,
+   "chunk_id": "za_memo_143#za-memo-143-ii#3",
+   "parameter": "jadu_max_floor_area_sqft",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #212 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 261,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "jadu_count_max",
+   "recommendation": "approve_with_note",
+   "note": "Second model: Lot must be zoned for single-family residences, with a single-family residence built or proposed to be built on it; Owner-occupancy is required (primary residence or JADU), unless the owner is a governmental agency, land trust, or housing organization",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 262,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Same parameter, value and quote as #215 from the original memo, which the 2026-10-15 review rejected; the quote is unchanged in Revision 1. Outdated: since 2026-01-01 (AB 1154) owner-occupancy applies only when the JADU shares sanitation.",
+   "checks": {
+    "source_text": "disagree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 263,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Second model: Applies only to lots zoned for single-family residences with a single-family residence built or proposed; Deed restriction must be approved by LADBS and reference the deed under which the owner acquired the property",
+   "checks": {
+    "source_text": "agree_with_caveat",
+    "second_model": "agree_with_caveat",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 264,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #217 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 265,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #218 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 266,
+   "chunk_id": "za_memo_143#za-memo-143-ii#4",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #220 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 267,
+   "chunk_id": "za_memo_143#za-memo-143-ii#5",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #221 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  },
+  {
+   "fragment_id": 268,
+   "chunk_id": "za_memo_143#za-memo-143-ii#5",
+   "parameter": "other",
+   "recommendation": "approve",
+   "note": "Same parameter, value and quote as #223 from the original memo, which the 2026-10-15 review approved; the quote is unchanged in Revision 1.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "carried_over",
+    "web": "confirmed_in_revision_1"
+   }
+  }
+ ]
+}

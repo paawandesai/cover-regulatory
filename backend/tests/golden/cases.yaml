@@ -1,7 +1,7 @@
 # Golden cases: self-selected parcels (vacant or City-owned lots where possible), identified by APN only.
 # Expected values were calculated (by Claude Code, not by running the engine) from the cited code text and the parcel's own data (lot area from
 # the County layer; width and depth from the fitted rectangle), not copied from the engine's output.
-# Hand calculations by Claude Code; Paawan checks them against the code text (decision D17).
+# Hand calculations by Claude Code; Paawan spot-checked them against the code text on 2026-10-16 (decision D17).
 # Every value the engine shows on these parcels is asserted (2026-10-16); `labels` pins the label where it matters.
 # A value of null means "the engine must not show a number here".
 cases:
