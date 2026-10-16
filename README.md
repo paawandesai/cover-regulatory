@@ -67,10 +67,10 @@ Places where a project guardrail overrides a requirement in the brief. The brief
 | The latest AI technology | A generally available model, pinned by id in configuration (`LLM_MODEL_ID`), used only at ingestion. |
 | Testing on parcels Cover would provide | None were delivered. The golden cases are **self-selected** parcels (vacant or City-owned where possible), identified by APN only. |
 | More specific resources from Cover | None were invented. Sources are official City, County and State publications. The LAMC text was saved by hand from the City's code publisher, not crawled. |
-| Rules approved by a person before use | In this demo the 230 rule candidates were reviewed by AI, at the project owner's instruction: a three-way check (source text, a second model, official sources) decided each one, and 8 were rejected. Values labelled "Derived from rule" therefore rest on an AI review, which the source panel says. A person should re-review before relying on them (see `AI_USAGE.md`). |
+| Rules approved by a person before use | In this demo the rule candidates were reviewed by AI, at the project owner's instruction: a three-way check (source text, a second model, official sources) decided each of the 230 candidates on 2026-10-15 (8 rejected). On 2026-10-16 ZA Memo 143 Revision 1 replaced the original memo; its 40 earlier decisions were retired and 33 re-extracted candidates were decided the same way (2 rejected). 214 approved rules are in use. Values labelled "Derived from rule" therefore rest on an AI review, which the source panel says. A person should re-review before relying on them (see `AI_USAGE.md`). |
 | Feedback that improves future answers | Feedback is queued for a reviewer and never edits rules, prompts or retrieval automatically. |
 | Scaling to LA County, California and beyond | Only LA City, Chapter I, R1 is implemented. The data flow is organised by jurisdiction → code regime → rule set → sources, but the LA rules, zone parser and section ids are hard-coded; `ARCHITECTURE.md` lists what a new jurisdiction needs. |
-| Developing on synthetic data only, with a "Demo — synthetic data only" banner (guardrail) | The brief asks for public parcel and zoning data, so the engine uses real public County and City layers with owner fields dropped at ingestion. Fixtures are APNs only, with no addresses. Because "synthetic" would be untrue, the hosted banner reads "Hosted demo with public data only. Please don't enter personal information." |
+| Developing on synthetic data only, with a "Demo — synthetic data only" banner (guardrail) | The brief asks for public parcel and zoning data, so the engine uses real public County and City layers with owner fields dropped at ingestion. Fixtures are APNs only, with no addresses. Because "synthetic" would be untrue, the hosted banner reads "Hosted demo with public data only. Please don't enter personal information." The project owner approved this wording on 2026-10-16. |
 | Visualizing existing buildings | Uses Microsoft's machine-learned footprints (ODbL), kept in their own table and labelled approximate. The County building outlines were not used because their license is unclear. Footprints can miss, merge or misplace buildings. |
 
 ## Data sources and licenses
@@ -79,7 +79,7 @@ See `LICENSES.md` for code dependencies and `backend/app/ingest/sources.yaml` fo
 ## Measured results
 Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on the same machine).
 
-**Golden parcels** (`backend/tests/golden/`): 11 of 11 pass. The expected values were calculated by Claude Code (the coding assistant) from the code text and the parcel data, not copied from the engine's output, then compared with the engine. No person has checked them yet (decision D17). Every value the engine shows on these parcels is asserted, plus the status, flags and labels of each case. Side yards are for a house at the maximum height (5 ft + 2 ft for 33 ft).
+**Golden parcels** (`backend/tests/golden/`): 11 of 11 pass. The expected values were calculated by Claude Code (the coding assistant) from the code text and the parcel data, not copied from the engine's output, then compared with the engine. The project owner (Paawan) spot-checked them against the code text on 2026-10-16 (decision D17). Every value the engine shows on these parcels is asserted, plus the status, flags and labels of each case. Side yards are for a house at the maximum height (5 ft + 2 ft for 33 ft).
 
 | APN | Case | Front / side / rear (ft) | Max floor area (sq ft) | Height (ft) | Guest house | Flags |
 |---|---|---|---|---|---|---|
@@ -160,9 +160,10 @@ The database starts empty. Load it either way:
   `scripts/db-restore.sh regengine.dump`. The dump contains regulation text saved by hand, so it stays out of git.
 - **From the sources**: run, inside the api container, `python -m app.ingest.load_datasets`,
   `python -m app.ingest.regtext.ingest`, `python -m app.search.index` and `python -m app.extract.extract`.
-  The regulation text step needs the hand-saved files in `data/manual/` mounted into the container (the image
+  The regulation text step needs the hand-saved files in `data/manual/` (the LAMC chapter, the Gov. Code pages and
+  ZA Memo 143 Revision 1 as `za_memo_143_rev1.pdf`) mounted into the container (the image
   does not include them), and extraction needs `ANTHROPIC_COVER_API_KEY`, which compose does not pass by default.
-  A fresh extraction creates new candidate ids, so the 2026-10-15 review in `backend/data/verification/` won't apply to
+  A fresh extraction creates new candidate ids, so the reviews in `backend/data/verification/` won't apply to
   them: every value stays "Interpretation" until the new candidates are reviewed. Use the dump to reproduce the
   demo exactly.
 

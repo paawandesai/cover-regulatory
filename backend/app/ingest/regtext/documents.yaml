@@ -32,16 +32,23 @@ documents:
     ocr_text: true
 
   - id: za_memo_143
-    title: ZA Memorandum No. 143, Implementation of 2019 ADU Ordinance and State ADU Law
+    title: ZA Memorandum No. 143, Revision 1 (LAMC Chapter 1), Implementation of 2019 ADU Ordinance and State ADU Law
     publisher: Los Angeles City Planning, Office of Zoning Administration
     doc_type: memo
     jurisdiction: City of Los Angeles
     code_chapter: I
-    fetch: url
-    url: https://planning.lacity.gov/odocument/184600d8-71d7-4d74-baf1-1f9cd2603320/ZA_Memo_No_143.pdf
-    effective_date: 2024-12-30
-    effective_note: Memo dated 2024-12-30; supersedes prior City ADU/JADU implementation documents.
+    # Saved by hand (City Planning rejects scripted fetches); supplied by the project owner on 2026-10-16.
+    fetch: manual
+    local_path: data/manual/za_memo_143_rev1.pdf
+    url: https://planning.lacity.gov/
+    effective_date: 2025-08-01
+    effective_note: >-
+      Revision 1 issued 2025-08-01 (original 2024-12-30); supersedes prior City ADU/JADU implementation documents.
+      The official URL of Revision 1 was not confirmed. Struck-through (deleted) text is dropped at ingestion and
+      the "(Revision 1, updated 8.1.25)" margin notes are removed.
     ocr_text: false
+    drop_struck: true
+    drop_patterns: ['\(Revision 1, updated 8\.1\.25\)\s*']
 
   - id: palisades_rebuild_faq
     title: Frequently Asked Questions Related to Palisades Fire Rebuilds

@@ -187,9 +187,27 @@ def revalidate() -> dict:
     return counts
 
 
+def retire_stale() -> dict:
+    """Decided fragments whose source text has since changed are no longer used (the engine already requires an
+    unchanged chunk hash); mark them so the review screen stops listing them as approved."""
+    with connect() as conn:
+        rows = conn.execute(
+            """UPDATE rule_fragment f SET status = 'invalid', validation = 'stale_chunk',
+                   review_note = left(coalesce(f.review_note || ' ', '') || 'Retired: the source text changed after this '
+                       || 'decision (re-ingested); a new candidate replaces it.', 2000)
+               FROM reg_chunk c WHERE c.id = f.chunk_id AND f.status IN ('approved', 'rejected')
+                   AND f.chunk_hash <> c.content_hash RETURNING f.id"""
+        ).fetchall()
+        conn.commit()
+    return {"retired": len(rows)}
+
+
 def main(names: list[str]) -> None:
     if names == ["--revalidate"]:
         print(revalidate())
+        return
+    if names == ["--retire-stale"]:
+        print(retire_stale())
         return
     groups = yaml.safe_load(TARGETS.read_text())["groups"]
     client = _client()

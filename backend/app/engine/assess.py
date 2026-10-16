@@ -364,7 +364,7 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[It
     coastal = "coastal_zone" in kinds
     coastal_note = (
         " In the Coastal Zone a Coastal Development Permit or exemption is still needed: ADU law does not override "
-        "the Coastal Act (ZA Memo 143, Q.23)."
+        "the Coastal Act (ZA Memo 143 Rev. 1, Q.23)."
         if coastal
         else ""
     )
@@ -435,10 +435,12 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[It
         lo_item.explanation = (
             "Two paths on this lot. (1) The state ADU above (800 sq ft) must be approved. (2) This larger City "
             "ordinance ADU is barred on lots in both a Very High Fire Hazard Severity Zone and the Hillside Area "
-            "unless the exceptions in LAMC 12.22 A.33(c)(4) are met, and street dedications may still be required "
-            "(ZA Memo 143, Q.42). Confirm with City Planning before relying on 1,200 sq ft." + coastal_note
+            "unless the exceptions in LAMC 12.22 A.33(c)(4) are met. If allowed, it may have to provide street "
+            "improvements for a 20 ft wide street frontage (ZA Memo 143 Rev. 1, Q.32) and fire sprinklers even where the "
+            "house has none (Q.31). Confirm with City Planning before relying on 1,200 sq ft." + coastal_note
         )
         lo_item.citations += _chunk_citation(conn, "LAMC 12.22 A.33(c)", "Hillside Area")
+        lo_item.citations += _chunk_citation(conn, "ZA Memo 143 IV", "Q. 42 How")
     items.append(lo_item)
 
     at = R.load("ADU_ATTACHED", conn)

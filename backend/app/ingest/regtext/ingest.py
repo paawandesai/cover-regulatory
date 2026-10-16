@@ -95,13 +95,37 @@ class _HTMLText(HTMLParser):
         return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
 
 
-def _pages(path: Path, indent_markers: bool = False) -> list[Page]:
+def strike_segments(page) -> list[tuple[float, float, float]]:
+    """Thin horizontal lines and rects on a PDF page, as (x0, x1, y). Revised memos draw strikethrough this way."""
+    return [
+        (o["x0"], o["x1"], (o["top"] + o["bottom"]) / 2)
+        for o in page.lines + page.rects
+        if abs(o["bottom"] - o["top"]) <= 1.5 and o["x1"] - o["x0"] > 2
+    ]
+
+
+def not_struck(obj: dict, segments: list[tuple[float, float, float]]) -> bool:
+    """False for a character crossed by a line through its middle (deleted text in a redlined document).
+    Underlines sit below the middle, so added text is kept."""
+    if obj.get("object_type") != "char":
+        return True
+    mid, height, cx = (obj["top"] + obj["bottom"]) / 2, obj["bottom"] - obj["top"], (obj["x0"] + obj["x1"]) / 2
+    return not any(x0 <= cx <= x1 and abs(y - mid) < height * 0.25 for x0, x1, y in segments)
+
+
+def _pages(path: Path, indent_markers: bool = False, drop_struck: bool = False) -> list[Page]:
     if path.suffix.lower() in (".html", ".htm"):
         parser = _HTMLText(indent_markers)
         parser.feed(path.read_text(encoding="utf-8", errors="ignore"))
         return [Page(1, parser.text())]
     with pdfplumber.open(path) as pdf:
-        return [Page(i + 1, page.extract_text() or "") for i, page in enumerate(pdf.pages)]
+        out = []
+        for i, page in enumerate(pdf.pages):
+            if drop_struck:
+                segs = strike_segments(page)
+                page = page.filter(lambda o, segs=segs: not_struck(o, segs))
+            out.append(Page(i + 1, page.extract_text() or ""))
+        return out
 
 
 def _label(doc: dict) -> str:
@@ -136,7 +160,9 @@ def ingest(doc: dict) -> dict | None:
         return None
     data = path.read_bytes()
     sha = hashlib.sha256(data).hexdigest()
-    pages = _pages(path, indent_markers=doc.get("doc_type") == "code_section")
+    pages = _pages(path, indent_markers=doc.get("doc_type") == "code_section", drop_struck=bool(doc.get("drop_struck")))
+    for pat in doc.get("drop_patterns") or []:
+        pages = [Page(p.number, re.sub(pat, "", p.text)) for p in pages]
     chunks = chunk_document(doc, pages)
     retrieved = datetime.fromtimestamp(path.stat().st_mtime, UTC)
 
