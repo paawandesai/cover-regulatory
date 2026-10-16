@@ -13,10 +13,19 @@ class ProjectInputs:
     second_unit: str | None = None  # one of ADU_TYPES
     second_unit_sqft: float | None = None
     second_unit_bedrooms: int | None = None
+    # Floor-area details (LAMC 12.03 "Floor Area, Residential"); floor_area_sqft is then the gross area inside the
+    # exterior walls of every building on the lot, and the exemptions below are taken off.
+    covered_parking_sqft: float | None = None  # required covered parking (garage or carport)
+    parking_in_rear: bool | None = (
+        None  # all of it in the rear half, or 55 ft+ from the front (40 ft+ on a through lot)
+    )
+    accessory_sqft: float | None = None  # detached accessory buildings of 200 sq ft or less, combined
+    tall_ceiling_sqft: float | None = None  # floor area under a ceiling over 14 ft, counted twice
+    side_wall_ft: float | None = None  # longest continuous side wall over 14 ft high
 
     @property
     def empty(self) -> bool:
-        return all(v is None for v in (self.height_ft, self.floor_area_sqft, self.second_unit, self.second_unit_sqft))
+        return all(v is None for v in self.__dict__.values())
 
 
 def _by_id(items) -> dict:
@@ -49,7 +58,41 @@ def _check(cid: str, title: str, basis, fits: bool | None, detail: str) -> dict:
     }
 
 
-def check_project(items, p: ProjectInputs) -> dict:
+def counted_floor_area(p: ProjectInputs, ex: dict | None, through_lot: bool = False) -> tuple[float, list[str]]:
+    """Residential floor area as 12.03 counts it: tall-ceiling area twice, minus the parking and small accessory
+    building exemptions. ex holds the reviewed numbers (RFA_EXEMPTIONS); without them nothing is adjusted."""
+    total, steps = p.floor_area_sqft, []
+    if not ex:
+        return total, steps
+    if p.tall_ceiling_sqft and ex.get("double_ceiling_ft") is not None:
+        total += p.tall_ceiling_sqft
+        steps.append(f"+{p.tall_ceiling_sqft:,.0f} counted twice (ceiling over {ex['double_ceiling_ft']:g} ft)")
+    if p.covered_parking_sqft and None not in (ex.get("parking_max_sqft"), ex.get("parking_fallback_sqft")):
+        cap = ex["parking_max_sqft"] if p.parking_in_rear else ex["parking_fallback_sqft"]
+        off = min(p.covered_parking_sqft, cap)
+        total -= off
+        where = (
+            (
+                f"at least {ex['parking_through_ft']:g} ft from both fronts"
+                if through_lot and ex.get("parking_through_ft")
+                else f"in the rear half or at least {ex['parking_front_ft']:g} ft from the front"
+            )
+            if p.parking_in_rear
+            else "nearer the front, so only the lower exemption"
+            if p.parking_in_rear is False
+            else "location not given, so only the lower exemption"
+        )
+        steps.append(f"-{off:,.0f} required covered parking ({where}; 200 sq ft per required space)")
+    if p.accessory_sqft and ex.get("accessory_total_sqft") is not None:
+        off = min(p.accessory_sqft, ex["accessory_total_sqft"])
+        total -= off
+        steps.append(
+            f"-{off:,.0f} detached accessory buildings of {ex.get('accessory_each_sqft') or 200:g} sq ft or less"
+        )
+    return max(total, 0.0), steps
+
+
+def check_project(items, p: ProjectInputs, rfa_exemptions: dict | None = None, through_lot: bool = False) -> dict:
     by = _by_id(items)
     checks: list[dict] = []
     if p.height_ft is not None:
@@ -78,20 +121,50 @@ def check_project(items, p: ProjectInputs) -> dict:
     if p.floor_area_sqft is not None:
         rfa = by.get("max_rfa")
         limit = _num(rfa)
+        counted, steps = counted_floor_area(p, rfa_exemptions, through_lot)
         extra = " A guest house counts toward this total." if p.second_unit == "guest_house" else ""
+        how = (
+            f" Counted: {p.floor_area_sqft:,.0f} {' '.join(steps)} = {counted:,.0f} sq ft (LAMC 12.03)."
+            if steps
+            else ""
+        )
         checks.append(
             _check(
                 "floor_area",
-                f"Floor area {p.floor_area_sqft:,.0f} sq ft",
+                f"Floor area {counted:,.0f} sq ft counted" if steps else f"Floor area {p.floor_area_sqft:,.0f} sq ft",
                 rfa,
-                None if limit is None else p.floor_area_sqft <= limit,
+                None if limit is None else counted <= limit,
                 (
                     f"Maximum {limit:,.0f} sq ft of residential floor area."
                     if limit is not None
                     else "The floor area limit is not modeled for this lot."
                 )
+                + how
                 + extra,
             )
+        )
+    if p.side_wall_ft is not None:
+        side = by.get("side_yard")
+        long_wall = p.side_wall_ft > 45 and (p.height_ft is None or p.height_ft > 14)
+        checks.append(
+            {
+                "id": "plane_break",
+                "title": f"Side wall {p.side_wall_ft:g} ft long" + (": needs a plane break" if long_wall else ""),
+                "status": "confirm"
+                if long_wall
+                else "fits"
+                if side is not None and side.label == "derived"
+                else "confirm",
+                "detail": (
+                    "Over 45 ft long and over 14 ft high, so it needs an offset (plane break) at least 5 ft deep beyond "
+                    "the required side yard and at least 10 ft long (LAMC 12.08 C.2(a)). Show it on the plans."
+                    if long_wall
+                    else "No plane break needed: walls need one only when over 14 ft high and over 45 ft long "
+                    "(LAMC 12.08 C.2(a))."
+                ),
+                "based_on": side.id if side is not None else None,
+                "label": side.label if side is not None else None,
+            }
         )
     if p.second_unit:
         checks.extend(_second_unit(by, p))
@@ -181,6 +254,16 @@ def _second_unit(by: dict, p: ProjectInputs) -> list[dict]:
     return [_check("adu_detached", f"Detached ADU {size:,.0f} sq ft", st, None, "Not determined.")]
 
 
+def _adu_height_text(by: dict) -> str:
+    h = by.get("adu_height")
+    v = _num(h)
+    if v is None:
+        return "16 ft"
+    if h.label == "interpretive" and v > 16:
+        return f"16 ft, or {v:g} ft (plus 2 ft for a matching roof pitch) if walking distance to transit is under half a mile"
+    return f"{v:g} ft"
+
+
 def summarize(items, ctx) -> dict:
     """Counts by label, a one-paragraph answer, and the decision paths an architect would weigh."""
     by = _by_id(items)
@@ -245,8 +328,8 @@ def summarize(items, ctx) -> dict:
                 "title": "State ADU or City ADU",
                 "options": [
                     (
-                        f"State ADU: up to {st:,.0f} sq ft, 4 ft side and rear setbacks, 16 ft. The City must approve it, "
-                        "and the floor area limit can't stop it."
+                        f"State ADU: up to {st:,.0f} sq ft, 4 ft side and rear setbacks, {_adu_height_text(by)}. The City "
+                        "must approve it, and the floor area limit can't stop it."
                     ),
                     (
                         f"City ordinance ADU: up to {lo:,.0f} sq ft and two stories, within the lot's floor area limit."

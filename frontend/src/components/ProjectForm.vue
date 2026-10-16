@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import type { ProjectCheck, ProjectInputs, SecondUnit } from '../types'
 
 const props = defineProps<{ inputs: Partial<ProjectInputs>; checks: ProjectCheck[] }>()
@@ -11,8 +11,25 @@ type Draft = {
   second_unit: SecondUnit | ''
   second_unit_sqft: string
   second_unit_bedrooms: string
+  covered_parking_sqft: string
+  parking_in_rear: '' | 'true' | 'false'
+  accessory_sqft: string
+  tall_ceiling_sqft: string
+  side_wall_ft: string
 }
-const draft = reactive<Draft>({ height_ft: '', floor_area_sqft: '', second_unit: '', second_unit_sqft: '', second_unit_bedrooms: '' })
+const draft = reactive<Draft>({
+  height_ft: '',
+  floor_area_sqft: '',
+  second_unit: '',
+  second_unit_sqft: '',
+  second_unit_bedrooms: '',
+  covered_parking_sqft: '',
+  parking_in_rear: '',
+  accessory_sqft: '',
+  tall_ceiling_sqft: '',
+  side_wall_ft: '',
+})
+const more = ref(false)
 
 watch(
   () => props.inputs,
@@ -22,6 +39,12 @@ watch(
     draft.second_unit = i.second_unit ?? ''
     draft.second_unit_sqft = i.second_unit_sqft?.toString() ?? ''
     draft.second_unit_bedrooms = i.second_unit_bedrooms?.toString() ?? ''
+    draft.covered_parking_sqft = i.covered_parking_sqft?.toString() ?? ''
+    draft.parking_in_rear = i.parking_in_rear === undefined ? '' : i.parking_in_rear ? 'true' : 'false'
+    draft.accessory_sqft = i.accessory_sqft?.toString() ?? ''
+    draft.tall_ceiling_sqft = i.tall_ceiling_sqft?.toString() ?? ''
+    draft.side_wall_ft = i.side_wall_ft?.toString() ?? ''
+    if (i.covered_parking_sqft || i.accessory_sqft || i.tall_ceiling_sqft || i.side_wall_ft) more.value = true
   },
   { immediate: true },
 )
@@ -35,6 +58,11 @@ function apply() {
     second_unit: draft.second_unit || undefined,
     second_unit_sqft: draft.second_unit ? n(draft.second_unit_sqft) : undefined,
     second_unit_bedrooms: draft.second_unit === 'attached' ? n(draft.second_unit_bedrooms) : undefined,
+    covered_parking_sqft: n(draft.covered_parking_sqft),
+    parking_in_rear: n(draft.covered_parking_sqft) && draft.parking_in_rear ? draft.parking_in_rear === 'true' : undefined,
+    accessory_sqft: n(draft.accessory_sqft),
+    tall_ceiling_sqft: n(draft.tall_ceiling_sqft),
+    side_wall_ft: n(draft.side_wall_ft),
   })
 }
 
@@ -83,6 +111,39 @@ const STATUS: Record<ProjectCheck['status'], string> = {
         <span class="small muted">Bedrooms</span>
         <input v-model="draft.second_unit_bedrooms" class="field" inputmode="numeric" placeholder="e.g. 1" />
       </label>
+      <details class="more" :open="more" @toggle="more = ($event.target as HTMLDetailsElement).open">
+        <summary class="small">Floor-area details and side walls</summary>
+        <p class="small muted hint">
+          With these, floor area is the gross area inside the exterior walls of every building on the lot, and the exemptions in LAMC 12.03
+          are taken off.
+        </p>
+        <div class="grid inner">
+          <label>
+            <span class="small muted">Required covered parking (sq ft)</span>
+            <input v-model="draft.covered_parking_sqft" class="field" inputmode="decimal" placeholder="e.g. 400" />
+          </label>
+          <label v-if="draft.covered_parking_sqft">
+            <span class="small muted">Where the parking is</span>
+            <select v-model="draft.parking_in_rear" class="field">
+              <option value="">Not sure</option>
+              <option value="true">Rear half, or 55 ft+ from the front</option>
+              <option value="false">Nearer the front</option>
+            </select>
+          </label>
+          <label>
+            <span class="small muted">Sheds and other small detached buildings (sq ft)</span>
+            <input v-model="draft.accessory_sqft" class="field" inputmode="decimal" placeholder="each 200 or less" />
+          </label>
+          <label>
+            <span class="small muted">Floor under ceilings over 14 ft (sq ft)</span>
+            <input v-model="draft.tall_ceiling_sqft" class="field" inputmode="decimal" placeholder="e.g. 200" />
+          </label>
+          <label>
+            <span class="small muted">Longest side wall over 14 ft high (ft)</span>
+            <input v-model="draft.side_wall_ft" class="field" inputmode="decimal" placeholder="e.g. 48" />
+          </label>
+        </div>
+      </details>
       <div class="actions">
         <button type="submit" class="btn btn-primary">Check</button>
         <button v-if="checks.length" type="button" class="btn btn-secondary" @click="clear">Clear</button>
@@ -138,6 +199,19 @@ label {
 .actions {
   display: flex;
   gap: 8px;
+}
+.more {
+  grid-column: 1 / -1;
+}
+.more summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.hint {
+  margin: 8px 0 0;
+}
+.grid.inner {
+  padding: 8px 0 0;
 }
 .checks {
   list-style: none;

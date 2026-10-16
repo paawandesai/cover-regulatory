@@ -165,13 +165,31 @@ def assess_parcel(
     second_unit: Literal["detached", "attached", "jadu", "guest_house"] | None = Query(None),
     second_unit_sqft: float | None = Query(None, gt=0, le=10_000),
     second_unit_bedrooms: int | None = Query(None, ge=0, le=10),
+    covered_parking_sqft: float | None = Query(None, gt=0, le=5_000, description="Required covered parking area"),
+    parking_in_rear: bool | None = Query(None, description="All covered parking in the rear half or 55 ft back"),
+    accessory_sqft: float | None = Query(
+        None, gt=0, le=5_000, description="Detached accessory buildings under 200 sq ft"
+    ),
+    tall_ceiling_sqft: float | None = Query(None, gt=0, le=50_000, description="Floor area under ceilings over 14 ft"),
+    side_wall_ft: float | None = Query(None, gt=0, le=500, description="Longest continuous side wall over 14 ft high"),
 ):
     """Project inputs are optional; they only change which limits are checked and the side yard's design height."""
     from app.engine.assess import assess
     from app.engine.project import ProjectInputs
     from app.parcel.resolve import ParcelNotFound
 
-    project = ProjectInputs(height_ft, floor_area_sqft, second_unit, second_unit_sqft, second_unit_bedrooms)
+    project = ProjectInputs(
+        height_ft,
+        floor_area_sqft,
+        second_unit,
+        second_unit_sqft,
+        second_unit_bedrooms,
+        covered_parking_sqft,
+        parking_in_rear,
+        accessory_sqft,
+        tall_ceiling_sqft,
+        side_wall_ft,
+    )
     try:
         return assess(q, project)
     except ParcelNotFound as e:

@@ -20,6 +20,7 @@ class Need:
     parameter: str
     quote_has: str | None = None
     pick: str = "one"  # "one" | "max" | "min"
+    numeric: bool = True  # False: a rule stated in words (its logic is in code); found when cited text exists
 
 
 @dataclass
@@ -92,6 +93,41 @@ RULES: dict[str, list[Need]] = {
         Need("stories", "LAMC 12.21.1 A.1", "stories_max", "“SS”"),
         Need("basement_ft", "LAMC 12.21.1 A.1", "other", "Basement does not count"),
     ],
+    # Prevailing front yard (12.08 C.1). The 10 ft spread, 40% of frontage and shallowest-average logic is coded in
+    # app/engine/prevailing.py; each phrase below must be in the reviewed quote for the rule to run.
+    "R1_PREVAILING_FRONT": [
+        Need(
+            "rule",
+            "LAMC 12.08 C.1",
+            "front_yard_min_ft",
+            "vary in depth by not more than ten feet comprise 40%",
+            numeric=False,
+        ),
+        Need("shallowest", "LAMC 12.08 C.1", "front_yard_min_ft", "shallowest average depth", numeric=False),
+        Need("cap_ft", "LAMC 12.08 C.1", "other", "exceed 40 feet in depth"),
+    ],
+    "R1_KEY_LOT": [
+        Need("reach_ft", "LAMC 12.08 C.1", "other", "On key lots the minimum front yard may be the average")
+    ],
+    "R1_PLANE_BREAK": [
+        Need(
+            "rule",
+            "LAMC 12.08 C.2",
+            "other",
+            "exceeding 14 feet in height and a continuous length greater than 45 feet",
+            numeric=False,
+        )
+    ],
+    "RFA_EXEMPTIONS": [
+        Need("double_ceiling_ft", "LAMC 12.03(b)", "rfa_double_count_ceiling_ft", "greater than 14 feet"),
+        Need("parking_max_sqft", "LAMC 12.03(b)", "rfa_parking_exempt_sqft", "200 square feet per parking space"),
+        Need("parking_fallback_sqft", "LAMC 12.03(b)", "rfa_parking_exempt_sqft", "only 200 square feet"),
+        Need("parking_front_ft", "LAMC 12.03(b)", "rfa_parking_front_setback_ft", "rear half of the Lot"),
+        Need("parking_through_ft", "LAMC 12.03(b)", "rfa_parking_front_setback_ft", "Through Lot"),
+        Need("accessory_each_sqft", "LAMC 12.03(c)", "rfa_accessory_exempt_sqft", "Detached Accessory", pick="min"),
+        Need("accessory_total_sqft", "LAMC 12.03(c)", "rfa_accessory_exempt_sqft", "Detached Accessory", pick="max"),
+    ],
+    "ADU_TRANSIT_HEIGHT": [Need("height_ft", "Gov. Code 66321(b)", "adu_height_max_ft", "major transit stop")],
     "GUEST_HOUSE": [Need("min_lot_sqft", "LAMC 12.08 A.7", "alq_min_lot_area_sqft")],
     "ADU_STATE_DETACHED": [
         Need("max_sqft", "Gov. Code 66323(a)", "adu_max_floor_area_sqft", "800 square feet"),
@@ -118,6 +154,22 @@ def _section_clause(section: str) -> tuple[str, str]:
     return "c.section_id = %s", section
 
 
+def _citation(r) -> dict:
+    return {
+        "fragment_id": r["id"],
+        "chunk_id": r["chunk_id"],
+        "section_id": r["section_id"],
+        "code_chapter": r["code_chapter"],
+        "quote": r["source_quote"],
+        "quote_start": r["quote_start"],
+        "quote_end": r["quote_end"],
+        "review_status": r["status"],
+        "reviewed_by": r["reviewed_by"],
+        "source_url": deep_link(r["source_url"], r["section_id"], r["page_start"]),
+        "retrieved_at": r["retrieved_at"],
+    }
+
+
 def load(rule_id: str, conn=None) -> RuleInputs:
     if conn is None:
         with connect() as c:
@@ -139,6 +191,19 @@ def load(rule_id: str, conn=None) -> RuleInputs:
         if any(r["status"] == "approved" for r in rows):
             rows = [r for r in rows if r["status"] == "approved"]
         values = sorted({float(r["value_numeric"]) for r in rows if r["value_numeric"] is not None})
+        if not need.numeric:
+            rows = rows[:1]
+            values = []
+            if not rows:
+                out.found[need.key] = Found(None, [], [], "missing")
+                continue
+            out.found[need.key] = Found(
+                None,
+                [rows[0]["id"]],
+                [_citation(rows[0])],
+                "approved" if rows[0]["status"] == "approved" else "pending",
+            )
+            continue
         if not values:
             out.found[need.key] = Found(None, [], [], "missing")
             continue
@@ -151,22 +216,7 @@ def load(rule_id: str, conn=None) -> RuleInputs:
         out.found[need.key] = Found(
             value,
             [r["id"] for r in used],
-            [
-                {
-                    "fragment_id": r["id"],
-                    "chunk_id": r["chunk_id"],
-                    "section_id": r["section_id"],
-                    "code_chapter": r["code_chapter"],
-                    "quote": r["source_quote"],
-                    "quote_start": r["quote_start"],
-                    "quote_end": r["quote_end"],
-                    "review_status": r["status"],
-                    "reviewed_by": r["reviewed_by"],
-                    "source_url": deep_link(r["source_url"], r["section_id"], r["page_start"]),
-                    "retrieved_at": r["retrieved_at"],
-                }
-                for r in used
-            ],
+            [_citation(r) for r in used],
             status,
         )
     return out

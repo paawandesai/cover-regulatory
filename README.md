@@ -22,8 +22,8 @@ Decision support for licensed architects and engineers. Given a City of Los Ange
 Enter an APN or a street address. The engine:
 
 1. **Finds the parcel and stops early when it must.** Outside the City, under Chapter 1A, or not an R1-family zone each gets an explicit result instead of wrong rules.
-2. **Reports the R1 envelope:** front, side and rear yards, maximum residential floor area, height, and whether the lot meets the R1 minimums.
-3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU (at least 850 sq ft, which state law says can't be refused), a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more).
+2. **Reports the R1 envelope:** front, side and rear yards, maximum residential floor area, height, and whether the lot meets the R1 minimums, plus an estimate of the block's prevailing front yard and, on a key lot, the averaged front yard it may use (LAMC 12.08 C.1).
+3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU (at least 850 sq ft, which state law says can't be refused), a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more). It also gives the detached ADU height the City must allow: 16 ft, or 18 ft (plus 2 ft for a matching roof pitch) near frequent transit.
 4. **Flags what it does not apply:** Hillside Area, Coastal Zone, Very High Fire Hazard Severity Zone, the January 2025 fire rebuild orders, overlay plans, zone conditions and SB 9. Where a flag means the flat-land rule is wrong (Hillside Area; Coastal Zone floor area and height; R1 variation zones), the value is withheld, not shown. Height Districts 1-L, 1-VL, 1-XL and 1-SS apply their own limits from LAMC 12.21.1 A.1; 1-SS caps the house at one story and 18 ft. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
 5. **Labels every value** with how it was established:
    - **Verified parcel data:** read from a named dataset with its fetch date.
@@ -37,7 +37,7 @@ Enter an APN or a street address. The engine:
 7. **Draws the lot.** A diagram or map shows the lot and the buildable area left after yards. It is labeled illustrative, not survey-grade. Clicking a yard, the buildable area, an existing building or the lot outline opens the value and its source text.
 8. **Takes feedback without letting it change anything.** "Report a problem" queues a note for a reviewer. Feedback never changes a rule. A rule changes status only through a review decision: the password-protected Rule review screen (`/review`), or the `apply_review` command that applied this demo's AI review. A reviewer can open the rules behind a reported value straight from the Feedback tab.
 
-9. **Answers in one paragraph and checks a project.** A summary states what can be built, how many values need confirming, and the choices to weigh (state or City ADU, guest house or ADU, fire rebuild order or standard rules). Optional project inputs (house height, floor area, a second unit and its size and bedrooms) are checked against the limits, and each check carries the label of the value it was checked against.
+9. **Answers in one paragraph and checks a project.** A summary states what can be built, how many values need confirming, and the choices to weigh (state or City ADU, guest house or ADU, fire rebuild order or standard rules). Optional project inputs (house height, floor area, a second unit and its size and bedrooms) are checked against the limits, and each check carries the label of the value it was checked against. Optional floor-area details (required covered parking and where it sits, small detached buildings, area under ceilings over 14 ft) apply the LAMC 12.03 exemptions, and a side-wall length checks the plane-break rule.
 
 No AI model runs when you ask for an assessment. The AI work happens once, at ingestion: a model reads the regulation text into candidate rule fragments, each with a verbatim quote. A deterministic check rejects any fragment whose quote is not in the text or whose number is not in the quote. Answers are therefore repeatable and fast.
 
@@ -52,7 +52,8 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 - There is no client-facing report or export, so there is no architect sign-off gate yet. Any report built later must sit behind a licensed reviewer's sign-off and disclose AI involvement.
 - The fire rebuild flag cites City Planning's Palisades Rebuild FAQ (2026-01-30), which summarizes Emergency Executive Orders 1, 8 and 9. The orders' own text was not ingested, so check the current order before relying on the flag.
 - An address that matches no County address point or parcel situs is sent to the US Census Geocoder (a public, no-account service). APN searches never leave the server.
-- Prevailing front-yard setbacks, key lots, garage and porch floor-area exemptions, side-wall plane breaks, transit-proximity ADU height increases and the per-story side-yard rule in the Coastal Zone and Hillside Area are named in the explanations but not computed.
+- The prevailing front yard and the key-lot front yard are estimates from parcel outlines and machine-learned building outlines, labelled Approximate and listing the lots they counted; confirm them on a survey. The per-story side-yard rule in the Coastal Zone and Hillside Area is named but not computed.
+- The 18 ft ADU height near transit uses Caltrans' straight-line half-mile transit areas. The law counts walking distance, so inside an area the 18 ft is an interpretation to confirm; outside every area the 16 ft is certain.
 - Corner lots are detected only where two adjacent sides read as streets on the parcel map. When only the long side reads as a street, the front and side yards are labelled as interpretations.
 
 ## Known constraints
@@ -108,7 +109,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 | Full assessment (`assess`) over the 11 golden parcels | 110 | 129 ms | 196 ms |
 | Regulation search (the 32 retrieval questions) | 32 | 52 ms | 114 ms |
 
-**Test suites** (2026-10-16): backend 76 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
+**Test suites** (2026-10-16): backend 83 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
 
 ## AI disclosure
 This tool uses an LLM only at ingestion, to extract candidate rule fragments from regulatory text. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
