@@ -146,6 +146,13 @@ const picked = computed(() => {
 })
 
 const parcelFetched = computed(() => formatDate(parcelItem('lot_area')?.source?.fetched_at))
+// Hover text on the map: the value each shape stands for.
+const mapLabels = computed<Record<string, string>>(() => {
+  const out: Record<string, string> = {}
+  for (const it of result.value?.items ?? []) out[it.id] = `${it.title}: ${formatValue(it)}`
+  if (out.max_rfa) out.max_rfa = `Buildable area (illustrative). ${out.max_rfa}`
+  return out
+})
 const zoningFetched = computed(() => formatDate(parcelItem('zone')?.source?.fetched_at))
 
 const notFoundBody = computed(() => {
@@ -268,10 +275,11 @@ const stop = computed(() => {
                 </button>
                 <button type="button" :aria-pressed="view === 'map'" :class="{ on: view === 'map' }" @click="view = 'map'">Map</button>
               </div>
-              <LotDiagram v-if="view === 'diagram'" :geometry="result.geometry" :dims="(dims?.value as string) ?? null" />
-              <LotMap v-else :apn="result.parcel.apn" :geometry="result.geometry" />
+              <LotDiagram v-if="view === 'diagram'" :geometry="result.geometry" :dims="(dims?.value as string) ?? null" @pick="pick" />
+              <LotMap v-else :apn="result.parcel.apn" :geometry="result.geometry" :labels="mapLabels" @pick="pick" />
               <figcaption class="small muted">
-                Illustrative, not survey-grade. Front taken as the street-facing side.
+                Illustrative, not survey-grade. Front taken as the street-facing side. Click a yard, the buildable area or a building to see
+                its source.
                 <template v-if="result.geometry.note">
                   {{ result.geometry.note[0].toUpperCase() + result.geometry.note.slice(1) }}.</template
                 >
@@ -553,6 +561,12 @@ h2 {
 @media (max-width: 1100px) {
   .right {
     position: static;
+  }
+}
+/* Phones: the answer first, then the parcel facts and drawing, then the source text. */
+@media (max-width: 760px) {
+  .mid {
+    order: -1;
   }
 }
 </style>

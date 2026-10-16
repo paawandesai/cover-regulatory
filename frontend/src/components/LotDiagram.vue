@@ -4,6 +4,7 @@ import { bounds, centroid, rings, toLocal } from '../geo'
 import type { Geometry } from '../types'
 
 const props = defineProps<{ geometry: Geometry; dims: string | null }>()
+const emit = defineEmits<{ pick: [string] }>()
 
 const W = 300
 const H = 360
@@ -73,10 +74,39 @@ const ariaLabel = computed(() => {
     <path v-if="drawing.env" :d="drawing.env" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 4" />
     <path v-if="drawing.bldg" :d="drawing.bldg" fill="var(--ink-muted)" fill-opacity="0.35" stroke="var(--ink-muted)" stroke-width="1" />
     <g v-if="drawing.oriented" class="lbl">
-      <text v-if="yards" :x="W / 2" :y="drawing.top - 8" text-anchor="middle">REAR {{ yards.rear }} FT</text>
-      <text v-if="yards" :x="W / 2" :y="drawing.bottom + 16" text-anchor="middle">FRONT {{ yards.front }} FT</text>
       <text
         v-if="yards"
+        :x="W / 2"
+        :y="drawing.top - 8"
+        text-anchor="middle"
+        class="link"
+        role="button"
+        tabindex="0"
+        @click="emit('pick', 'rear_yard')"
+        @keydown.enter="emit('pick', 'rear_yard')"
+      >
+        REAR {{ yards.rear }} FT
+      </text>
+      <text
+        v-if="yards"
+        :x="W / 2"
+        :y="drawing.bottom + 16"
+        text-anchor="middle"
+        class="link"
+        role="button"
+        tabindex="0"
+        @click="emit('pick', 'front_yard')"
+        @keydown.enter="emit('pick', 'front_yard')"
+      >
+        FRONT {{ yards.front }} FT
+      </text>
+      <text
+        v-if="yards"
+        class="link"
+        role="button"
+        tabindex="0"
+        @click="emit('pick', 'side_yard')"
+        @keydown.enter="emit('pick', 'side_yard')"
         :x="drawing.left - 10"
         :y="drawing.midY"
         text-anchor="middle"
@@ -86,7 +116,7 @@ const ariaLabel = computed(() => {
       </text>
       <text :x="W / 2" :y="Math.min(H - 6, drawing.bottom + 34)" text-anchor="middle">STREET</text>
     </g>
-    <g v-if="drawing.env">
+    <g v-if="drawing.env" class="link" role="button" tabindex="0" @click="emit('pick', 'max_rfa')" @keydown.enter="emit('pick', 'max_rfa')">
       <text :x="drawing.labelX" :y="drawing.midY - 4" :text-anchor="drawing.labelAnchor" class="big">Buildable area</text>
       <text v-if="area" :x="drawing.labelX" :y="drawing.midY + 14" :text-anchor="drawing.labelAnchor" class="lbl-t">{{ area }} SQ FT</text>
     </g>
@@ -105,6 +135,13 @@ const ariaLabel = computed(() => {
   font-family: var(--font-mono);
   font-size: 11px;
   fill: var(--ink-muted);
+}
+.link {
+  cursor: pointer;
+}
+.lbl text.link {
+  fill: var(--accent-hover);
+  text-decoration: underline;
 }
 .big {
   font-family: var(--font-sans);

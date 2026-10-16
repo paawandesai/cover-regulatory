@@ -5,6 +5,7 @@ import base64
 import pytest
 from fastapi.testclient import TestClient
 
+from app.api import ratelimit
 from app.api.auth import hash_password
 from app.config import get_settings
 
@@ -26,7 +27,9 @@ def client(monkeypatch):
     monkeypatch.setenv("ADMIN_USERNAME", "reviewer")
     monkeypatch.setenv("ADMIN_PASSWORD_SCRYPT", hash_password(PASSWORD))
     get_settings.cache_clear()
+    ratelimit.reset()
     yield TestClient(app)
+    ratelimit.reset()
     get_settings.cache_clear()
 
 
@@ -248,3 +251,11 @@ def test_feedback_can_be_marked_reviewed_without_touching_rules(client):
     with connect() as conn:
         conn.execute("DELETE FROM feedback WHERE id = %s", (fid,))
         conn.commit()
+
+
+def test_wrong_passwords_are_rate_limited(client):
+    for _ in range(ratelimit.LIMITS["auth_fail"][0]):
+        assert client.get("/api/admin/feedback", headers=auth(pw="wrong")).status_code == 401
+    assert client.get("/api/admin/feedback", headers=auth(pw="wrong")).status_code == 429
+    # Even the right password waits until the window passes, so guessing can't continue.
+    assert client.get("/api/admin/feedback", headers=auth()).status_code == 429

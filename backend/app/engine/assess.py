@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from app.db.connection import connect
 from app.engine import rules as R
 from app.engine.geometry import envelope, lot_frame
+from app.engine.links import deep_link
 from app.engine.project import ProjectInputs, check_project, summarize
 from app.parcel.provenance import Sourced
 from app.parcel.resolve import ParcelContext, resolve
@@ -154,7 +155,7 @@ def _rule_item(item_id, family, title, ri: R.RuleInputs, value, unit, explanatio
 def _chunk_citation(conn, section_id: str, contains: str | None = None) -> list[dict]:
     """Cite a chunk by its section id (looked up in code, never emitted by a model)."""
     row = conn.execute(
-        """SELECT id, section_id, code_chapter, source_url, retrieved_at::text AS retrieved_at, text
+        """SELECT id, section_id, code_chapter, source_url, page_start, retrieved_at::text AS retrieved_at, text
            FROM reg_chunk WHERE section_id = %s AND (%s::text IS NULL OR text ILIKE '%%' || %s || '%%')
            ORDER BY id LIMIT 1""",
         (section_id, contains, contains),
@@ -172,7 +173,7 @@ def _chunk_citation(conn, section_id: str, contains: str | None = None) -> list[
             "quote": row["text"][start:end],
             "quote_start": start,
             "quote_end": end,
-            "source_url": row["source_url"],
+            "source_url": deep_link(row["source_url"], row["section_id"], row["page_start"]),
             "retrieved_at": row["retrieved_at"],
             "review_status": "code-cited",
         }
@@ -229,25 +230,43 @@ def _r1_items(
     h = R.load("R1_HEIGHT", conn)
     hmax, hlow = h.value("max_ft"), h.value("low_roof_ft")
     hd = (ctx.zone.height_district or "") if ctx.zone else ""
-    district = "HD_VL" if hd.endswith("VL") else "HD_XL" if hd.endswith("XL") else None
+    district = (
+        "HD_SS"
+        if hd.endswith("SS")
+        else "HD_VL"
+        if hd.endswith("VL")
+        else "HD_XL"
+        if hd.endswith("XL")
+        else "HD_L"
+        if hd.endswith("L")
+        else None
+    )
     hwhy = (
         f"{hmax} ft off the Hillside Area and Coastal Zone, or {hlow} ft where the roof is flat or slopes less than 25%. Where 40% of the homes on the block "
         "are taller, their average height may apply instead; not evaluated."
         if hmax and hlow
         else None
     )
-    if hd.endswith("SS"):
-        # 1-SS (one story, 18 ft) is not modeled; showing the R1 33 ft would be wrong.
-        hmax = None
-        hwhy = "Height District 1-SS limits buildings to one story and 18 ft (LAMC 12.21.1 A.1); not modeled here."
-        district = None
     if district:
         d = R.load(district, conn)
-        if d.value("max_ft") is not None and hmax is not None and d.value("max_ft") < hmax:
-            hmax = d.value("max_ft")
-            hwhy = f"Height District {hd} limits buildings to {hmax} ft (lower than the R1 limit)."
+        dmax = d.value("max_ft")
+        if district == "HD_SS":
+            # 1-SS replaces the R1 limit outright: one story and 18 ft to the highest point of the roof.
+            hmax = dmax
+            hwhy = (
+                f"Height District {hd} allows one story, with the highest point of the roof at {dmax:g} ft (LAMC "
+                f"12.21.1 A.1). A basement is not a story if the floor above it is no more than "
+                f"{d.value('basement_ft'):g} ft above grade."
+                if dmax is not None and d.value("basement_ft") is not None
+                else f"Height District {hd} limits buildings to one story and 18 ft; the rule text is not reviewed."
+            )
+        elif dmax is not None and hmax is not None and dmax < hmax:
+            hmax = dmax
+            hwhy = f"Height District {hd} limits buildings to {hmax:g} ft (lower than the R1 limit)."
             if hlow is not None and hlow < hmax:
                 hwhy += f" The R1 limit of {hlow} ft still applies where the roof is flat or slopes less than 25%."
+        elif dmax is not None and hwhy:
+            hwhy += f" Height District {hd} allows up to {dmax:g} ft, so the R1 limit governs."
         h.found.update({f"district_{k}": v for k, v in d.found.items()})
     sy = R.load("R1_SIDE_YARD", conn)
     side = side_base = None
@@ -778,6 +797,7 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
             "envelope": None,
             "envelope_area_sqft": None,
             "yards_ft": None,
+            "yards": [],
             "note": "yards not determined; no buildable area drawn",
         }
     if result["geometry"] is not None:

@@ -27,6 +27,8 @@ class Settings(BaseSettings):
 
     # Hosted demo gate. When set, every /api route except health and the invite check needs the invite cookie.
     demo_invite_code: SecretStr | None = None
+    # Behind the bundled Caddy proxy: take the client IP for rate limits from X-Forwarded-For.
+    trust_proxy_headers: bool = False
 
     @field_validator("anthropic_api_key", "admin_password_scrypt", "demo_invite_code", mode="before")
     @classmethod

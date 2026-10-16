@@ -12,15 +12,18 @@ async function send() {
     await submitInvite(code.value)
     location.reload()
   } catch (e) {
-    error.value = e instanceof ApiError && e.status === 403 ? "That code didn't work." : 'Could not reach the server.'
+    error.value =
+      e instanceof ApiError && e.status === 403
+        ? "That code didn't work."
+        : e instanceof ApiError && e.status === 429
+          ? 'Too many tries. Wait 15 minutes and try again.'
+          : 'Could not reach the server.'
   }
 }
 </script>
 
 <template>
-  <div v-if="invite.required" class="demo small">
-    Hosted demo with public data only. Please don't enter personal information.
-  </div>
+  <div v-if="invite.required" class="demo small">Hosted demo with public data only. Please don't enter personal information.</div>
   <main v-if="invite.needed" class="gate">
     <form class="card" @submit.prevent="send">
       <h1>Regulatory Engine demo</h1>

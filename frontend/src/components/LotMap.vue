@@ -10,7 +10,8 @@ import type { Geometry } from '../types'
 // The worker is a separate module; point MapLibre at the copy Vite serves and bundles.
 maplibregl.setWorkerUrl(workerUrl)
 
-const props = defineProps<{ apn: string; geometry: Geometry }>()
+const props = defineProps<{ apn: string; geometry: Geometry; labels?: Record<string, string> }>()
+const emit = defineEmits<{ pick: [string] }>()
 const el = ref<HTMLDivElement>()
 let map: maplibregl.Map | null = null
 
@@ -32,6 +33,14 @@ async function draw() {
   const set = (id: string, data: GeoJSON.FeatureCollection) => (m.getSource(id) as maplibregl.GeoJSONSource | undefined)?.setData(data)
   set('lot', feature(props.geometry.lot))
   set('envelope', feature(props.geometry.envelope))
+  set('yards', {
+    type: 'FeatureCollection',
+    features: (props.geometry.yards ?? []).map((y) => ({
+      type: 'Feature',
+      properties: { item: `${y.kind}_yard` },
+      geometry: y.geometry,
+    })),
+  })
   set('buildings', {
     type: 'FeatureCollection',
     features: (props.geometry.buildings ?? []).map((g) => ({
@@ -68,7 +77,8 @@ onMounted(() => {
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
   map.on('load', () => {
     const m = map!
-    for (const id of ['nearby', 'lot', 'envelope', 'buildings']) m.addSource(id, { type: 'geojson', data: feature(null) })
+    for (const id of ['nearby', 'lot', 'yards', 'envelope', 'buildings'])
+      m.addSource(id, { type: 'geojson', data: feature(null), generateId: true })
     m.addLayer({
       id: 'nearby-fill',
       type: 'fill',
@@ -92,6 +102,12 @@ onMounted(() => {
       type: 'line',
       source: 'lot',
       paint: { 'line-color': '#1c1b19', 'line-width': 2 },
+    })
+    m.addLayer({
+      id: 'yard-fill',
+      type: 'fill',
+      source: 'yards',
+      paint: { 'fill-color': '#c2410c', 'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.18, 0] },
     })
     m.addLayer({
       id: 'env-fill',
@@ -120,6 +136,42 @@ onMounted(() => {
       type: 'line',
       source: 'buildings',
       paint: { 'line-color': '#57534e', 'line-width': 1 },
+    })
+    // Clickable annotations: each shape opens the value it comes from in the source panel.
+    const targets: [string, (f: maplibregl.MapGeoJSONFeature) => string][] = [
+      ['bldg-fill', () => 'existing_footprint'],
+      ['env-fill', () => 'max_rfa'],
+      ['yard-fill', (f) => String(f.properties.item)],
+      ['lot-fill', () => 'lot_dimensions'],
+    ]
+    const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 8 })
+    const hit = (p: maplibregl.PointLike) => {
+      for (const [layer, item] of targets) {
+        const f = m.queryRenderedFeatures(p, { layers: [layer] })[0]
+        if (f) return { f, item: item(f) }
+      }
+      return null
+    }
+    let hovered: string | number | undefined
+    m.on('mousemove', (e) => {
+      const h = hit(e.point)
+      if (hovered !== undefined) m.setFeatureState({ source: 'yards', id: hovered }, { hover: false })
+      hovered = undefined
+      m.getCanvas().style.cursor = h ? 'pointer' : ''
+      if (!h) return popup.remove()
+      if (h.f.layer.id === 'yard-fill' && h.f.id !== undefined) {
+        hovered = h.f.id
+        m.setFeatureState({ source: 'yards', id: hovered }, { hover: true })
+      }
+      popup
+        .setLngLat(e.lngLat)
+        .setText(props.labels?.[h.item] ?? h.item)
+        .addTo(m)
+    })
+    m.on('mouseout', () => popup.remove())
+    m.on('click', (e) => {
+      const h = hit(e.point)
+      if (h) emit('pick', h.item)
     })
     draw()
   })

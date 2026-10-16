@@ -39,3 +39,25 @@ def test_golden(case):
         assert r["items"] == []
     assert any("not for legal" in d or "not be suitable for legal" in d for d in r["disclaimers"])
     assert r["ai_disclosure"]
+
+
+def test_single_story_district(monkeypatch):
+    """No loaded parcel is in Height District 1-SS, so one R1 parcel is resolved as if it were."""
+    import dataclasses
+
+    from app.engine import assess as A
+
+    real = A.resolve
+
+    def as_ss(q):
+        ctx = real(q)
+        ctx.zone = dataclasses.replace(ctx.zone, height_district="1SS")
+        return ctx
+
+    monkeypatch.setattr(A, "resolve", as_ss)
+    items = {i["id"]: i for i in assess("2228004010")["items"]}
+    h = items["max_height"]
+    assert h["value"] == 18 and h["label"] == "derived"
+    assert "one story" in h["explanation"]
+    assert any(c["section_id"] == "LAMC 12.21.1 A.1" for c in h["citations"])
+    assert items["side_yard"]["value"] == 5  # no extra side yard at 18 ft
