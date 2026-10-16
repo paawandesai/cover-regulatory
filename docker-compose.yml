@@ -25,6 +25,7 @@ services:
       ADMIN_USERNAME: ${ADMIN_USERNAME:-}
       ADMIN_PASSWORD_SCRYPT: ${ADMIN_PASSWORD_SCRYPT:-}
       DEMO_INVITE_CODE: ${DEMO_INVITE_CODE:-}
+      TRUST_PROXY_HEADERS: "true"  # the api is reached only through the web (Caddy) container
     depends_on:
       db: { condition: service_healthy }
     restart: unless-stopped

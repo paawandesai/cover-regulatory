@@ -15,6 +15,7 @@ from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request, Respo
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from app.api import ratelimit
 from app.api.auth import require_admin
 from app.config import get_settings
 from app.db.connection import connect
@@ -111,7 +112,9 @@ def invite(body: InviteIn, request: Request, response: Response):
     code = get_settings().demo_invite_code
     if code is None:
         return {"ok": True}
+    ratelimit.check(request, "invite_fail")
     if not hmac.compare_digest(body.code.strip().encode(), code.get_secret_value().encode()):
+        ratelimit.record(request, "invite_fail")
         raise HTTPException(403, "wrong invite code")
     response.set_cookie(
         INVITE_COOKIE,
@@ -139,7 +142,9 @@ def get_chunk(chunk_id: str):
         ).fetchone()
     if row is None:
         raise HTTPException(404, "no such chunk")
-    return row
+    from app.engine.links import deep_link
+
+    return row | {"source_url": deep_link(row["source_url"], row["section_id"])}
 
 
 @app.get("/api/search")
@@ -198,8 +203,9 @@ class FeedbackIn(BaseModel):
 
 
 @app.post("/api/feedback", status_code=202)
-def feedback(body: FeedbackIn):
+def feedback(body: FeedbackIn, request: Request):
     """Queued for a reviewer. Feedback never edits rules, prompts or retrieval."""
+    ratelimit.hit(request, "feedback")
     with connect() as conn:
         fid = conn.execute(
             "INSERT INTO feedback (apn, item_id, kind, comment) VALUES (%s,%s,%s,%s) RETURNING id",

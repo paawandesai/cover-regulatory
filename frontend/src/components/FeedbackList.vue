@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { decideFeedback, feedbackList, type FeedbackRow } from '../api'
+import { assess, decideFeedback, feedbackList, type FeedbackRow } from '../api'
 import { formatApn, formatDate } from '../format'
 
 const KIND: Record<string, string> = {
@@ -9,7 +9,26 @@ const KIND: Record<string, string> = {
   missing_rule: 'A rule is missing',
   other: 'Something else',
 }
+const emit = defineEmits<{ openFragment: [number] }>()
 const status = ref<FeedbackRow['status']>('new')
+// Rule candidates behind the reported value, looked up by re-running the assessment for that APN.
+const rules = ref<Record<number, { id: number; section: string }[] | 'none' | 'loading'>>({})
+
+async function findRules(r: FeedbackRow) {
+  if (!r.apn || !r.item_id) return
+  rules.value[r.id] = 'loading'
+  try {
+    const a = await assess(r.apn)
+    const item = [...a.items, ...a.parcel.items].find((i) => i.id === r.item_id)
+    const seen = new Set<number>()
+    const found = (item?.citations ?? [])
+      .filter((c) => c.fragment_id != null && !seen.has(c.fragment_id) && seen.add(c.fragment_id))
+      .map((c) => ({ id: c.fragment_id as number, section: c.section_id }))
+    rules.value[r.id] = found.length ? found : 'none'
+  } catch {
+    rules.value[r.id] = 'none'
+  }
+}
 const rows = ref<FeedbackRow[]>([])
 const error = ref<string | null>(null)
 
@@ -64,6 +83,23 @@ async function mark(r: FeedbackRow, s: 'reviewed' | 'dismissed') {
           <template v-if="r.reviewed_by"> · {{ r.status }} by {{ r.reviewed_by }}</template>
         </span>
         <p v-if="r.comment" class="small">{{ r.comment }}</p>
+        <div v-if="r.apn && r.item_id" class="rules small">
+          <button v-if="!rules[r.id]" type="button" class="link" @click="findRules(r)">Find the rules behind this value</button>
+          <span v-else-if="rules[r.id] === 'loading'" class="muted">Looking up…</span>
+          <span v-else-if="rules[r.id] === 'none'" class="muted">No reviewed rule behind it (parcel data or a computed value).</span>
+          <template v-else>
+            <span class="muted">Rules:</span>
+            <button
+              v-for="f in rules[r.id] as { id: number; section: string }[]"
+              :key="f.id"
+              type="button"
+              class="chip mono"
+              @click="emit('openFragment', f.id)"
+            >
+              #{{ f.id }} {{ f.section }}
+            </button>
+          </template>
+        </div>
       </div>
       <div v-if="r.status === 'new'" class="act">
         <button type="button" class="btn btn-secondary" @click="mark(r, 'reviewed')">Mark reviewed</button>
@@ -118,5 +154,31 @@ async function mark(r: FeedbackRow, s: 'reviewed' | 'dismissed') {
 }
 p {
   margin: 0;
+}
+.rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 4px;
+}
+.link {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+.chip {
+  min-height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ink);
 }
 </style>

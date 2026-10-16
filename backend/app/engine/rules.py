@@ -10,6 +10,7 @@ parameter and a phrase their quote must contain. The label follows the fragment'
 from dataclasses import dataclass, field
 
 from app.db.connection import connect
+from app.engine.links import deep_link
 
 
 @dataclass(frozen=True)
@@ -85,6 +86,12 @@ RULES: dict[str, list[Need]] = {
     ],
     "HD_VL": [Need("max_ft", "LAMC 12.21.1 A.1", "height_max_ft", "“VL”")],
     "HD_XL": [Need("max_ft", "LAMC 12.21.1 A.1", "height_max_ft", "“XL”")],
+    "HD_L": [Need("max_ft", "LAMC 12.21.1 A.1", "height_max_ft", "“L”")],
+    "HD_SS": [
+        Need("max_ft", "LAMC 12.21.1 A.1", "height_max_ft", "“SS”"),
+        Need("stories", "LAMC 12.21.1 A.1", "stories_max", "“SS”"),
+        Need("basement_ft", "LAMC 12.21.1 A.1", "other", "Basement does not count"),
+    ],
     "GUEST_HOUSE": [Need("min_lot_sqft", "LAMC 12.08 A.7", "alq_min_lot_area_sqft")],
     "ADU_STATE_DETACHED": [
         Need("max_sqft", "Gov. Code 66323(a)", "adu_max_floor_area_sqft", "800 square feet"),
@@ -120,7 +127,7 @@ def load(rule_id: str, conn=None) -> RuleInputs:
         clause, arg = _section_clause(need.section)
         rows = conn.execute(
             f"""SELECT f.id, f.status, f.reviewed_by, f.value_numeric, f.source_quote, f.quote_start, f.quote_end, f.chunk_id,
-                       c.section_id, c.code_chapter, c.source_url, c.retrieved_at::text AS retrieved_at
+                       c.section_id, c.code_chapter, c.source_url, c.page_start, c.retrieved_at::text AS retrieved_at
                 FROM rule_fragment f JOIN reg_chunk c ON c.id = f.chunk_id
                 WHERE {clause} AND f.parameter = %s AND f.status IN ('approved', 'pending')
                   AND f.validation = 'ok' AND f.chunk_hash = c.content_hash AND NOT c.mock
@@ -155,7 +162,7 @@ def load(rule_id: str, conn=None) -> RuleInputs:
                     "quote_end": r["quote_end"],
                     "review_status": r["status"],
                     "reviewed_by": r["reviewed_by"],
-                    "source_url": r["source_url"],
+                    "source_url": deep_link(r["source_url"], r["section_id"], r["page_start"]),
                     "retrieved_at": r["retrieved_at"],
                 }
                 for r in used

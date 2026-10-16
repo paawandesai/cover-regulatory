@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { ApiError, clearCredentials, decide, fragments, hasCredentials, setCredentials } from '../api'
 import AppHeader from '../components/AppHeader.vue'
 import FeedbackList from '../components/FeedbackList.vue'
@@ -44,6 +44,18 @@ const password = ref('')
 const authError = ref<string | null>(null)
 const tab = ref<Status>('pending')
 const mode = ref<'rules' | 'feedback'>('rules')
+
+// From the feedback queue: jump to a rule candidate wherever it is listed.
+async function openFragment(id: number) {
+  family.value = ''
+  advice.value = ''
+  const where = TABS.map(([s]) => s).find((s) => lists.value[s].some((f) => f.id === id))
+  if (!where) return
+  mode.value = 'rules'
+  tab.value = where
+  await nextTick()
+  pickedId.value = id
+}
 const family = ref('')
 const advice = ref('')
 const lists = ref<Record<Status, Fragment[]>>({
@@ -75,9 +87,11 @@ async function signIn() {
     authError.value =
       e instanceof ApiError && e.status === 503
         ? "Admin sign-in isn't set up on the server. Set ADMIN_USERNAME and ADMIN_PASSWORD_SCRYPT."
-        : e instanceof ApiError && e.status === 401
-          ? 'Wrong username or password.'
-          : 'Could not reach the server.'
+        : e instanceof ApiError && e.status === 429
+          ? 'Too many failed sign-ins. Wait 15 minutes and try again.'
+          : e instanceof ApiError && e.status === 401
+            ? 'Wrong username or password.'
+            : 'Could not reach the server.'
   }
 }
 
@@ -214,7 +228,7 @@ async function act(decision: 'approved' | 'rejected') {
           </template>
         </div>
 
-        <FeedbackList v-if="mode === 'feedback'" />
+        <FeedbackList v-if="mode === 'feedback'" @open-fragment="openFragment" />
         <div v-else class="cols">
           <section aria-label="Candidate rules" class="card listcol">
             <p v-if="!list.length" class="empty small muted">Nothing here.</p>

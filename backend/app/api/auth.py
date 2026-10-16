@@ -8,9 +8,10 @@ import hmac
 import secrets
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
+from app.api import ratelimit
 from app.config import get_settings
 
 _basic = HTTPBasic(auto_error=False)
@@ -34,16 +35,18 @@ def verify_password(password: str, stored: str) -> bool:
     return hmac.compare_digest(digest.hex(), digest_hex)
 
 
-def require_admin(credentials: Annotated[HTTPBasicCredentials | None, Depends(_basic)]) -> str:
+def require_admin(request: Request, credentials: Annotated[HTTPBasicCredentials | None, Depends(_basic)]) -> str:
     s = get_settings()
     if not s.admin_username or s.admin_password_scrypt is None:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "admin review is not configured")
+    ratelimit.check(request, "auth_fail")
     ok = (
         credentials is not None
         and hmac.compare_digest(credentials.username.encode(), s.admin_username.encode())
         and verify_password(credentials.password, s.admin_password_scrypt.get_secret_value())
     )
     if not ok:
+        ratelimit.record(request, "auth_fail")
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "invalid credentials", {"WWW-Authenticate": "Basic"})
     return s.admin_username
 

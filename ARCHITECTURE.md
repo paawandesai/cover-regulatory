@@ -78,7 +78,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Flag, not evaluated | A condition detected from a map layer (with its dataset and fetch date) or the zone string, or a law that may apply. Not evaluated. |
 | Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. In the hosted demo the reviewer is an AI review applied on the owner's instruction (`reviewed_by = 'ai-review'`), and the source panel says so. |
 | Interpretation, confirm with City | Same computation, but at least one input fragment is still pending review (shows the share of inputs found), or a standard R1 value where something not modeled may change it (conditioned zone, specific plan or HPOZ, through lot, front taken on the long side, City ADU on a Hillside lot in a VHFHSZ). |
-| Not modeled here | A flag (Hillside Area; Coastal Zone floor area and height; R1 variation zone; Height District 1-SS) makes the flat-land rule wrong, so no value is shown. |
+| Not modeled here | A flag (Hillside Area; Coastal Zone floor area and height; R1 variation zone) makes the flat-land rule wrong, so no value is shown. |
 | No cited source | An input is missing or ambiguous. No number is shown. |
 
 The model never sets a label. Labels come from review status and the deterministic checks.

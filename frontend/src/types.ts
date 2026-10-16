@@ -42,6 +42,7 @@ export interface Geometry {
   note?: string
   yards_ft: { front: number; side: number; rear: number } | null
   buildings?: GeoJSON.Polygon[]
+  yards?: { kind: 'front' | 'side' | 'rear'; geometry: GeoJSON.Polygon | GeoJSON.MultiPolygon }[]
 }
 
 export interface Assessment {

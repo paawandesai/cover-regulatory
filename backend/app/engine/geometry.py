@@ -128,10 +128,28 @@ def envelope(frame: LotFrame, front_ft: float, side_ft: float, rear_ft: float) -
         inner = box(minx + side_ft, miny + rear_ft, maxx - side_ft, maxy - front_ft)
     env_local = local.intersection(inner) if inner.is_valid and not inner.is_empty else Polygon()
     env_ft = translate(rotate(env_local, frame.angle_deg, origin=(0, 0)), ox, oy)
+
+    # Yard strips, for the map's clickable annotations. Front and rear take the full width; sides fill between.
+    front_low = abs(fm.y - miny) <= abs(fm.y - maxy)
+    lo_d, hi_d = (front_ft, rear_ft) if front_low else (rear_ft, front_ft)
+    strips = {
+        "front" if front_low else "rear": box(minx, miny, maxx, miny + lo_d),
+        "rear" if front_low else "front": box(minx, maxy - hi_d, maxx, maxy),
+        "side_a": box(minx, miny + lo_d, minx + side_ft, maxy - hi_d),
+        "side_b": box(maxx - side_ft, miny + lo_d, maxx, maxy - hi_d),
+    }
+    yards = []
+    for kind, strip in strips.items():
+        piece = local.intersection(strip) if strip.is_valid and not strip.is_empty else Polygon()
+        if piece.is_empty or piece.area < 1:
+            continue
+        ft = translate(rotate(piece, frame.angle_deg, origin=(0, 0)), ox, oy)
+        yards.append({"kind": "side" if kind.startswith("side") else kind, "geometry": mapping(transform(_TO_LL, ft))})
     return {
         "lot": mapping(transform(_TO_LL, frame.lot_ft)),
         "envelope": mapping(transform(_TO_LL, env_ft)) if not env_ft.is_empty else None,
         "envelope_area_sqft": round(env_ft.area) if not env_ft.is_empty else 0,
         "front_mid": mapping(transform(_TO_LL, Point(frame.front_mid)))["coordinates"],
+        "yards": yards,
         "label": "illustrative, not survey-grade",
     }

@@ -15,7 +15,7 @@ Decision support for licensed architects and engineers. Given a City of Los Ange
    - **4412-014-028** (Pacific Palisades): Hillside, Coastal Zone, fire hazard zone and the 2025 fire. Values are withheld, the City ADU path is an interpretation, and SB 9 is suspended.
    - **2118-015-001** (commercial zone), **5179-003-026** (Boyle Heights, Chapter 1A) and **4327-028-024** (Beverly Hills): three stop states.
 3. Click any value to see the regulation text behind it. Fill in **Your project** (height, floor area, a second unit) to check a design against the limits; the side yard and the drawn buildable area follow the height you enter.
-4. **Rule review** (`/review`) needs the admin login, also sent separately. It shows each AI-read rule candidate with its source quote and checks, and the feedback queue.
+4. **Rule review** (`/review`) needs the admin login, also sent separately. It shows each AI-read rule candidate with its source quote and checks, and the feedback queue. After 10 wrong passwords or invite codes in 15 minutes, that address is blocked for the rest of the window; feedback is limited to 30 notes an hour. The limits key on a salted hash of the address, which is never logged.
 5. To run it yourself, see Development below. The database dump that reproduces the demo exactly is shared on request, because it contains regulation text saved by hand.
 
 ## What it does
@@ -24,7 +24,7 @@ Enter an APN or a street address. The engine:
 1. **Finds the parcel and stops early when it must.** Outside the City, under Chapter 1A, or not an R1-family zone each gets an explicit result instead of wrong rules.
 2. **Reports the R1 envelope:** front, side and rear yards, maximum residential floor area, height, and whether the lot meets the R1 minimums.
 3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU (at least 850 sq ft, which state law says can't be refused), a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more).
-4. **Flags what it does not apply:** Hillside Area, Coastal Zone, Very High Fire Hazard Severity Zone, the January 2025 fire rebuild orders, overlay plans, zone conditions and SB 9. Where a flag means the flat-land rule is wrong (Hillside Area; Coastal Zone floor area and height; R1 variation zones; Height District 1-SS), the value is withheld, not shown. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
+4. **Flags what it does not apply:** Hillside Area, Coastal Zone, Very High Fire Hazard Severity Zone, the January 2025 fire rebuild orders, overlay plans, zone conditions and SB 9. Where a flag means the flat-land rule is wrong (Hillside Area; Coastal Zone floor area and height; R1 variation zones), the value is withheld, not shown. Height Districts 1-L, 1-VL, 1-XL and 1-SS apply their own limits from LAMC 12.21.1 A.1; 1-SS caps the house at one story and 18 ft. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
 5. **Labels every value** with how it was established:
    - **Verified parcel data:** read from a named dataset with its fetch date.
    - **Derived from rule:** computed from regulation text that a review approved (in this demo, an AI review; see Known constraints).
@@ -33,9 +33,9 @@ Enter an APN or a street address. The engine:
    - **Approximate:** machine-learned building outlines, and lot width and depth fitted to the parcel outline. Shown for context; not survey-grade.
    - **Flag, not evaluated:** a condition detected from a map layer or the zone string (with the layer's fetch date), or a law that may apply (SB 9). The engine does not evaluate it.
    - **No cited source:** an input is missing or the rule doesn't apply. No number is shown.
-6. **Shows the source.** Clicking any value opens the regulation text with the supporting quote highlighted, plus a link to the official source.
-7. **Draws the lot.** A diagram or map shows the lot and the buildable area left after yards. It is labeled illustrative, not survey-grade.
-8. **Takes feedback without letting it change anything.** "Report a problem" queues a note for a reviewer. Feedback never changes a rule. A rule changes status only through a review decision: the password-protected Rule review screen (`/review`), or the `apply_review` command that applied this demo's AI review.
+6. **Shows the source.** Clicking any value opens the regulation text with the supporting quote highlighted, plus a link to the official source. State-law citations link to the exact Government Code section on leginfo, and PDF sources open at the cited page.
+7. **Draws the lot.** A diagram or map shows the lot and the buildable area left after yards. It is labeled illustrative, not survey-grade. Clicking a yard, the buildable area, an existing building or the lot outline opens the value and its source text.
+8. **Takes feedback without letting it change anything.** "Report a problem" queues a note for a reviewer. Feedback never changes a rule. A rule changes status only through a review decision: the password-protected Rule review screen (`/review`), or the `apply_review` command that applied this demo's AI review. A reviewer can open the rules behind a reported value straight from the Feedback tab.
 
 9. **Answers in one paragraph and checks a project.** A summary states what can be built, how many values need confirming, and the choices to weigh (state or City ADU, guest house or ADU, fire rebuild order or standard rules). Optional project inputs (house height, floor area, a second unit and its size and bedrooms) are checked against the limits, and each check carries the label of the value it was checked against.
 
@@ -48,12 +48,10 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 - Setback and buildable-area geometry is illustrative, not survey-grade.
 - It does not consider private covenants (CC&Rs), demographic data, or owner information.
 - Existing buildings are shown as approximate Microsoft machine-learned outlines (ODbL). They can miss, merge or misplace buildings. The Assessor's building attributes are shown when recorded.
-- The map has no interactive annotations beyond pan and zoom; values are explained in the side panel instead.
 - There is no chat. The plan's read-only follow-up chat was not built.
 - There is no client-facing report or export, so there is no architect sign-off gate yet. Any report built later must sit behind a licensed reviewer's sign-off and disclose AI involvement.
 - The fire rebuild flag cites City Planning's Palisades Rebuild FAQ (2026-01-30), which summarizes Emergency Executive Orders 1, 8 and 9. The orders' own text was not ingested, so check the current order before relying on the flag.
 - An address that matches no County address point or parcel situs is sent to the US Census Geocoder (a public, no-account service). APN searches never leave the server.
-- Sign-in and invite-code attempts are not rate-limited.
 - Prevailing front-yard setbacks, key lots, garage and porch floor-area exemptions, side-wall plane breaks, transit-proximity ADU height increases and the per-story side-yard rule in the Coastal Zone and Hillside Area are named in the explanations but not computed.
 - Corner lots are detected only where two adjacent sides read as streets on the parcel map. When only the long side reads as a street, the front and side yards are labelled as interpretations.
 
@@ -110,7 +108,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 | Full assessment (`assess`) over the 11 golden parcels | 110 | 129 ms | 196 ms |
 | Regulation search (the 32 retrieval questions) | 32 | 52 ms | 114 ms |
 
-**Test suites** (2026-10-16): backend 65 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
+**Test suites** (2026-10-16): backend 76 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
 
 ## AI disclosure
 This tool uses an LLM only at ingestion, to extract candidate rule fragments from regulatory text. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
