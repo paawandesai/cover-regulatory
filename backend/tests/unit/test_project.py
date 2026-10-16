@@ -74,3 +74,34 @@ def test_summary_counts_and_paths():
     assert {p["id"] for p in s["paths"]} == {"adu_path", "guest_or_adu"}
     fire = summarize(ITEMS, NS(overlays=[{"kind": "fire_perimeter_2025"}]))
     assert "rebuild_or_standard" in {p["id"] for p in fire["paths"]}
+
+
+EX = {
+    "double_ceiling_ft": 14.0,
+    "parking_max_sqft": 400.0,
+    "parking_fallback_sqft": 200.0,
+    "parking_front_ft": 55.0,
+    "parking_through_ft": 40.0,
+    "accessory_each_sqft": 200.0,
+    "accessory_total_sqft": 400.0,
+}
+
+
+def test_floor_area_exemptions():
+    p = ProjectInputs(floor_area_sqft=3900, covered_parking_sqft=420, parking_in_rear=True, accessory_sqft=150)
+    c = {x["id"]: x for x in check_project(ITEMS, p, EX)["checks"]}
+    # 3,900 - 400 parking (rear, capped) - 150 shed = 3,350 <= 3,645
+    assert c["floor_area"]["status"] == "fits" and "3,350" in c["floor_area"]["title"]
+
+
+def test_parking_near_front_and_tall_ceilings():
+    p = ProjectInputs(floor_area_sqft=3500, covered_parking_sqft=400, parking_in_rear=False, tall_ceiling_sqft=200)
+    c = {x["id"]: x for x in check_project(ITEMS, p, EX)["checks"]}
+    # 3,500 + 200 - 200 = 3,500 <= 3,645; without the reviewed numbers nothing is adjusted
+    assert "3,500" in c["floor_area"]["title"] and c["floor_area"]["status"] == "fits"
+    assert check_project(ITEMS, p)["checks"][0]["title"] == "Floor area 3,500 sq ft"
+
+
+def test_plane_break():
+    assert checks(side_wall_ft=50, height_ft=26)["plane_break"]["status"] == "confirm"
+    assert checks(side_wall_ft=40)["plane_break"]["status"] == "fits"

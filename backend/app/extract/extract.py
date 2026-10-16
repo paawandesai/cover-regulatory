@@ -68,14 +68,18 @@ def _documents_block(chunks: list[dict]) -> str:
 
 
 def load_group(conn, prefixes: list[str]) -> list[dict]:
-    # "=LAMC 12.21.1" means that section's own text only, without its subsections.
+    # "=LAMC 12.21.1" means that section's own text only, without its subsections; "#<chunk id>" is one chunk
+    # (for a definition inside a long definitions section).
+    ids = [p[1:] for p in prefixes if p.startswith("#")]
     pats = [
-        r"^" + re.escape(p[1:]) + r"$" if p.startswith("=") else r"^" + re.escape(p) + r"($|[ .(])" for p in prefixes
+        r"^" + re.escape(p[1:]) + r"$" if p.startswith("=") else r"^" + re.escape(p) + r"($|[ .(])"
+        for p in prefixes
+        if not p.startswith("#")
     ]
     return conn.execute(
         """SELECT id, section_id, text, source_url, content_hash FROM reg_chunk
-           WHERE section_id ~ ANY(%s) AND NOT mock ORDER BY id""",
-        (pats,),
+           WHERE (section_id ~ ANY(%s) OR id = ANY(%s)) AND NOT mock ORDER BY id""",
+        (pats, ids),
     ).fetchall()
 
 

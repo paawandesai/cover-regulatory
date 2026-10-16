@@ -78,6 +78,11 @@ export interface ProjectInputs {
   second_unit: SecondUnit
   second_unit_sqft: number
   second_unit_bedrooms: number
+  covered_parking_sqft: number
+  parking_in_rear: boolean
+  accessory_sqft: number
+  tall_ceiling_sqft: number
+  side_wall_ft: number
 }
 
 export interface ProjectCheck {

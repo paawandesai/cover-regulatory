@@ -32,6 +32,7 @@ OVERLAY_NAME_FIELDS = (
     "H_TYPE",
     "NAME_ALF",
     "ZONE",
+    "hqta_type",
 )
 
 POLY = "ST_Multi(ST_CollectionExtract(ST_MakeValid(ST_SetSRID(ST_GeomFromGeoJSON(%s), 4326)), 3))"

@@ -11,6 +11,7 @@ from app.db.connection import connect
 from app.engine import rules as R
 from app.engine.geometry import envelope, lot_frame
 from app.engine.links import deep_link
+from app.engine.prevailing import prevailing
 from app.engine.project import ProjectInputs, check_project, summarize
 from app.parcel.provenance import Sourced
 from app.parcel.resolve import ParcelContext, resolve
@@ -195,6 +196,153 @@ def _flag(conn, fid, title, explanation, section, contains=None) -> Item:
     )
 
 
+def _prevailing_items(conn, ctx: ParcelContext, frame, fy: R.RuleInputs) -> list[Item]:
+    """Prevailing front yard and key-lot estimates from neighbouring lots (12.08 C.1). Approximate: they rest on
+    parcel and machine-learned building outlines."""
+    pv = R.load("R1_PREVAILING_FRONT", conn)
+    cap = pv.value("cap_ft")
+    if pv.label == "uncited" or cap is None:
+        return []
+    est = prevailing(conn, ctx.apn, frame, cap) if frame else None
+    if est is None:
+        item = Item(
+            "prevailing_front_yard",
+            "r1_envelope",
+            "Prevailing front yard on the block (estimate)",
+            None,
+            "ft",
+            "uncited",
+            rule_id=pv.rule_id,
+            explanation="Could not find the block frontage (fewer than three lots in a row on this street in the "
+            "loaded data, or no street side found).",
+            citations=pv.citations(),
+        )
+        return [item]
+    counted = est["developed"]
+    skipped = "; ".join(f"{e['why']}: {e['apn']}" for e in est["excluded"]) or "none"
+    how = (
+        f"Block frontage of about {est['frontage_ft']} ft ({est['lots']} lots on this side of the street, found from "
+        f"parcel outlines; at most 600 ft each way). {counted} developed lot{'s' if counted != 1 else ''} counted, "
+        f"measured to the nearest building outline that is not entirely on the rear half. Not counted: {skipped}."
+    )
+    if est["combination"]:
+        c = est["combination"]
+        value = est["value_ft"]
+        why = (
+            f"{len(c['lots'])} developed lots whose front yards are within 10 ft of each other make up "
+            f"{c['share']:.0%} of the frontage, so the minimum front yard is their average, {c['average_ft']:g} ft"
+            + (f", capped at {cap:g} ft" if value < c["average_ft"] else "")
+            + " (the shallowest such group). If confirmed on a survey this replaces the front yard above. "
+        )
+    else:
+        value = "Not met"
+        why = (
+            "No group of developed lots with front yards within 10 ft of each other makes up 40% of the frontage, "
+            "so the front yard above applies. "
+        )
+    items = [
+        Item(
+            "prevailing_front_yard",
+            "r1_envelope",
+            "Prevailing front yard on the block (estimate)",
+            value,
+            "ft" if isinstance(value, float) else None,
+            "approximate",
+            rule_id=pv.rule_id,
+            explanation=why + how + " Building outlines are machine-learned and approximate.",
+            citations=pv.citations(),
+        )
+    ]
+    key = est.get("key")
+    kl = R.load("R1_KEY_LOT", conn)
+    sy = R.load("R1_SIDE_YARD", conn)
+    if est["key_lot"] and key and kl.value("reach_ft") and key["corner_width_ft"] and sy.value("base_ft") is not None:
+        interior = min(key["interior_depth_ft"] * fy.value("pct") / 100, fy.value("max_ft"))
+        cw = key["corner_width_ft"]
+        corner_side = (
+            sy.value("base_ft")
+            if cw >= 50 or sy.value("narrow_pct") is None
+            else max(round(cw * sy.value("narrow_pct") / 100, 1), sy.value("narrow_min_ft") or 0)
+        )
+        kv = round((interior + corner_side) / 2, 1)
+        k_item = Item(
+            "key_lot_front_yard",
+            "r1_envelope",
+            "Key lot front yard (option, estimate)",
+            kv,
+            "ft",
+            "approximate",
+            rule_id=kl.rule_id,
+            explanation=(
+                f"This looks like a key lot: the lot beside it ({key['corner_apn']}) is a reversed corner lot that "
+                "fronts the cross street. The front yard may be the average of the adjoining interior lot's required "
+                f"front yard ({interior:g} ft on {key['interior_apn']}) and the corner lot's street-side side yard "
+                f"({corner_side:g} ft), so {kv:g} ft, for up to {kl.value('reach_ft'):g} ft from the corner lot's rear "
+                "lot line; beyond that the front yard above applies. Where buildings on those lots sit closer, their "
+                "yards may be used instead. Lot shapes come from parcel outlines; confirm on a survey."
+            ),
+            citations=kl.citations() + fy.citations()[:1],
+        )
+        items.append(k_item)
+    return items
+
+
+def _adu_height(conn, ctx: ParcelContext, st: R.RuleInputs) -> Item:
+    """Gov. Code 66321(b)(4): 16 ft for a detached ADU, or 18 ft within half a mile walking distance of a major
+    transit stop or high-quality transit corridor. Caltrans' areas are straight-line half-mile buffers; walking
+    distance is never shorter, so outside them the 16 ft answer is certain and inside them it is only likely."""
+    tr = R.load("ADU_TRANSIT_HEIGHT", conn)
+    base, near = st.value("height_ft"), tr.value("height_ft")
+    areas = [o for o in ctx.overlays if o["kind"] == "hqta"]
+    loaded = conn.execute("SELECT 1 FROM source WHERE id = 'caltrans_hqta'").fetchone() is not None
+    title = "Detached ADU height the City must allow"
+    if base is None or near is None or not loaded:
+        return Item(
+            "adu_height", "adu", title, None, "ft", "uncited", explanation="Transit areas or rule text not loaded."
+        )
+    pitch = _chunk_citation(conn, "Gov. Code 66321(b)", "additional two feet")
+    if areas:
+        words = {
+            "major_stop_rail": "a rail station",
+            "major_stop_brt": "a bus rapid transit stop",
+            "major_stop_bus": "a stop where frequent bus routes cross",
+            "hq_corridor_bus": "a frequent bus corridor",
+        }
+        kinds = sorted({words.get(o["name"] or "", "a transit area") for o in areas})
+        ri = R.RuleInputs("ADU_TRANSIT_HEIGHT", dict(tr.found))
+        item = _rule_item(
+            "adu_height",
+            "adu",
+            title,
+            ri,
+            near,
+            "ft",
+            f"The lot is within half a mile, in a straight line, of a major transit stop or high-quality transit "
+            f"corridor in Caltrans' layer ({', '.join(kinds)}). State law allows {near:g} ft within half a mile "
+            f"walking distance, plus 2 ft for a roof pitch that matches the house, so up to {near + 2:g} ft. Walking "
+            f"distance can be longer than the straight line; confirm it, or plan for {base:g} ft.",
+        )
+        item.label = "interpretive"
+        item.coverage = 1.0
+    else:
+        item = _rule_item(
+            "adu_height",
+            "adu",
+            title,
+            st,
+            base,
+            "ft",
+            f"{base:g} ft. The {near:g} ft limit near transit does not apply: the lot is more than half a mile, even in "
+            "a straight line, from every major transit stop and high-quality transit corridor in Caltrans' layer, "
+            "and walking distance is never shorter.",
+        )
+        item.citations = [c for c in st.citations() if "66321" in (c["section_id"] or "")] + tr.citations()
+    if areas:
+        item.citations += pitch
+    item.source = _overlay_source(ctx, ("hqta",)) if areas else None
+    return item
+
+
 def _r1_items(
     conn,
     ctx: ParcelContext,
@@ -220,12 +368,14 @@ def _r1_items(
             front,
             "ft",
             f"The lesser of {fy.value('pct')}% of lot depth ({depth:.0f} ft) and {fy.value('max_ft')} ft. Where the block "
-            "has a prevailing setback, the average of neighbouring front yards applies instead (up to 40 ft), and a "
-            "key lot may average with the neighbouring side yard; neither is evaluated."
+            "has a prevailing setback, the average of neighbouring front yards applies instead (up to 40 ft); see the "
+            "estimate below."
             if depth
             else "Lot depth unknown.",
         )
     )
+    if flat_land or "hillside" not in kinds:
+        items += _prevailing_items(conn, ctx, frame, fy)
 
     h = R.load("R1_HEIGHT", conn)
     hmax, hlow = h.value("max_ft"), h.value("low_roof_ft")
@@ -304,7 +454,15 @@ def _r1_items(
                 if per
                 else ""
             )
-        why += " Walls over 14 ft high and 45 ft long need a 5 ft deep, 10 ft long plane break; not evaluated."
+        why += (
+            " Walls over 14 ft high and 45 ft long need a 5 ft deep, 10 ft long plane break (enter a wall length "
+            "under Your project to check it)."
+        )
+        if frame is not None and frame.corner:
+            why += (
+                " Corner lot: LAMC 12.08 C.2 sets no separate street-side yard for R1, so the same side yard applies on "
+                "the street side, and a rooftop deck there need not step back the extra 3 ft (12.08 C.2(d))."
+            )
     else:
         why = "Lot width unknown."
     items.append(
@@ -422,13 +580,15 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[It
                 f"One detached new ADU up to {st.value('max_sqft'):.0f} sq ft, with side and rear setbacks of no more than "
                 f"{st.value('setback_ft'):.0f} ft, and a height of at least {st.value('height_ft'):.0f} ft allowed, on a lot "
                 "with an existing or proposed single-family home. The City must approve it ministerially, including in "
-                "a fire hazard or Hillside Area (Gov. Code 66323). Taller limits (18 ft near transit or with a matching "
-                "roof pitch) are not evaluated." + coastal_note
+                "a fire hazard or Hillside Area (Gov. Code 66323). See the height the City must allow below."
+                + coastal_note
             )
             if None not in (st.value("max_sqft"), st.value("setback_ft"), st.value("height_ft"))
             else None,
         )
     )
+
+    items.append(_adu_height(conn, ctx, st))
 
     lo = R.load("ADU_LOCAL_DETACHED", conn)
     lo_item = _rule_item(
@@ -734,6 +894,10 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
         if long_front:
             # The front may really be the short side (an unrecognised corner lot), which swaps width and depth.
             for it in r1:
+                if it.id in ("prevailing_front_yard", "key_lot_front_yard"):
+                    it.explanation = (it.explanation or "") + (
+                        " The front was taken on the lot's long side, so the block used here may be the wrong one."
+                    )
                 if it.id in ("front_yard", "side_yard") and it.label == "derived":
                     it.label = "interpretive"
                     it.explanation = (it.explanation or "") + (
@@ -784,6 +948,19 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
                     "(LAMC 12.08 C.2, 12.21.1); not modeled."
                 )
         items += r1
+        ex = R.load("RFA_EXEMPTIONS", conn)
+        rfa_ex = {k: f.value for k, f in ex.found.items()} if ex.label == "derived" else None
+        rfa_item = next((i for i in items if i.id == "max_rfa"), None)
+        if rfa_ex and rfa_item is not None and rfa_item.value is not None:
+            rfa_item.explanation = (rfa_item.explanation or "") + (
+                f" What counts (LAMC 12.03): area under a ceiling over {rfa_ex['double_ceiling_ft']:g} ft counts twice; "
+                f"required covered parking is not counted up to {rfa_ex['parking_max_sqft']:,.0f} sq ft when all of it "
+                f"is in the rear half or at least {rfa_ex['parking_front_ft']:g} ft from the front (otherwise "
+                f"{rfa_ex['parking_fallback_sqft']:,.0f} sq ft), nor detached accessory buildings of "
+                f"{rfa_ex['accessory_each_sqft']:g} sq ft or less, up to {rfa_ex['accessory_total_sqft']:,.0f} sq ft "
+                "in all. Lattice-roof porches and qualifying basements are not counted either."
+            )
+            rfa_item.citations += ex.citations()
         items += _building_types(conn, ctx, lot_area)
         items += _flags(conn, ctx)
     if frame and None not in (front, side, rear):
@@ -804,5 +981,7 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
         result["geometry"]["buildings"] = buildings
     result["items"] = [asdict(i) | {"label_text": i.label_text} for i in items]
     result["summary"] = summarize(items, ctx)
-    result["project"] = check_project(items, project) if project and not project.empty else None
+    result["project"] = (
+        check_project(items, project, rfa_ex, bool(frame and frame.through)) if project and not project.empty else None
+    )
     return result

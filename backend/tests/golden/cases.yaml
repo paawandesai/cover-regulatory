@@ -3,6 +3,9 @@
 # the County layer; width and depth from the fitted rectangle), not copied from the engine's output.
 # Hand calculations by Claude Code; Paawan spot-checked them against the code text on 2026-10-16 (decision D17).
 # Every value the engine shows on these parcels is asserted (2026-10-16); `labels` pins the label where it matters.
+# Wave 2 (2026-10-16) added adu_height, checked against the Caltrans service rather than the engine; not yet
+# spot-checked by Paawan. The prevailing front yard rests on machine-learned outlines, so its rule is tested on
+# hand-made lots in tests/unit/test_prevailing.py instead.
 # A value of null means "the engine must not show a number here".
 cases:
   - apn: "2121005008"   # vacant, Reseda, R1-1, ~60 x 135 ft, 8,100 sq ft
@@ -19,6 +22,9 @@ cases:
       jadu: 500.0
       adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
       adu_attached: 850           # 66321(b)/12.22 A.33(e)(3): 850 sq ft can't be refused; no existing home, so the 50% cap doesn't bite
+      adu_height: 18.0            # 66321(b)(4)(B): the parcel's interior point is inside a Caltrans half-mile transit area (service queried directly, 2026-10-16); walking distance unconfirmed
+    labels:
+      adu_height: interpretive
     flags_include: [sb9]
     flags_exclude: [hillside, fire_rebuild]
   - apn: "2121016012"   # vacant, Reseda, R1-1, ~50 x 110 ft, 5,452 sq ft
@@ -78,6 +84,9 @@ cases:
       adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
       adu_attached: 850           # 66321(b)/12.22 A.33(e)(3): 850 sq ft can't be refused; no existing home, so the 50% cap doesn't bite
       jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
+      adu_height: 16.0            # 66321(b)(4)(A): no Caltrans half-mile transit area at the parcel (service queried directly, 2026-10-16)
+    labels:
+      adu_height: derived
     flags_include: [fire_rebuild, hillside, coastal, vhfhsz]
   - apn: "2126005015"   # vacant, R1-2-RIO, ~50 x 245 ft, 12,260 sq ft: supplemental district not modeled
     status: ok

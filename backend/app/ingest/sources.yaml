@@ -133,6 +133,21 @@ datasets:
     overlay_kind: coastal_zone
     scope: study_areas
 
+  - id: caltrans_hqta
+    name: High Quality Transit Areas (California)
+    publisher: California Department of Transportation (Caltrans)
+    item_id: 863e61eacbf3463ab239beb3cee4a2c3
+    service_url: https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHrailroad/CA_HQ_Transit_Areas/FeatureServer/0
+    license: Public (as stated on the item)
+    notes: >-
+      Half-mile straight-line buffers around major transit stops (existing and planned in the regional
+      transportation plan) and high-quality transit corridors, built from GTFS schedules. Used for the state
+      ADU height rule (Gov. Code 66321(b)(4)(B)); the law counts walking distance, so a parcel inside a buffer
+      is only "may qualify".
+    target: overlay
+    overlay_kind: hqta
+    scope: study_areas
+
   - id: lacounty_fire_perimeters_2025
     name: Palisades Fire perimeter (2025-01-21), from Palisades and Eaton Dissolved Fire Perimeters
     publisher: LA County Public Works

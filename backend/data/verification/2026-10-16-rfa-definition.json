@@ -1,0 +1,138 @@
+{
+ "checked_on": "2026-10-16",
+ "method": "New candidates from the Residential Floor Area definition (LAMC 12.03), extracted for left-out item 11. Each was checked against its source chunk by Claude Opus 5.5 (via Claude Code) and independently by Claude Sonnet 5.5 (Anthropic API), after the deterministic quote and number checks. #280-#282 (Hillside basement, driveway and light-well allowances) are left pending: the second model disagreed because the generic parameter hides the rule, and the engine does not use them.",
+ "candidates": [
+  {
+   "fragment_id": 269,
+   "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+   "parameter": "rfa_double_count_ceiling_ft",
+   "recommendation": "approve_with_note",
+   "note": "Value and quote correct. The engine applies it only as the double count of area with a ceiling over 14 ft; stairways and shafts counted once is stated to the user.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 270,
+   "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Correct (attic portion with a ceiling over 7 ft counts). Used in explanation text only.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 271,
+   "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+   "parameter": "rfa_parking_exempt_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Correct. The engine applies 200 sq ft per required covered space up to 400 only when all the parking is in the rear half or at least 55 ft from the front lot line, and 200 otherwise (#274), as the second model's caveats require.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 272,
+   "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+   "parameter": "rfa_parking_front_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "Correct. Used only as the alternative location test for the 400 sq ft parking exemption.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 273,
+   "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+   "parameter": "rfa_parking_front_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "Correct; through lots with no rear lot line only. The engine applies it only on lots it reads as through lots.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 274,
+   "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+   "parameter": "rfa_parking_exempt_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Correct. 200 sq ft total when any required covered parking fails the location test.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 275,
+   "chunk_id": "lamc_chapter1#lamc-12-03-c#1",
+   "parameter": "rfa_parking_exempt_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Correct. Per-lot cap on the parking exemption, separate from the accessory-building cap.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 276,
+   "chunk_id": "lamc_chapter1#lamc-12-03-c#1",
+   "parameter": "rfa_accessory_exempt_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Correct. Only buildings of 200 sq ft or less are exempt; the engine applies the 400 sq ft combined cap from #277.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 277,
+   "chunk_id": "lamc_chapter1#lamc-12-03-c#1",
+   "parameter": "rfa_accessory_exempt_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Correct. Combined cap; the engine only exempts buildings of 200 sq ft or less (#276).",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 278,
+   "chunk_id": "lamc_chapter1#lamc-12-03-c#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Correct. No size cap stated; the Lattice Roof definition decides. Explanation text only.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 279,
+   "chunk_id": "lamc_chapter1#lamc-12-03-c#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Correct for flat-land lots outside the Hillside Area and Coastal Zone; the driveway and light-well allowances are named in the explanation. Explanation text only.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree_with_caveat",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  }
+ ]
+}

@@ -34,14 +34,25 @@ async function pick(id: string) {
   }
 }
 
-const PROJECT_KEYS = ['height_ft', 'floor_area_sqft', 'second_unit', 'second_unit_sqft', 'second_unit_bedrooms'] as const
+const PROJECT_KEYS = [
+  'height_ft',
+  'floor_area_sqft',
+  'second_unit',
+  'second_unit_sqft',
+  'second_unit_bedrooms',
+  'covered_parking_sqft',
+  'parking_in_rear',
+  'accessory_sqft',
+  'tall_ceiling_sqft',
+  'side_wall_ft',
+] as const
 
 // Project inputs live in the URL so a checked scenario can be shared or reloaded.
 const project = computed<Partial<ProjectInputs>>(() => {
-  const out: Record<string, string | number> = {}
+  const out: Record<string, string | number | boolean> = {}
   for (const k of PROJECT_KEYS) {
     const v = route.query[k]
-    if (typeof v === 'string' && v) out[k] = k === 'second_unit' ? v : Number(v)
+    if (typeof v === 'string' && v) out[k] = k === 'second_unit' ? v : k === 'parking_in_rear' ? v === 'true' : Number(v)
   }
   return out as Partial<ProjectInputs>
 })
