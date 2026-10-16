@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import type { Assessment, Chunk, Fragment, ProjectInputs } from './types'
+import type { Assessment, Chunk, Fragment, ProjectInputs, Report, ReportRow, ChatAnswer } from './types'
 
 export class ApiError extends Error {
   constructor(
@@ -107,4 +107,42 @@ export const decideFeedback = (id: number, status: 'reviewed' | 'dismissed') =>
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...auth() },
     body: JSON.stringify({ status }),
+  })
+
+// Client reports: created by anyone with the invite, readable by link only after a reviewer signs.
+export const createReport = (apn: string, project: Partial<ProjectInputs>) =>
+  request<{ token: string; status: string }>('/api/reports', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ apn, project }),
+  })
+
+export const getReport = (token: string) => request<Report>(`/api/reports/${encodeURIComponent(token)}`)
+
+export const reportList = (status: Report['status']) => request<ReportRow[]>(`/api/admin/reports?status=${status}`, { headers: auth() })
+
+export const previewReport = (token: string) => request<Report>(`/api/admin/reports/${encodeURIComponent(token)}`, { headers: auth() })
+
+export const signReport = (
+  token: string,
+  body: { signer_name: string; signer_license: string; note: string | null; statement_accepted: boolean },
+) =>
+  request<{ token: string; status: string }>(`/api/admin/reports/${encodeURIComponent(token)}/sign`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...auth() },
+    body: JSON.stringify(body),
+  })
+
+export const withdrawReport = (token: string) =>
+  request<{ token: string; status: string }>(`/api/admin/reports/${encodeURIComponent(token)}/withdraw`, {
+    method: 'POST',
+    headers: auth(),
+  })
+
+// Follow-up question: answered only from cited text, quotes checked on the server. Nothing is stored.
+export const askChat = (apn: string, question: string) =>
+  request<ChatAnswer>('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ apn, question }),
   })

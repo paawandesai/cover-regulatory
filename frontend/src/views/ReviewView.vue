@@ -3,6 +3,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { ApiError, clearCredentials, decide, fragments, hasCredentials, setCredentials } from '../api'
 import AppHeader from '../components/AppHeader.vue'
 import FeedbackList from '../components/FeedbackList.vue'
+import ReportList from '../components/ReportList.vue'
 import QuoteInContext from '../components/QuoteInContext.vue'
 import type { Fragment } from '../types'
 
@@ -43,7 +44,7 @@ const user = ref('')
 const password = ref('')
 const authError = ref<string | null>(null)
 const tab = ref<Status>('pending')
-const mode = ref<'rules' | 'feedback'>('rules')
+const mode = ref<'rules' | 'feedback' | 'reports'>('rules')
 
 // From the feedback queue: jump to a rule candidate wherever it is listed.
 async function openFragment(id: number) {
@@ -210,6 +211,15 @@ async function act(decision: 'approved' | 'rejected') {
           >
             Feedback
           </button>
+          <button
+            type="button"
+            class="tab"
+            :class="{ on: mode === 'reports' }"
+            :aria-pressed="mode === 'reports'"
+            @click="mode = 'reports'"
+          >
+            Client reports
+          </button>
           <template v-if="mode === 'rules'">
             <label for="fam" class="sr-only">Rule family</label>
             <select id="fam" v-model="family" class="field small">
@@ -229,6 +239,7 @@ async function act(decision: 'approved' | 'rejected') {
         </div>
 
         <FeedbackList v-if="mode === 'feedback'" @open-fragment="openFragment" />
+        <ReportList v-else-if="mode === 'reports'" />
         <div v-else class="cols">
           <section aria-label="Candidate rules" class="card listcol">
             <p v-if="!list.length" class="empty small muted">Nothing here.</p>

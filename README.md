@@ -41,6 +41,10 @@ Enter an APN or a street address. The engine:
 
 9. **Answers in one paragraph and checks a project.** A summary states what can be built, how many values need confirming, and the choices to weigh (state or City ADU, guest house or ADU, fire rebuild order or standard rules). Optional project inputs (house height, floor area, a second unit and its size and bedrooms) are checked against the limits, and each check carries the label of the value it was checked against. Optional floor-area details (required covered parking and where it sits, small detached buildings, area under ceilings over 14 ft) apply the LAMC 12.03 exemptions, and a side-wall length checks the plane-break rule.
 
+10. **Saves scenarios and compares them.** Up to four sets of project inputs per parcel are saved in your browser only (nothing is stored on the server) and can be compared side by side.
+11. **Makes a client report a reviewer signs.** "Create a report for sign-off" freezes the assessment and the project into a report with every value's label and sources, the disclaimers and the AI disclosure. Its link shows only "Awaiting sign-off" until a reviewer signs it with their name and license number in Rule review (Client reports tab); the signed report prints or saves as PDF. Only the APN is stored, never a typed address.
+12. **Answers follow-up questions from cited text.** "Ask a follow-up" sends the question to Claude with this assessment's values and the regulation chunks retrieved for it, never the APN or address. Each sentence of the answer must quote a chunk verbatim or restate an assessment value; the server checks every quote against the chunk and removes any sentence that fails, and shows how many were removed. The question is not logged or stored.
+
 No AI model runs when you ask for an assessment. The AI work happens once, at ingestion: a model reads the regulation text into candidate rule fragments, each with a verbatim quote. A deterministic check rejects any fragment whose quote is not in the text or whose number is not in the quote. Answers are therefore repeatable and fast.
 
 ## What it does NOT do
@@ -52,8 +56,8 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 - Setback and buildable-area geometry is illustrative, not survey-grade.
 - It does not consider private covenants (CC&Rs), demographic data, or owner information.
 - Existing buildings are shown as approximate Microsoft machine-learned outlines (ODbL). They can miss, merge or misplace buildings. The Assessor's building attributes are shown when recorded.
-- There is no chat. The plan's read-only follow-up chat was not built.
-- There is no client-facing report or export, so there is no architect sign-off gate yet. Any report built later must sit behind a licensed reviewer's sign-off and disclose AI involvement.
+- The follow-up chat answers only from the loaded regulation text and this assessment's values. A question the loaded text doesn't answer gets "does not answer this", not a guess. It needs `ANTHROPIC_COVER_API_KEY` on the server; without it the chat says it is turned off.
+- A client report opens only after a licensed reviewer signs it in Rule review. The report is a frozen copy: it does not update when rules or data change. Reports are deleted with feedback after `FEEDBACK_RETENTION_DAYS` (1 day on the hosted demo).
 - The fire rebuild results use the Mayor's Emergency Executive Orders 1 (revised 2025-03-18), 8 and 9 as published on the Mayor's Emergency Orders page. Orders change; check the current order. The engine cannot see what stood on a lot before the fire, so the like-for-like footprint is scaled from today's building outlines and the height limit is stated in words.
 - SB 9 results depend on facts outside the loaded data (tenants, rent control, Ellis Act withdrawals) and on Gov. Code 65913.4(a)(6)(B)-(K) as of 2021-09-16, which is not loaded. They are interpretations, except where SB 9 is ruled out (Executive Order 9, or a lot too small to split).
 - An address that matches no County address point or parcel situs is sent to the US Census Geocoder (a public, no-account service). APN searches never leave the server.

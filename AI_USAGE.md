@@ -4,7 +4,7 @@
 This repository is written with Claude Code (Anthropic) working with the developer, configured for Claude Opus 5.5 (`claude-opus-5-5`, 1M context). Commits made with it carry a `Co-Authored-By` trailer. Code is tested (CI plus the local database suites) before it is merged. Merge requests were merged on the owner's instruction without a separate human code review, and anything not independently verified is listed below.
 
 ## Model used by the application
-Configured by `LLM_MODEL_ID` (Anthropic API). The model id, the served model and the prompt version are recorded on every extraction run (`extraction_run.model_id`, `served_model`, `prompt_version`). Explanations shown in the app are fixed templates written in code, not model output, and no model runs when an assessment is requested.
+Configured by `LLM_MODEL_ID` (Anthropic API). The model id, the served model and the prompt version are recorded on every extraction run (`extraction_run.model_id`, `served_model`, `prompt_version`). Explanations shown in the app are fixed templates written in code, not model output, and no model runs when an assessment is requested. The one model call at query time is the optional follow-up chat (`backend/app/api/chat.py`, prompt `chat-v1`, model from `LLM_MODEL_ID`): its answer is shown as AI-written, each quote is checked verbatim against the source chunk, sentences that fail are removed, and the answer carries "Interpretation, confirm with the City". The model never sees the APN or address.
 
 ## Model-generated artifacts not independently verified
 | Artifact | Produced by | Verified? |

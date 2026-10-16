@@ -68,6 +68,8 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Rule catalogue | `backend/app/engine/rules.py` | Each rule lists the fragment inputs it needs. A rule is "derived" only if every input is approved, and "interpretive" (with a coverage share) if any input is still pending. |
 | Assessment | `backend/app/engine/assess.py` | Stops early where needed, computes values, applies the Hillside Area (with slope bands from `app/ingest/slope.py`), Coastal Zone and R1 variation tables, withholds what is not modeled, adds flags and disclaimers. |
 | SB 9 and fire orders | `backend/app/engine/orders.py` | SB 9 two-unit and lot-split tests, Executive Order 9's suspension, and the EO 1 like-for-like and EO 8 Coastal Zone rebuild limits. |
+| Client reports | `backend/app/api/reports.py`, `report` table | Freezes an assessment into a report keyed by an unguessable token. The public link returns only the status until an admin signs with name and license; withdrawn reports return 404. |
+| Follow-up chat | `backend/app/api/chat.py` | Builds the prompt from the assessment's values (10-digit numbers scrubbed) and retrieved chunks as delimited data; the model returns sentences with quotes or item ids (structured output, no tools). Each quote is checked verbatim against its chunk; failing sentences are dropped. |
 | API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt. The optional invite gate is for the hosted demo. |
 | Web app | `frontend/` | Vue 3 + TypeScript + MapLibre with the Forge design tokens. Assessment page, source-text panel, feedback, rule review and stop states. |
 | Packaging | `docker-compose.yml`, `*/Dockerfile`, `deploy/` | Database (PostGIS + pgvector), API with the embedding model built in, Caddy serving the app, and a daily feedback purge. |
@@ -88,7 +90,9 @@ The model never sets a label. Labels come from review status and the determinist
 
 ## Security and privacy controls
 
-- The model sees only regulation text, never an address, APN or user input. Its key is read from the environment and used only by the extraction command.
+- At extraction the model sees only regulation text. The follow-up chat also sends the user's question and the assessment's values, never an address or APN (10-digit numbers are scrubbed from both). The key is read from the environment; without it the chat returns 503 and nothing else changes.
+- Chat answers are checked, not trusted: a sentence survives only if every quote is verbatim in the chunk it names or it points at a real assessment value. The question is not logged or stored, and it is rate limited (30 an hour per client).
+- Client report links show nothing but the status until a reviewer signs; reports store the APN, never a typed address, and are purged with feedback.
 - Text inside documents is treated as data. Adversarial tests show that injected instructions produce at most a pending candidate. An injected exemption whose quote lacks the number is rejected; a quote that does contain it stays a candidate until review.
 - Feedback goes into a queue. It never edits rules, prompts or retrieval, and it is deleted after `FEEDBACK_RETENTION_DAYS` (1 day on the hosted demo).
 - No access logs with query strings, plus `noindex` headers. Admin credentials are held in browser memory only.

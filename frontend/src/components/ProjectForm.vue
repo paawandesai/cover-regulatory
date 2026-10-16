@@ -82,7 +82,7 @@ const STATUS: Record<ProjectCheck['status'], string> = {
   <div class="card proj">
     <div class="ghead">
       <h2>Your project</h2>
-      <span class="small muted">Optional. Checked against the values below; nothing is saved.</span>
+      <span class="small muted">Optional. Checked against the values below; nothing is stored on the server.</span>
     </div>
     <form class="grid" @submit.prevent="apply">
       <label>

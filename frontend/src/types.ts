@@ -135,3 +135,36 @@ export interface Fragment {
   checks: { source_text?: string; second_model?: string; web?: string } | null
   checked_on: string | null
 }
+
+export interface Report {
+  token: string
+  status: 'awaiting_signoff' | 'signed' | 'withdrawn'
+  created_at: string
+  apn?: string
+  project?: Partial<ProjectInputs>
+  snapshot?: Assessment
+  statement?: string
+  signed?: { name: string; license: string; note: string | null; at: string } | null
+}
+
+export interface ReportRow {
+  token: string
+  created_at: string
+  apn: string
+  status: Report['status']
+  signer_name: string | null
+  signer_license: string | null
+  signed_at: string | null
+  answer: string | null
+}
+
+export interface ChatAnswer {
+  sentences: {
+    text: string
+    citations: { chunk_id: string; section_id: string; quote: string; source_url: string | null }[]
+    items: string[]
+  }[]
+  answer: string | null
+  dropped: number
+  disclosure: string
+}

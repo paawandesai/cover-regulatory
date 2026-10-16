@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { ApiError, checkInvite, invite, submitInvite } from './api'
 
+// A signed client report opens by its link alone; the client has no invite code.
+const route = useRoute()
+const isReport = computed(() => route.path.startsWith('/report/'))
 const code = ref('')
 const error = ref<string | null>(null)
 checkInvite().catch(() => Object.assign(invite, { checked: true }))
@@ -24,7 +28,7 @@ async function send() {
 
 <template>
   <div v-if="invite.required" class="demo small">Hosted demo with public data only. Please don't enter personal information.</div>
-  <main v-if="invite.needed" class="gate">
+  <main v-if="invite.needed && !isReport" class="gate">
     <form class="card" @submit.prevent="send">
       <h1>Regulatory Engine demo</h1>
       <p class="small muted">This demo is invite-only. Enter the code you were given.</p>
@@ -34,7 +38,7 @@ async function send() {
       <p v-if="error" class="small err" role="alert">{{ error }}</p>
     </form>
   </main>
-  <RouterView v-else-if="invite.checked" />
+  <RouterView v-else-if="invite.checked || isReport" />
 </template>
 
 <style scoped>
