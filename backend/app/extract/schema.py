@@ -5,7 +5,9 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-RuleFamily = Literal["r1_envelope", "guest_house", "adu_state", "adu_local", "jadu", "flag", "other"]
+RuleFamily = Literal[
+    "r1_envelope", "guest_house", "adu_state", "adu_local", "jadu", "sb9", "fire_rebuild", "flag", "other"
+]
 Unit = Literal["ft", "sqft", "percent", "ratio", "stories", "count", "days", "boolean", "text"]
 
 # The parameters the rule engine knows how to apply. Anything else is extracted as "other" for a reviewer
@@ -52,6 +54,16 @@ PARAMETERS: dict[str, Unit] = {
     "adu_approval_days": "days",
     "jadu_max_floor_area_sqft": "sqft",
     "jadu_count_max": "count",
+    # SB 9 (Gov. Code 65852.21 two-unit development, 66411.7 urban lot split)
+    "sb9_lot_split_min_pct": "percent",
+    "sb9_lot_split_min_sqft": "sqft",
+    "sb9_units_per_lot_max": "count",
+    "sb9_unit_min_floor_area_sqft": "sqft",
+    "sb9_side_rear_setback_ft": "ft",
+    # Mayor's emergency orders after the January 2025 fires
+    "rebuild_max_pct_prior": "percent",
+    "rebuild_bluff_setback_ft": "ft",
+    "sb9_suspended": "boolean",
     "other": "text",
 }
 

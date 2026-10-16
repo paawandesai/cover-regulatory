@@ -120,6 +120,28 @@ RULES: dict[str, list[Need]] = {
             numeric=False,
         )
     ],
+    # SB 9: two-unit development (Gov. Code 65852.21) and urban lot split (66411.7).
+    "SB9": [
+        Need("units", "Gov. Code 65852.21(a)", "sb9_units_per_lot_max", "no more than two residential units"),
+        Need("protect_sqft", "Gov. Code 65852.21(b)", "sb9_unit_min_floor_area_sqft", "800 square feet"),
+        Need("setback_ft", "Gov. Code 65852.21(b)", "sb9_side_rear_setback_ft", "four feet"),
+        Need("split_pct", "Gov. Code 66411.7(a)", "sb9_lot_split_min_pct", "40 percent"),
+        Need("split_sqft", "Gov. Code 66411.7(a)", "sb9_lot_split_min_sqft", "1,200 square feet"),
+        Need("split_setback_ft", "Gov. Code 66411.7(c)", "sb9_side_rear_setback_ft", "four feet"),
+    ],
+    "EO9_SB9": [Need("suspended", "EO 9 1", "sb9_suspended", "will not accept or process", numeric=False)],
+    # Mayor's Emergency Executive Orders 1 (revised) and 8 after the January 2025 fires.
+    "EO1_LIKE_FOR_LIKE": [
+        Need("primary_pct", "EO 1 B.3", "rebuild_max_pct_prior", "Primary structures"),
+        Need("accessory_pct", "EO 1 B.3", "rebuild_max_pct_prior", "Accessory structures"),
+        Need("adu_canyon_ft", "EO 1 B.3", "rebuild_bluff_setback_ft", condition_has="Canyon"),
+        Need("adu_coastal_ft", "EO 1 B.3", "rebuild_bluff_setback_ft", condition_has="Coastal"),
+    ],
+    "EO8_HEIGHT": [
+        Need("height", "EO 8 A", "height_max_ft", "Non-hillside R1 properties", numeric=False),
+        Need("canyon_ft", "EO 8 A", "rebuild_bluff_setback_ft", condition_has="Canyon"),
+        Need("coastal_ft", "EO 8 A", "rebuild_bluff_setback_ft", condition_has="Coastal"),
+    ],
     "RFA_EXEMPTIONS": [
         Need("double_ceiling_ft", "LAMC 12.03(b)", "rfa_double_count_ceiling_ft", "greater than 14 feet"),
         Need("parking_max_sqft", "LAMC 12.03(b)", "rfa_parking_exempt_sqft", "200 square feet per parking space"),

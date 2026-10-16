@@ -124,3 +124,25 @@ def test_2025_fire_map_flag(monkeypatch):
     flags = {i["id"]: i for i in assess("2228004010")["items"] if i["family"] == "flag"}
     assert "vhfhsz_2025" in flags and "vhfhsz" not in flags
     assert flags["vhfhsz_2025"]["citations"]
+
+
+def test_fire_rebuild_coastal_lot():
+    """4412-014-018: built-up R1-1 lot in the Coastal Zone inside the Palisades Fire perimeter. EO 1 B.3: 110% of the
+    building outlines on the lot (about 2,795 sq ft); EO 8 A.1: the flat-land Height District 1 limit, 33 ft."""
+    items = {i["id"]: i for i in assess("4412014018")["items"]}
+    fp = items["eo1_footprint"]
+    assert abs(fp["value"] - 1.1 * 2795) <= 2 and fp["label"] == "approximate"
+    assert any(c["section_id"] == "EO 1 B.3" for c in fp["citations"])
+    assert items["eo8_height"]["value"] == 33 and items["eo8_height"]["label"] == "derived"
+    assert items["sb9_two_unit"]["value"] is False  # EO 9: Very High fire zone inside the Palisades Fire area
+
+
+def test_sb9_lot_too_small_to_split():
+    """66411.7(a)(2): both new lots at least 1,200 sq ft, so a 2,000 sq ft lot cannot be split."""
+    from app.engine.orders import sb9_items
+    from app.parcel.resolve import resolve
+
+    with connect() as conn:
+        items = {i.id: i for i in sb9_items(conn, resolve("2121005008"), 2000, set())}
+    assert items["sb9_lot_split"].value is False and items["sb9_lot_split"].label == "derived"
+    assert items["sb9_two_unit"].value == 2

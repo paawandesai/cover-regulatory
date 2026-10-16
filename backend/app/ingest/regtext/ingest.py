@@ -23,10 +23,12 @@ from app.config import get_settings
 from app.db.connection import connect
 from app.ingest.regtext.chunk import (
     FAQ_HEADING,
+    ORDER_NUMBER,
     Chunk,
     Page,
     chunk_by_headings,
     chunk_lamc,
+    chunk_order,
     chunk_ordinance,
     chunk_statute,
     indent_marker,
@@ -134,6 +136,9 @@ def _label(doc: dict) -> str:
         "ord_186481_adu": "Ord. 186,481",
         "za_memo_143": "ZA Memo 143",
         "palisades_rebuild_faq": "Palisades Rebuild FAQ",
+        "eo1_revised": "EO 1",
+        "eo8": "EO 8",
+        "eo9": "EO 9",
     }.get(doc["id"], "Gov. Code" if doc["doc_type"] == "statute" else doc["title"])
 
 
@@ -146,6 +151,10 @@ def chunk_document(doc: dict, pages: list[Page]) -> list[Chunk]:
         return chunk_statute(pages, _label(doc))
     if doc.get("headings") == "faq":
         return chunk_by_headings(pages, _label(doc), pattern=FAQ_HEADING)
+    if doc.get("headings") == "letters":
+        return chunk_order(pages, _label(doc))
+    if doc.get("headings") == "numbers":
+        return chunk_by_headings(pages, _label(doc), pattern=ORDER_NUMBER)
     return chunk_by_headings(pages, _label(doc))
 
 
