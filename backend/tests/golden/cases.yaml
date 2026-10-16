@@ -2,6 +2,7 @@
 # Expected values were calculated (by Claude Code, not by running the engine) from the cited code text and the parcel's own data (lot area from
 # the County layer; width and depth from the fitted rectangle), not copied from the engine's output.
 # Hand calculations by Claude Code; Paawan checks them against the code text (decision D17).
+# Every value the engine shows on these parcels is asserted (2026-10-16); `labels` pins the label where it matters.
 # A value of null means "the engine must not show a number here".
 cases:
   - apn: "2121005008"   # vacant, Reseda, R1-1, ~60 x 135 ft, 8,100 sq ft
@@ -16,6 +17,8 @@ cases:
       lot_minimums: true      # 12.08 C.4: 8,100 >= 5,000 and 60 >= 50
       adu_state_detached: 800.0
       jadu: 500.0
+      adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
+      adu_attached: null          # 66314(d): cap is 50% of the existing dwelling; vacant lot, so no number
     flags_include: [sb9]
     flags_exclude: [hillside, fire_rebuild]
   - apn: "2121016012"   # vacant, Reseda, R1-1, ~50 x 110 ft, 5,452 sq ft
@@ -25,17 +28,41 @@ cases:
       side_yard: 5.0          # width exactly 50 -> not "less than 50 feet"
       max_rfa: 2453           # 0.45 x 5,452 = 2,453.4
       lot_minimums: true
+      rear_yard: 15.0         # 12.08 C.3
+      max_height: 33.0        # 12.21.1: R1, not Hillside or Coastal
+      guest_house: false      # 5,452 < 10,000
+      adu_state_detached: 800.0  # Gov. Code 66323(a)(2): up to 800 sq ft must be approved
+      adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
+      adu_attached: null          # 66314(d): cap is 50% of the existing dwelling; vacant lot, so no number
+      jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
   - apn: "2121002004"   # vacant, Reseda, R1-1, ~25 x 130 ft, 3,249 sq ft (substandard lot)
     status: ok
     expect:
       side_yard: 3.0          # 12.08 C.2(a): 10% x 25 = 2.5, but not less than 3 ft
       max_rfa: 1462           # 0.45 x 3,249 = 1,462.05
       lot_minimums: false     # 3,249 < 5,000 and 25 < 50
+      front_yard: 20.0        # min(20% x 130 = 26, 20)
+      rear_yard: 15.0
+      max_height: 33.0
+      guest_house: false      # 3,249 < 10,000
+      adu_state_detached: 800.0  # Gov. Code 66323(a)(2): up to 800 sq ft must be approved
+      adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
+      adu_attached: null          # 66314(d): cap is 50% of the existing dwelling; vacant lot, so no number
+      jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
   - apn: "4359016023"   # vacant, R1-1, 16,403 sq ft, inside a specific plan
     status: ok
     expect:
       guest_house: true       # 16,403 >= 10,000
       max_rfa: 7381           # 0.45 x 16,403 = 7,381.35
+      front_yard: 20.0        # min(20% x 212 = 42.4, 20)
+      side_yard: 5.0          # width 108 >= 50
+      rear_yard: 15.0
+      max_height: 33.0
+      lot_minimums: true      # 16,403 >= 5,000 and 108 >= 50
+      adu_state_detached: 800.0  # Gov. Code 66323(a)(2): up to 800 sq ft must be approved
+      adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
+      adu_attached: null          # 66314(d): cap is 50% of the existing dwelling; vacant lot, so no number
+      jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
     flags_include: [overlay_plan]
   - apn: "4412014028"   # vacant, Pacific Palisades, R1-1, hillside + coastal + 2025 fire perimeter
     status: ok
@@ -44,9 +71,36 @@ cases:
       max_rfa: null
       max_height: null
       guest_house: true       # 11,793 >= 10,000 (12.08 A.7 still applies; hillside rules not modeled)
+      side_yard: null         # hillside: flat-land yards withheld
+      rear_yard: null
+      lot_minimums: true      # 11,793 >= 5,000 and 68 >= 50 (12.08 C.4 is not a flat-land-only rule)
+      adu_state_detached: 800.0  # Gov. Code 66323(a)(2): up to 800 sq ft must be approved
+      adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
+      adu_attached: null          # 66314(d): cap is 50% of the existing dwelling; vacant lot, so no number
+      jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
     flags_include: [fire_rebuild, hillside, coastal, vhfhsz]
-  - apn: "2126005015"   # vacant, R1-2-RIO: supplemental district not modeled
+  - apn: "2126005015"   # vacant, R1-2-RIO, ~50 x 245 ft, 12,260 sq ft: supplemental district not modeled
     status: ok
+    expect:
+      front_yard: 20.0        # min(20% x 245 = 49, 20)
+      side_yard: 5.0          # width exactly 50
+      rear_yard: 15.0
+      max_rfa: 5517           # 0.45 x 12,260 = 5,517
+      max_height: 33.0        # 12.21.1 "notwithstanding" paragraph: R1 33 ft off Hillside/Coastal, any height district
+      lot_minimums: true      # 12,260 >= 5,000 and 50 >= 50
+      guest_house: true       # 12,260 >= 10,000
+      adu_state_detached: 800.0  # Gov. Code 66323(a)(2): up to 800 sq ft must be approved
+      adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
+      adu_attached: null          # 66314(d): cap is 50% of the existing dwelling; vacant lot, so no number
+      jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
+    # The RIO district is not modeled, so the R1 envelope is shown only as an interpretation.
+    labels:
+      front_yard: interpretive
+      side_yard: interpretive
+      rear_yard: interpretive
+      max_rfa: interpretive
+      max_height: interpretive
+      lot_minimums: interpretive
     flags_include: [zone_unmodeled]
   - apn: "5179003026"   # Boyle Heights: Chapter 1A in effect
     status: regime_not_modeled

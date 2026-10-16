@@ -64,7 +64,7 @@ See `LICENSES.md` for code dependencies and `backend/app/ingest/sources.yaml` fo
 ## Measured results
 Measured 2026-10-15 on the development machine (4 CPU cores, no GPU, Postgres on the same machine).
 
-**Golden parcels** (`backend/tests/golden/`): 8 of 8 pass. The expected values were calculated by Claude Code (the coding assistant) from the code text and the parcel data, not copied from the engine's output, then compared with the engine. No person has checked them yet (decision D17). Values in the table that `cases.yaml` does not list are the engine's observed output, not asserted.
+**Golden parcels** (`backend/tests/golden/`): 8 of 8 pass. The expected values were calculated by Claude Code (the coding assistant) from the code text and the parcel data, not copied from the engine's output, then compared with the engine. No person has checked them yet (decision D17). Every value the engine shows on these parcels is asserted (66 values, plus the status and flags of each case).
 
 | APN | Case | Front / side / rear (ft) | Max floor area (sq ft) | Height (ft) | Guest house | Flags |
 |---|---|---|---|---|---|---|
