@@ -109,7 +109,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 - Feedback cannot change a rule.
 - The extraction schema has no status or confidence field for a model to set.
 
-**Retrieval** (`eval/retrieval/results.md`, 32 questions): recall@5 is 0.781 and MRR is 0.631 with embeddings plus section-id lookup. The question set is small and was written by the search code's author, so treat these numbers as a sanity check.
+**Retrieval** (`eval/retrieval/results.md`): on a 50-question holdout written by a second model from sampled chunks (it never saw the search code), recall@5 is 0.56 and MRR 0.44 with embeddings plus section-id lookup. On the 32-question dev set that search was tuned on it is 0.81, so the dev number overstates accuracy. The holdout counts only the source chunk's section as right, which makes it a lower bound. Assessment values do not depend on search.
 
 **Latency**, in process, after warm-up:
 

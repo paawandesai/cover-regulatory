@@ -25,3 +25,28 @@ What this does and does not show:
   embeddings exist. That differs from the plan (decision D15 called for fusion) and is recorded here.
 - Misses cluster on questions whose best answer is spread across ZA Memo 143 sections and state law. Those
   are the questions where the assessment uses approved rules rather than search.
+
+## Holdout set (2026-10-16)
+
+`holdout.yaml` has 50 questions written by Claude Sonnet 5.5 (`app/search/write_questions.py`). Each was written
+from one randomly sampled chunk (seed 20261016, at most 6 chunks per document), and the writer saw only that
+chunk: not the search code, not `questions.yaml`. The label is the source chunk's section. Nothing in search was
+changed after these numbers were taken. Corpus: 2,906 chunks.
+
+| Set | Mode | recall@5 | recall@10 | MRR | p50 ms | p95 ms |
+|---|---|---|---|---|---|---|
+| Dev (`questions.yaml`, 32) | Default | 0.812 | | 0.642 | | |
+| **Holdout** (50) | Default (embedding + section-id lookup) | **0.56** | 0.60 | 0.441 | 108 | 157 |
+| Holdout (50) | Full text only | 0.12 | 0.20 | 0.070 | 50 | 84 |
+
+What this shows:
+- Search is clearly weaker on questions it was not tuned on: recall@5 falls from 0.81 to 0.56. The dev number
+  overstates accuracy.
+- 16 of the 22 misses are Government Code questions (29 of the 50 are). In 7 of them the top result is ZA Memo 143
+  section IV, the City's summary of the same state ADU law, which may well answer the question; the single-label
+  scoring counts that as a miss, so 0.56 is a lower bound.
+- Full text alone is much worse on natural questions (0.12), which supports keeping it off by default.
+- The assessment does not depend on search: values come from reviewed rules. Search feeds the source panel's
+  related text and the follow-up chat, which only keeps sentences whose quotes it can find, so a retrieval miss
+  there gives "does not answer this" rather than a wrong answer.
+- The questions are model-written, not written by a person. A person-written set is still the stronger test.
