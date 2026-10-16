@@ -158,6 +158,24 @@ documents:
     fetch: manual
     url: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7
     local_path: data/manual/gov_66411_7.html
+  - id: gov_65913_4
+    title: Gov. Code 65913.4 (SB 35 streamlining; SB 9 site exclusions in (a)(6)(B)-(K))
+    publisher: FindLaw (Thomson Reuters), printed copy supplied by the project owner
+    doc_type: statute
+    jurisdiction: State of California
+    code_chapter: null
+    fetch: manual
+    url: https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/
+    local_path: data/manual/gov_65913_4_findlaw.pdf
+    effective_note: >-
+      FindLaw text "current as of January 01, 2026" (as amended by Stats. 2023, c. 778, SB 423). SB 9 refers to
+      the section "as that section read on September 16, 2021"; this is the later text, so results citing it
+      stay interpretations.
+    # Page headers and the site's navigation are not law.
+    drop_patterns:
+      - 'California Code, Government Code - GOV § 65913\.4 \| FindLaw [^\n]*\n'
+      - '\n?https://codes\.findlaw\.com/\S* Page \d+ of \d+'
+    trim: {start: "(a) Except as provided", end: "as of that date is repealed.", prefix: "65913.4.\n"}
   - id: lamc_chapter1
     title: LAMC Chapter I, Sections 12.00-13.xx (consolidated zoning regulations, as amended)
     publisher: American Legal Publishing (free public viewer), saved by hand

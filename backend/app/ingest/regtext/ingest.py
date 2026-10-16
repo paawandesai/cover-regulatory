@@ -130,6 +130,26 @@ def _pages(path: Path, indent_markers: bool = False, drop_struck: bool = False) 
         return out
 
 
+def _trim(pages: list[Page], start: str, end: str, prefix: str = "") -> list[Page]:
+    """Keep the law text of a page printed from a web site: drop what comes before `start` (replaced by `prefix`,
+    e.g. the section number the chunker splits on) and everything after `end`, across pages."""
+    out, started, done = [], False, False
+    for p in pages:
+        text = p.text
+        if not started:
+            i = text.find(start)
+            if i < 0:
+                continue
+            text, started = prefix + text[i:], True
+        j = text.find(end)
+        if j >= 0:
+            text, done = text[: j + len(end)], True
+        out.append(Page(p.number, text))
+        if done:
+            break
+    return out
+
+
 def _label(doc: dict) -> str:
     return {
         "ord_184802_bmo": "Ord. 184,802",
@@ -172,6 +192,8 @@ def ingest(doc: dict) -> dict | None:
     pages = _pages(path, indent_markers=doc.get("doc_type") == "code_section", drop_struck=bool(doc.get("drop_struck")))
     for pat in doc.get("drop_patterns") or []:
         pages = [Page(p.number, re.sub(pat, "", p.text)) for p in pages]
+    if doc.get("trim"):
+        pages = _trim(pages, **doc["trim"])
     chunks = chunk_document(doc, pages)
     retrieved = datetime.fromtimestamp(path.stat().st_mtime, UTC)
 
