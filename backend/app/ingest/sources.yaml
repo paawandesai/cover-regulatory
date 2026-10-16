@@ -102,6 +102,21 @@ datasets:
     overlay_kind: vhfhsz
     scope: study_areas
 
+  - id: lacounty_fhsz_lra_2025
+    name: Fire Hazard Severity Zones in Local Responsibility Areas (CAL FIRE 2025 map), Very High class
+    publisher: LA County Fire Department GIS, from CAL FIRE
+    item_id: Hazards/MapServer/18 (LA County public GIS)
+    service_url: https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/Hazards/MapServer/18
+    license: LA County terms of use (informational). Used for flagging only.
+    notes: >-
+      CAL FIRE recommended these zones for the City in March 2025 (layer revised 2025-08-21). The City must adopt
+      them by ordinance; until that is confirmed, lacity_vhfhsz stays the zone the engine applies, and this layer
+      only flags lots whose class would change.
+    where: "HAZ_CLASS = 'Very High'"
+    target: overlay
+    overlay_kind: vhfhsz_2025
+    scope: study_areas
+
   - id: lacity_hpoz
     name: Historic Preservation Overlay Zones
     publisher: Los Angeles City Planning (GIS@LADCP)
@@ -131,6 +146,17 @@ datasets:
     notes: The Coastal Commission's own statewide layer is a polyline, so the County's polygon version is used.
     target: overlay
     overlay_kind: coastal_zone
+    scope: study_areas
+
+  - id: usgs_3dep
+    name: 3D Elevation Program (3DEP) elevation, 1 m where available
+    publisher: U.S. Geological Survey (The National Map)
+    service_url: https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer
+    license: Public domain (U.S. Government work)
+    notes: >-
+      Sampled over each Hillside Area parcel at ingestion to estimate slope bands for LAMC 12.21 C.10(b). Run after
+      parcels and overlays. Not the surveyed slope analysis map the code requires.
+    target: slope
     scope: study_areas
 
   - id: caltrans_hqta

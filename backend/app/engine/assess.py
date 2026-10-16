@@ -343,6 +343,36 @@ def _adu_height(conn, ctx: ParcelContext, st: R.RuleInputs) -> Item:
     return item
 
 
+def _hillside_rfa(conn, ctx: ParcelContext, hs: R.RuleInputs, lot_area, zone: str):
+    """12.21 C.10(b): the sum over slope bands of band area x ratio, or the guaranteed minimum (25% of the lot or
+    800 sq ft) if larger. Band areas are estimated from USGS elevation (app/ingest/slope.py)."""
+    bands = [hs.value(f"band_{k}") for k in range(len(R.HILLSIDE_BANDS))]
+    ri = R.RuleInputs(hs.rule_id, {k: f for k, f in hs.found.items() if k.startswith("band_") or k == "min_pct"})
+    row = conn.execute(
+        "SELECT band_sqft, resolution_ft, s.retrieved_at FROM parcel_slope ps JOIN source s ON s.id = ps.source_id "
+        "WHERE apn = %s",
+        (ctx.apn,),
+    ).fetchone()
+    floor_cite = _chunk_citation(conn, "LAMC 12.21 C.10(b)", "or 800 square feet, whichever is greater")
+    if row is None or None in bands or not lot_area or hs.value("min_pct") is None or not floor_cite:
+        return ri, None, "Slope bands for this lot are not computed in the loaded data.", []
+    areas = [row["band_sqft"].get(lbl.replace(" ", ""), 0.0) for lbl in R.HILLSIDE_BANDS]
+    by_band = sum(a * r for a, r in zip(areas, bands, strict=True))
+    minimum = max(lot_area * hs.value("min_pct") / 100, 800)
+    value = round(max(by_band, minimum))
+    parts = ", ".join(
+        f"{lbl}%: {a:,.0f} sq ft x {r:g}" for lbl, a, r in zip(R.HILLSIDE_BANDS, areas, bands, strict=True) if a
+    )
+    why = (
+        f"Sum of each slope band's area times its ratio for {zone} (Tables 12.21 C.10-2a/2b): {parts} = "
+        f"{by_band:,.0f} sq ft. The guaranteed minimum is {hs.value('min_pct'):g}% of the lot or 800 sq ft, "
+        f"whichever is greater ({minimum:,.0f} sq ft), so the limit is {value:,} sq ft. Slope bands are estimated from "
+        f"the USGS 3DEP elevation model on a {row['resolution_ft']:.0f} ft grid; the permit needs a surveyed slope "
+        "analysis map, which can differ."
+    )
+    return ri, value, why, floor_cite
+
+
 def _r1_items(
     conn,
     ctx: ParcelContext,
@@ -354,7 +384,9 @@ def _r1_items(
 ):
     items: list[Item] = []
     kinds = {o["kind"] for o in ctx.overlays}
-    flat_land = not ({"hillside", "coastal_zone"} & kinds)
+    base_zone = (ctx.zone.base_zone or "") if ctx.zone else ""
+    hillside = "hillside" in kinds or base_zone.startswith("R1H")
+    flat_land = not hillside and "coastal_zone" not in kinds
     fy = R.load("R1_FRONT_YARD", conn)
     front = None
     if depth and fy.value("pct") is not None and fy.value("max_ft") is not None:
@@ -374,8 +406,10 @@ def _r1_items(
             else "Lot depth unknown.",
         )
     )
-    if flat_land or "hillside" not in kinds:
-        items += _prevailing_items(conn, ctx, frame, fy)
+    if hillside:
+        # Table 12.21 C.10-1 sets the same R1 front, side and rear yards in the Hillside Area.
+        items[-1].citations += _chunk_citation(conn, "LAMC 12.21 C.10(a)", "Table 12.21 C.10-1")
+    items += _prevailing_items(conn, ctx, frame, fy)
 
     h = R.load("R1_HEIGHT", conn)
     hmax, hlow = h.value("max_ft"), h.value("low_roof_ft")
@@ -397,6 +431,80 @@ def _r1_items(
         if hmax and hlow
         else None
     )
+    base = (ctx.zone.base_zone or "") if ctx.zone else ""
+    var = None
+    h_extra: list[dict] = []
+    if R1_VARIATION.match(base) and base[2] in R.VARIATION_TABLE and lot_area:
+        # R1V, R1F and R1R have their own height, floor area and lot coverage table (12.08 C.5(b)-(d), 12.21.6).
+        var = R.load(f"VARIATION_{base}", conn, R.variation_needs(base, round(lot_area)))
+        if base[2] == "V":
+            hmax = var.value("height_ft")
+            hwhy = (
+                f"{base} (Variable-Mass) allows {hmax:g} ft, with the encroachment plane starting {var.value('plane_ft'):g} "
+                "ft above the front and side yards and rising at 45 degrees (Table 12.08 C.5.(b)); the plane is not drawn."
+                if hmax is not None and var.value("plane_ft") is not None
+                else None
+            )
+        else:
+            fh, rh = var.value("front_height_ft"), var.value("rear_height_ft")
+            hmax = max(fh, rh) if fh is not None and rh is not None else None
+            if hmax is not None:
+                if base[2] == "F":
+                    hwhy = (
+                        f"{base} (Front-Mass, Table 12.08 C.5.(c)): the front mass may reach {fh:g} ft (plane from "
+                        f"{var.value('front_plane_ft'):g} ft); the rear mass, at least {var.value('rear_depth_ft'):g} ft deep "
+                        f"from the rear yard, is limited to {rh:g} ft (plane from {var.value('rear_plane_ft'):g} ft). "
+                        "The planes rise at 45 degrees and are not drawn."
+                    )
+                elif depth is not None and depth <= 90:
+                    hmax = rh
+                    hwhy = (
+                        f"{base} (Rear-Mass, Table 12.08 C.5.(d)). This lot is {depth:.0f} ft deep (90 ft or less), so "
+                        f"the rear mass standard applies to the whole building: {rh:g} ft, plane from "
+                        f"{var.value('rear_plane_ft'):g} ft (12.08 C.5(d)(1)(i))."
+                    )
+                else:
+                    hwhy = (
+                        f"{base} (Rear-Mass, Table 12.08 C.5.(d)): the front mass, at least {var.value('front_depth_ft'):g} ft "
+                        f"deep from the front yard, is limited to {fh:g} ft (plane from {var.value('front_plane_ft'):g} ft); "
+                        f"the rear mass may reach {rh:g} ft (plane from {var.value('rear_plane_ft'):g} ft). The planes rise "
+                        "at 45 degrees and are not drawn."
+                    )
+        hlow = None
+        h = var
+        if base[2] == "R" and depth is not None and depth <= 90:
+            h_extra = _chunk_citation(conn, "LAMC 12.08 C.5(d)", "90 feet or less")
+    # Coastal Zone, off the Hillside Area, Height District 1: 45 ft (12.21.1) and floor area of three times the
+    # buildable area (12.21.1 A.1). Variation zones keep their own table.
+    coastal = "coastal_zone" in kinds and "hillside" not in kinds and var is None and hd.startswith("1")
+    co = R.load("COASTAL_R1", conn) if coastal else None
+    if co is not None and co.value("height_ft") is not None:
+        hmax, hlow, h = co.value("height_ft"), None, R.RuleInputs(co.rule_id, {"height_ft": co.found["height_ft"]})
+        hwhy = (
+            f"{hmax:g} ft for R1 in Height District 1 in the Coastal Zone (LAMC 12.21.1); the 33 ft flat-land limit "
+            "does not apply here. A Coastal Development Permit may still limit it."
+        )
+    hs = None
+    hd_row = R.hillside_hd_row(ctx.zone.height_district if ctx.zone else None)
+    if hillside:
+        district = None  # Table 12.21 C.10-4 already has a row per height district
+        hs = R.load(
+            "HILLSIDE_R1", conn, R.hillside_needs(base_zone if base_zone.startswith("R1H") else "R1", hd_row or "-")
+        )
+        h = R.RuleInputs(hs.rule_id, {k: hs.found[k] for k in ("max_ft", "low_roof_ft")})
+        hmax, hlow = (hs.value("max_ft"), hs.value("low_roof_ft")) if hd_row else (None, None)
+        hwhy = (
+            f"Hillside Area, Height District {ctx.zone.height_district}: {hmax:g} ft where the roof slopes 25% or more, "
+            f"{hlow:g} ft where it is flatter (Table 12.21 C.10-4). Height is the envelope height above Hillside Area "
+            "grade at every point, not above one base point."
+            if hmax is not None and hlow is not None
+            else "Height district not in Table 12.21 C.10-4."
+        )
+        if "coastal_zone" in kinds and hmax is not None:
+            hwhy += (
+                " This lot is also in the Coastal Zone, where 12.21.1 allows 45 ft in Height District 1; 12.21.1 also "
+                "sends Hillside lots to this table. Confirm which applies."
+            )
     if district:
         d = R.load(district, conn)
         dmax = d.value("max_ft")
@@ -434,7 +542,7 @@ def _r1_items(
         side = side_base
         step = sy.value("per_10ft_over_18_ft")
         hside = min(design_height, hmax) if design_height and hmax else hmax
-        if flat_land and step and hside:
+        if (flat_land or hillside) and step and hside:
             # 12.08 C.2(b): new construction off the Hillside Area and Coastal Zone adds 1 ft per 10 ft (or part)
             # above 18 ft. Shown at the maximum height (or the project's height, when given) so the drawn buildable
             # area is safe for that house.
@@ -442,14 +550,15 @@ def _r1_items(
             side = side_base + extra
             at = lambda ht: side_base + step * math.ceil(max(ht - 18, 0) / 10)
             why += (
-                f" New construction adds {step:.0f} ft for each 10 ft (or part) of height above 18 ft (LAMC 12.08 "
-                f"C.2(b)), so this shows {side:g} ft for a {hside:g} ft house{' (your project)' if hside != hmax else ' (the maximum)'}. By height: {side_base:g} ft "
+                f" New construction adds {step:.0f} ft for each 10 ft (or part) of height above 18 ft ("
+                + ("Table 12.21 C.10-1" if hillside else "LAMC 12.08 C.2(b)")
+                + f"), so this shows {side:g} ft for a {hside:g} ft house{' (your project)' if hside != hmax else ' (the maximum)'}. By height: {side_base:g} ft "
                 f"up to 18 ft, {at(28):g} ft up to 28 ft, {at(min(hmax, 38)):g} ft up to {min(hmax, 38):g} ft."
             )
         elif not flat_land:
             per = sy.value("per_story_ft")
             why += (
-                f" In the Coastal Zone or Hillside Area the per-story rule applies instead: add {per:g} ft for each "
+                f" In the Coastal Zone the per-story rule applies instead: add {per:g} ft for each "
                 "story above the second (LAMC 12.08 C.2(a))."
                 if per
                 else ""
@@ -478,7 +587,11 @@ def _r1_items(
             why,
         )
     )
-    items.append(_rule_item("max_height", "r1_envelope", "Maximum height", h, hmax, "ft", hwhy))
+    h_item = _rule_item("max_height", "r1_envelope", "Maximum height", h, hmax, "ft", hwhy)
+    h_item.citations += h_extra
+    if hs is not None and "coastal_zone" in kinds and h_item.value is not None:
+        h_item.label, h_item.coverage = "interpretive", 1.0  # two limits may apply; see the explanation
+    items.append(h_item)
 
     ry = R.load("R1_REAR_YARD", conn)
     rear = ry.value("min_ft")
@@ -495,24 +608,94 @@ def _r1_items(
         ri.citations += _chunk_citation(conn, "LAMC 12.21 C.1(h)", "through")
     items.append(ri)
 
-    rfa = R.load("R1_RFA", conn)
+    rfa = var if var is not None else R.load("R1_RFA", conn)
     rfa_val = round(lot_area * rfa.value("ratio")) if lot_area and rfa.value("ratio") is not None else None
-    items.append(
-        _rule_item(
-            "max_rfa",
-            "r1_envelope",
-            "Maximum residential floor area",
-            rfa,
-            rfa_val,
-            "sqft",
-            f"{rfa.value('ratio')} x lot area ({lot_area:,.0f} sq ft), for a lot outside the Hillside Area and Coastal "
-            "Zone. Not evaluated: covered parking exemptions (200 sq ft per space, up to 400 sq ft only in the rear half "
-            "of the lot), detached accessory buildings up to 200 sq ft, open lattice-roof porches, double counting of "
-            "ceilings over 14 ft, and the encroachment plane that starts 20 ft above the front and side yards."
-            if lot_area
-            else None,
+    buildable = None
+    hs_cites: list[dict] = []
+    if hs is not None:
+        rfa, rfa_val, rfa_why, hs_cites = _hillside_rfa(conn, ctx, hs, lot_area, base_zone)
+    elif co is not None and co.value("buildable_x") is not None:
+        rfa = R.RuleInputs(co.rule_id, {"buildable_x": co.found["buildable_x"]})
+        rfa.found.update({f"yard_{k}": v for k, v in R.load("R1_FRONT_YARD", conn).found.items()})
+        if frame is not None and None not in (front, side_base, rear):
+            # 12.03 "Buildable Area": the lot less its required yards, for a one-story building.
+            buildable = envelope(frame, front, side_base, front if frame.through else rear)["envelope_area_sqft"]
+        rfa_val = round(buildable * co.value("buildable_x")) if buildable else None
+        rfa_why = (
+            f"{co.value('buildable_x'):g} x the buildable area ({buildable:,.0f} sq ft: the lot less a {front:g} ft front, "
+            f"{side_base:g} ft side and {rear:g} ft rear yard, as for a one-story building), for an R1 lot in the "
+            "Coastal Zone off the Hillside Area (LAMC 12.21.1 A.1; Buildable Area in 12.03). The buildable area comes "
+            "from the illustrative lot outline."
+            if buildable
+            else "Buildable area not determined (no lot outline or yards)."
         )
+    elif var is not None:
+        rfa_why = (
+            f"{rfa.value('ratio'):g} x lot area ({lot_area:,.0f} sq ft): the {base} ratio for a lot of "
+            f"{R.lot_band(round(lot_area)).lower()} sq ft (Table 12.08 C.5.({ {'V': 'b', 'F': 'c', 'R': 'd'}[base[2]] }))."
+            if lot_area
+            else None
+        )
+    if co is None and var is None and hs is None:
+        rfa_why = (
+            f"{rfa.value('ratio')} x lot area ({lot_area:,.0f} sq ft), for a lot outside the Hillside Area and Coastal "
+            "Zone. The encroachment plane that starts 20 ft above the front and side yards is not drawn."
+            if lot_area
+            else None
+        )
+    rfa_item = _rule_item(
+        "max_rfa",
+        "r1_envelope",
+        "Maximum floor area (Coastal Zone)" if co is not None else "Maximum residential floor area",
+        rfa,
+        rfa_val,
+        "sqft",
+        rfa_why,
     )
+    if hs is not None and rfa_item.value is not None:
+        rfa_item.label, rfa_item.coverage = "interpretive", 1.0  # slope bands are estimated, not surveyed
+        rfa_item.citations += hs_cites
+    if co is not None and rfa_item.value is not None:
+        # The buildable area is measured on the fitted lot outline, which is illustrative.
+        rfa_item.label, rfa_item.coverage = "interpretive", 1.0
+        rfa_item.explanation += (
+            " Here floor area follows the general Floor Area definition (exterior walls, stairways, shafts, equipment "
+            "rooms, parking areas and basement storage are not counted), not Residential Floor Area (LAMC 12.03). "
+            "Confirm the buildable area on a survey."
+        )
+        rfa_item.citations += _chunk_citation(conn, "LAMC 12.03(b)", "FLOOR AREA. The area")
+    items.append(rfa_item)
+    if hs is not None and lot_area and hs.value("coverage_pct") is not None:
+        small = bool(width and width < 50 and lot_area < 5000 and hs.value("coverage_small_pct"))
+        key = "coverage_small_pct" if small else "coverage_pct"
+        pct = hs.value(key)
+        items.append(
+            _rule_item(
+                "max_lot_coverage",
+                "r1_envelope",
+                "Maximum lot coverage",
+                R.RuleInputs(hs.rule_id, {key: hs.found[key]}),
+                round(lot_area * pct / 100),
+                "sqft",
+                f"{pct:g}% of the lot area ({lot_area:,.0f} sq ft) for buildings more than 6 ft above natural ground "
+                + ("(substandard lot: under 50 ft wide and under 5,000 sq ft) " if small else "")
+                + "(LAMC 12.21 C.10(e)).",
+            )
+        )
+    if var is not None and lot_area and var.value("coverage_pct") is not None:
+        cov = R.RuleInputs(var.rule_id, {"coverage_pct": var.found["coverage_pct"]})
+        items.append(
+            _rule_item(
+                "max_lot_coverage",
+                "r1_envelope",
+                "Maximum lot coverage",
+                cov,
+                round(lot_area * var.value("coverage_pct") / 100),
+                "sqft",
+                f"{var.value('coverage_pct'):g}% of the lot area ({lot_area:,.0f} sq ft) may be covered by buildings, "
+                f"for a {base} lot of this size.",
+            )
+        )
 
     lm = R.load("R1_LOT_MINIMUMS", conn)
     conforming = None
@@ -698,8 +881,9 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 conn,
                 "hillside",
                 "In the Hillside Area",
-                "Hillside rules replace the flat-land R1 envelope (setbacks, floor area, height, grading). "
-                "Not modeled; the flat-land values above do not apply.",
+                "The Hillside Area standards (LAMC 12.21 C.10) are applied above: yards, slope-band floor area, envelope "
+                "height and lot coverage. Not evaluated: grading limits (C.10(f)), parking (C.10(g)), fire protection "
+                "and street access (C.10(h), (i)), and the sewer connection (C.10(j)).",
                 "LAMC 12.21 C.10",
             )
         )
@@ -720,6 +904,20 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 "vhfhsz",
                 "Very High Fire Hazard Severity Zone",
                 "Additional fire and access rules apply, including for ADUs. Not modeled.",
+                "LAMC 12.22 A.33(c)",
+                "Very High Fire Hazard",
+            )
+        )
+    if "vhfhsz_2025" in kinds and "vhfhsz" not in kinds:
+        # 2025 CAL FIRE map, recommended to the City in March 2025; the City applies it once adopted by ordinance.
+        out.append(
+            _flag(
+                conn,
+                "vhfhsz_2025",
+                "Very High Fire Hazard Severity Zone on CAL FIRE's 2025 map",
+                "The City's current map (the one applied here) does not place this lot in a Very High Fire Hazard "
+                "Severity Zone, but CAL FIRE's 2025 recommended map does. Once the City adopts that map, the fire "
+                "zone rules apply, including those for ADUs. Check whether it has been adopted.",
                 "LAMC 12.22 A.33(c)",
                 "Very High Fire Hazard",
             )
@@ -883,10 +1081,10 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
         items.append(dims)
         buildings, fp_item = _footprints(conn, ctx.apn)
         items.append(fp_item)
-        if not ctx.zone.is_plain_r1:
+        if not ctx.zone.is_modeled:
             result["notes"].append(
-                f"{ctx.zone.raw} is an R1 variation or carries conditions; the standard R1 values "
-                "below are shown for reference and labeled accordingly."
+                f"{ctx.zone.raw}: " + "; ".join(ctx.zone.unmodeled) + ". The values below are shown for reference "
+                "and labeled accordingly."
             )
         r1, front, side, rear = _r1_items(
             conn, ctx, width, depth, lot_area, frame, project.height_ft if project else None
@@ -909,41 +1107,31 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
         # The flat-land floor area and 33/28 ft height also exclude the Coastal Zone (12.08 C.5(a), 12.21.1), and the R1
         # variation zones have their own floor area and height tables (12.08 C.5(b), 12.21.6).
         withheld = {
-            "hillside": ({"front_yard", "side_yard", "rear_yard", "max_rfa", "max_height"}, "in the Hillside Area."),
-            "coastal_zone": (
+            "coastal_zone_unmodeled": (
                 {"max_rfa", "max_height"},
                 (
-                    "in the Coastal Zone (Height District 1 allows up to 45 ft there, subject to a Coastal Development "
-                    "Permit; Coastal Zone floor area rules differ)."
+                    "in the Coastal Zone outside Height District 1 (only the Height District 1 coastal limits are "
+                    "modeled)."
                 ),
             ),
         }
         variation = ctx.zone.base_zone if R1_VARIATION.match(ctx.zone.base_zone or "") else None
-        if variation:
-            withheld["variation"] = (
-                {"max_rfa", "max_height"},
-                (
-                    f"in the {variation} One-Family Zone Variation, which has its own floor area and height table "
-                    "(LAMC 12.08 C.5(b), 12.21.6)."
-                ),
-            )
-            kinds = kinds | {"variation"}
+        if "coastal_zone" in kinds and not variation and not (ctx.zone.height_district or "").startswith("1"):
+            kinds = kinds | {"coastal_zone_unmodeled"}
         for kind, (ids, where) in withheld.items():
             if kind in kinds:
                 for i in r1:
                     if i.id in ids and i.value is not None:
                         i.value, i.label, i.coverage = None, "withheld", None
                         i.explanation = "Not modeled here: the flat-land R1 rule does not apply " + where
-        if "hillside" in kinds:
-            front = side = rear = None
         overlay_plan = bool({"specific_plan", "hpoz"} & kinds)
-        if not ctx.zone.is_plain_r1 or overlay_plan:
+        if not ctx.zone.is_modeled or overlay_plan:
             for i in r1:
                 if i.label == "derived":
                     i.label = "interpretive"
                 i.explanation = (i.explanation or "") + (
-                    " Variation or condition not modeled."
-                    if not ctx.zone.is_plain_r1
+                    " Not modeled for this zone string: " + "; ".join(ctx.zone.unmodeled) + "."
+                    if not ctx.zone.is_modeled
                     else " A specific plan or HPOZ here can set its own yards and height, which take precedence "
                     "(LAMC 12.08 C.2, 12.21.1); not modeled."
                 )
@@ -951,6 +1139,9 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
         ex = R.load("RFA_EXEMPTIONS", conn)
         rfa_ex = {k: f.value for k, f in ex.found.items()} if ex.label == "derived" else None
         rfa_item = next((i for i in items if i.id == "max_rfa"), None)
+        coastal_floor = "coastal_zone" in kinds and "hillside" not in kinds
+        if coastal_floor:
+            rfa_ex = None  # 12.03: Residential Floor Area (and its exemptions) does not apply in the Coastal Zone
         if rfa_ex and rfa_item is not None and rfa_item.value is not None:
             rfa_item.explanation = (rfa_item.explanation or "") + (
                 f" What counts (LAMC 12.03): area under a ceiling over {rfa_ex['double_ceiling_ft']:g} ft counts twice; "

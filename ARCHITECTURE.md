@@ -57,6 +57,8 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Part | Where | What it does |
 |---|---|---|
 | Dataset loaders | `backend/app/ingest/load_datasets.py`, `sources.yaml` | Pull public ArcGIS layers for the study areas, drop owner fields, and record source, license and fetch time. Microsoft's ODbL building footprints come from one tile filtered to the study areas, into their own table. |
+| Slope bands | `backend/app/ingest/slope.py` | For each Hillside Area parcel, samples the USGS 3DEP elevation model on a grid of about 3 ft, computes slope per cell and stores the area in each LAMC 12.21 C.10(b) slope band (`parcel_slope`). An estimate of the surveyed slope analysis map. |
+| Table reader | `backend/app/extract/tables.py` | Reads the R1 variation and Hillside tables cell by cell (no model) into pending candidates, checked like model output. |
 | Regulation ingestion | `backend/app/ingest/regtext/` | Parse ordinance PDFs and saved HTML into chunks keyed by section id. Each chunk keeps a content hash. |
 | Search | `backend/app/search/` | Exact section-id lookup first, then pgvector cosine search over local embeddings. Full-text search is the fallback. |
 | Extraction | `backend/app/extract/` | Claude (model id from config, structured output) reads groups of chunks into rule fragments. Regulation text is wrapped as data. The schema has no field for status or confidence. |
@@ -64,7 +66,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Parcel resolution | `backend/app/parcel/` | APN, then County address points, then County situs, then the Census geocoder. Then point-in-City, code regime from the Community Plan Area, and zone parsing. |
 | Lot geometry | `backend/app/engine/geometry.py` | Minimum rotated rectangle in State Plane feet. Rays from each side find street (40 ft or more gap), alley (10 to 40 ft) or unknown, which sets the front. The envelope is the rectangle shrunk by the yards, labeled illustrative. |
 | Rule catalogue | `backend/app/engine/rules.py` | Each rule lists the fragment inputs it needs. A rule is "derived" only if every input is approved, and "interpretive" (with a coverage share) if any input is still pending. |
-| Assessment | `backend/app/engine/assess.py` | Stops early where needed, computes values, withholds flat-land values in the Hillside Area and Coastal Zone, adds flags and disclaimers. |
+| Assessment | `backend/app/engine/assess.py` | Stops early where needed, computes values, applies the Hillside Area (with slope bands from `app/ingest/slope.py`), Coastal Zone and R1 variation tables, withholds what is not modeled, adds flags and disclaimers. |
 | API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt. The optional invite gate is for the hosted demo. |
 | Web app | `frontend/` | Vue 3 + TypeScript + MapLibre with the Forge design tokens. Assessment page, source-text panel, feedback, rule review and stop states. |
 | Packaging | `docker-compose.yml`, `*/Dockerfile`, `deploy/` | Database (PostGIS + pgvector), API with the embedding model built in, Caddy serving the app, and a daily feedback purge. |
@@ -78,7 +80,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Flag, not evaluated | A condition detected from a map layer (with its dataset and fetch date) or the zone string, or a law that may apply. Not evaluated. |
 | Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. In the hosted demo the reviewer is an AI review applied on the owner's instruction (`reviewed_by = 'ai-review'`), and the source panel says so. |
 | Interpretation, confirm with City | Same computation, but at least one input fragment is still pending review (shows the share of inputs found), or a standard R1 value where something not modeled may change it (conditioned zone, specific plan or HPOZ, through lot, front taken on the long side, City ADU on a Hillside lot in a VHFHSZ). |
-| Not modeled here | A flag (Hillside Area; Coastal Zone floor area and height; R1 variation zone) makes the flat-land rule wrong, so no value is shown. |
+| Not modeled here | A flag makes the standard rule wrong and the replacement is not modeled (Coastal Zone outside Height District 1), so no value is shown. |
 | No cited source | An input is missing or ambiguous. No number is shown. |
 
 The model never sets a label. Labels come from review status and the deterministic checks.

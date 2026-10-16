@@ -86,8 +86,8 @@ def test_nearby_parcels_return_geometry_only(client):
 
 
 def test_assessment_returns_lot_outline_when_yards_are_withheld(client):
-    # Hillside parcel: flat-land yards withheld, but the lot outline is still drawn with no envelope.
-    g = client.get("/api/assess", params={"q": "4412014028"}).json()["geometry"]
+    # Lot width and depth cannot be measured on this outline, so no yards: the lot is still drawn, with no envelope.
+    g = client.get("/api/assess", params={"q": "4411004005"}).json()["geometry"]
     assert g["lot"]["type"] in ("Polygon", "MultiPolygon")
     assert g["envelope"] is None and g["yards_ft"] is None
 

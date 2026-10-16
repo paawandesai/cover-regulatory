@@ -31,6 +31,9 @@ PARAMETERS: dict[str, Unit] = {
     "rfa_parking_front_setback_ft": "ft",
     "rfa_accessory_exempt_sqft": "sqft",
     "rfa_double_count_ceiling_ft": "ft",
+    "encroachment_plane_origin_ft": "ft",
+    "mass_envelope_depth_ft": "ft",
+    "rfa_guaranteed_min_pct": "percent",
     # Guest house = accessory living quarters (no kitchen)
     "alq_allowed": "boolean",
     "alq_min_lot_area_sqft": "sqft",

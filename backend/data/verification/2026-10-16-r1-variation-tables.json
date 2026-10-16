@@ -1,0 +1,2310 @@
+{
+ "checked_on": "2026-10-16",
+ "method": "Cells of LAMC Tables 12.08 C.5.(b)-(d) (R1V, R1F, R1R variation zones), read by position by the deterministic table reader (app/extract/tables.py, no model) for left-out item 7. Each cell passed the quote and number checks. Claude Sonnet 5.5 (Anthropic API) checked every cell's zone, row, value and unit against the table text in one call per table and found no problems; Claude Opus 5.5 (via Claude Code) checked the reader's column order against the text for the R1V3, R1F3 and R1R3 columns.",
+ "candidates": [
+  {
+   "fragment_id": 283,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 284,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 285,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 286,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 287,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 288,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 289,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 290,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 291,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 292,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 293,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 294,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 295,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 296,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 297,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 298,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 299,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 300,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 301,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 302,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 303,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 304,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 305,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 306,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 307,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 308,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 309,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 310,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 311,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 312,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 313,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 314,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 315,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 316,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 317,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 318,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 319,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 320,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 321,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 322,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 323,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 324,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 325,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 326,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 327,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 328,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 329,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 330,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 331,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 332,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 333,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 334,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 335,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 336,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 337,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 338,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-b#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 339,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 340,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 341,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 342,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 343,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 344,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 345,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 346,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 347,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 348,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 349,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 350,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 351,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 352,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 353,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 354,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 355,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 356,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 357,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 358,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 359,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 360,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 361,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 362,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 363,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 364,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 365,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 366,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 367,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 368,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 369,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 370,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 371,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 372,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 373,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 374,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 375,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 376,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 377,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 378,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 379,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 380,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 381,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 382,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 383,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 384,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 385,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 386,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 387,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 388,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 389,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 390,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 391,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 392,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 393,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 394,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 395,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 396,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 397,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 398,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 399,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 400,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 401,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 402,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 403,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 404,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 405,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 406,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-c#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 407,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 408,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 409,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 410,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 411,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 412,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 413,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 414,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 415,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 416,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 417,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 418,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 419,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 420,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 421,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 422,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 423,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 424,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 425,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 426,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 427,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 428,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 429,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 430,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 431,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 432,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 433,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 434,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 435,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 436,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 437,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 438,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 439,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 440,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 441,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 442,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 443,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 444,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 445,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 446,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 447,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 448,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 449,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 450,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 451,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 452,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 453,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 454,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "lot_coverage_max_pct",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 455,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 456,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 457,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 458,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "mass_envelope_depth_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 459,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 460,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 461,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 462,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 463,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 464,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 465,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 466,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 467,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 468,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 469,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 470,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 471,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 472,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 473,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  },
+  {
+   "fragment_id": 474,
+   "chunk_id": "lamc_chapter1#lamc-12-08-c-5-d#1",
+   "parameter": "encroachment_plane_origin_ft",
+   "recommendation": "approve",
+   "note": "Table cell read by position; zone, row and value confirmed by the second model.",
+   "checks": {
+    "source_text": "agree",
+    "second_model": "agree",
+    "deterministic": "quote_in_chunk_and_number_in_quote"
+   }
+  }
+ ]
+}
