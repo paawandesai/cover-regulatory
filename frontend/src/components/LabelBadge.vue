@@ -38,7 +38,8 @@ defineProps<{ label: Label; text?: string }>()
   border-color: var(--danger);
 }
 .withheld,
-.approximate {
+.approximate,
+.flag {
   color: var(--ink-muted);
   border-color: var(--line-strong);
   border-style: dashed;

@@ -1,6 +1,6 @@
 // Shapes returned by the FastAPI backend (backend/app/api/main.py, backend/app/engine/assess.py).
 
-export type Label = 'verified' | 'derived' | 'interpretive' | 'uncited' | 'withheld' | 'approximate' | 'mock'
+export type Label = 'verified' | 'derived' | 'interpretive' | 'uncited' | 'withheld' | 'approximate' | 'flag' | 'mock'
 
 export interface Citation {
   fragment_id: number | null

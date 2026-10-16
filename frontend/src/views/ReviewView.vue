@@ -160,7 +160,10 @@ async function act(decision: 'approved' | 'rejected') {
     <main class="page">
       <form v-if="!signedIn" class="card signin" @submit.prevent="signIn">
         <h1>Sign in to review rules</h1>
-        <p class="small muted">Rule candidates are used in assessments only after a reviewer approves them here.</p>
+        <p class="small muted">
+          Rule candidates are used in assessments only after a review approves them. In this demo the decisions were made by an AI review
+          (three-way check) and are recorded as such.
+        </p>
         <label for="u" class="small">Username</label>
         <input id="u" v-model="user" class="field" autocomplete="username" required />
         <label for="p" class="small">Password</label>

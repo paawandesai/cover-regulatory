@@ -56,7 +56,7 @@ const REVIEW: Record<string, string> = {
 
 const coverage = computed(() => {
   const c = props.item.coverage
-  if (c == null) return 'n/a'
+  if (c == null) return null
   return c >= 1 ? 'All found' : `${Math.round(c * 100)}% found`
 })
 </script>
@@ -64,7 +64,7 @@ const coverage = computed(() => {
 <template>
   <aside aria-label="Source text" class="card panel">
     <span class="eyebrow">Source text</span>
-    <h2>{{ item.title }}</h2>
+    <h2 aria-live="polite">{{ item.title }}</h2>
     <div class="meta">
       <span class="value">{{ formatValue(item) }}</span>
       <span class="mono small">{{ citeLabel(item) }}</span>
@@ -72,7 +72,7 @@ const coverage = computed(() => {
     </div>
     <p v-if="item.explanation" class="small muted">{{ item.explanation }}</p>
 
-    <template v-if="(item.label === 'verified' || item.label === 'approximate') && item.source">
+    <template v-if="item.source && !current">
       <p class="small">
         From the
         <span class="mono">{{ item.source.dataset ?? 'derived' }}</span>
@@ -123,7 +123,7 @@ const coverage = computed(() => {
             }}
           </dd>
         </div>
-        <div>
+        <div v-if="coverage">
           <dt>Inputs found</dt>
           <dd>{{ coverage }}</dd>
         </div>
@@ -133,7 +133,7 @@ const coverage = computed(() => {
       >
     </template>
 
-    <p v-else class="small muted">No regulation text supports this value.</p>
+    <p v-else-if="!item.source" class="small muted">No regulation text supports this value.</p>
 
     <FeedbackForm :apn="apn" :item-id="item.id" />
   </aside>

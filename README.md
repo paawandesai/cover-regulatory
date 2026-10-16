@@ -11,14 +11,15 @@ Enter an APN or a street address. The engine:
 
 1. **Finds the parcel and stops early when it must.** Outside the City, under Chapter 1A, or not an R1-family zone each gets an explicit result instead of wrong rules.
 2. **Reports the R1 envelope:** front, side and rear yards, maximum residential floor area, height, and whether the lot meets the R1 minimums.
-3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU, a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more).
-4. **Flags what it does not apply:** Hillside Area, Coastal Zone, Very High Fire Hazard Severity Zone, the January 2025 fire rebuild orders, overlay plans, zone conditions and SB 9. Where a flag means the flat-land rule is wrong (Hillside, Coastal Zone floor area), the value is withheld, not shown.
+3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU (at least 850 sq ft, which state law says can't be refused), a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more).
+4. **Flags what it does not apply:** Hillside Area, Coastal Zone, Very High Fire Hazard Severity Zone, the January 2025 fire rebuild orders, overlay plans, zone conditions and SB 9. Where a flag means the flat-land rule is wrong (Hillside Area; Coastal Zone floor area and height; R1 variation zones; Height District 1-SS), the value is withheld, not shown. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
 5. **Labels every value** with how it was established:
    - **Verified parcel data:** read from a named dataset with its fetch date.
-   - **Derived from rule:** computed from regulation text that a review approved (in this demo, an AI review; see Known constraints). Flags and lot dimensions computed from geometry are also Derived.
-   - **Interpretation, confirm with City:** computed from text that an AI read but no review has approved yet (it shows how many of the rule's inputs were found), or a standard R1 value on an R1 variation or conditioned zone the engine does not model.
-   - **Not modeled here:** a flag makes the flat-land rule wrong (Hillside Area, Coastal Zone floor area). No number is shown.
-   - **Approximate (imagery):** machine-learned building outlines. Shown for context, never used in a rule.
+   - **Derived from rule:** computed from regulation text that a review approved (in this demo, an AI review; see Known constraints).
+   - **Interpretation, confirm with City:** computed from text that an AI read but no review has approved yet (it shows how many of the rule's inputs were found), or a standard R1 value where something not modeled may change it: a conditioned zone, a specific plan or HPOZ, a through lot, a front taken on the long side, or the City ADU on a Hillside lot in a Very High Fire Hazard Severity Zone.
+   - **Not modeled here:** a flag makes the flat-land rule wrong (see item 4). No number is shown.
+   - **Approximate:** machine-learned building outlines, and lot width and depth fitted to the parcel outline. Shown for context; not survey-grade.
+   - **Flag, not evaluated:** a condition detected from a map layer or the zone string (with the layer's fetch date), or a law that may apply (SB 9). The engine does not evaluate it.
    - **No cited source:** an input is missing or the rule doesn't apply. No number is shown.
 6. **Shows the source.** Clicking any value opens the regulation text with the supporting quote highlighted, plus a link to the official source.
 7. **Draws the lot.** A diagram or map shows the lot and the buildable area left after yards. It is labeled illustrative, not survey-grade.
