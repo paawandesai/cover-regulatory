@@ -38,7 +38,8 @@ _SUBSECTION = re.compile(r"Subsection\s+([A-Z]{1,2})\b")
 _SUBDIVISION = re.compile(r"Subdivision\s+(\d+)")
 _PARAGRAPH = re.compile(r"Paragraph\s+\(([a-z]{1,2})\)", re.IGNORECASE)
 _SUBPARAGRAPH = re.compile(r"Subparagraph\s+\((\d+)\)")
-_LETTER_PARA = re.compile(r"^\s*\(([a-z])\)\s+", re.MULTILINE)
+# "(b) Text" or "(j)(1) Text": a subdivision may open straight into its first numbered paragraph.
+_LETTER_PARA = re.compile(r"^\s*\(([a-z])\)(?:\s+|(?=\(\d))", re.MULTILINE)
 _ROMAN_HEADING = re.compile(r"^\s*([IVX]{1,5})\.\s+(\S.*)$", re.MULTILINE)
 # FAQ documents: "Q11. Can I build an Accessory Dwelling Unit ...?"
 FAQ_HEADING = re.compile(r"^\s*(Q\d{1,3})\.\s+(\S.*)$", re.MULTILINE)

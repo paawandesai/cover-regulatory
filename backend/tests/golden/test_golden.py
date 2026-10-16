@@ -146,3 +146,17 @@ def test_sb9_lot_too_small_to_split():
         items = {i.id: i for i in sb9_items(conn, resolve("2121005008"), 2000, set())}
     assert items["sb9_lot_split"].value is False and items["sb9_lot_split"].label == "derived"
     assert items["sb9_two_unit"].value == 2
+
+
+def test_sb9_cites_the_65913_4_site_list():
+    """The SB 9 result cites Gov. Code 65913.4(a)(6), whose (D), (F) and (G) are the hazard layers checked."""
+    from app.engine.orders import sb9_items
+    from app.parcel.resolve import resolve
+
+    with connect() as conn:
+        items = {i.id: i for i in sb9_items(conn, resolve("2121005008"), 8100, set())}
+    for item_id in ("sb9_two_unit", "sb9_lot_split"):
+        cites = [c for c in items[item_id].citations if c["section_id"] == "Gov. Code 65913.4(a)"]
+        assert cites and cites[0]["quote"].startswith("(6) The development is not located on a site")
+        assert items[item_id].label == "interpretive"
+    assert "65913.4(a)(6)(D), (F) and (G)" in items["sb9_two_unit"].explanation

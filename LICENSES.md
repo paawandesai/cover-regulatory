@@ -131,7 +131,7 @@ table at load time. Summary:
 | Palisades Fire perimeter 2025 | LA County Public Works | County terms |
 | Building footprints (Global ML Building Footprints, tile 023012311) | Microsoft | ODbL 1.0, kept in a separate table and attributed (see Notes) |
 | Address geocoding fallback | US Census Geocoder | Public domain (US Government work); called at query time with the typed address only |
-| Regulation text (LAMC Chapter I, City ordinances and ZA memos, Gov. Code) | City Clerk, City Planning, State of California | Enacted law and public records. LAMC and Gov. Code pages were saved by hand, not crawled; the files stay out of git (`data/manual/`) |
+| Regulation text (LAMC Chapter I, City ordinances and ZA memos, Gov. Code) | City Clerk, City Planning, State of California | Enacted law and public records. LAMC and Gov. Code pages were saved by hand, not crawled; Gov. Code 65913.4 is a FindLaw page printed by the project owner. The files stay out of git (`data/manual/`) |
 
 ## Frontend runtime dependencies (npm)
 

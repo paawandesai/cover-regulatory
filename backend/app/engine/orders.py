@@ -40,7 +40,12 @@ def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[Item]:
             "occupied in the last 3 years"
         ),
         "no units withdrawn from rent under the Ellis Act in the last 15 years",
-        "the site exclusions of Gov. Code 65913.4(a)(6)(B)-(K) as of 2021-09-16 (that section is not loaded)",
+        (
+            "the Gov. Code 65913.4(a)(6) sites not mapped here: farmland (B), wetlands (C), listed hazardous waste "
+            "sites (E), a regulatory floodway (H), natural community conservation plan lands (I), protected species "
+            "habitat (J) and conservation easements (K). SB 9 uses that section as it read on 2021-09-16; the copy "
+            "loaded here is the 2026 text, whose (B)-(K) list the same kinds of site"
+        ),
     ]
     hazards = [
         name
@@ -52,10 +57,15 @@ def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[Item]:
         if kind in kinds
     ]
     site = (
-        f" The loaded maps put this lot in {', '.join(hazards)}; 65913.4 excludes some hazard sites unless they meet "
-        "its conditions, so check those before relying on this."
+        f" The loaded maps put this lot in {', '.join(hazards)}; Gov. Code 65913.4(a)(6)(D), (F) and (G) exclude "
+        "those sites unless the stated fire, seismic or flood standards are met, so check those before relying on "
+        "this."
         if hazards
-        else " The loaded maps show no fire hazard zone, earthquake fault zone or 100-year flood plain here."
+        else " The loaded maps show no Very High fire hazard zone, earthquake fault zone or 100-year flood plain "
+        "here (Gov. Code 65913.4(a)(6)(D), (F) and (G))."
+    )
+    site_cites = chunk_citation(
+        conn, "Gov. Code 65913.4(a)", "(6) The development is not located on a site that is any of the following"
     )
     if "hpoz" in kinds:
         confirm.insert(0, "whether the home is a contributing structure in the HPOZ (excluded if it is)")
@@ -76,6 +86,7 @@ def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[Item]:
         + site
         + _confirm(confirm),
     )
+    two.citations += site_cites
     two.label, two.coverage = "interpretive", 1.0  # eligibility rests on facts the loaded data cannot show
     out.append(two)
 
@@ -102,6 +113,7 @@ def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[Item]:
         split = rule_item("sb9_lot_split", "sb9", "SB 9 lot split", split_inputs, possible, None, why)
         split.citations += chunk_citation(conn, "Gov. Code 66411.7(j)", "more than two units")
         if possible:
+            split.citations += site_cites
             split.label, split.coverage = "interpretive", 1.0
         out.append(split)
     return out
