@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import type { Assessment, Chunk, Fragment } from './types'
+import type { Assessment, Chunk, Fragment, ProjectInputs } from './types'
 
 export class ApiError extends Error {
   constructor(
@@ -17,7 +17,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, { ...init, headers: { Accept: 'application/json', ...init?.headers } })
   if (!res.ok) {
     if (res.status === 401 && res.headers.get('content-type')?.includes('json')) {
-      const body = await res.clone().json().catch(() => null)
+      const body = await res
+        .clone()
+        .json()
+        .catch(() => null)
       if (body?.detail === 'invite_required') invite.needed = true
     }
     let detail = res.statusText
@@ -32,7 +35,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>
 }
 
-export const assess = (q: string) => request<Assessment>(`/api/assess?q=${encodeURIComponent(q)}`)
+export const assess = (q: string, project: Partial<ProjectInputs> = {}) => {
+  const params = new URLSearchParams({ q })
+  for (const [k, v] of Object.entries(project)) if (v !== undefined && v !== null) params.set(k, String(v))
+  return request<Assessment>(`/api/assess?${params}`)
+}
 
 export const chunk = (id: string) => request<Chunk>(`/api/chunks/${encodeURIComponent(id)}`)
 
@@ -79,3 +86,25 @@ export async function submitInvite(code: string) {
   })
   invite.needed = false
 }
+
+export interface FeedbackRow {
+  id: number
+  created_at: string
+  apn: string | null
+  item_id: string | null
+  kind: string
+  comment: string | null
+  status: 'new' | 'reviewed' | 'dismissed'
+  reviewed_by: string | null
+  reviewed_at: string | null
+}
+
+export const feedbackList = (status: FeedbackRow['status']) =>
+  request<FeedbackRow[]>(`/api/admin/feedback?status=${status}`, { headers: auth() })
+
+export const decideFeedback = (id: number, status: 'reviewed' | 'dismissed') =>
+  request<{ id: number; status: string }>(`/api/admin/feedback/${id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...auth() },
+    body: JSON.stringify({ status }),
+  })

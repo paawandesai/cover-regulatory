@@ -1,7 +1,7 @@
 # Retrieval results
 
 Measured 2026-10-15 on this machine (4 CPU cores, no GPU), 32 questions in `questions.yaml`, corpus of
-2,804 chunks. Run with `uv run python -m app.search.evaluate --k 5 --mode <mode>` from `backend/`.
+2,817 chunks. Run with `uv run python -m app.search.evaluate --k 5 --mode <mode>` from `backend/`.
 Latency is per query, end to end in Python (embedding the query plus the database queries), after one
 warm-up query loads the model.
 
@@ -13,6 +13,9 @@ warm-up query loads the model.
 | Fused, full-text weight 0.5 | 0.750 | 0.567 | | |
 | Fused, full-text weight 0.3 | 0.781 | 0.588 | | |
 | **Default** (full-text weight 0) at k=10 | 0.812 (recall@10) | 0.636 | 51 | 91 |
+
+A re-run of the default mode on 2026-10-16 gave the same recall@5 and MRR, with p50 52 ms and p95 114 ms (the README
+quotes this run).
 
 What this does and does not show:
 - The question set is small and was written by the same author (Claude Code) who wrote the search code, and

@@ -71,6 +71,7 @@ RULES: dict[str, list[Need]] = {
         Need("narrow_pct", "LAMC 12.08 C.2", "side_yard_pct_lot_width", "less than 50 feet"),
         Need("narrow_min_ft", "LAMC 12.08 C.2", "side_yard_min_ft", "less than 50 feet"),
         Need("per_story_ft", "LAMC 12.08 C.2", "side_yard_extra_per_story_ft", "more than two stories"),
+        Need("per_10ft_over_18_ft", "LAMC 12.08 C.2", "other", "above the first 18 feet"),
     ],
     "R1_REAR_YARD": [Need("min_ft", "LAMC 12.08 C.3", "rear_yard_min_ft")],
     "R1_LOT_MINIMUMS": [

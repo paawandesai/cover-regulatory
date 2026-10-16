@@ -5,10 +5,12 @@ import { ApiError, assess } from '../api'
 import AppHeader from '../components/AppHeader.vue'
 import LabelBadge from '../components/LabelBadge.vue'
 import LotDiagram from '../components/LotDiagram.vue'
+import ProjectForm from '../components/ProjectForm.vue'
+import SummaryCard from '../components/SummaryCard.vue'
 import SourcePanel from '../components/SourcePanel.vue'
 import StopState from '../components/StopState.vue'
 import { citeLabel, formatApn, formatDate, formatExisting, formatValue } from '../format'
-import type { Assessment, Item, Label } from '../types'
+import type { Assessment, Item, Label, ProjectInputs } from '../types'
 
 // MapLibre is large; load it only when the map view is opened.
 const LotMap = defineAsyncComponent(() => import('../components/LotMap.vue'))
@@ -32,14 +34,34 @@ async function pick(id: string) {
   }
 }
 
+const PROJECT_KEYS = ['height_ft', 'floor_area_sqft', 'second_unit', 'second_unit_sqft', 'second_unit_bedrooms'] as const
+
+// Project inputs live in the URL so a checked scenario can be shared or reloaded.
+const project = computed<Partial<ProjectInputs>>(() => {
+  const out: Record<string, string | number> = {}
+  for (const k of PROJECT_KEYS) {
+    const v = route.query[k]
+    if (typeof v === 'string' && v) out[k] = k === 'second_unit' ? v : Number(v)
+  }
+  return out as Partial<ProjectInputs>
+})
+
+function applyProject(p: Partial<ProjectInputs>) {
+  const query: Record<string, string> = { q: String(route.query.q ?? '') }
+  for (const [k, v] of Object.entries(p)) if (v !== undefined) query[k] = String(v)
+  router.push({ query })
+}
+
 async function load(q: string) {
   loading.value = true
   error.value = null
+  const keepPick = result.value?.parcel && pickedId.value
   try {
-    const r = await assess(q)
+    const r = await assess(q, project.value)
     result.value = r
+    document.title = `APN ${formatApn(r.parcel.apn)} · Regulatory Engine`
     const first = r.items.find((i) => i.citations.length && i.family !== 'parcel') ?? r.items[0]
-    pickedId.value = first?.id ?? null
+    if (!keepPick || ![...r.items, ...r.parcel.items].some((i) => i.id === keepPick)) pickedId.value = first?.id ?? null
   } catch (e) {
     result.value = null
     error.value = e instanceof ApiError ? { status: e.status, message: e.message } : { status: 0, message: String(e) }
@@ -49,8 +71,9 @@ async function load(q: string) {
 }
 
 watch(
-  () => route.query.q,
-  (q) => {
+  () => JSON.stringify(route.query),
+  () => {
+    const q = route.query.q
     if (typeof q === 'string' && q.trim().length >= 3) {
       input.value = q
       load(q)
@@ -80,7 +103,7 @@ const facts = computed(() => {
   const add = (it: Item | undefined, k: string, v?: string, text?: string, badge?: Label) =>
     it && rows.push({ k, v: v ?? formatValue(it), item: it, text, badge })
   add(parcelItem('lot_area'), 'Lot area')
-  add(dims.value, 'Lot width x depth', undefined, 'Derived (parcel shape)')
+  add(dims.value, 'Lot width x depth', undefined, 'Approximate (parcel shape)')
   add(parcelItem('community_plan_area'), 'Community plan area')
   const regime = parcelItem('code_regime')
   add(regime, 'Zoning code in effect', regime?.value === 'I' ? 'Chapter I' : regime?.value === '1A' ? 'Chapter 1A' : undefined)
@@ -99,7 +122,11 @@ const groups = computed(() => {
   return [
     {
       title: 'R1 envelope',
-      sub: isHillside.value ? 'Hillside Area: flat-land values withheld' : 'Flat-land R1, two stories or less',
+      sub: isHillside.value
+        ? 'Hillside Area: flat-land values withheld'
+        : r.items.some((i) => i.family === 'r1_envelope' && i.label === 'withheld')
+          ? 'Some values withheld for this lot'
+          : 'Flat-land R1',
       rows: of(['r1_envelope']),
     },
     {
@@ -119,6 +146,17 @@ const picked = computed(() => {
 })
 
 const parcelFetched = computed(() => formatDate(parcelItem('lot_area')?.source?.fetched_at))
+const zoningFetched = computed(() => formatDate(parcelItem('zone')?.source?.fetched_at))
+
+const notFoundBody = computed(() => {
+  const q = String(route.query.q ?? '').replace(/[\s-]/g, '')
+  const where = 'Only four study areas are loaded (Reseda, Boyle Heights, Pacific Palisades and a Westside strip by Beverly Hills).'
+  return /^\d+$/.test(q)
+    ? q.length === 10
+      ? `No parcel with that APN is loaded. ${where}`
+      : `An APN has 10 digits; that has ${q.length}. ${where}`
+    : `That address isn't in the loaded parcel data. ${where} Inside them, an address or the 10-digit APN works.`
+})
 
 const stop = computed(() => {
   const r = result.value
@@ -178,8 +216,8 @@ const stop = computed(() => {
       <StopState
         v-if="error?.status === 404"
         eyebrow="Search"
-        title="Address not found"
-        body="That address isn't in the loaded parcel data. Try the 10-digit APN instead."
+        title="Parcel not found"
+        :body="notFoundBody"
         detail="Lookup order: APN, County address points, County parcel situs, then the US Census geocoder."
       />
       <StopState
@@ -194,89 +232,96 @@ const stop = computed(() => {
         <p v-for="d in result.disclaimers" :key="d" class="small muted stop-note">{{ d }}</p>
       </template>
 
-      <div v-else-if="result" class="cols">
-        <section aria-label="Parcel" class="left">
-          <div class="card parcel">
-            <div class="apn">
-              <span class="eyebrow">APN</span>
-              <span class="mono small">{{ formatApn(result.parcel.apn) }}</span>
-            </div>
-            <h1>{{ zone ? `${zone} one-family lot` : 'Parcel' }}</h1>
-            <button
-              v-for="f in facts"
-              :key="f.k"
-              type="button"
-              class="fact"
-              :class="{ on: pickedId === f.item.id }"
-              @click="pick(f.item.id)"
-            >
-              <span class="fk">
-                <span class="small muted">{{ f.k }}</span>
-                <span class="strong">{{ f.v }}</span>
-              </span>
-              <LabelBadge :label="f.badge ?? f.item.label" :text="f.text" />
-            </button>
-          </div>
-
-          <figure v-if="result.geometry" class="card fig">
-            <div class="toggle" role="group" aria-label="Lot view">
-              <button type="button" :aria-pressed="view === 'diagram'" :class="{ on: view === 'diagram' }" @click="view = 'diagram'">
-                Diagram
-              </button>
-              <button type="button" :aria-pressed="view === 'map'" :class="{ on: view === 'map' }" @click="view = 'map'">Map</button>
-            </div>
-            <LotDiagram v-if="view === 'diagram'" :geometry="result.geometry" :dims="(dims?.value as string) ?? null" />
-            <LotMap v-else :apn="result.parcel.apn" :geometry="result.geometry" />
-            <figcaption class="small muted">
-              Illustrative, not survey-grade. Front taken as the street-facing side.
-              <template v-if="result.geometry.note"> {{ result.geometry.note[0].toUpperCase() + result.geometry.note.slice(1) }}.</template>
-              <template v-if="view === 'map'"> Neighbouring parcel outlines from LA County Assessor data; no basemap.</template>
-              <template v-if="result.geometry.buildings?.length">
-                Grey shapes are existing buildings, traced from imagery by machine learning (Microsoft, ODbL); approximate.</template
+      <template v-else-if="result">
+        <div v-if="fire" class="card alert fire" role="note">
+          <strong>{{ fire.title }}</strong>
+          <p class="small">{{ fire.explanation }}</p>
+        </div>
+        <div class="cols">
+          <section aria-label="Parcel" class="left">
+            <div class="card parcel">
+              <div class="apn">
+                <span class="eyebrow">APN</span>
+                <span class="mono small">{{ formatApn(result.parcel.apn) }}</span>
+              </div>
+              <h1>{{ zone ? `${zone} one-family lot` : 'Parcel' }}</h1>
+              <button
+                v-for="f in facts"
+                :key="f.k"
+                type="button"
+                class="fact"
+                :class="{ on: pickedId === f.item.id }"
+                @click="pick(f.item.id)"
               >
-            </figcaption>
-          </figure>
-
-          <p class="small muted">
-            Parcel data: LA County Assessor open parcels, fetched
-            {{ parcelFetched }}. Informational only; not suitable for legal, engineering or surveying use.
-          </p>
-        </section>
-
-        <section aria-label="Assessment" class="mid">
-          <div v-if="fire" class="card alert" role="note">
-            <strong>{{ fire.title }}</strong>
-            <p class="small">{{ fire.explanation }}</p>
-          </div>
-          <div v-for="n in result.notes" :key="n" class="card note small">
-            {{ n }}
-          </div>
-
-          <div v-for="g in groups" :key="g.title" class="card">
-            <div class="ghead">
-              <h2>{{ g.title }}</h2>
-              <span class="small muted">{{ g.sub }}</span>
+                <span class="fk">
+                  <span class="small muted">{{ f.k }}</span>
+                  <span class="strong">{{ f.v }}</span>
+                </span>
+                <LabelBadge :label="f.badge ?? f.item.label" :text="f.text" />
+              </button>
             </div>
-            <button
-              v-for="r in g.rows"
-              :key="r.id"
-              type="button"
-              class="row"
-              :class="{ on: pickedId === r.id }"
-              :aria-pressed="pickedId === r.id"
-              @click="pick(r.id)"
-            >
-              <span class="rt">{{ r.title }}</span>
-              <span class="rv">{{ formatValue(r) }}</span>
-              <span class="rc mono small muted">{{ citeLabel(r) }}</span>
-              <LabelBadge :label="r.label" />
-            </button>
-          </div>
-          <p class="small muted">{{ result.ai_disclosure }}</p>
-        </section>
 
-        <SourcePanel v-if="picked" ref="panel" class="right" :item="picked" :apn="result.parcel.apn" />
-      </div>
+            <figure v-if="result.geometry" class="card fig">
+              <div class="toggle" role="group" aria-label="Lot view">
+                <button type="button" :aria-pressed="view === 'diagram'" :class="{ on: view === 'diagram' }" @click="view = 'diagram'">
+                  Diagram
+                </button>
+                <button type="button" :aria-pressed="view === 'map'" :class="{ on: view === 'map' }" @click="view = 'map'">Map</button>
+              </div>
+              <LotDiagram v-if="view === 'diagram'" :geometry="result.geometry" :dims="(dims?.value as string) ?? null" />
+              <LotMap v-else :apn="result.parcel.apn" :geometry="result.geometry" />
+              <figcaption class="small muted">
+                Illustrative, not survey-grade. Front taken as the street-facing side.
+                <template v-if="result.geometry.note">
+                  {{ result.geometry.note[0].toUpperCase() + result.geometry.note.slice(1) }}.</template
+                >
+                <template v-if="view === 'map'"> Neighbouring parcel outlines from LA County Assessor data; no basemap.</template>
+                <template v-if="result.geometry.buildings?.length">
+                  Grey shapes are existing buildings, traced from imagery by machine learning (Microsoft, ODbL); approximate.</template
+                >
+              </figcaption>
+            </figure>
+
+            <p class="small muted">
+              Parcel data: LA County Assessor open parcels, fetched
+              {{ parcelFetched }}. Zoning: City of LA zoning layer, fetched {{ zoningFetched }}. Informational only; not suitable for legal,
+              engineering or surveying use.
+            </p>
+          </section>
+
+          <section aria-label="Assessment" class="mid">
+            <SummaryCard v-if="result.summary" :summary="result.summary" />
+            <ProjectForm :inputs="project" :checks="result.project?.checks ?? []" @apply="applyProject" @pick="pick" />
+            <div v-for="n in result.notes" :key="n" class="card note small">
+              {{ n }}
+            </div>
+
+            <div v-for="g in groups" :key="g.title" class="card">
+              <div class="ghead">
+                <h2>{{ g.title }}</h2>
+                <span class="small muted">{{ g.sub }}</span>
+              </div>
+              <button
+                v-for="r in g.rows"
+                :key="r.id"
+                type="button"
+                class="row"
+                :class="{ on: pickedId === r.id }"
+                :aria-pressed="pickedId === r.id"
+                @click="pick(r.id)"
+              >
+                <span class="rt">{{ r.title }}</span>
+                <span class="rv">{{ formatValue(r) }}</span>
+                <span class="rc mono small muted">{{ citeLabel(r) }}</span>
+                <LabelBadge :label="r.label" />
+              </button>
+            </div>
+            <p class="small muted">{{ result.ai_disclosure }}</p>
+          </section>
+
+          <SourcePanel v-if="picked" ref="panel" class="right" :item="picked" :apn="result.parcel.apn" />
+        </div>
+      </template>
 
       <section v-else-if="!loading" class="card intro">
         <h1>Check what can be built on a City of LA R1 lot</h1>
@@ -483,6 +528,9 @@ h2 {
   padding: 12px 16px;
   border-color: var(--accent);
   border-left-width: 4px;
+}
+.fire {
+  margin-bottom: 24px;
 }
 .alert p {
   margin: 4px 0 0;

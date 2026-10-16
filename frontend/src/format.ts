@@ -6,7 +6,8 @@ export const LABEL_TEXT: Record<Label, string> = {
   interpretive: 'Interpretation, confirm with City',
   uncited: 'No cited source',
   withheld: 'Not modeled here',
-  approximate: 'Approximate (imagery)',
+  approximate: 'Approximate',
+  flag: 'Flag, not evaluated',
   mock: 'MOCK data',
 }
 
@@ -23,6 +24,7 @@ const BOOLEAN_TEXT: Record<string, [string, string]> = {
 export function formatValue(item: Item): string {
   const v = item.value
   if (v === null || v === undefined) return 'Not determined'
+  if (item.id === 'existing') return formatExisting(v)
   if (typeof v === 'boolean') {
     if (item.family === 'flag') return v ? 'May apply' : 'Does not apply'
     const [yes, no] = BOOLEAN_TEXT[item.id] ?? ['Yes', 'No']
@@ -58,6 +60,6 @@ export const formatDate = (iso: string | null | undefined) => (iso ? iso.slice(0
 /** "LAMC 12.08 C.1" for the first citation, plus a count when there are several distinct sections. */
 export function citeLabel(item: Item): string {
   const sections = [...new Set(item.citations.map((c) => c.section_id))]
-  if (!sections.length) return item.label === 'verified' || item.label === 'approximate' ? 'Parcel data' : ''
+  if (!sections.length) return item.source?.dataset ? 'Map data' : ''
   return sections.length > 1 ? `${sections[0]} +${sections.length - 1}` : sections[0]
 }

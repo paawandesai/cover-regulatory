@@ -74,10 +74,11 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Label | Meaning |
 |---|---|
 | Verified parcel data | Read straight from a named dataset, with its fetch date. |
-| Approximate (imagery) | Machine-learned building outlines (Microsoft, ODbL). Shown, never used in a rule. |
-| Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. Flags and lot dimensions are also Derived when code computes them from geometry or a cited section, with no fragment involved. In the hosted demo the reviewer is an AI review applied on the owner's instruction (`reviewed_by = 'ai-review'`), and the source panel says so. |
-| Interpretation, confirm with City | Same computation, but at least one input fragment is still pending review (shows the share of inputs found), or a standard R1 value shown on an R1 variation or conditioned zone that is not modeled. |
-| Not modeled here | A flag (Hillside Area, Coastal Zone floor area) makes the flat-land rule wrong, so no value is shown. |
+| Approximate | Machine-learned building outlines (Microsoft, ODbL), and lot width and depth fitted to the parcel outline. Shown, not survey-grade. |
+| Flag, not evaluated | A condition detected from a map layer (with its dataset and fetch date) or the zone string, or a law that may apply. Not evaluated. |
+| Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. In the hosted demo the reviewer is an AI review applied on the owner's instruction (`reviewed_by = 'ai-review'`), and the source panel says so. |
+| Interpretation, confirm with City | Same computation, but at least one input fragment is still pending review (shows the share of inputs found), or a standard R1 value where something not modeled may change it (conditioned zone, specific plan or HPOZ, through lot, front taken on the long side, City ADU on a Hillside lot in a VHFHSZ). |
+| Not modeled here | A flag (Hillside Area; Coastal Zone floor area and height; R1 variation zone; Height District 1-SS) makes the flat-land rule wrong, so no value is shown. |
 | No cited source | An input is missing or ambiguous. No number is shown. |
 
 The model never sets a label. Labels come from review status and the deterministic checks.
@@ -89,6 +90,22 @@ The model never sets a label. Labels come from review status and the determinist
 - Feedback goes into a queue. It never edits rules, prompts or retrieval, and it is deleted after `FEEDBACK_RETENTION_DAYS` (1 day on the hosted demo).
 - No access logs with query strings, plus `noindex` headers. Admin credentials are held in browser memory only.
 - Secrets never enter the repo. A gitleaks scan runs in pre-commit and CI.
+
+## Adding a jurisdiction
+
+The pipeline is organised by jurisdiction, but only LA City Chapter I is built, and these parts are LA-specific:
+
+| Part | Where | What a new jurisdiction needs |
+|---|---|---|
+| Boundary and code regime | `backend/app/parcel/resolve.py`, `boundary` and `code_regime_area` tables | Its boundary layer and a map from areas to the code in force there |
+| Parcel and zoning layers | `backend/app/ingest/sources.yaml`, `study_areas.yaml` | Its parcel, zoning and overlay layers, with licenses |
+| Zone parser | `backend/app/parcel/zone.py` | Its zone-string grammar (base zone, height district, qualifiers, suffixes) |
+| Regulation text | `backend/app/ingest/regtext/` | A chunker for its code's section numbering, and sources allowed to be fetched or saved by hand |
+| Rule definitions | `backend/app/engine/rules.py` | The parameters each rule needs, keyed by that code's section ids |
+| Rule assembly | `backend/app/engine/assess.py` | Which rules apply to which zones, overlays that withhold or downgrade values, and the stop states |
+| Golden cases | `backend/tests/golden/cases.yaml` | Parcels with expected values worked out from that code |
+
+State ADU law (Gov. Code 66310-66342) and the geometry, labels, citations and review flow carry over unchanged to any California city.
 
 ## Scaling beyond the PoC
 

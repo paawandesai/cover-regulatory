@@ -194,3 +194,57 @@ def test_existing_buildings_are_returned_with_attribution(client):
     assert len(r["geometry"]["buildings"]) == 1
     vacant = client.get("/api/assess?q=2121005008").json()
     assert next(i for i in vacant["items"] if i["id"] == "existing_footprint")["value"] == "None found"
+
+
+def test_address_lookup_finds_the_parcel(client):
+    # The address is read from the loaded parcel roll, so no street address is committed to the repo.
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT situs_house_no, situs_direction, situs_street FROM parcel WHERE apn = '2104024009'"
+        ).fetchone()
+    if not row or not row["situs_house_no"]:
+        pytest.skip("situs not loaded")
+    address = " ".join(str(v) for v in (row["situs_house_no"], row["situs_direction"], row["situs_street"]) if v)
+    r = client.get("/api/assess", params={"q": address})
+    assert r.status_code == 200
+    assert r.json()["parcel"]["apn"] == "2104024009"
+
+
+def test_unknown_apn_is_not_found(client):
+    assert client.get("/api/assess?q=9999999999").status_code == 404
+
+
+def test_project_inputs_change_checks_and_side_yard(client):
+    plain = client.get("/api/assess?q=2121005008").json()
+    assert plain["project"] is None and plain["summary"]["answer"]
+    r = client.get(
+        "/api/assess",
+        params={
+            "q": "2121005008",
+            "height_ft": 24,
+            "floor_area_sqft": 4000,
+            "second_unit": "detached",
+            "second_unit_sqft": 700,
+        },
+    ).json()
+    checks = {c["id"]: c["status"] for c in r["project"]["checks"]}
+    assert checks == {"height": "fits", "side_yard": "fits", "floor_area": "exceeds", "adu_detached": "fits"}
+    side = next(i for i in r["items"] if i["id"] == "side_yard")
+    assert side["value"] == 6.0  # 5 ft + 1 ft for 24 ft (one 10 ft increment above 18 ft)
+    assert r["geometry"]["yards_ft"]["side"] == 6.0
+    assert client.get("/api/assess", params={"q": "2121005008", "second_unit": "garage"}).status_code == 422
+
+
+def test_feedback_can_be_marked_reviewed_without_touching_rules(client):
+    before = client.get("/api/admin/fragments?status=approved", headers=auth()).json()
+    fid = client.post("/api/feedback", json={"apn": "2121005008", "item_id": "side_yard", "kind": "other"}).json()["id"]
+    assert any(f["id"] == fid for f in client.get("/api/admin/feedback", headers=auth()).json())
+    assert client.post(f"/api/admin/feedback/{fid}", json={"status": "reviewed"}).status_code == 401
+    r = client.post(f"/api/admin/feedback/{fid}", json={"status": "reviewed"}, headers=auth())
+    assert r.json()["status"] == "reviewed"
+    done = client.get("/api/admin/feedback?status=reviewed", headers=auth()).json()
+    assert next(f for f in done if f["id"] == fid)["reviewed_by"] == "reviewer"
+    assert client.get("/api/admin/fragments?status=approved", headers=auth()).json() == before
+    with connect() as conn:
+        conn.execute("DELETE FROM feedback WHERE id = %s", (fid,))
+        conn.commit()

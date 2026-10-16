@@ -7,7 +7,8 @@ Method (deterministic, parcel data only):
   1. Project the parcel to EPSG:2229 (California State Plane V, US feet).
   2. Fit the minimum rotated rectangle; its short side is the width, its long side the depth.
   3. A rectangle side faces a street when the gap from its midpoint to the next parcel outward is street-wide.
-     On a corner lot the shorter street-facing side is taken as the front. A side with no parcel in reach is
+     On a corner lot (streets on adjacent sides) the shorter street-facing side is taken as the front; with
+     streets on opposite sides it is a through lot, with a front yard at each street end. A side with no parcel in reach is
      "unknown" (edge of the loaded data), and with no street side at all the front is not inferred.
   4. The envelope is the parcel minus the front, side and rear yards, measured in the rectangle's frame.
 """
@@ -50,7 +51,8 @@ class LotFrame:
     street_sides: list[int]
     alley_sides: list[int]
     unknown_sides: list[int]
-    corner: bool
+    corner: bool  # street on two adjacent sides
+    through: bool  # street on two opposite sides
     angle_deg: float  # rotation that puts the front side along the x axis
     origin: tuple[float, float]
     front_mid: tuple[float, float] | None  # midpoint of the front side, EPSG:2229
@@ -101,9 +103,9 @@ def lot_frame(apn: str) -> LotFrame | None:
     # Width runs along the front, depth away from it, whichever rectangle side is longer.
     width, depth = lengths[front if front is not None else lengths.index(width)], None
     depth = lengths[(front + 1) % 4] if front is not None else max(lengths)
-    return LotFrame(
-        lot, width, depth, front, street, alley, unknown, len(street) >= 2, angle, (center.x, center.y), mid
-    )
+    through = any((i + 2) % 4 in street for i in street)
+    corner = any((i + 1) % 4 in street for i in street)
+    return LotFrame(lot, width, depth, front, street, alley, unknown, corner, through, angle, (center.x, center.y), mid)
 
 
 def envelope(frame: LotFrame, front_ft: float, side_ft: float, rear_ft: float) -> dict:

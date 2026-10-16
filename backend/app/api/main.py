@@ -153,12 +153,22 @@ def search_chunks(q: str = Query(min_length=2, max_length=300), k: int = Query(8
 
 
 @app.get("/api/assess")
-def assess_parcel(q: str = Query(min_length=3, max_length=200, description="APN or street address")):
+def assess_parcel(
+    q: str = Query(min_length=3, max_length=200, description="APN or street address"),
+    height_ft: float | None = Query(None, gt=0, le=100, description="Proposed house height"),
+    floor_area_sqft: float | None = Query(None, gt=0, le=100_000, description="Proposed residential floor area"),
+    second_unit: Literal["detached", "attached", "jadu", "guest_house"] | None = Query(None),
+    second_unit_sqft: float | None = Query(None, gt=0, le=10_000),
+    second_unit_bedrooms: int | None = Query(None, ge=0, le=10),
+):
+    """Project inputs are optional; they only change which limits are checked and the side yard's design height."""
     from app.engine.assess import assess
+    from app.engine.project import ProjectInputs
     from app.parcel.resolve import ParcelNotFound
 
+    project = ProjectInputs(height_ft, floor_area_sqft, second_unit, second_unit_sqft, second_unit_bedrooms)
     try:
-        return assess(q)
+        return assess(q, project)
     except ParcelNotFound as e:
         raise HTTPException(404, str(e)) from e
 
@@ -200,9 +210,30 @@ def feedback(body: FeedbackIn):
 
 
 @app.get("/api/admin/feedback")
-def list_feedback(_admin: Annotated[str, Depends(require_admin)]):
+def list_feedback(
+    _admin: Annotated[str, Depends(require_admin)],
+    status: Literal["new", "reviewed", "dismissed"] = "new",
+):
     with connect() as conn:
-        return conn.execute("SELECT * FROM feedback WHERE status = 'new' ORDER BY id").fetchall()
+        return conn.execute("SELECT * FROM feedback WHERE status = %s ORDER BY id DESC LIMIT 500", (status,)).fetchall()
+
+
+class FeedbackDecision(BaseModel):
+    status: Literal["reviewed", "dismissed"]
+
+
+@app.post("/api/admin/feedback/{fid}")
+def decide_feedback(fid: int, body: FeedbackDecision, admin: Annotated[str, Depends(require_admin)]):
+    """Marks a note as handled. It never touches a rule: rules change only through a fragment review decision."""
+    with connect() as conn:
+        row = conn.execute(
+            "UPDATE feedback SET status = %s, reviewed_by = %s, reviewed_at = now() WHERE id = %s RETURNING id, status",
+            (body.status, admin, fid),
+        ).fetchone()
+        conn.commit()
+    if not row:
+        raise HTTPException(404, "feedback not found")
+    return row
 
 
 # --- admin review -----------------------------------------------------------------------------------------
