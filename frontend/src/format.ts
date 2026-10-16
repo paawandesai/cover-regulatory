@@ -6,6 +6,8 @@ export const LABEL_TEXT: Record<Label, string> = {
   interpretive: 'Interpretation, confirm with City',
   uncited: 'No cited source',
   withheld: 'Not modeled here',
+  approximate: 'Approximate (imagery)',
+  mock: 'MOCK data',
 }
 
 const num = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -56,6 +58,6 @@ export const formatDate = (iso: string | null | undefined) => (iso ? iso.slice(0
 /** "LAMC 12.08 C.1" for the first citation, plus a count when there are several distinct sections. */
 export function citeLabel(item: Item): string {
   const sections = [...new Set(item.citations.map((c) => c.section_id))]
-  if (!sections.length) return item.label === 'verified' ? 'Parcel data' : ''
+  if (!sections.length) return item.label === 'verified' || item.label === 'approximate' ? 'Parcel data' : ''
   return sections.length > 1 ? `${sections[0]} +${sections.length - 1}` : sections[0]
 }

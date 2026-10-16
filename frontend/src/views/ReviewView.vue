@@ -25,7 +25,7 @@ const VALIDATION: Record<string, string> = {
   stale_chunk: 'Source text changed',
 }
 
-// Advisory results of the three-way check (source text, a second model, official sources). Only a person decides.
+// Advisory results of the three-way check (source text, a second model, official sources). Only a review decision changes a status.
 const CHECK: Record<NonNullable<Fragment['check_recommendation']>, string> = {
   approve: 'Checks suggest approve',
   approve_with_note: 'Checks suggest approve, with a note',
@@ -195,7 +195,7 @@ async function act(decision: 'approved' | 'rejected') {
             </option>
           </select>
           <span class="spacer" />
-          <span class="small muted">Nothing is used in an assessment until it is approved here.</span>
+          <span class="small muted">Pending candidates show only as Interpretation; approval makes them Derived.</span>
         </div>
 
         <div class="cols">

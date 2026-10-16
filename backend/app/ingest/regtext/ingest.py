@@ -198,6 +198,7 @@ def ingest(doc: dict) -> dict | None:
                    ON CONFLICT (id) DO UPDATE SET section_id=EXCLUDED.section_id, heading=EXCLUDED.heading,
                        text=EXCLUDED.text, page_start=EXCLUDED.page_start, page_end=EXCLUDED.page_end,
                        retrieved_at=EXCLUDED.retrieved_at, effective_date=EXCLUDED.effective_date,
+                       code_chapter=EXCLUDED.code_chapter, source_url=EXCLUDED.source_url,
                        content_hash=EXCLUDED.content_hash, embedding=NULL""",
                 (
                     cid,

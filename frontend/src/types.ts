@@ -1,6 +1,6 @@
 // Shapes returned by the FastAPI backend (backend/app/api/main.py, backend/app/engine/assess.py).
 
-export type Label = 'verified' | 'derived' | 'interpretive' | 'uncited' | 'withheld'
+export type Label = 'verified' | 'derived' | 'interpretive' | 'uncited' | 'withheld' | 'approximate' | 'mock'
 
 export interface Citation {
   fragment_id: number | null
@@ -11,6 +11,7 @@ export interface Citation {
   quote_end: number | null
   review_status: 'pending' | 'approved' | 'code-cited' | string
   reviewed_by?: string | null
+  code_chapter?: string | null
   source_url: string | null
   retrieved_at: string | null
 }
@@ -26,7 +27,7 @@ export interface Item {
   coverage: number | null
   explanation: string | null
   citations: Citation[]
-  source: { dataset: string | null; fetched_at: string | null } | null
+  source: { dataset: string | null; fetched_at: string | null; attribution?: string | null } | null
   label_text: string
 }
 

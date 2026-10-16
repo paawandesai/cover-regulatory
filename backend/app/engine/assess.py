@@ -32,6 +32,7 @@ LABEL_TEXT = {
     "interpretive": "Interpretation, confirm with the jurisdiction",
     "uncited": "No cited source found",
     "withheld": "Not modeled here",
+    "approximate": "Approximate (imagery)",
     "mock": "MOCK data",
 }
 
@@ -53,6 +54,23 @@ class Item:
     @property
     def label_text(self) -> str:
         return LABEL_TEXT[self.label].format(rule=self.rule_id)
+
+
+def _overlay_source(ctx, kinds: tuple[str, ...]) -> dict:
+    rows = [o for o in ctx.overlays if o["kind"] in kinds]
+    dates = [o["fetched_at"] for o in rows if o.get("fetched_at")]
+    return {
+        "dataset": " / ".join(sorted({o["source_id"] for o in rows if o.get("source_id")})) or None,
+        "fetched_at": min(dates).isoformat() if dates else None,
+    }
+
+
+def _zone_source(ctx) -> dict:
+    z = ctx.zone_strings[0] if ctx.zone_strings else None
+    return {
+        "dataset": z.source_id if z else None,
+        "fetched_at": z.fetched_at.isoformat() if z and z.fetched_at else None,
+    }
 
 
 def _footprints(conn, apn: str) -> tuple[list[dict], Item]:
@@ -87,7 +105,7 @@ def _footprints(conn, apn: str) -> tuple[list[dict], Item]:
         "Existing buildings (outline)",
         value,
         None,
-        "verified",
+        "approximate",
         explanation="Approximate outlines traced from imagery by machine learning; they can miss, merge or "
         "misplace buildings and may predate recent demolition or construction. Not a survey.",
         source={
@@ -131,7 +149,7 @@ def _rule_item(item_id, family, title, ri: R.RuleInputs, value, unit, explanatio
 def _chunk_citation(conn, section_id: str, contains: str | None = None) -> list[dict]:
     """Cite a chunk by its section id (looked up in code, never emitted by a model)."""
     row = conn.execute(
-        """SELECT id, section_id, source_url, retrieved_at::text AS retrieved_at, left(text, 400) AS excerpt
+        """SELECT id, section_id, code_chapter, source_url, retrieved_at::text AS retrieved_at, left(text, 400) AS excerpt
            FROM reg_chunk WHERE section_id = %s AND (%s::text IS NULL OR text ILIKE '%%' || %s || '%%')
            ORDER BY id LIMIT 1""",
         (section_id, contains, contains),
@@ -142,6 +160,7 @@ def _chunk_citation(conn, section_id: str, contains: str | None = None) -> list[
         {
             "chunk_id": row["id"],
             "section_id": row["section_id"],
+            "code_chapter": row["code_chapter"],
             "quote": row["excerpt"],
             "source_url": row["source_url"],
             "retrieved_at": row["retrieved_at"],
@@ -424,7 +443,7 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 None,
                 "verified",
                 explanation="Its standards can override the zone's. Not modeled.",
-                source={"dataset": "lacity_specific_plans / lacity_hpoz"},
+                source=_overlay_source(ctx, ("specific_plan", "hpoz")),
             )
         )
     if ctx.zone and ctx.zone.unmodeled:
@@ -438,7 +457,7 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 "verified",
                 explanation="Q, T or D conditions and supplemental districts are parcel-specific ordinances. "
                 "Read them before relying on any value here.",
-                source={"dataset": "lacity_zoning"},
+                source=_zone_source(ctx),
             )
         )
     if ctx.split_zoned:
@@ -449,9 +468,10 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 "Parcel is split-zoned",
                 True,
                 None,
-                "verified",
-                explanation="The zone at the parcel's interior point was used.",
-                source={"dataset": "lacity_zoning"},
+                "derived",
+                explanation="Computed: more than 2% of the lot lies in another zone. The zone at the parcel's "
+                "interior point was used.",
+                source=_zone_source(ctx),
             )
         )
     out.append(
