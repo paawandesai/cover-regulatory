@@ -92,7 +92,7 @@ Measured 2026-10-15 on the development machine (4 CPU cores, no GPU, Postgres on
 | Full assessment (`assess`) over the 8 golden parcels | 80 | 135 ms | 205 ms |
 | Regulation search | 60 | 47 ms | 84 ms |
 
-**Test suites** (2026-10-16): backend 50 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the 29 backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally.
+**Test suites** (2026-10-16): backend 50 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the 29 backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
 
 ## AI disclosure
 This tool uses an LLM only at ingestion, to extract candidate rule fragments from regulatory text. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
