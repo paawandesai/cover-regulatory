@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from app.db.connection import connect
 from app.engine import rules as R
 from app.engine.geometry import envelope, lot_frame
+from app.engine.project import ProjectInputs, check_project, summarize
 from app.parcel.provenance import Sourced
 from app.parcel.resolve import ParcelContext, resolve
 from app.parcel.zone import R1_VARIATION
@@ -23,8 +24,9 @@ TOOL_DISCLAIMER = (
     "Planning and LADBS before relying on it."
 )
 AI_DISCLOSURE = (
-    "AI was used to read the regulation text into rule candidates. Values labeled 'Interpretation' come from those "
-    "readings and have not been reviewed yet; values labeled 'Derived' come from readings that passed review. In this "
+    "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that "
+    "passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the "
+    "engine does not model. In this "
     "demo that review was an AI review applied on the project owner's instruction, not a person's; each value's "
     "source panel says which. No AI model is used to compute this assessment."
 )
@@ -192,7 +194,15 @@ def _flag(conn, fid, title, explanation, section, contains=None) -> Item:
     )
 
 
-def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None, lot_area: float | None, frame=None):
+def _r1_items(
+    conn,
+    ctx: ParcelContext,
+    width: float | None,
+    depth: float | None,
+    lot_area: float | None,
+    frame=None,
+    design_height: float | None = None,
+):
     items: list[Item] = []
     kinds = {o["kind"] for o in ctx.overlays}
     flat_land = not ({"hillside", "coastal_zone"} & kinds)
@@ -241,6 +251,7 @@ def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None
         h.found.update({f"district_{k}": v for k, v in d.found.items()})
     sy = R.load("R1_SIDE_YARD", conn)
     side = side_base = None
+    hside = hmax
     if width is not None and sy.value("base_ft") is not None:
         if width >= 50 or sy.value("narrow_pct") is None:
             side_base = sy.value("base_ft")
@@ -253,15 +264,17 @@ def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None
             )
         side = side_base
         step = sy.value("per_10ft_over_18_ft")
-        if flat_land and step and hmax:
+        hside = min(design_height, hmax) if design_height and hmax else hmax
+        if flat_land and step and hside:
             # 12.08 C.2(b): new construction off the Hillside Area and Coastal Zone adds 1 ft per 10 ft (or part)
-            # above 18 ft. Shown at the maximum height so the drawn buildable area is safe for a full-height house.
-            extra = step * math.ceil(max(hmax - 18, 0) / 10)
+            # above 18 ft. Shown at the maximum height (or the project's height, when given) so the drawn buildable
+            # area is safe for that house.
+            extra = step * math.ceil(max(hside - 18, 0) / 10)
             side = side_base + extra
             at = lambda ht: side_base + step * math.ceil(max(ht - 18, 0) / 10)
             why += (
                 f" New construction adds {step:.0f} ft for each 10 ft (or part) of height above 18 ft (LAMC 12.08 "
-                f"C.2(b)), so this shows {side:g} ft for a house at the {hmax:g} ft maximum. By height: {side_base:g} ft "
+                f"C.2(b)), so this shows {side:g} ft for a {hside:g} ft house{' (your project)' if hside != hmax else ' (the maximum)'}. By height: {side_base:g} ft "
                 f"up to 18 ft, {at(28):g} ft up to 28 ft, {at(min(hmax, 38)):g} ft up to {min(hmax, 38):g} ft."
             )
         elif not flat_land:
@@ -279,7 +292,7 @@ def _r1_items(conn, ctx: ParcelContext, width: float | None, depth: float | None
         _rule_item(
             "side_yard",
             "r1_envelope",
-            f"Side yards (each, minimum, for a {hmax:g} ft house)"
+            f"Side yards (each, minimum, for a {hside:g} ft house)"
             if side != side_base
             else "Side yards (each, minimum)",
             sy,
@@ -603,7 +616,7 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
     return out
 
 
-def assess(query: str) -> dict:
+def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
     ctx = resolve(query)
     result = {
         "generated_at": datetime.now(UTC).isoformat(),
@@ -694,7 +707,9 @@ def assess(query: str) -> dict:
                 f"{ctx.zone.raw} is an R1 variation or carries conditions; the standard R1 values "
                 "below are shown for reference and labeled accordingly."
             )
-        r1, front, side, rear = _r1_items(conn, ctx, width, depth, lot_area, frame)
+        r1, front, side, rear = _r1_items(
+            conn, ctx, width, depth, lot_area, frame, project.height_ft if project else None
+        )
         if long_front:
             # The front may really be the short side (an unrecognised corner lot), which swaps width and depth.
             for it in r1:
@@ -766,4 +781,6 @@ def assess(query: str) -> dict:
     if result["geometry"] is not None:
         result["geometry"]["buildings"] = buildings
     result["items"] = [asdict(i) | {"label_text": i.label_text} for i in items]
+    result["summary"] = summarize(items, ctx)
+    result["project"] = check_project(items, project) if project and not project.empty else None
     return result

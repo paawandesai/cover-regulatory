@@ -91,6 +91,22 @@ The model never sets a label. Labels come from review status and the determinist
 - No access logs with query strings, plus `noindex` headers. Admin credentials are held in browser memory only.
 - Secrets never enter the repo. A gitleaks scan runs in pre-commit and CI.
 
+## Adding a jurisdiction
+
+The pipeline is organised by jurisdiction, but only LA City Chapter I is built, and these parts are LA-specific:
+
+| Part | Where | What a new jurisdiction needs |
+|---|---|---|
+| Boundary and code regime | `backend/app/parcel/resolve.py`, `boundary` and `code_regime_area` tables | Its boundary layer and a map from areas to the code in force there |
+| Parcel and zoning layers | `backend/app/ingest/sources.yaml`, `study_areas.yaml` | Its parcel, zoning and overlay layers, with licenses |
+| Zone parser | `backend/app/parcel/zone.py` | Its zone-string grammar (base zone, height district, qualifiers, suffixes) |
+| Regulation text | `backend/app/ingest/regtext/` | A chunker for its code's section numbering, and sources allowed to be fetched or saved by hand |
+| Rule definitions | `backend/app/engine/rules.py` | The parameters each rule needs, keyed by that code's section ids |
+| Rule assembly | `backend/app/engine/assess.py` | Which rules apply to which zones, overlays that withhold or downgrade values, and the stop states |
+| Golden cases | `backend/tests/golden/cases.yaml` | Parcels with expected values worked out from that code |
+
+State ADU law (Gov. Code 66310-66342) and the geometry, labels, citations and review flow carry over unchanged to any California city.
+
 ## Scaling beyond the PoC
 
 How this would run in production on AWS. Nothing below is built; the PoC runs as one Docker Compose host.

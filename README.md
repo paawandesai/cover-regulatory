@@ -6,6 +6,18 @@ Decision support for licensed architects and engineers. Given a City of Los Ange
 
 > Status: proof of concept, built 2026-10-15. The database holds four small, self-selected study areas (Reseda, Boyle Heights, Pacific Palisades and a Westside strip on the Beverly Hills edge; `backend/app/ingest/study_areas.yaml`), so parcels outside them return "not found". Hosted demo (invite only): https://34-213-114-35.sslip.io. Architecture: [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
+## For reviewers
+1. Open the hosted demo at https://34-213-114-35.sslip.io. The invite code is sent separately by the project owner; it is not in this repo.
+2. Try these APNs (or a street address inside the study areas):
+   - **2121-005-008** (Reseda): a vacant flat-land R1 lot where every value is derived.
+   - **2104-024-009** (Reseda): a built-up lot with an existing home, its building outline, and the attached ADU raised to 850 sq ft.
+   - **2121-003-007** (Reseda): a through lot, so the rear yard is an interpretation.
+   - **4412-014-028** (Pacific Palisades): Hillside, Coastal Zone, fire hazard zone and the 2025 fire. Values are withheld, the City ADU path is an interpretation, and SB 9 is suspended.
+   - **2118-015-001** (commercial zone), **5179-003-026** (Boyle Heights, Chapter 1A) and **4327-028-024** (Beverly Hills): three stop states.
+3. Click any value to see the regulation text behind it. Fill in **Your project** (height, floor area, a second unit) to check a design against the limits; the side yard and the drawn buildable area follow the height you enter.
+4. **Rule review** (`/review`) needs the admin login, also sent separately. It shows each AI-read rule candidate with its source quote and checks, and the feedback queue.
+5. To run it yourself, see Development below. The database dump that reproduces the demo exactly is shared on request, because it contains regulation text saved by hand.
+
 ## What it does
 Enter an APN or a street address. The engine:
 
@@ -25,6 +37,8 @@ Enter an APN or a street address. The engine:
 7. **Draws the lot.** A diagram or map shows the lot and the buildable area left after yards. It is labeled illustrative, not survey-grade.
 8. **Takes feedback without letting it change anything.** "Report a problem" queues a note for a reviewer. Feedback never changes a rule. A rule changes status only through a review decision: the password-protected Rule review screen (`/review`), or the `apply_review` command that applied this demo's AI review.
 
+9. **Answers in one paragraph and checks a project.** A summary states what can be built, how many values need confirming, and the choices to weigh (state or City ADU, guest house or ADU, fire rebuild order or standard rules). Optional project inputs (house height, floor area, a second unit and its size and bedrooms) are checked against the limits, and each check carries the label of the value it was checked against.
+
 No AI model runs when you ask for an assessment. The AI work happens once, at ingestion: a model reads the regulation text into candidate rule fragments, each with a verbatim quote. A deterministic check rejects any fragment whose quote is not in the text or whose number is not in the quote. Answers are therefore repeatable and fast.
 
 ## What it does NOT do
@@ -34,14 +48,14 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 - Setback and buildable-area geometry is illustrative, not survey-grade.
 - It does not consider private covenants (CC&Rs), demographic data, or owner information.
 - Existing buildings are shown as approximate Microsoft machine-learned outlines (ODbL). They can miss, merge or misplace buildings. The Assessor's building attributes are shown when recorded.
-- It has no project-inputs form (bedrooms, proposed floor area, height). The assessment depends on the parcel only.
 - The map has no interactive annotations beyond pan and zoom; values are explained in the side panel instead.
 - There is no chat. The plan's read-only follow-up chat was not built.
 - There is no client-facing report or export, so there is no architect sign-off gate yet. Any report built later must sit behind a licensed reviewer's sign-off and disclose AI involvement.
-- The fire rebuild flag cites City Planning's Palisades Rebuild FAQ (2026-01-30), which summarizes Emergency Executive Orders 1 and 8. The orders' own text was not ingested, so check the current order before relying on the flag.
+- The fire rebuild flag cites City Planning's Palisades Rebuild FAQ (2026-01-30), which summarizes Emergency Executive Orders 1, 8 and 9. The orders' own text was not ingested, so check the current order before relying on the flag.
 - An address that matches no County address point or parcel situs is sent to the US Census Geocoder (a public, no-account service). APN searches never leave the server.
 - Sign-in and invite-code attempts are not rate-limited.
-- Prevailing front-yard setbacks, garage floor-area exemptions, transit-proximity ADU height increases and multi-story side-yard increments are named in the explanations but not computed.
+- Prevailing front-yard setbacks, key lots, garage and porch floor-area exemptions, side-wall plane breaks, transit-proximity ADU height increases and the per-story side-yard rule in the Coastal Zone and Hillside Area are named in the explanations but not computed.
+- Corner lots are detected only where two adjacent sides read as streets on the parcel map. When only the long side reads as a street, the front and side yards are labelled as interpretations.
 
 ## Known constraints
 Places where a project guardrail overrides a requirement in the brief. The brief is paraphrased, not quoted.
@@ -55,7 +69,7 @@ Places where a project guardrail overrides a requirement in the brief. The brief
 | More specific resources from Cover | None were invented. Sources are official City, County and State publications. The LAMC text was saved by hand from the City's code publisher, not crawled. |
 | Rules approved by a person before use | In this demo the 230 rule candidates were reviewed by AI, at the project owner's instruction: a three-way check (source text, a second model, official sources) decided each one, and 8 were rejected. Values labelled "Derived from rule" therefore rest on an AI review, which the source panel says. A person should re-review before relying on them (see `AI_USAGE.md`). |
 | Feedback that improves future answers | Feedback is queued for a reviewer and never edits rules, prompts or retrieval automatically. |
-| Scaling to LA County, California and beyond | Only LA City, Chapter I, R1 is implemented. The design is jurisdiction-pluggable (jurisdiction → code regime → rule set → sources), but nothing else is modeled. |
+| Scaling to LA County, California and beyond | Only LA City, Chapter I, R1 is implemented. The data flow is organised by jurisdiction → code regime → rule set → sources, but the LA rules, zone parser and section ids are hard-coded; `ARCHITECTURE.md` lists what a new jurisdiction needs. |
 | Developing on synthetic data only, with a "Demo — synthetic data only" banner (guardrail) | The brief asks for public parcel and zoning data, so the engine uses real public County and City layers with owner fields dropped at ingestion. Fixtures are APNs only, with no addresses. Because "synthetic" would be untrue, the hosted banner reads "Hosted demo with public data only. Please don't enter personal information." |
 | Visualizing existing buildings | Uses Microsoft's machine-learned footprints (ODbL), kept in their own table and labelled approximate. The County building outlines were not used because their license is unclear. Footprints can miss, merge or misplace buildings. |
 
@@ -63,18 +77,21 @@ Places where a project guardrail overrides a requirement in the brief. The brief
 See `LICENSES.md` for code dependencies and `backend/app/ingest/sources.yaml` for every dataset and document, with its license and item id. Retrieval dates are recorded in the `source` table at load time and shown beside each value.
 
 ## Measured results
-Measured 2026-10-15 on the development machine (4 CPU cores, no GPU, Postgres on the same machine).
+Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on the same machine).
 
-**Golden parcels** (`backend/tests/golden/`): 8 of 8 pass. The expected values were calculated by Claude Code (the coding assistant) from the code text and the parcel data, not copied from the engine's output, then compared with the engine. No person has checked them yet (decision D17). Every value the engine shows on these parcels is asserted (66 values, plus the status and flags of each case).
+**Golden parcels** (`backend/tests/golden/`): 11 of 11 pass. The expected values were calculated by Claude Code (the coding assistant) from the code text and the parcel data, not copied from the engine's output, then compared with the engine. No person has checked them yet (decision D17). Every value the engine shows on these parcels is asserted, plus the status, flags and labels of each case. Side yards are for a house at the maximum height (5 ft + 2 ft for 33 ft).
 
 | APN | Case | Front / side / rear (ft) | Max floor area (sq ft) | Height (ft) | Guest house | Flags |
 |---|---|---|---|---|---|---|
-| 2121-005-008 | Reseda R1-1, 60 x 135 ft | 20 / 5 / 15 | 3,645 | 33 | Not allowed | SB 9 |
-| 2121-016-012 | Reseda R1-1, exactly 50 ft wide | 20 / 5 / 15 | 2,453 | 33 | Not allowed | SB 9 |
-| 2121-002-004 | Reseda R1-1, 25 ft wide (substandard) | 20 / 3 / 15 | 1,462 | 33 | Not allowed | SB 9 |
-| 4359-016-023 | R1-1, 16,403 sq ft, inside a specific plan | 20 / 5 / 15 | 7,381 | 33 | Allowed | Overlay plan, SB 9 |
-| 4412-014-028 | Pacific Palisades, Hillside + Coastal + fire | Withheld | Withheld | Withheld | Allowed | Fire rebuild, Hillside, Coastal, VHFHSZ, SB 9 |
-| 2126-005-015 | R1-2-RIO (supplemental district) | 20 / 5 / 15 | 5,517 | 33 | Allowed | Zone conditions, SB 9 |
+| 2121-005-008 | Reseda R1-1, 60 x 135 ft | 20 / 7 / 15 | 3,645 | 33 | Not allowed | SB 9 |
+| 2121-016-012 | Reseda R1-1, exactly 50 ft wide | 20 / 7 / 15 | 2,453 | 33 | Not allowed | SB 9 |
+| 2121-002-004 | Reseda R1-1, 25 ft wide (substandard) | 20 / 5 / 15 | 1,462 | 33 | Not allowed | SB 9 |
+| 4359-016-023 | R1-1, 16,403 sq ft, inside a specific plan (interpretation) | 20 / 7 / 15 | 7,381 | 33 | Allowed | Overlay plan, SB 9 |
+| 4412-014-028 | Pacific Palisades, Hillside + Coastal + fire | Withheld | Withheld | Withheld | Allowed | Fire rebuild, Hillside, Coastal, VHFHSZ, SB 9 suspended |
+| 2126-005-015 | R1-2-RIO (supplemental district, interpretation) | 20 / 7 / 15 | 5,517 | 33 | Allowed | Zone conditions, SB 9 |
+| 2104-024-009 | Reseda, existing home; front on the long side (interpretation) | 12 / 7 / 15 | 3,168 | 33 | Not allowed | SB 9 |
+| 2121-003-007 | Reseda, existing home; through lot | 20 / 7 / 15 (rear: interpretation) | 9,113 | 33 | Allowed | SB 9 |
+| 2118-015-001 | [Q]C2-2D-CDO (commercial) | Stop: zone not modeled | | | | |
 | 5179-003-026 | Boyle Heights (Chapter 1A) | Stop: code regime not modeled | | | | |
 | 4327-028-024 | Beverly Hills | Stop: outside the City | | | | |
 
@@ -90,10 +107,10 @@ Measured 2026-10-15 on the development machine (4 CPU cores, no GPU, Postgres on
 
 | Operation | Runs | p50 | p95 |
 |---|---|---|---|
-| Full assessment (`assess`) over the 8 golden parcels | 80 | 135 ms | 205 ms |
-| Regulation search | 60 | 47 ms | 84 ms |
+| Full assessment (`assess`) over the 11 golden parcels | 110 | 129 ms | 196 ms |
+| Regulation search (the 32 retrieval questions) | 32 | 52 ms | 114 ms |
 
-**Test suites** (2026-10-16): backend 50 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the 29 backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
+**Test suites** (2026-10-16): backend 65 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
 
 ## AI disclosure
 This tool uses an LLM only at ingestion, to extract candidate rule fragments from regulatory text. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
@@ -145,7 +162,7 @@ The database starts empty. Load it either way:
   `python -m app.ingest.regtext.ingest`, `python -m app.search.index` and `python -m app.extract.extract`.
   The regulation text step needs the hand-saved files in `data/manual/` mounted into the container (the image
   does not include them), and extraction needs `ANTHROPIC_COVER_API_KEY`, which compose does not pass by default.
-  A fresh extraction creates new candidate ids, so the 2026-10-15 review in `data/verification/` won't apply to
+  A fresh extraction creates new candidate ids, so the 2026-10-15 review in `backend/data/verification/` won't apply to
   them: every value stays "Interpretation" until the new candidates are reviewed. Use the dump to reproduce the
   demo exactly.
 

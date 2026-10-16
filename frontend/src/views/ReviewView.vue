@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { ApiError, clearCredentials, decide, fragments, hasCredentials, setCredentials } from '../api'
 import AppHeader from '../components/AppHeader.vue'
+import FeedbackList from '../components/FeedbackList.vue'
 import QuoteInContext from '../components/QuoteInContext.vue'
 import type { Fragment } from '../types'
 
@@ -42,6 +43,7 @@ const user = ref('')
 const password = ref('')
 const authError = ref<string | null>(null)
 const tab = ref<Status>('pending')
+const mode = ref<'rules' | 'feedback'>('rules')
 const family = ref('')
 const advice = ref('')
 const lists = ref<Record<Status, Fragment[]>>({
@@ -179,29 +181,41 @@ async function act(decision: 'approved' | 'rejected') {
             :key="id"
             type="button"
             class="tab"
-            :class="{ on: tab === id }"
-            :aria-pressed="tab === id"
-            @click="tab = id"
+            :class="{ on: mode === 'rules' && tab === id }"
+            :aria-pressed="mode === 'rules' && tab === id"
+            @click="((tab = id), (mode = 'rules'))"
           >
             {{ name }} <span class="mono small">{{ lists[id].length }}</span>
           </button>
-          <label for="fam" class="sr-only">Rule family</label>
-          <select id="fam" v-model="family" class="field small">
-            <option value="">All rule families</option>
-            <option v-for="f in families" :key="f" :value="f">{{ f }}</option>
-          </select>
-          <label for="adv" class="sr-only">Check result</label>
-          <select id="adv" v-model="advice" class="field small">
-            <option value="">All check results</option>
-            <option v-for="(label, k) in CHECK" :key="k" :value="k">
-              {{ label }}
-            </option>
-          </select>
-          <span class="spacer" />
-          <span class="small muted">Pending candidates show only as Interpretation; approval makes them Derived.</span>
+          <button
+            type="button"
+            class="tab"
+            :class="{ on: mode === 'feedback' }"
+            :aria-pressed="mode === 'feedback'"
+            @click="mode = 'feedback'"
+          >
+            Feedback
+          </button>
+          <template v-if="mode === 'rules'">
+            <label for="fam" class="sr-only">Rule family</label>
+            <select id="fam" v-model="family" class="field small">
+              <option value="">All rule families</option>
+              <option v-for="f in families" :key="f" :value="f">{{ f }}</option>
+            </select>
+            <label for="adv" class="sr-only">Check result</label>
+            <select id="adv" v-model="advice" class="field small">
+              <option value="">All check results</option>
+              <option v-for="(label, k) in CHECK" :key="k" :value="k">
+                {{ label }}
+              </option>
+            </select>
+            <span class="spacer" />
+            <span class="small muted">Pending candidates show only as Interpretation; approval makes them Derived.</span>
+          </template>
         </div>
 
-        <div class="cols">
+        <FeedbackList v-if="mode === 'feedback'" />
+        <div v-else class="cols">
           <section aria-label="Candidate rules" class="card listcol">
             <p v-if="!list.length" class="empty small muted">Nothing here.</p>
             <button

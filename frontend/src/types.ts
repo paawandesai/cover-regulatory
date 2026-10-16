@@ -58,6 +58,34 @@ export interface Assessment {
   geometry: Geometry | null
   disclaimers: string[]
   ai_disclosure: string
+  summary?: Summary
+  project?: { inputs: Partial<ProjectInputs>; checks: ProjectCheck[] } | null
+}
+
+export interface Summary {
+  answer: string
+  confidence: string
+  counts: Partial<Record<Label, number>>
+  paths: { id: string; title: string; options: string[] }[]
+}
+
+export type SecondUnit = 'detached' | 'attached' | 'jadu' | 'guest_house'
+
+export interface ProjectInputs {
+  height_ft: number
+  floor_area_sqft: number
+  second_unit: SecondUnit
+  second_unit_sqft: number
+  second_unit_bedrooms: number
+}
+
+export interface ProjectCheck {
+  id: string
+  title: string
+  status: 'fits' | 'confirm' | 'exceeds' | 'not_determined'
+  detail: string
+  based_on: string | null
+  label: Label | null
 }
 
 export interface Chunk {

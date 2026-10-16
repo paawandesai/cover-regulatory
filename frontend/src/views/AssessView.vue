@@ -5,10 +5,12 @@ import { ApiError, assess } from '../api'
 import AppHeader from '../components/AppHeader.vue'
 import LabelBadge from '../components/LabelBadge.vue'
 import LotDiagram from '../components/LotDiagram.vue'
+import ProjectForm from '../components/ProjectForm.vue'
+import SummaryCard from '../components/SummaryCard.vue'
 import SourcePanel from '../components/SourcePanel.vue'
 import StopState from '../components/StopState.vue'
 import { citeLabel, formatApn, formatDate, formatExisting, formatValue } from '../format'
-import type { Assessment, Item, Label } from '../types'
+import type { Assessment, Item, Label, ProjectInputs } from '../types'
 
 // MapLibre is large; load it only when the map view is opened.
 const LotMap = defineAsyncComponent(() => import('../components/LotMap.vue'))
@@ -32,15 +34,34 @@ async function pick(id: string) {
   }
 }
 
+const PROJECT_KEYS = ['height_ft', 'floor_area_sqft', 'second_unit', 'second_unit_sqft', 'second_unit_bedrooms'] as const
+
+// Project inputs live in the URL so a checked scenario can be shared or reloaded.
+const project = computed<Partial<ProjectInputs>>(() => {
+  const out: Record<string, string | number> = {}
+  for (const k of PROJECT_KEYS) {
+    const v = route.query[k]
+    if (typeof v === 'string' && v) out[k] = k === 'second_unit' ? v : Number(v)
+  }
+  return out as Partial<ProjectInputs>
+})
+
+function applyProject(p: Partial<ProjectInputs>) {
+  const query: Record<string, string> = { q: String(route.query.q ?? '') }
+  for (const [k, v] of Object.entries(p)) if (v !== undefined) query[k] = String(v)
+  router.push({ query })
+}
+
 async function load(q: string) {
   loading.value = true
   error.value = null
+  const keepPick = result.value?.parcel && pickedId.value
   try {
-    const r = await assess(q)
+    const r = await assess(q, project.value)
     result.value = r
     document.title = `APN ${formatApn(r.parcel.apn)} · Regulatory Engine`
     const first = r.items.find((i) => i.citations.length && i.family !== 'parcel') ?? r.items[0]
-    pickedId.value = first?.id ?? null
+    if (!keepPick || ![...r.items, ...r.parcel.items].some((i) => i.id === keepPick)) pickedId.value = first?.id ?? null
   } catch (e) {
     result.value = null
     error.value = e instanceof ApiError ? { status: e.status, message: e.message } : { status: 0, message: String(e) }
@@ -50,8 +71,9 @@ async function load(q: string) {
 }
 
 watch(
-  () => route.query.q,
-  (q) => {
+  () => JSON.stringify(route.query),
+  () => {
+    const q = route.query.q
     if (typeof q === 'string' && q.trim().length >= 3) {
       input.value = q
       load(q)
@@ -81,7 +103,7 @@ const facts = computed(() => {
   const add = (it: Item | undefined, k: string, v?: string, text?: string, badge?: Label) =>
     it && rows.push({ k, v: v ?? formatValue(it), item: it, text, badge })
   add(parcelItem('lot_area'), 'Lot area')
-  add(dims.value, 'Lot width x depth', undefined, 'Derived (parcel shape)')
+  add(dims.value, 'Lot width x depth', undefined, 'Approximate (parcel shape)')
   add(parcelItem('community_plan_area'), 'Community plan area')
   const regime = parcelItem('code_regime')
   add(regime, 'Zoning code in effect', regime?.value === 'I' ? 'Chapter I' : regime?.value === '1A' ? 'Chapter 1A' : undefined)
@@ -268,6 +290,8 @@ const stop = computed(() => {
           </section>
 
           <section aria-label="Assessment" class="mid">
+            <SummaryCard v-if="result.summary" :summary="result.summary" />
+            <ProjectForm :inputs="project" :checks="result.project?.checks ?? []" @apply="applyProject" @pick="pick" />
             <div v-for="n in result.notes" :key="n" class="card note small">
               {{ n }}
             </div>
