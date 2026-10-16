@@ -56,7 +56,7 @@ db-tests:
     - cd backend && uv sync --frozen --python 3.13 && uv run python -m app.db.migrate
   script:
     # Fail instead of skipping if the database is somehow unreachable.
-    - uv run python -c "from app.db.connection import connect; connect().__enter__().execute('SELECT 1 FROM rule_fragment LIMIT 1')"
+    - uv run python -c "import os, psycopg; psycopg.connect(os.environ['DATABASE_URL']).execute('SELECT 1 FROM rule_fragment LIMIT 1')"
     - uv run pytest -q tests/golden tests/api tests/adversarial --junitxml=db-junit.xml
   artifacts:
     when: always
