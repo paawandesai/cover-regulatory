@@ -32,11 +32,13 @@ defineProps<{ label: Label; text?: string }>()
   border-color: var(--accent-subtle);
   background: var(--accent-subtle);
 }
-.uncited {
+.uncited,
+.mock {
   color: var(--danger);
   border-color: var(--danger);
 }
-.withheld {
+.withheld,
+.approximate {
   color: var(--ink-muted);
   border-color: var(--line-strong);
   border-style: dashed;

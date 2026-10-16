@@ -139,12 +139,14 @@ def resolve(query: str) -> ParcelContext:
         ).fetchone()
         cpa_val = Sourced(cpa["name"], cpa["source_id"], cpa["fetched_at"]) if cpa else None
         regime = cpa["regime"] if cpa and cpa["regime"] else "I"
-        regime_val = Sourced(
-            regime,
-            "code_regime_area" if cpa and cpa["regime"] else None,
-            None,
-            "verified" if (not cpa or not cpa["regime"] or cpa["verified"]) else "interpretive",
-        )
+        # A Community Plan Area not on the Chapter 1A list is Chapter I. With no plan area found, Chapter I is
+        # only an assumption, so it is labelled interpretive rather than verified.
+        if cpa and cpa["regime"]:
+            regime_val = Sourced(regime, "code_regime_area", None, "verified" if cpa["verified"] else "interpretive")
+        elif cpa:
+            regime_val = Sourced(regime, cpa["source_id"], cpa["fetched_at"])
+        else:
+            regime_val = Sourced(regime, None, None, "interpretive")
 
         zones = conn.execute(
             """SELECT z.zone_string, z.source_id, z.fetched_at,

@@ -4,12 +4,13 @@ Structural controls (not prompt lines) keep this safe:
 - The model gets no tools. It only returns JSON matching `Extraction`, validated by the SDK.
 - Chunk text is untrusted and goes in a delimited data section of the user turn, never the system prompt.
 - Each fragment is checked deterministically (quote must occur in the chunk, number must occur in the quote).
-- Everything lands as 'pending' or 'invalid'. Only a reviewer's approval makes a fragment usable.
+- Everything lands as 'pending' or 'invalid'. Pending fragments can only be shown as Interpretation; a review decision is needed for 'Derived'.
 - The prompt holds regulation text only: never an address, APN or user input.
 
 Run: uv run python -m app.extract.extract [group ...]     (needs ANTHROPIC_COVER_API_KEY)
 """
 
+import html
 import logging
 import re
 import sys
@@ -56,12 +57,13 @@ def _client() -> anthropic.Anthropic:
 def _documents_block(chunks: list[dict]) -> str:
     parts = []
     for c in chunks:
-        # Escape anything that could close the delimiter early.
-        body = c["text"].replace("</document>", "&lt;/document&gt;")
-        parts.append(
-            f'<document chunk_id="{c["id"]}" section="{c["section_id"]}" source="{c["source_url"]}">\n'
-            f"{body}\n</document>"
+        # Escape anything that could close a delimiter early (</document> or </documents>), and quote attributes.
+        body = re.sub(r"</(documents?)", r"&lt;/\1", c["text"], flags=re.IGNORECASE)
+        attrs = " ".join(
+            f'{k}="{html.escape(str(v or ""), quote=True)}"'
+            for k, v in (("chunk_id", c["id"]), ("section", c["section_id"]), ("source", c["source_url"]))
         )
+        parts.append(f"<document {attrs}>\n{body}\n</document>")
     return "<documents>\n" + "\n".join(parts) + "\n</documents>"
 
 

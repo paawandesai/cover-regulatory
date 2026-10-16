@@ -72,12 +72,13 @@ const coverage = computed(() => {
     </div>
     <p v-if="item.explanation" class="small muted">{{ item.explanation }}</p>
 
-    <template v-if="item.label === 'verified' && item.source">
+    <template v-if="(item.label === 'verified' || item.label === 'approximate') && item.source">
       <p class="small">
         From the
         <span class="mono">{{ item.source.dataset ?? 'derived' }}</span>
         dataset, fetched {{ formatDate(item.source.fetched_at) }}.
       </p>
+      <p v-if="item.source.attribution" class="small muted">{{ item.source.attribution }}</p>
     </template>
 
     <template v-else-if="current">
@@ -102,7 +103,11 @@ const coverage = computed(() => {
       <dl class="facts small">
         <div>
           <dt>Document</dt>
-          <dd>{{ chunk?.document_title ?? current.section_id }}<template v-if="chunk?.manual_retrieval"> (saved by hand)</template></dd>
+          <dd>
+            {{ chunk?.document_title ?? current.section_id
+            }}<template v-if="current.code_chapter"> · LAMC Chapter {{ current.code_chapter }}</template
+            ><template v-if="chunk?.manual_retrieval"> (saved by hand)</template>
+          </dd>
         </div>
         <div>
           <dt>Retrieved</dt>

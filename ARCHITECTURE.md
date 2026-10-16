@@ -2,7 +2,8 @@
 
 The engine answers one question for a City of Los Angeles parcel: what may be built here under the R1 rules,
 and what text says so. It is built around one design choice. **The AI reads the regulations once, at
-ingestion, and a person approves what it read. Answering a question is plain, deterministic code.** That
+ingestion, and a review step approves what it read (in this demo, an AI review applied on the owner's
+instruction, recorded as `reviewed_by = 'ai-review'`). Answering a question is plain, deterministic code.** That
 keeps answers repeatable, citable and fast, and it keeps the model away from addresses and user input.
 
 ```
@@ -11,8 +12,9 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
  │ Public GIS layers            │   │ Regulation text                                                 │
  │ County parcels, City zoning, │   │ LAMC Chapter I (saved by hand), BMO/ADU ordinances, ZA Memo 143,│
  │ boundary, plan areas,        │   │ Gov. Code 66310-66342, 65852.21, Palisades rebuild FAQ          │
- │ overlays, fire perimeters    │   └───────────────┬─────────────────────────────────────────────────┘
- └──────────────┬───────────────┘                   │ parse, chunk by section id (12.08 C.2(a) ...)
+ │ overlays, fire perimeters,   │   └───────────────┬─────────────────────────────────────────────────┘
+ │ Microsoft footprints (ODbL)  │                   │ parse, chunk by section id (12.08 C.2(a) ...)
+ └──────────────┬───────────────┘                   │
                 │ load_datasets.py                  ▼
                 │ (owner fields dropped)   ┌───────────────────┐   fastembed nomic-embed-text-v1.5
                 │                          │ reg_chunk         │◄── (local, CPU) -> pgvector
@@ -24,8 +26,8 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
                 │                          │ rule_fragment     │  quote must occur in the chunk,
                 │                          │ pending/invalid   │  number must occur in the quote,
                 │                          └────────┬──────────┘  unit must match the parameter
-                │                                   │ Rule review UI (/review, password)
-                │                                   ▼ person approves or rejects
+                │                                   │ Rule review UI (/review, password) or
+                │                                   ▼ apply_review.py: approve or reject
                 ▼                          ┌───────────────────┐
  ┌──────────────────────────────┐          │ rule_fragment     │
  │ PostgreSQL 16                │◄─────────│ approved          │
@@ -59,7 +61,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Search | `backend/app/search/` | Exact section-id lookup first, then pgvector cosine search over local embeddings. Full-text search is the fallback. |
 | Extraction | `backend/app/extract/` | Claude (model id from config, structured output) reads groups of chunks into rule fragments. Regulation text is wrapped as data. The schema has no field for status or confidence. |
 | Deterministic checks | `backend/app/extract/validate.py` | Rejects a fragment whose quote is not verbatim in the chunk, whose number is not in the quote, or whose unit doesn't match. Re-running marks fragments stale when their chunk's text changes. |
-| Parcel resolution | `backend/app/parcel/` | APN, then City address points, then County situs, then the Census geocoder. Then point-in-City, code regime from the Community Plan Area, and zone parsing. |
+| Parcel resolution | `backend/app/parcel/` | APN, then County address points, then County situs, then the Census geocoder. Then point-in-City, code regime from the Community Plan Area, and zone parsing. |
 | Lot geometry | `backend/app/engine/geometry.py` | Minimum rotated rectangle in State Plane feet. Rays from each side find street (40 ft or more gap), alley (10 to 40 ft) or unknown, which sets the front. The envelope is the rectangle shrunk by the yards, labeled illustrative. |
 | Rule catalogue | `backend/app/engine/rules.py` | Each rule lists the fragment inputs it needs. A rule is "derived" only if every input is approved, and "interpretive" (with a coverage share) if any input is still pending. |
 | Assessment | `backend/app/engine/assess.py` | Stops early where needed, computes values, withholds flat-land values in the Hillside Area and Coastal Zone, adds flags and disclaimers. |
@@ -72,25 +74,54 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Label | Meaning |
 |---|---|
 | Verified parcel data | Read straight from a named dataset, with its fetch date. |
-| Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. In the hosted demo the reviewer is an AI review applied on the owner's instruction (`reviewed_by = 'ai-review'`), and the source panel says so. |
-| Interpretation, confirm with City | Same computation, but at least one input fragment is still pending review. Shows the share of inputs found. |
-| No cited source | An input is missing, ambiguous or withheld. No number is shown. |
+| Approximate (imagery) | Machine-learned building outlines (Microsoft, ODbL). Shown, never used in a rule. |
+| Derived from rule | Computed by code from fragments a reviewer approved, all checks passing, source text unchanged. Flags and lot dimensions are also Derived when code computes them from geometry or a cited section, with no fragment involved. In the hosted demo the reviewer is an AI review applied on the owner's instruction (`reviewed_by = 'ai-review'`), and the source panel says so. |
+| Interpretation, confirm with City | Same computation, but at least one input fragment is still pending review (shows the share of inputs found), or a standard R1 value shown on an R1 variation or conditioned zone that is not modeled. |
+| Not modeled here | A flag (Hillside Area, Coastal Zone floor area) makes the flat-land rule wrong, so no value is shown. |
+| No cited source | An input is missing or ambiguous. No number is shown. |
 
 The model never sets a label. Labels come from review status and the deterministic checks.
 
 ## Security and privacy controls
 
 - The model sees only regulation text, never an address, APN or user input. Its key is read from the environment and used only by the extraction command.
-- Text inside documents is treated as data. Adversarial tests show that injected instructions produce at most a pending candidate, and no input can produce a zero setback.
-- Feedback goes into a queue. It never edits rules, prompts or retrieval, and the hosted demo deletes it after 14 days.
+- Text inside documents is treated as data. Adversarial tests show that injected instructions produce at most a pending candidate. An injected exemption whose quote lacks the number is rejected; a quote that does contain it stays a candidate until review.
+- Feedback goes into a queue. It never edits rules, prompts or retrieval, and it is deleted after `FEEDBACK_RETENTION_DAYS` (1 day on the hosted demo).
 - No access logs with query strings, plus `noindex` headers. Admin credentials are held in browser memory only.
 - Secrets never enter the repo. A gitleaks scan runs in pre-commit and CI.
 
 ## Scaling beyond the PoC
 
-The production shape would be:
-- Scheduled ingestion workers on a queue.
-- An API on ECS.
-- RDS Postgres with PostGIS and pgvector.
-- Secrets in Secrets Manager.
-- Jurisdiction plug-ins (`jurisdiction → code regime → rule set → sources`), so adding LA County or another city means adding a plug-in, not forking the engine.
+How this would run in production on AWS. Nothing below is built; the PoC runs as one Docker Compose host.
+
+```
+  EventBridge schedule ──► SQS "ingest" queue ──► Ingestion workers (ECS Fargate)
+  (per source, per        (one message per        fetch allowed sources, chunk, hash-diff,
+   jurisdiction)           document or layer)     extract changed chunks with the LLM (Bedrock or
+                                                   Anthropic API, key in Secrets Manager)
+                                                            │ new or changed candidates
+                                                            ▼
+                                                  Review queue ─► Rule review UI (licensed reviewer,
+                                                            │      SSO via Cognito/OAuth, audit log)
+                                                            ▼ approved fragments only
+  Users ─► CloudFront + WAF ─► ALB ─► Assessment API (ECS Fargate, autoscaled, no model calls)
+                                          │            │
+                                          ▼            ▼
+                         RDS Postgres + PostGIS   ElastiCache Redis (assessment cache,
+                         + pgvector (Multi-AZ)     keyed by APN + rule-set version)
+                                          ▲
+  Jurisdiction plug-ins: jurisdiction → code regime → rule set → sources
+  (LA City Chapter I today; Chapter 1A, LA County, other cities added as plug-ins, not forks)
+
+  Observability: CloudWatch metrics (status codes, latency, opaque ids only), self-hosted tracing
+  for extraction runs, alarms on source changes and on stale ingests.
+```
+
+What changes from the PoC:
+- Ingestion becomes scheduled and incremental: a changed source re-extracts only changed chunks, and any rule
+  whose chunk hash changed drops back to pending until it is re-reviewed.
+- Review moves to named, licensed reviewers with SSO and an audit trail, replacing the shared admin password
+  and the demo's AI review.
+- The assessment API stays stateless and deterministic, so it scales horizontally; results are cached per
+  APN and rule-set version.
+- Every jurisdiction is a plug-in with its own code-regime map, rule set and source list.

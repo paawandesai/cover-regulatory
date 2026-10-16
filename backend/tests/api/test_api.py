@@ -104,8 +104,13 @@ def test_invite_gate(monkeypatch, client):
     assert client.get("/api/assess", params={"q": "2121005008"}).status_code == 200
 
 
-def test_no_gate_without_code(client):
+def test_no_gate_without_code(client, monkeypatch):
     assert client.get("/api/invite").json() == {"required": False, "ok": True}
+    # docker compose passes an unset variable as "", which must also mean no gate.
+    monkeypatch.setenv("DEMO_INVITE_CODE", "")
+    get_settings.cache_clear()
+    assert client.get("/api/invite").json() == {"required": False, "ok": True}
+    assert client.get("/api/assess", params={"q": "2121005008"}).status_code == 200
 
 
 def test_verification_is_shown_but_never_changes_status(client, tmp_path):
@@ -184,7 +189,7 @@ def test_existing_buildings_are_returned_with_attribution(client):
             pytest.skip("footprints not loaded")
     r = client.get("/api/assess?q=2104024009").json()
     item = next(i for i in r["items"] if i["id"] == "existing_footprint")
-    assert item["value"].startswith("1 building")
+    assert item["value"].startswith("1 building") and item["label"] == "approximate"
     assert "ODbL" in item["source"]["attribution"]
     assert len(r["geometry"]["buildings"]) == 1
     vacant = client.get("/api/assess?q=2121005008").json()

@@ -28,7 +28,7 @@ _DIRS = {"NORTH": "N", "SOUTH": "S", "EAST": "E", "WEST": "W"}
 
 
 def normalize_street_address(text: str) -> tuple[str | None, str, str | None]:
-    """Split "18350 Kittridge Street, Reseda, CA 91335" into (house_no, street, zip), uppercased and abbreviated."""
+    """Split "123 Example Street, Reseda, CA 91335" into (house_no, street, zip), uppercased and abbreviated."""
     t = re.sub(r"[^A-Z0-9 ,]", " ", (text or "").upper())
     zip_m = re.search(r"\b(\d{5})(?:\s*\d{4})?\s*$", t)
     zip5 = zip_m.group(1) if zip_m else None

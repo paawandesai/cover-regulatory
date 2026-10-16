@@ -86,8 +86,8 @@ const facts = computed(() => {
   add(regime, 'Zoning code in effect', regime?.value === 'I' ? 'Chapter I' : regime?.value === '1A' ? 'Chapter 1A' : undefined)
   const existing = parcelItem('existing')
   add(existing, 'Existing building (Assessor)', formatExisting(existing?.value))
-  // Machine-learned outlines: a neutral badge, so they don't read as verified records.
-  add(item('existing_footprint'), 'Existing buildings (outline)', undefined, 'Approximate (imagery)', 'derived')
+  // Machine-learned outlines carry their own label, so they don't read as verified records.
+  add(item('existing_footprint'), 'Existing buildings (outline)')
   return rows
 })
 
@@ -180,7 +180,7 @@ const stop = computed(() => {
         eyebrow="Search"
         title="Address not found"
         body="That address isn't in the loaded parcel data. Try the 10-digit APN instead."
-        detail="Lookup order: APN, City address points, County parcel situs, then the US Census geocoder."
+        detail="Lookup order: APN, County address points, County parcel situs, then the US Census geocoder."
       />
       <StopState
         v-else-if="error"
@@ -191,6 +191,7 @@ const stop = computed(() => {
 
       <template v-else-if="result && stop">
         <StopState :eyebrow="`APN ${formatApn(result.parcel.apn)}`" :title="stop.title" :body="stop.body" :detail="stop.detail" />
+        <p v-for="d in result.disclaimers" :key="d" class="small muted stop-note">{{ d }}</p>
       </template>
 
       <div v-else-if="result" class="cols">
@@ -300,6 +301,10 @@ const stop = computed(() => {
   flex: 1 1 auto;
   min-width: 0;
   height: 44px;
+}
+.stop-note {
+  max-width: 640px;
+  margin: 12px auto 0;
 }
 .disclaimer {
   background: var(--accent-subtle);

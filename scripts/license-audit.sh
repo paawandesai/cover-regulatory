@@ -8,12 +8,12 @@ out=$(mktemp)
   echo "### Backend (Python, via pip-licenses)"
   echo
   (cd backend && uv run -q pip-licenses --from=mixed --format=markdown --with-urls)
-  if [[ -f web/package.json ]]; then
+  if [[ -f frontend/package.json ]]; then
     echo
     echo "### Frontend (npm, via license-checker)"
     echo
     echo '```'
-    (cd web && npx --yes license-checker --summary --production)
+    (cd frontend && npx --yes license-checker --summary --production)
     echo '```'
   fi
 } > "$out"
