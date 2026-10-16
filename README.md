@@ -24,14 +24,16 @@ Enter an APN or a street address. The engine:
 1. **Finds the parcel and stops early when it must.** Outside the City, under Chapter 1A, or not an R1-family zone each gets an explicit result instead of wrong rules.
 2. **Reports the R1 envelope:** front, side and rear yards, maximum residential floor area, height, and whether the lot meets the R1 minimums, plus an estimate of the block's prevailing front yard and, on a key lot, the averaged front yard it may use (LAMC 12.08 C.1).
 3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU (at least 850 sq ft, which state law says can't be refused), a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more). It also gives the detached ADU height the City must allow: 16 ft, or 18 ft (plus 2 ft for a matching roof pitch) near frequent transit.
-4. **Applies the area rules it models and flags the rest.** Hillside Area lots get the LAMC 12.21 C.10 yards, height by height district (Table 12.21 C.10-4), lot coverage, and floor area from slope bands (Tables 12.21 C.10-2a/2b, with the guaranteed minimum); the slope bands are estimated from USGS elevation, so that floor area is an interpretation. R1V, R1F and R1R variation zones get their own floor area ratio, height and lot coverage (Tables 12.08 C.5(b)-(d)); R1H variation zones use their Hillside column. Coastal Zone lots off the Hillside Area in Height District 1 get 45 ft and three times the buildable area (LAMC 12.21.1). Still flagged, not applied: Hillside grading, parking, fire protection and street access; Very High Fire Hazard Severity Zone rules; the January 2025 fire rebuild orders; overlay plans; zone conditions; and SB 9. Coastal Zone lots outside Height District 1 have their floor area and height withheld. Lots that CAL FIRE's 2025 map would newly place in a Very High zone are flagged until the City adopts it. Height Districts 1-L, 1-VL, 1-XL and 1-SS apply their own limits from LAMC 12.21.1 A.1; 1-SS caps the house at one story and 18 ft. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
+4. **Applies the area rules it models and flags the rest.** Hillside Area lots get the LAMC 12.21 C.10 yards, height by height district (Table 12.21 C.10-4), lot coverage, and floor area from slope bands (Tables 12.21 C.10-2a/2b, with the guaranteed minimum); the slope bands are estimated from USGS elevation, so that floor area is an interpretation. R1V, R1F and R1R variation zones get their own floor area ratio, height and lot coverage (Tables 12.08 C.5(b)-(d)); R1H variation zones use their Hillside column. Coastal Zone lots off the Hillside Area in Height District 1 get 45 ft and three times the buildable area (LAMC 12.21.1). Still flagged, not applied: Hillside grading, parking, fire protection and street access; Very High Fire Hazard Severity Zone rules; overlay plans; and zone conditions. Coastal Zone lots outside Height District 1 have their floor area and height withheld. Lots that CAL FIRE's 2025 map would newly place in a Very High zone are flagged until the City adopts it. Height Districts 1-L, 1-VL, 1-XL and 1-SS apply their own limits from LAMC 12.21.1 A.1; 1-SS caps the house at one story and 18 ft. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
+   **SB 9** (Gov. Code 65852.21, 66411.7): up to two homes on the lot and whether it can be split into two lots (each at least 40% of the lot and 1,200 sq ft), with the 800 sq ft and 4 ft setback protections. The engine checks the zone, HPOZ, fire hazard, earthquake fault and flood layers, and lists what it can't check (tenant history, rent control, the Gov. Code 65913.4 site list, which is not loaded), so a "yes" is an interpretation. Inside the Palisades Fire area's Very High fire zone, Executive Order 9 makes SB 9 unavailable.
+   **Fire rebuild** (Mayor's Emergency Executive Orders 1 and 8, inside the January 2025 fire perimeter): the like-for-like footprint, 110% of the building outlines on the lot (Approximate, since the outline's imagery date is unknown), and in the Coastal Zone the 33 ft height for a zoning-compliant EO 8 rebuild.
 5. **Labels every value** with how it was established:
    - **Verified parcel data:** read from a named dataset with its fetch date.
    - **Derived from rule:** computed from regulation text that a review approved (in this demo, an AI review; see Known constraints).
    - **Interpretation, confirm with City:** computed from text that an AI read but no review has approved yet (it shows how many of the rule's inputs were found), or a standard R1 value where something not modeled may change it: a conditioned zone, a specific plan or HPOZ, a through lot, a front taken on the long side, or the City ADU on a Hillside lot in a Very High Fire Hazard Severity Zone.
    - **Not modeled here:** a flag makes the flat-land rule wrong (see item 4). No number is shown.
    - **Approximate:** machine-learned building outlines, and lot width and depth fitted to the parcel outline. Shown for context; not survey-grade.
-   - **Flag, not evaluated:** a condition detected from a map layer or the zone string (with the layer's fetch date), or a law that may apply (SB 9). The engine does not evaluate it.
+   - **Flag, not evaluated:** a condition detected from a map layer or the zone string (with the layer's fetch date), The engine does not evaluate it.
    - **No cited source:** an input is missing or the rule doesn't apply. No number is shown.
 6. **Shows the source.** Clicking any value opens the regulation text with the supporting quote highlighted, plus a link to the official source. State-law citations link to the exact Government Code section on leginfo, and PDF sources open at the cited page.
 7. **Draws the lot.** A diagram or map shows the lot and the buildable area left after yards. It is labeled illustrative, not survey-grade. Clicking a yard, the buildable area, an existing building or the lot outline opens the value and its source text.
@@ -44,7 +46,7 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 ## What it does NOT do
 - It does not cover jurisdictions outside the City of Los Angeles. Such parcels get an explicit "outside City of Los Angeles" result.
 - It does not model LAMC Chapter 1A (the new Zoning Code, in effect in the Downtown and Boyle Heights Community Plan Areas). Those parcels get a "code regime not modeled" result.
-- It models only the R1 zone family, including its Hillside, Coastal Zone and variation rules. HPOZs, specific plans, fire hazard zone rules, Hillside grading and access rules, SB 9, and the January 2025 fire rebuild orders are detected and flagged, not applied.
+- It models only the R1 zone family, including its Hillside, Coastal Zone and variation rules. HPOZs, specific plans, fire hazard zone rules, and Hillside grading and access rules are detected and flagged, not applied.
 - Hillside floor area depends on slope bands estimated from the USGS 3DEP elevation model on a grid of about 3 ft; the City requires a surveyed slope analysis map, which can differ. A Hillside lot with no slope estimate has its floor area withheld.
 - The fire hazard zone applied is the City's current map (LA GeoHub). CAL FIRE's 2025 recommended map is loaded for comparison; in the loaded areas it adds no City lots.
 - Setback and buildable-area geometry is illustrative, not survey-grade.
@@ -52,7 +54,8 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 - Existing buildings are shown as approximate Microsoft machine-learned outlines (ODbL). They can miss, merge or misplace buildings. The Assessor's building attributes are shown when recorded.
 - There is no chat. The plan's read-only follow-up chat was not built.
 - There is no client-facing report or export, so there is no architect sign-off gate yet. Any report built later must sit behind a licensed reviewer's sign-off and disclose AI involvement.
-- The fire rebuild flag cites City Planning's Palisades Rebuild FAQ (2026-01-30), which summarizes Emergency Executive Orders 1, 8 and 9. The orders' own text was not ingested, so check the current order before relying on the flag.
+- The fire rebuild results use the Mayor's Emergency Executive Orders 1 (revised 2025-03-18), 8 and 9 as published on the Mayor's Emergency Orders page. Orders change; check the current order. The engine cannot see what stood on a lot before the fire, so the like-for-like footprint is scaled from today's building outlines and the height limit is stated in words.
+- SB 9 results depend on facts outside the loaded data (tenants, rent control, Ellis Act withdrawals) and on Gov. Code 65913.4(a)(6)(B)-(K) as of 2021-09-16, which is not loaded. They are interpretations, except where SB 9 is ruled out (Executive Order 9, or a lot too small to split).
 - An address that matches no County address point or parcel situs is sent to the US Census Geocoder (a public, no-account service). APN searches never leave the server.
 - The prevailing front yard and the key-lot front yard are estimates from parcel outlines and machine-learned building outlines, labelled Approximate and listing the lots they counted; confirm them on a survey. The per-story side-yard rule in the Coastal Zone is named but not computed.
 - The 18 ft ADU height near transit uses Caltrans' straight-line half-mile transit areas. The law counts walking distance, so inside an area the 18 ft is an interpretation to confirm; outside every area the 16 ft is certain.
@@ -84,14 +87,14 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 
 | APN | Case | Front / side / rear (ft) | Max floor area (sq ft) | Height (ft) | Guest house | Flags |
 |---|---|---|---|---|---|---|
-| 2121-005-008 | Reseda R1-1, 60 x 135 ft | 20 / 7 / 15 | 3,645 | 33 | Not allowed | SB 9 |
-| 2121-016-012 | Reseda R1-1, exactly 50 ft wide | 20 / 7 / 15 | 2,453 | 33 | Not allowed | SB 9 |
-| 2121-002-004 | Reseda R1-1, 25 ft wide (substandard) | 20 / 5 / 15 | 1,462 | 33 | Not allowed | SB 9 |
-| 4359-016-023 | R1-1, 16,403 sq ft, inside a specific plan (interpretation) | 20 / 7 / 15 | 7,381 | 33 | Allowed | Overlay plan, SB 9 |
-| 4412-014-028 | Pacific Palisades, Hillside + Coastal + fire | 20 / 7 / 15 | 4,272 (slope bands, interpretation) | 33 (interpretation) | Allowed | Fire rebuild, Hillside, Coastal, VHFHSZ, SB 9 suspended |
-| 2126-005-015 | R1-2-RIO (supplemental district, interpretation) | 20 / 7 / 15 | 5,517 | 33 | Allowed | Zone conditions, SB 9 |
-| 2104-024-009 | Reseda, existing home; front on the long side (interpretation) | 12 / 7 / 15 | 3,168 | 33 | Not allowed | SB 9 |
-| 2121-003-007 | Reseda, existing home; through lot | 20 / 7 / 15 (rear: interpretation) | 9,113 | 33 | Allowed | SB 9 |
+| 2121-005-008 | Reseda R1-1, 60 x 135 ft | 20 / 7 / 15 | 3,645 | 33 | Not allowed | SB 9: two homes, lot split |
+| 2121-016-012 | Reseda R1-1, exactly 50 ft wide | 20 / 7 / 15 | 2,453 | 33 | Not allowed | SB 9: two homes, lot split |
+| 2121-002-004 | Reseda R1-1, 25 ft wide (substandard) | 20 / 5 / 15 | 1,462 | 33 | Not allowed | SB 9: two homes, lot split |
+| 4359-016-023 | R1-1, 16,403 sq ft, inside a specific plan (interpretation) | 20 / 7 / 15 | 7,381 | 33 | Allowed | Overlay plan; SB 9: two homes, lot split |
+| 4412-014-028 | Pacific Palisades, Hillside + Coastal + fire | 20 / 7 / 15 | 4,272 (slope bands, interpretation) | 33 (interpretation) | Allowed | Fire rebuild, Hillside, Coastal, VHFHSZ; SB 9 not available (EO 9) |
+| 2126-005-015 | R1-2-RIO (supplemental district, interpretation) | 20 / 7 / 15 | 5,517 | 33 | Allowed | Zone conditions; SB 9: two homes, lot split |
+| 2104-024-009 | Reseda, existing home; front on the long side (interpretation) | 12 / 7 / 15 | 3,168 | 33 | Not allowed | SB 9: two homes, lot split |
+| 2121-003-007 | Reseda, existing home; through lot | 20 / 7 / 15 (rear: interpretation) | 9,113 | 33 | Allowed | SB 9: two homes, lot split |
 | 2118-015-001 | [Q]C2-2D-CDO (commercial) | Stop: zone not modeled | | | | |
 | 5179-003-026 | Boyle Heights (Chapter 1A) | Stop: code regime not modeled | | | | |
 | 4327-028-024 | Beverly Hills | Stop: outside the City | | | | |
@@ -108,7 +111,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 
 | Operation | Runs | p50 | p95 |
 |---|---|---|---|
-| Full assessment (`assess`) over the 11 golden parcels | 110 | 257 ms | 395 ms |
+| Full assessment (`assess`) over the 11 golden parcels | 110 | 266 ms | 377 ms |
 | Regulation search (the 32 retrieval questions) | 32 | 52 ms | 114 ms |
 
 The assessment took 129 ms (p50) before the prevailing front yard estimate, which reads every lot and building on the block face (measured 2026-10-16).

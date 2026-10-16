@@ -11,7 +11,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
  ┌──────────────────────────────┐   ┌─────────────────────────────────────────────────────────────────┐
  │ Public GIS layers            │   │ Regulation text                                                 │
  │ County parcels, City zoning, │   │ LAMC Chapter I (saved by hand), BMO/ADU ordinances, ZA Memo 143,│
- │ boundary, plan areas,        │   │ Gov. Code 66310-66342, 65852.21, Palisades rebuild FAQ          │
+ │ boundary, plan areas,        │   │ Gov. Code 66310-66342, SB 9, Mayor's EOs 1/8/9, rebuild FAQ     │
  │ overlays, fire perimeters,   │   └───────────────┬─────────────────────────────────────────────────┘
  │ Microsoft footprints (ODbL)  │                   │ parse, chunk by section id (12.08 C.2(a) ...)
  └──────────────┬───────────────┘                   │
@@ -67,6 +67,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Lot geometry | `backend/app/engine/geometry.py` | Minimum rotated rectangle in State Plane feet. Rays from each side find street (40 ft or more gap), alley (10 to 40 ft) or unknown, which sets the front. The envelope is the rectangle shrunk by the yards, labeled illustrative. |
 | Rule catalogue | `backend/app/engine/rules.py` | Each rule lists the fragment inputs it needs. A rule is "derived" only if every input is approved, and "interpretive" (with a coverage share) if any input is still pending. |
 | Assessment | `backend/app/engine/assess.py` | Stops early where needed, computes values, applies the Hillside Area (with slope bands from `app/ingest/slope.py`), Coastal Zone and R1 variation tables, withholds what is not modeled, adds flags and disclaimers. |
+| SB 9 and fire orders | `backend/app/engine/orders.py` | SB 9 two-unit and lot-split tests, Executive Order 9's suspension, and the EO 1 like-for-like and EO 8 Coastal Zone rebuild limits. |
 | API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt. The optional invite gate is for the hosted demo. |
 | Web app | `frontend/` | Vue 3 + TypeScript + MapLibre with the Forge design tokens. Assessment page, source-text panel, feedback, rule review and stop states. |
 | Packaging | `docker-compose.yml`, `*/Dockerfile`, `deploy/` | Database (PostGIS + pgvector), API with the embedding model built in, Caddy serving the app, and a daily feedback purge. |

@@ -42,6 +42,9 @@ _LETTER_PARA = re.compile(r"^\s*\(([a-z])\)\s+", re.MULTILINE)
 _ROMAN_HEADING = re.compile(r"^\s*([IVX]{1,5})\.\s+(\S.*)$", re.MULTILINE)
 # FAQ documents: "Q11. Can I build an Accessory Dwelling Unit ...?"
 FAQ_HEADING = re.compile(r"^\s*(Q\d{1,3})\.\s+(\S.*)$", re.MULTILINE)
+# Executive orders: top-level lettered paragraphs ("B. Rebuilding"), or numbered ones in a short order.
+ORDER_LETTER = re.compile(r"^\s*([A-H])\.\s+([A-Z]\S*(?: \S+){0,8})\s*$", re.MULTILINE)
+ORDER_NUMBER = re.compile(r"^\s*(\d{1,2})\.\s+(\S.*)$", re.MULTILINE)
 _STATUTE_SECTION = re.compile(r"^\s*(\d{5}(?:\.\d+)?)\.\s", re.MULTILINE)
 
 
@@ -217,6 +220,35 @@ def chunk_by_headings(
         end = marks[i + 1].start() if i + 1 < len(marks) else len(text)
         heading = m.group(2).strip()[:160] if m.lastindex and m.lastindex >= 2 else None
         chunks += _split_long(text[m.start() : end], m.start(), f"{label} {m.group(1)}", heading, offsets)
+    return chunks
+
+
+_TITLE_WORD = r"(?:[A-Z][\w'’-]*|of|and|for|the|to|in|on|or)"
+_ORDER_TITLED = re.compile(rf"^\s*(\d{{1,2}})\.\s+([A-Z][\w'’-]*(?: {_TITLE_WORD}){{0,8}}):", re.MULTILINE)
+
+
+def chunk_order(pages: list[Page], label: str) -> list[Chunk]:
+    """An executive order split at its lettered paragraphs ("B. Rebuilding") and their titled numbered
+    paragraphs ("3. Review Rules for Eligible Projects:"), as "EO 1 B.3". Untitled numbered items stay inside."""
+    text, offsets = _joined(pages)
+    marks: list[tuple[int, str, str]] = []
+    for m in ORDER_LETTER.finditer(text):
+        marks.append((m.start(), m.group(1), m.group(2).strip()))
+    letters = sorted(marks)
+    for m in _ORDER_TITLED.finditer(text):
+        parent = next((lt for lt in reversed(letters) if lt[0] < m.start()), None)
+        if parent:
+            marks.append((m.start(), f"{parent[1]}.{m.group(1)}", m.group(2).strip()))
+    marks.sort()
+    chunks: list[Chunk] = []
+    first = marks[0][0] if marks else len(text)
+    if text[:first].strip():
+        chunks += _split_long(text[:first], 0, f"{label} introduction", "Introduction", offsets)
+    for i, (start, key, heading) in enumerate(marks):
+        end = marks[i + 1][0] if i + 1 < len(marks) else len(text)
+        if end - start < 40:
+            continue  # a lettered heading straight followed by its first numbered paragraph
+        chunks += _split_long(text[start:end], start, f"{label} {key}", heading[:160], offsets)
     return chunks
 
 

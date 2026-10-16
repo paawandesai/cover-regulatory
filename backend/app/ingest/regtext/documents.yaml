@@ -63,6 +63,46 @@ documents:
     ocr_text: false
     headings: faq
 
+  # Mayor's Emergency Executive Orders after the January 2025 fires, from the Mayor's Emergency Orders page.
+  - id: eo1_revised
+    title: Emergency Executive Order No. 1 (revised 2025-03-18), Expedited Community Rebuilding and Recovery
+    publisher: Office of the Mayor, City of Los Angeles
+    doc_type: order
+    jurisdiction: City of Los Angeles
+    code_chapter: null
+    fetch: url
+    url: https://mayor.lacity.gov/sites/g/files/wph2066/files/2025-03/EO%201%20REVISED%20-%20Emergency%20Executive%20Order%20-%20Expedited%20Community%20Rebuilding%20and%20Recovery_0.pdf
+    effective_date: 2025-03-18
+    effective_note: Paragraph 4 (General Rebuilding and Reconstruction Rules) was replaced by EO 8 on 2025-07-23. Orders change; re-check before use.
+    ocr_text: false
+    headings: letters
+
+  - id: eo8
+    title: Emergency Executive Order No. 8 and Partially Revised No. 1, Expanding Pathways for Expedited Residential Rebuilding
+    publisher: Office of the Mayor, City of Los Angeles
+    doc_type: order
+    jurisdiction: City of Los Angeles
+    code_chapter: null
+    fetch: url
+    url: https://mayor.lacity.gov/sites/g/files/wph2066/files/2025-07/Emergency%20Executive%20Order%20No.%208%20and%20Partially%20Revised%20No.%201%20-%20Expanding%20Pathways%20for%20Expedited%20Residential%20Rebuilding.pdf
+    effective_date: 2025-07-23
+    effective_note: Orders change; re-check before use.
+    ocr_text: false
+    headings: letters
+
+  - id: eo9
+    title: Emergency Executive Order No. 9, Local Prohibition on SB 9 in Burn Areas
+    publisher: Office of the Mayor, City of Los Angeles
+    doc_type: order
+    jurisdiction: City of Los Angeles
+    code_chapter: null
+    fetch: url
+    url: https://mayor.lacity.gov/sites/g/files/wph2066/files/2025-07/Emergency%20Executive%20Order%20No.%209%20-%20Local%20Prohibition%20on%20SB%209%20in%20Burn%20Areas.pdf
+    effective_date: 2025-07-30
+    effective_note: Follows the Governor's Executive Order N-32-25. Orders change; re-check before use.
+    ocr_text: false
+    headings: numbers
+
   # Saved by hand (leginfo refuses automated requests; LAMC consolidated text is only on amlegal's viewer).
   - id: gov_66310_article1
     title: Gov. Code Title 7, Div. 1, Ch. 13, Art. 1 (ADU law, findings and definitions)

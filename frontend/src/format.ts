@@ -19,6 +19,8 @@ const UNITS: Record<string, string> = { ft: 'ft', sqft: 'sq ft' }
 const BOOLEAN_TEXT: Record<string, [string, string]> = {
   guest_house: ['Allowed', 'Not allowed'],
   lot_minimums: ['Meets minimums', 'Below minimums'],
+  sb9_two_unit: ['Available', 'Not available'],
+  sb9_lot_split: ['Possible', 'Not possible'],
 }
 
 export function formatValue(item: Item): string {

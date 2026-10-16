@@ -1,0 +1,193 @@
+{
+  "checked_on": "2026-10-16",
+  "method": "Wave 4 (left-out items 12 and 13). Candidates from Gov. Code 65852.21 and 66411.7 (SB 9) and Mayor's Emergency Executive Orders 1 (revised), 8 and 9, extracted by Claude Opus 5.5 (prompt extract-v2). The 17 candidates the engine uses were checked by Claude Sonnet 5.5 (Anthropic API) against each chunk, then by Claude Opus 5.5 (via Claude Code), which decided. The other candidates (parameter 'other') stay pending for a reviewer.",
+  "candidates": [
+    {
+      "fragment_id": 615,
+      "chunk_id": "gov_65852_21#gov--code-65852-21-a#1",
+      "parameter": "sb9_units_per_lot_max",
+      "recommendation": "approve_with_note",
+      "note": "Two units are the ceiling for ministerial review, not a per-lot cap; the engine lists the other (a)(1)-(5) requirements as checks to confirm.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The quote supports a value of 2 with unit count: 'no more than two residential units'. The parameter name is acceptable but could mislead, because the text sets the threshold for ministerial review of a development in a single-family zone, not a standalone per-lot maximum. The conditions field only points to paragraphs (1)-(5) and does not list the actual gating requirements (urbanized area, 65913.4 parcel criteria, protected-housing demolition limits, 3-year tenant occupancy, Ellis Act 15-year lookback, historic exclusions). The extraction therefore needs those conditions written out before an engine can apply it safely."
+      }
+    },
+    {
+      "fragment_id": 619,
+      "chunk_id": "gov_65852_21#gov--code-65852-21-b#1",
+      "parameter": "sb9_unit_min_floor_area_sqft",
+      "recommendation": "approve_with_note",
+      "note": "Sonnet disagreed with the parameter name: 800 sq ft is what local standards may not preclude, not a minimum unit size. The engine states it that way.",
+      "checks": {
+        "second_model": "disagree",
+        "second_model_explanation": "The number 800 and unit sqft match the quote, but the parameter name mischaracterizes the rule. The text is a limit on local agency standards: they may not physically preclude two units or preclude either from being at least 800 sq ft. It does not set a minimum unit size. The candidate also drops conditions in the same subdivision (setback exception for existing or same-footprint structures, 4 ft side/rear setback cap, uniformity requirement, historic district carve-out), so conditions is null when the excerpt contains several that change when the value applies. A better parameter would be something like sb9_min_unit_size_protected_sqft with these conditions attached."
+      }
+    },
+    {
+      "fragment_id": 620,
+      "chunk_id": "gov_65852_21#gov--code-65852-21-b#1",
+      "parameter": "sb9_side_rear_setback_ft",
+      "recommendation": "approve_with_note",
+      "note": "Word rule: no setback for an existing structure or one rebuilt in the same location and dimensions.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The quote is accurate and the null/text representation of 'no setback' is faithful, but the parameter name sb9_side_rear_setback_ft is too broad. The text actually grants an exemption for existing or same-location-and-dimension structures, while the general SB 9 side/rear setback in clause (ii) is up to 4 ft. A value of null with unit 'text' fits a non-numeric exemption, yet the engine needs a companion entry for the 4 ft maximum in other circumstances. Conditions capture the exemption trigger but omit the clause (ii) counterpart and the limits on its scope (side and rear lines only, subject to (2)(A) preclusion limits). Verdict: agree with caveat, since the excerpt supports the extraction but the parameter name and conditions must be narrowed or paired with the 4 ft rule."
+      }
+    },
+    {
+      "fragment_id": 621,
+      "chunk_id": "gov_65852_21#gov--code-65852-21-b#1",
+      "parameter": "sb9_side_rear_setback_ft",
+      "recommendation": "approve",
+      "note": "4 ft is the most a city may require from side and rear lot lines; shown as a maximum.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The value (4), unit (ft) and parameter (side and rear setback) match the quoted clause (b)(2)(B)(ii). The conditions are incomplete: the candidate captures the exclusion for existing or same-location structures but frames it as an exclusion rather than a zero-setback rule, and omits that 4 ft is only a ceiling that yields to the physical-preclusion test of (2)(A) (two units, each at least 800 sq ft). The rule should be phrased as: local agency may require up to 4 ft side/rear, but none for existing or same-footprint structures, and never so much as to preclude two 800 sq ft units."
+      }
+    },
+    {
+      "fragment_id": 633,
+      "chunk_id": "gov_66411_7#gov--code-66411-7-a#1",
+      "parameter": "sb9_lot_split_min_pct",
+      "recommendation": "approve",
+      "note": "Neither new lot may be under 40% of the original.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The value of 40, the unit of percent, and the parameter name for the minimum share of the original lot area all match the quoted text. The condition field captures only the 'no more than two parcels, approximately equal' language and the single-family zone. It omits the 'all requirements' gating, the 1,200 sq ft minimum with its local-ordinance exception, the urbanized-area requirement, the 65913.4 site exclusions, and the protected-housing limits. The number is accurate, but the conditions are incomplete and could lead to over-approval if used alone."
+      }
+    },
+    {
+      "fragment_id": 635,
+      "chunk_id": "gov_66411_7#gov--code-66411-7-a#1",
+      "parameter": "sb9_lot_split_min_sqft",
+      "recommendation": "approve_with_note",
+      "note": "The engine says a City ordinance could set a smaller minimum and that none is loaded; it does not claim none exists.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The 1,200 sq ft value and sqft unit match paragraph (2)(A), and the parameter name fits the text. The candidate captures the (2)(B) exception, though only loosely: it says the exception exists but does not say that a local ordinance can change the minimum. It omits the 40 percent floor in (1) and the eligibility conditions in (3). The 'LA has no smaller ordinance' claim in engine_rule_using_it is outside the excerpt and unsupported. Agree with caveat: the number is correct but should be applied only together with the other requirements."
+      }
+    },
+    {
+      "fragment_id": 639,
+      "chunk_id": "gov_66411_7#gov--code-66411-7-c#1",
+      "parameter": "sb9_unit_min_floor_area_sqft",
+      "recommendation": "approve_with_note",
+      "note": "Sonnet disagreed with the parameter name, as for #619. Paragraph (3) lets the 4 ft setbacks apply notwithstanding the 800 sq ft protection; the engine says so.",
+      "checks": {
+        "second_model": "disagree",
+        "second_model_explanation": "The number 800 and the unit sq ft match the quote. But the text does not set a minimum floor area for units. It limits what local objective standards may do: they may not preclude two units or force a unit below 800 sq ft. The parameter name misdescribes that. The conditions also omit the (c)(3) 'notwithstanding paragraph (2)' setback rules: up to 4 ft side/rear setbacks are allowed, and none for existing or same-footprint structures. Those rules decide when the 800 sq ft protection actually binds, so the extraction is incomplete and misleading."
+      }
+    },
+    {
+      "fragment_id": 641,
+      "chunk_id": "gov_66411_7#gov--code-66411-7-c#1",
+      "parameter": "sb9_side_rear_setback_ft",
+      "recommendation": "approve",
+      "note": "4 ft maximum side and rear setback on a lot created by a split.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The value of 4, unit of feet, and the side and rear lot-line scope match the text of 66411.7(c)(3)(B). The conditions field correctly captures the exclusion for existing or same-location/same-dimension structures and notes that 4 ft is a maximum. However, the parameter name lacks 'max', the engine rule drops the zero-setback exception, and the overriding limits in (c)(2) (no physical preclusion of two units, 800 sq ft minimum unit size) are not recorded. The extraction is accurate but incomplete and needs the caveats to be safely applied."
+      }
+    },
+    {
+      "fragment_id": 649,
+      "chunk_id": "gov_66411_7#gov--code-66411-7-j#1",
+      "parameter": "sb9_units_per_lot_max",
+      "recommendation": "reject",
+      "note": "The value is null though the text says two; #615 and the engine's word text cover the unit limit instead.",
+      "checks": {
+        "second_model": "disagree",
+        "second_model_explanation": "The excerpt sets a limit of two units on a parcel created through the lot-split authority. The candidate's value_text says two but the value field is null, so the extraction is incomplete. The unit 'count' is fine. The parameter name 'sb9_units_per_lot_max' implies a hard cap on any SB 9 lot, but the text only says the agency is not required to permit more than two on a lot-split parcel. The conditions capture the definition of unit but omit the notwithstanding clause covering ADU and density bonus laws. They also do not say that the agency may permit more than two."
+      }
+    },
+    {
+      "fragment_id": 650,
+      "chunk_id": "eo1_revised#eo-1-b-3#1",
+      "parameter": "rebuild_max_pct_prior",
+      "recommendation": "approve",
+      "note": "110% of pre-fire footprint and height, same location, Eligible Projects only.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The value 110, unit percent, and parameter name (max percent of prior footprint and height) match the quoted text. The location condition (substantially the same location) is captured. However, the conditions omit the Eligible Project criteria in the same excerpt: same use, no increase in primary dwelling units, and the permit and completion deadlines. They also omit that this is one of several alternative qualifying categories under item 4. Without those, the rule could be applied outside its intended scope, especially in combination with SB 9 unit additions."
+      }
+    },
+    {
+      "fragment_id": 653,
+      "chunk_id": "eo1_revised#eo-1-b-3#2",
+      "parameter": "rebuild_max_pct_prior",
+      "recommendation": "approve",
+      "note": "Accessory structures: 110% of pre-fire footprint and height.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The value 110 and the unit percent match the text. The quote and the E-79-8 condition are captured, but the parameter name is too generic and does not say the cap covers only accessory structures, and only footprint and height. The conditions also omit the pre-Wildfire existence requirement, the separate footprint and height tests, and the Eligible Project scope. The extraction is usable if the name is made specific, for example accessory_structure_rebuild_max_pct_of_prewildfire_footprint_and_height, and the missing conditions are added."
+      }
+    },
+    {
+      "fragment_id": 654,
+      "chunk_id": "eo1_revised#eo-1-b-3#2",
+      "parameter": "rebuild_bluff_setback_ft",
+      "recommendation": "approve",
+      "note": "10 ft from a canyon bluff (new ADUs); the coastal bluff figure is #655.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The number 10 and unit feet match the text for canyon bluffs, and the condition 'Canyon bluff' is correct as far as it goes. However, the parameter name 'rebuild_bluff_setback_ft' is too generic: the text sets two different distances (10 ft canyon bluff, 25 ft coastal bluff) and only for new ADUs, so the name implies a single rebuild-wide bluff setback. The conditions omit the 25 ft coastal bluff counterpart and the Wildfire-damaged primary residence requirement. The extraction should be renamed (e.g., adu_canyon_bluff_setback_ft) and paired with a separate 25 ft coastal bluff entry, with the Eligible Project scope noted."
+      }
+    },
+    {
+      "fragment_id": 655,
+      "chunk_id": "eo1_revised#eo-1-b-3#2",
+      "parameter": "rebuild_bluff_setback_ft",
+      "recommendation": "approve",
+      "note": "25 ft from a coastal bluff (new ADUs).",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The 25 ft value and ft unit are accurate for coastal bluffs. The parameter name 'rebuild_bluff_setback_ft' is too generic: the text sets two different distances (10 ft canyon bluff, 25 ft coastal bluff), so a single parameter with 25 hides the canyon bluff alternative. The condition 'Coastal bluff' is also incomplete because it omits the canyon-bluff 10 ft case and the Wildfire-damaged-primary-residence precondition. The number is correct, but the parameter should be split into coastal and canyon variants and scoped to EO 1 eligible ADUs."
+      }
+    },
+    {
+      "fragment_id": 661,
+      "chunk_id": "eo8#eo-8-a#1",
+      "parameter": "height_max_ft",
+      "recommendation": "approve_with_note",
+      "note": "Word rule: Eligible EO8 projects on non-hillside Coastal Zone R1 lots use the flat-land Height District 1 limits of 12.21.1.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The null value with unit 'text' and the value_text are faithful to the excerpt: it gives no numeric height, only a cross-reference to the R1 Height District 1 standard in LAMC 12.21.1 for lots not in a Hillside Area or Coastal Zone. The parameter name height_max_ft is loosely acceptable, as the text regulates height, but it is a reference rather than a number. The conditions field is null even though the excerpt makes the rule conditional on Eligible EO8 Project status (single-family, wildfire-damaged, compliance with all objective zoning standards) and on the non-hillside R1 Coastal Zone lot type. applies_to partly captures this but conditions should be filled in. The engine_rule's 33 ft/28 ft figures come from outside the excerpt and are unsupported here."
+      }
+    },
+    {
+      "fragment_id": 664,
+      "chunk_id": "eo8#eo-8-a#2",
+      "parameter": "rebuild_bluff_setback_ft",
+      "recommendation": "approve",
+      "note": "EO 8 project 10 ft from a canyon bluff.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The value 10 and unit ft match the quoted text for canyon bluffs, and the quote is accurate. However, the parameter name implies a general bluff setback, while the text sets two values by bluff type: 10 ft for canyon bluff and 25 ft for coastal bluff. The 'Canyon bluff' condition partly captures this, but the candidate omits the companion 25 ft coastal bluff value and the eligibility conditions (Coastal Zone, same unit count, no subdivision or lot line changes, EPM compliance, permit and completion deadlines). It should be renamed to something like canyon_bluff_setback_ft and paired with a separate coastal_bluff_setback_ft of 25, with the eligibility conditions attached."
+      }
+    },
+    {
+      "fragment_id": 665,
+      "chunk_id": "eo8#eo-8-a#2",
+      "parameter": "rebuild_bluff_setback_ft",
+      "recommendation": "approve",
+      "note": "EO 8 project 25 ft from a coastal bluff.",
+      "checks": {
+        "second_model": "agree_with_caveat",
+        "second_model_explanation": "The value 25 and unit ft match the quote for a coastal bluff. The quote also sets a 10 ft setback from a canyon bluff, which the candidate omits. The parameter name does not say it covers only coastal bluffs, so it reads as a general rebuild bluff setback. The excerpt makes this one of several cumulative eligibility conditions for an Eligible EO8 Project, and the candidate does not capture those. The number is correct, but the conditions are incomplete and the parameter should be split by bluff type, for example coastal_bluff_min_setback_ft."
+      }
+    },
+    {
+      "fragment_id": 675,
+      "chunk_id": "eo9#eo-9-1#1",
+      "parameter": "sb9_suspended",
+      "recommendation": "approve_with_note",
+      "note": "Sonnet noted the boolean value is null; the engine uses it as a word rule. The vesting exception in the conditions comes from paragraph 2 of the order (its own chunk).",
+      "checks": {
+        "second_model": "disagree",
+        "second_model_explanation": "The excerpt states a flat refusal to accept or process applications under Gov. Code 65852.21 and 66411.7 for any project in a VHFHSZ within the Palisades Fire area. For a boolean parameter like sb9_suspended, the value should be true, not null. The unit (boolean) is acceptable, and the parameter name fits the text, though it covers both SB 9 provisions. The scope in applies_to correctly captures the zone and area limits in the excerpt, and the excerpt contains no other exceptions. However, the candidate's conditions field adds a vesting exception (LAMC 13B.10.1.B.2(a), Executive Order N-32-25) that does not appear in the excerpt. It cannot be verified from this text and should be removed or sourced separately. The null value is the main defect."
+      }
+    }
+  ]
+}

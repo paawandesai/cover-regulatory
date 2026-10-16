@@ -307,6 +307,13 @@ def summarize(items, ctx) -> dict:
     g = by.get("guest_house")
     if g is not None and g.value is True:
         answer += " A guest house is also allowed on this lot."
+    sb2, split = by.get("sb9_two_unit"), by.get("sb9_lot_split")
+    if sb2 is not None and sb2.value:
+        answer += (
+            " SB 9 may also allow two homes" + (" or a lot split" if split and split.value else "") + ", to confirm."
+        )
+    elif sb2 is not None and sb2.value is False:
+        answer += " SB 9 is not available here (Executive Order 9)."
     confirm, withheld = counts.get("interpretive", 0), counts.get("withheld", 0)
     parts = []
     if confirm:
@@ -367,8 +374,19 @@ def summarize(items, ctx) -> dict:
                 "title": "Fire rebuild order or standard rules",
                 "options": [
                     (
-                        "Rebuild under the emergency orders: like-for-like (EO 1), or EO 8 in the Coastal Zone. Only for a "
-                        "building damaged or destroyed by the fire."
+                        "Rebuild under the emergency orders: like-for-like (EO 1"
+                        + (
+                            f", up to about {by['eo1_footprint'].value:,.0f} sq ft of footprint"
+                            if by.get("eo1_footprint") and by["eo1_footprint"].value
+                            else ", up to 110% of the pre-fire footprint and height"
+                        )
+                        + ")"
+                        + (
+                            f", or EO 8 in the Coastal Zone (zoning-compliant, up to {by['eo8_height'].value:g} ft)"
+                            if by.get("eo8_height") and by["eo8_height"].value
+                            else ""
+                        )
+                        + ". Only for a building damaged or destroyed by the fire."
                     ),
                     "Build new under the standard rules shown here.",
                 ],

@@ -117,6 +117,26 @@ datasets:
     overlay_kind: vhfhsz_2025
     scope: study_areas
 
+  - id: ca_alquist_priolo_fault_zones
+    name: Alquist-Priolo Earthquake Fault Zones (California Geological Survey)
+    publisher: LA County public GIS, from the California Geological Survey
+    item_id: Hazards/MapServer/5 (LA County public GIS)
+    service_url: https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/Hazards/MapServer/5
+    license: LA County terms of use (informational). Used for flagging only (SB 9 site checks).
+    target: overlay
+    overlay_kind: fault_zone
+    scope: study_areas
+
+  - id: fema_flood_100yr
+    name: FEMA 100-year flood plain (special flood hazard area)
+    publisher: LA County public GIS, from FEMA's flood maps
+    item_id: Hazards/MapServer/11 (LA County public GIS)
+    service_url: https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/Hazards/MapServer/11
+    license: LA County terms of use (informational); FEMA flood data is public domain. Used for flagging only (SB 9 site checks).
+    target: overlay
+    overlay_kind: flood_100yr
+    scope: study_areas
+
   - id: lacity_hpoz
     name: Historic Preservation Overlay Zones
     publisher: Los Angeles City Planning (GIS@LADCP)

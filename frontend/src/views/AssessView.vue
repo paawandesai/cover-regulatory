@@ -134,10 +134,12 @@ const groups = computed(() => {
     {
       title: 'R1 envelope',
       sub: isHillside.value
-        ? 'Hillside Area: flat-land values withheld'
+        ? 'Hillside Area standards (LAMC 12.21 C.10)'
         : r.items.some((i) => i.family === 'r1_envelope' && i.label === 'withheld')
           ? 'Some values withheld for this lot'
-          : 'Flat-land R1',
+          : item('coastal')?.value
+            ? 'Coastal Zone (LAMC 12.21.1)'
+            : 'Flat-land R1',
       rows: of(['r1_envelope']),
     },
     {
@@ -145,6 +147,8 @@ const groups = computed(() => {
       sub: 'Single-family home within the envelope above, plus',
       rows: of(['guest_house', 'adu', 'jadu']),
     },
+    { title: 'SB 9', sub: 'Two homes, or a lot split, under state law', rows: of(['sb9']) },
+    { title: 'Fire rebuild', sub: "Mayor's emergency orders after the January 2025 fires", rows: of(['rebuild']) },
     { title: 'Flags', sub: 'Shown, not evaluated', rows: of(['flag']) },
   ].filter((g) => g.rows.length)
 })

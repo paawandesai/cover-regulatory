@@ -4,13 +4,16 @@ Order: resolve the parcel -> stop early (outside City, Chapter 1A, not R1) -> lo
 Every item carries a label (verified / derived / interpretive / uncited) and the citations behind it."""
 
 import math
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict
 from datetime import UTC, datetime
 
 from app.db.connection import connect
 from app.engine import rules as R
 from app.engine.geometry import envelope, lot_frame
-from app.engine.links import deep_link
+from app.engine.item import Item
+from app.engine.item import chunk_citation as _chunk_citation
+from app.engine.item import rule_item as _rule_item
+from app.engine.orders import rebuild_items, sb9_items
 from app.engine.prevailing import prevailing
 from app.engine.project import ProjectInputs, check_project, summarize
 from app.parcel.provenance import Sourced
@@ -32,35 +35,6 @@ AI_DISCLOSURE = (
     "demo that review was an AI review applied on the project owner's instruction, not a person's; each value's "
     "source panel says which. No AI model is used to compute this assessment."
 )
-LABEL_TEXT = {
-    "verified": "Verified parcel data",
-    "derived": "Derived from rule {rule}",
-    "interpretive": "Interpretation, confirm with the jurisdiction",
-    "uncited": "No cited source found",
-    "withheld": "Not modeled here",
-    "approximate": "Approximate",
-    "flag": "Flag, not evaluated",
-    "mock": "MOCK data",
-}
-
-
-@dataclass
-class Item:
-    id: str
-    family: str  # parcel | r1_envelope | guest_house | adu | jadu | flag
-    title: str
-    value: float | str | bool | None
-    unit: str | None
-    label: str
-    rule_id: str | None = None
-    coverage: float | None = None
-    explanation: str | None = None
-    citations: list[dict] = field(default_factory=list)
-    source: dict | None = None
-
-    @property
-    def label_text(self) -> str:
-        return LABEL_TEXT[self.label].format(rule=self.rule_id)
 
 
 def _overlay_source(ctx, kinds: tuple[str, ...]) -> dict:
@@ -80,7 +54,7 @@ def _zone_source(ctx) -> dict:
     }
 
 
-def _footprints(conn, apn: str) -> tuple[list[dict], Item]:
+def _footprints(conn, apn: str) -> tuple[list[dict], Item, float | None]:
     """Existing buildings from the ODbL footprint table: those mostly (over half) inside this parcel."""
     rows = conn.execute(
         """SELECT ST_AsGeoJSON(b.geom)::json AS geom, ST_Area(b.geom::geography) * 10.7639 AS sqft, b.height_m,
@@ -95,31 +69,39 @@ def _footprints(conn, apn: str) -> tuple[list[dict], Item]:
         "SELECT id, retrieved_at, attribution FROM source WHERE id = 'ms_global_building_footprints'"
     ).fetchone()
     if src is None:
-        return [], Item(
-            "existing_footprint",
-            "parcel",
-            "Existing buildings (outline)",
+        return (
+            [],
+            Item(
+                "existing_footprint",
+                "parcel",
+                "Existing buildings (outline)",
+                None,
+                None,
+                "uncited",
+                explanation="Building footprints are not loaded.",
+            ),
             None,
-            None,
-            "uncited",
-            explanation="Building footprints are not loaded.",
         )
     total = round(sum(r["sqft"] for r in rows))
     value = f"{len(rows)} building{'s' if len(rows) != 1 else ''}, about {total:,} sq ft" if rows else "None found"
-    return [r["geom"] for r in rows], Item(
-        "existing_footprint",
-        "parcel",
-        "Existing buildings (outline)",
-        value,
-        None,
-        "approximate",
-        explanation="Approximate outlines traced from imagery by machine learning; they can miss, merge or "
-        "misplace buildings and may predate recent demolition or construction. Not a survey.",
-        source={
-            "dataset": src["id"],
-            "fetched_at": src["retrieved_at"].isoformat() if src["retrieved_at"] else None,
-            "attribution": src["attribution"],
-        },
+    return (
+        [r["geom"] for r in rows],
+        Item(
+            "existing_footprint",
+            "parcel",
+            "Existing buildings (outline)",
+            value,
+            None,
+            "approximate",
+            explanation="Approximate outlines traced from imagery by machine learning; they can miss, merge or "
+            "misplace buildings and may predate recent demolition or construction. Not a survey.",
+            source={
+                "dataset": src["id"],
+                "fetched_at": src["retrieved_at"].isoformat() if src["retrieved_at"] else None,
+                "attribution": src["attribution"],
+            },
+        ),
+        (total or None),
     )
 
 
@@ -135,50 +117,6 @@ def _sourced(item_id: str, title: str, s: Sourced | None, unit: str | None = Non
         "mock" if s.label == "mock" else s.label,
         source={"dataset": s.source_id, "fetched_at": s.fetched_at.isoformat() if s.fetched_at else None},
     )
-
-
-def _rule_item(item_id, family, title, ri: R.RuleInputs, value, unit, explanation) -> Item:
-    label = ri.label if value is not None else "uncited"
-    return Item(
-        item_id,
-        family,
-        title,
-        value,
-        unit,
-        label,
-        rule_id=ri.rule_id,
-        coverage=ri.coverage if label == "interpretive" else None,
-        explanation=explanation,
-        citations=ri.citations(),
-    )
-
-
-def _chunk_citation(conn, section_id: str, contains: str | None = None) -> list[dict]:
-    """Cite a chunk by its section id (looked up in code, never emitted by a model)."""
-    row = conn.execute(
-        """SELECT id, section_id, code_chapter, source_url, page_start, retrieved_at::text AS retrieved_at, text
-           FROM reg_chunk WHERE section_id = %s AND (%s::text IS NULL OR text ILIKE '%%' || %s || '%%')
-           ORDER BY id LIMIT 1""",
-        (section_id, contains, contains),
-    ).fetchone()
-    if row is None:
-        return []
-    # Quote from the phrase that made this the right chunk (or the start), so the panel highlights it.
-    start = max(row["text"].lower().find(contains.lower()), 0) if contains else 0
-    end = min(len(row["text"]), start + 400)
-    return [
-        {
-            "chunk_id": row["id"],
-            "section_id": row["section_id"],
-            "code_chapter": row["code_chapter"],
-            "quote": row["text"][start:end],
-            "quote_start": start,
-            "quote_end": end,
-            "source_url": deep_link(row["source_url"], row["section_id"], row["page_start"]),
-            "retrieved_at": row["retrieved_at"],
-            "review_status": "code-cited",
-        }
-    ]
 
 
 def _flag(conn, fid, title, explanation, section, contains=None) -> Item:
@@ -868,11 +806,12 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 conn,
                 "fire_rebuild",
                 "Inside a January 2025 fire perimeter",
-                "If a building here was damaged or destroyed by the fire, the Mayor's emergency orders may apply "
-                "instead of the standard rules: EO 1 (like-for-like rebuild), EO 8 (single-family homes in the Coastal "
-                "Zone), and EO 9 (no SB 9 projects in the burn area's fire hazard zone). Cited from City Planning's "
-                "rebuild FAQ, not the orders themselves; check the current order.",
-                "Palisades Rebuild FAQ Q1",
+                "If a building here was damaged or destroyed by the fire, the Mayor's emergency orders offer other "
+                "paths than the standard rules: EO 1 (like-for-like rebuild) and, in the Coastal Zone, EO 8 "
+                "(zoning-compliant single-family rebuild); see Fire rebuild below. Orders change; check the current "
+                "order.",
+                "EO 1 B.3",
+                "Eligible Projects",
             )
         )
     if "hillside" in kinds:
@@ -965,33 +904,8 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 source=_zone_source(ctx),
             )
         )
-    if "fire_perimeter_2025" in kinds and "vhfhsz" in kinds:
-        out.append(
-            _flag(
-                conn,
-                "sb9_suspended",
-                "SB 9 is suspended here",
-                "Mayor's Executive Order 9 suspends SB 9 lot splits and two-unit projects in the Very High Fire Hazard "
-                "Severity Zone inside the Palisades burn area. Check whether the order is still in force.",
-                "Palisades Rebuild FAQ Q13",
-                "Senate Bill 9",
-            )
-        )
-    else:
-        out.append(
-            _flag(
-                conn,
-                "sb9",
-                "SB 9 lot split or two-unit development may be available",
-                "State law allows a ministerial two-unit development or lot split on many single-family lots. It "
-                "excludes, among others, Very High Fire Hazard Severity Zones (unless fire standards are met), "
-                "historic districts and landmarks, flood zones, and homes rented in the last 3 years for a lot "
-                "split. "
-                + ("This lot is in a Very High Fire Hazard Severity Zone. " if "vhfhsz" in kinds else "")
-                + "Not evaluated.",
-                "Gov. Code 65852.21(a)",
-            )
-        )
+    # SB 9 is evaluated in orders.sb9_items, including Executive Order 9's suspension in the Palisades.
+
     return out
 
 
@@ -1079,7 +993,7 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
             else None,
         )
         items.append(dims)
-        buildings, fp_item = _footprints(conn, ctx.apn)
+        buildings, fp_item, outline_sqft = _footprints(conn, ctx.apn)
         items.append(fp_item)
         if not ctx.zone.is_modeled:
             result["notes"].append(
@@ -1153,6 +1067,9 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
             )
             rfa_item.citations += ex.citations()
         items += _building_types(conn, ctx, lot_area)
+        items += sb9_items(conn, ctx, lot_area, kinds)
+        flat = R.load("R1_HEIGHT", conn).value("max_ft")
+        items += rebuild_items(conn, ctx, kinds, outline_sqft, flat)
         items += _flags(conn, ctx)
     if frame and None not in (front, side, rear):
         if frame.through:
