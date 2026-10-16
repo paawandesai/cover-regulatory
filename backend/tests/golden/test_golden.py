@@ -30,6 +30,8 @@ def test_golden(case):
             # A number is only shown with cited text behind it, and never as "verified".
             assert got["label"] in ("derived", "interpretive"), key
             assert got["citations"], key
+    for key, want in (case.get("labels") or {}).items():
+        assert items[key]["label"] == want, f"{key}: label {items[key]['label']}, expected {want}"
     flags = {i["id"] for i in r["items"] if i["family"] == "flag"}
     assert set(case.get("flags_include", [])) <= flags
     assert not (set(case.get("flags_exclude", [])) & flags)
