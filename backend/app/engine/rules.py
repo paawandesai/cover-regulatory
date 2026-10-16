@@ -21,6 +21,8 @@ class Need:
     quote_has: str | None = None
     pick: str = "one"  # "one" | "max" | "min"
     numeric: bool = True  # False: a rule stated in words (its logic is in code); found when cited text exists
+    applies: str | None = None  # the fragment's applies_to must include this (a table column, e.g. "R1V2")
+    condition_has: str | None = None  # the fragment's conditions must contain this (a table row)
 
 
 @dataclass
@@ -127,6 +129,10 @@ RULES: dict[str, list[Need]] = {
         Need("accessory_each_sqft", "LAMC 12.03(c)", "rfa_accessory_exempt_sqft", "Detached Accessory", pick="min"),
         Need("accessory_total_sqft", "LAMC 12.03(c)", "rfa_accessory_exempt_sqft", "Detached Accessory", pick="max"),
     ],
+    "COASTAL_R1": [
+        Need("height_ft", "LAMC 12.21.1", "height_max_ft", "located in a Coastal Zone"),
+        Need("buildable_x", "LAMC 12.21.1 A.1", "rfa_ratio", "Coastal Zone not located in a Hillside Area"),
+    ],
     "ADU_TRANSIT_HEIGHT": [Need("height_ft", "Gov. Code 66321(b)", "adu_height_max_ft", "major transit stop")],
     "GUEST_HOUSE": [Need("min_lot_sqft", "LAMC 12.08 A.7", "alq_min_lot_area_sqft")],
     "ADU_STATE_DETACHED": [
@@ -170,12 +176,12 @@ def _citation(r) -> dict:
     }
 
 
-def load(rule_id: str, conn=None) -> RuleInputs:
+def load(rule_id: str, conn=None, needs: list[Need] | None = None) -> RuleInputs:
     if conn is None:
         with connect() as c:
-            return load(rule_id, c)
+            return load(rule_id, c, needs)
     out = RuleInputs(rule_id)
-    for need in RULES[rule_id]:
+    for need in needs if needs is not None else RULES[rule_id]:
         clause, arg = _section_clause(need.section)
         rows = conn.execute(
             f"""SELECT f.id, f.status, f.reviewed_by, f.value_numeric, f.source_quote, f.quote_start, f.quote_end, f.chunk_id,
@@ -184,8 +190,19 @@ def load(rule_id: str, conn=None) -> RuleInputs:
                 WHERE {clause} AND f.parameter = %s AND f.status IN ('approved', 'pending')
                   AND f.validation = 'ok' AND f.chunk_hash = c.content_hash AND NOT c.mock
                   AND (%s::text IS NULL OR f.source_quote ILIKE '%%' || %s || '%%')
+                  AND (%s::text IS NULL OR %s = ANY(f.applies_to))
+                  AND (%s::text IS NULL OR f.conditions ILIKE '%%' || %s || '%%')
                 ORDER BY (f.status = 'approved') DESC, f.id""",
-            (arg, need.parameter, need.quote_has, need.quote_has),
+            (
+                arg,
+                need.parameter,
+                need.quote_has,
+                need.quote_has,
+                need.applies,
+                need.applies,
+                need.condition_has,
+                need.condition_has,
+            ),
         ).fetchall()
         # An approved reading outranks unreviewed ones for the same input.
         if any(r["status"] == "approved" for r in rows):
@@ -220,3 +237,87 @@ def load(rule_id: str, conn=None) -> RuleInputs:
             status,
         )
     return out
+
+
+# R1 variation zones (LAMC Tables 12.08 C.5.(b)-(d)): one table column per zone, one row per lot-size band.
+VARIATION_TABLE = {"V": "LAMC 12.08 C.5(b)", "F": "LAMC 12.08 C.5(c)", "R": "LAMC 12.08 C.5(d)"}
+LOT_BANDS = [
+    (6000, "Up to 6,000"),
+    (7000, "6,001 to 7,000"),
+    (8000, "7,001 to 8,000"),
+    (9000, "8,001 to 9,000"),
+    (10000, "9,001 to 10,000"),
+    (float("inf"), "Over 10,000"),
+]
+
+
+def lot_band(lot_area: float) -> str:
+    return next(label for top, label in LOT_BANDS if lot_area <= top)
+
+
+def variation_needs(zone: str, lot_area: float) -> list[Need]:
+    """Inputs for one variation zone: its floor-area ratio and lot coverage for this lot size, and its mass rows."""
+    sec = VARIATION_TABLE[zone[2]]
+    band = f"Lot {lot_band(lot_area)} sq ft"
+    needs = [
+        Need("ratio", sec, "rfa_ratio", applies=zone, condition_has=band),
+        Need("coverage_pct", sec, "lot_coverage_max_pct", applies=zone, condition_has=band),
+    ]
+    if zone[2] == "V":
+        needs += [
+            Need("height_ft", sec, "height_max_ft", applies=zone),
+            Need("plane_ft", sec, "encroachment_plane_origin_ft", applies=zone),
+        ]
+    else:
+        for mass in ("front", "rear"):
+            needs += [
+                Need(f"{mass}_height_ft", sec, "height_max_ft", applies=zone, condition_has=f"{mass} mass"),
+                Need(
+                    f"{mass}_plane_ft", sec, "encroachment_plane_origin_ft", applies=zone, condition_has=f"{mass} mass"
+                ),
+            ]
+        other = "rear" if zone[2] == "F" else "front"
+        needs.append(
+            Need(f"{other}_depth_ft", sec, "mass_envelope_depth_ft", applies=zone, condition_has=f"{other} mass")
+        )
+    return needs
+
+
+# Hillside Area (LAMC 12.21 C.10): Table C.10-4 heights by height district row, C.10-2a/2b ratios by slope band.
+HILLSIDE_BANDS = ["0 - 14.99", "15 - 29.99", "30 - 44.99", "45 - 59.99", "60 - 99.99", "100 +"]
+
+
+def hillside_hd_row(height_district: str | None) -> str | None:
+    hd = (height_district or "").upper()
+    if hd.endswith("SS"):
+        return "1SS"
+    if hd.endswith("XL"):
+        return "1XL"
+    if hd in ("1", "1L", "1VL"):
+        return "1, 1L, & 1VL"
+    return None
+
+
+def hillside_needs(zone: str, hd_row: str) -> list[Need]:
+    """Heights use the R1 column (R1H lots follow the R1 Hillside standards); ratios use the zone's own column."""
+    sec_b, sec_d = "LAMC 12.21 C.10(b)", "LAMC 12.21 C.10(d)"
+    needs = [
+        Need(
+            "max_ft", sec_d, "height_max_ft", applies="R1", condition_has=f"25% or greater; Height District {hd_row};"
+        ),
+        Need(
+            "low_roof_ft",
+            sec_d,
+            "height_max_ft",
+            applies="R1",
+            condition_has=f"less than 25%; Height District {hd_row};",
+        ),
+        Need("min_pct", sec_b, "rfa_guaranteed_min_pct", applies="R1"),
+        Need("coverage_pct", "LAMC 12.21 C.10(e)", "lot_coverage_max_pct", "6 feet above natural ground"),
+        Need("coverage_small_pct", "LAMC 12.21 C.10(e)", "lot_coverage_max_pct", "substandard as to width"),
+    ]
+    needs += [
+        Need(f"band_{k}", sec_b, "rfa_ratio", applies=zone, condition_has=f"slope band {b}%")
+        for k, b in enumerate(HILLSIDE_BANDS)
+    ]
+    return needs

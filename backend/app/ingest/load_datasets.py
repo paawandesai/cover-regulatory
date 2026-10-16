@@ -85,10 +85,10 @@ def _norm_address(*parts) -> str:
 
 def _features(ds: dict, areas: list[dict], fields: list[str]):
     if ds.get("scope") == "all":
-        yield from iter_features(ds["service_url"], fields)
+        yield from iter_features(ds["service_url"], fields, where=ds.get("where", "1=1"))
         return
     for a in areas:
-        yield from iter_features(ds["service_url"], fields, bbox=tuple(a["bbox"]))
+        yield from iter_features(ds["service_url"], fields, bbox=tuple(a["bbox"]), where=ds.get("where", "1=1"))
 
 
 def load(ds: dict, areas: list[dict]) -> int:
@@ -104,10 +104,16 @@ def load(ds: dict, areas: list[dict]) -> int:
             "overlay": "overlay",
             "address_point": "address_point",
             "footprint_odbl": "building_footprint_odbl",
+            "slope": "parcel_slope",
         }[target]
         conn.execute(f"DELETE FROM {table} WHERE source_id = %s", (ds["id"],))
 
-        if target == "parcel":
+        if target == "slope":
+            from app.ingest.slope import load_slopes
+
+            n = load_slopes(conn, ds, now)
+
+        elif target == "parcel":
             fmap = ds["fields"]
             for f in _features(ds, areas, list(fmap)):
                 p = f["properties"]

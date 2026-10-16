@@ -54,6 +54,10 @@ def _number_forms(v: float) -> set[str]:
     forms = {f"{v:g}"}
     if v == int(v):
         forms |= {str(int(v)), f"{int(v):,}"}
+    if 0 <= v < 1:
+        forms |= {f"{v:.2f}", f"{v:.2f}"[1:]}  # "0.40" or ".40", as code tables write ratios
+        if v:
+            forms.add(f"{v:g}"[1:])
     return forms
 
 

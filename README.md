@@ -12,7 +12,7 @@ Decision support for licensed architects and engineers. Given a City of Los Ange
    - **2121-005-008** (Reseda): a vacant flat-land R1 lot where every value is derived.
    - **2104-024-009** (Reseda): a built-up lot with an existing home, its building outline, and the attached ADU raised to 850 sq ft.
    - **2121-003-007** (Reseda): a through lot, so the rear yard is an interpretation.
-   - **4412-014-028** (Pacific Palisades): Hillside, Coastal Zone, fire hazard zone and the 2025 fire. Values are withheld, the City ADU path is an interpretation, and SB 9 is suspended.
+   - **4412-014-028** (Pacific Palisades): Hillside, Coastal Zone, fire hazard zone and the 2025 fire. The Hillside yards, height, slope-band floor area and lot coverage are applied; the height and floor area are interpretations, the City ADU path is an interpretation, and SB 9 is suspended.
    - **2118-015-001** (commercial zone), **5179-003-026** (Boyle Heights, Chapter 1A) and **4327-028-024** (Beverly Hills): three stop states.
 3. Click any value to see the regulation text behind it. Fill in **Your project** (height, floor area, a second unit) to check a design against the limits; the side yard and the drawn buildable area follow the height you enter.
 4. **Rule review** (`/review`) needs the admin login, also sent separately. It shows each AI-read rule candidate with its source quote and checks, and the feedback queue. After 10 wrong passwords or invite codes in 15 minutes, that address is blocked for the rest of the window; feedback is limited to 30 notes an hour. The limits key on a salted hash of the address, which is never logged.
@@ -24,7 +24,7 @@ Enter an APN or a street address. The engine:
 1. **Finds the parcel and stops early when it must.** Outside the City, under Chapter 1A, or not an R1-family zone each gets an explicit result instead of wrong rules.
 2. **Reports the R1 envelope:** front, side and rear yards, maximum residential floor area, height, and whether the lot meets the R1 minimums, plus an estimate of the block's prevailing front yard and, on a key lot, the averaged front yard it may use (LAMC 12.08 C.1).
 3. **Reports what can be built besides the house:** a detached ADU under state law (800 sq ft) and under the City ordinance (up to 1,200 sq ft), an attached ADU (at least 850 sq ft, which state law says can't be refused), a JADU (500 sq ft), and a guest house (allowed only on lots of 10,000 sq ft or more). It also gives the detached ADU height the City must allow: 16 ft, or 18 ft (plus 2 ft for a matching roof pitch) near frequent transit.
-4. **Flags what it does not apply:** Hillside Area, Coastal Zone, Very High Fire Hazard Severity Zone, the January 2025 fire rebuild orders, overlay plans, zone conditions and SB 9. Where a flag means the flat-land rule is wrong (Hillside Area; Coastal Zone floor area and height; R1 variation zones), the value is withheld, not shown. Height Districts 1-L, 1-VL, 1-XL and 1-SS apply their own limits from LAMC 12.21.1 A.1; 1-SS caps the house at one story and 18 ft. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
+4. **Applies the area rules it models and flags the rest.** Hillside Area lots get the LAMC 12.21 C.10 yards, height by height district (Table 12.21 C.10-4), lot coverage, and floor area from slope bands (Tables 12.21 C.10-2a/2b, with the guaranteed minimum); the slope bands are estimated from USGS elevation, so that floor area is an interpretation. R1V, R1F and R1R variation zones get their own floor area ratio, height and lot coverage (Tables 12.08 C.5(b)-(d)); R1H variation zones use their Hillside column. Coastal Zone lots off the Hillside Area in Height District 1 get 45 ft and three times the buildable area (LAMC 12.21.1). Still flagged, not applied: Hillside grading, parking, fire protection and street access; Very High Fire Hazard Severity Zone rules; the January 2025 fire rebuild orders; overlay plans; zone conditions; and SB 9. Coastal Zone lots outside Height District 1 have their floor area and height withheld. Lots that CAL FIRE's 2025 map would newly place in a Very High zone are flagged until the City adopts it. Height Districts 1-L, 1-VL, 1-XL and 1-SS apply their own limits from LAMC 12.21.1 A.1; 1-SS caps the house at one story and 18 ft. Side yards are shown for a house at the maximum height (LAMC 12.08 C.2(b) adds 1 ft per 10 ft above 18 ft), with the table by height in the explanation.
 5. **Labels every value** with how it was established:
    - **Verified parcel data:** read from a named dataset with its fetch date.
    - **Derived from rule:** computed from regulation text that a review approved (in this demo, an AI review; see Known constraints).
@@ -44,7 +44,9 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 ## What it does NOT do
 - It does not cover jurisdictions outside the City of Los Angeles. Such parcels get an explicit "outside City of Los Angeles" result.
 - It does not model LAMC Chapter 1A (the new Zoning Code, in effect in the Downtown and Boyle Heights Community Plan Areas). Those parcels get a "code regime not modeled" result.
-- It models only the R1 zone family. Hillside Area, R1 Variation Zones, HPOZs, specific plans, the Coastal Zone, fire hazard zones, SB 9, and the January 2025 fire rebuild orders are detected and flagged, not applied.
+- It models only the R1 zone family, including its Hillside, Coastal Zone and variation rules. HPOZs, specific plans, fire hazard zone rules, Hillside grading and access rules, SB 9, and the January 2025 fire rebuild orders are detected and flagged, not applied.
+- Hillside floor area depends on slope bands estimated from the USGS 3DEP elevation model on a grid of about 3 ft; the City requires a surveyed slope analysis map, which can differ. A Hillside lot with no slope estimate has its floor area withheld.
+- The fire hazard zone applied is the City's current map (LA GeoHub). CAL FIRE's 2025 recommended map is loaded for comparison; in the loaded areas it adds no City lots.
 - Setback and buildable-area geometry is illustrative, not survey-grade.
 - It does not consider private covenants (CC&Rs), demographic data, or owner information.
 - Existing buildings are shown as approximate Microsoft machine-learned outlines (ODbL). They can miss, merge or misplace buildings. The Assessor's building attributes are shown when recorded.
@@ -52,7 +54,7 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 - There is no client-facing report or export, so there is no architect sign-off gate yet. Any report built later must sit behind a licensed reviewer's sign-off and disclose AI involvement.
 - The fire rebuild flag cites City Planning's Palisades Rebuild FAQ (2026-01-30), which summarizes Emergency Executive Orders 1, 8 and 9. The orders' own text was not ingested, so check the current order before relying on the flag.
 - An address that matches no County address point or parcel situs is sent to the US Census Geocoder (a public, no-account service). APN searches never leave the server.
-- The prevailing front yard and the key-lot front yard are estimates from parcel outlines and machine-learned building outlines, labelled Approximate and listing the lots they counted; confirm them on a survey. The per-story side-yard rule in the Coastal Zone and Hillside Area is named but not computed.
+- The prevailing front yard and the key-lot front yard are estimates from parcel outlines and machine-learned building outlines, labelled Approximate and listing the lots they counted; confirm them on a survey. The per-story side-yard rule in the Coastal Zone is named but not computed.
 - The 18 ft ADU height near transit uses Caltrans' straight-line half-mile transit areas. The law counts walking distance, so inside an area the 18 ft is an interpretation to confirm; outside every area the 16 ft is certain.
 - Corner lots are detected only where two adjacent sides read as streets on the parcel map. When only the long side reads as a street, the front and side yards are labelled as interpretations.
 
@@ -86,7 +88,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 | 2121-016-012 | Reseda R1-1, exactly 50 ft wide | 20 / 7 / 15 | 2,453 | 33 | Not allowed | SB 9 |
 | 2121-002-004 | Reseda R1-1, 25 ft wide (substandard) | 20 / 5 / 15 | 1,462 | 33 | Not allowed | SB 9 |
 | 4359-016-023 | R1-1, 16,403 sq ft, inside a specific plan (interpretation) | 20 / 7 / 15 | 7,381 | 33 | Allowed | Overlay plan, SB 9 |
-| 4412-014-028 | Pacific Palisades, Hillside + Coastal + fire | Withheld | Withheld | Withheld | Allowed | Fire rebuild, Hillside, Coastal, VHFHSZ, SB 9 suspended |
+| 4412-014-028 | Pacific Palisades, Hillside + Coastal + fire | 20 / 7 / 15 | 4,272 (slope bands, interpretation) | 33 (interpretation) | Allowed | Fire rebuild, Hillside, Coastal, VHFHSZ, SB 9 suspended |
 | 2126-005-015 | R1-2-RIO (supplemental district, interpretation) | 20 / 7 / 15 | 5,517 | 33 | Allowed | Zone conditions, SB 9 |
 | 2104-024-009 | Reseda, existing home; front on the long side (interpretation) | 12 / 7 / 15 | 3,168 | 33 | Not allowed | SB 9 |
 | 2121-003-007 | Reseda, existing home; through lot | 20 / 7 / 15 (rear: interpretation) | 9,113 | 33 | Allowed | SB 9 |
@@ -106,8 +108,10 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 
 | Operation | Runs | p50 | p95 |
 |---|---|---|---|
-| Full assessment (`assess`) over the 11 golden parcels | 110 | 129 ms | 196 ms |
+| Full assessment (`assess`) over the 11 golden parcels | 110 | 257 ms | 395 ms |
 | Regulation search (the 32 retrieval questions) | 32 | 52 ms | 114 ms |
+
+The assessment took 129 ms (p50) before the prevailing front yard estimate, which reads every lot and building on the block face (measured 2026-10-16).
 
 **Test suites** (2026-10-16): backend 83 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
 

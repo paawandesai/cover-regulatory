@@ -55,6 +55,11 @@ class ParsedZone:
         return self.base_zone is not None and (self.base_zone == "R1" or bool(R1_VARIATION.match(self.base_zone)))
 
     @property
+    def is_modeled(self) -> bool:
+        """R1, or an R1V, R1F or R1R variation, with no qualifier, condition or supplemental district."""
+        return (self.base_zone == "R1" or bool(R1_VARIATION.match(self.base_zone or ""))) and not self.unmodeled
+
+    @property
     def is_plain_r1(self) -> bool:
         """Base R1 with no qualifier, condition, variation or supplemental district: what this PoC models fully."""
         return self.base_zone == "R1" and not self.unmodeled
@@ -95,11 +100,9 @@ def parse_zone(raw: str) -> ParsedZone:
         unmodeled.append("(F) funded improvement classification not modeled")
     if d_limit:
         unmodeled.append("D development limitation: parcel-specific ordinance not modeled")
-    if base and R1_VARIATION.match(base):
-        unmodeled.append(f"R1 Variation Zone {base} not modeled")
-    elif base and base != "R1":
+    if base and base != "R1" and not R1_VARIATION.match(base):
         unmodeled.append(f"Zone {base} is outside the modeled R1 family")
-    if base == "R1" and height is None:
+    if base and (base == "R1" or R1_VARIATION.match(base)) and height is None:
         unmodeled.append("No height district in zone string")
     for sup in supplemental:
         desc = SUPPLEMENTAL_DESCRIPTIONS.get(sup, "supplemental district")

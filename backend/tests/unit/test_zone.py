@@ -37,9 +37,11 @@ def test_unbracketed_q_prefix():
 
 
 def test_r1_variation():
-    z = parse_zone("R1V2-HPOZ")
-    assert z.base_zone == "R1V2" and z.is_r1_family and not z.is_plain_r1
-    assert any("Variation" in u for u in z.unmodeled)
+    z = parse_zone("R1V2-1")
+    assert z.base_zone == "R1V2" and z.is_r1_family and z.is_modeled and not z.is_plain_r1
+    assert not parse_zone("R1V2-HPOZ").is_modeled  # no height district, and an HPOZ
+    assert parse_zone("R1H1-1").is_modeled  # Hillside variation: the Table 12.21 C.10-2b column
+    assert not parse_zone("R1H1").is_modeled  # "1" is the variation number; no height district
 
 
 def test_footnote_marker():
