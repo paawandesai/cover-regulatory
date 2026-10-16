@@ -13,7 +13,7 @@ gitleaks:
     - gitleaks git --redact --verbose .
 
 # Lint and unit tests. Tests that need the loaded database (API, golden parcels, adversarial) skip
-# themselves when no database is reachable; run them locally against a loaded database.
+# themselves when no database is reachable; the db-tests job below runs them against the loaded data.
 backend:
   stage: check
   image: python:3.13-slim
@@ -30,6 +30,38 @@ backend:
     when: always
     reports:
       junit: backend/pytest-junit.xml
+
+# The golden, API and adversarial suites against the loaded database. The dump holds regulation text saved by
+# hand, so it is kept out of git in the project's private package registry and fetched with the job token.
+# Bump DB_DUMP_VERSION when a new dump is published.
+db-tests:
+  stage: check
+  image: pgvector/pgvector:0.8.1-pg16-bookworm
+  variables:
+    DB_DUMP_VERSION: "2026.10.16-wave5b"
+    DATABASE_URL: postgresql://regengine@localhost:5432/regengine
+    UV_PROJECT_ENVIRONMENT: /tmp/venv
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends postgresql-16-postgis-3 curl ca-certificates > /dev/null
+    - mkdir -p /tmp/pg && chown postgres /tmp/pg
+    - su postgres -c "/usr/lib/postgresql/16/bin/initdb -D /tmp/pg -A trust -U postgres > /dev/null"
+    - su postgres -c "/usr/lib/postgresql/16/bin/pg_ctl -D /tmp/pg -l /tmp/pg/log -w start"
+    - psql -U postgres -h localhost -c "CREATE ROLE regengine LOGIN SUPERUSER" -c "CREATE DATABASE regengine OWNER regengine"
+    - >-
+      curl -sSf --header "JOB-TOKEN: $CI_JOB_TOKEN" -o /tmp/regengine.dump
+      "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/regengine-db/$DB_DUMP_VERSION/regengine.dump"
+    - pg_restore --no-owner --no-privileges -U regengine -h localhost -d regengine /tmp/regengine.dump
+    - rm /tmp/regengine.dump
+    - curl -LsSf https://astral.sh/uv/0.11.32/install.sh | sh > /dev/null && export PATH="$HOME/.local/bin:$PATH"
+    - cd backend && uv sync --frozen --python 3.13 && uv run python -m app.db.migrate
+  script:
+    # Fail instead of skipping if the database is somehow unreachable.
+    - uv run python -c "from app.db.connection import connect; connect().__enter__().execute('SELECT 1 FROM rule_fragment LIMIT 1')"
+    - uv run pytest -q tests/golden tests/api tests/adversarial --junitxml=db-junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: backend/db-junit.xml
 
 frontend:
   stage: check

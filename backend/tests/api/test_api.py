@@ -348,6 +348,8 @@ def test_chat_keeps_only_checked_quotes_and_never_sends_the_apn(monkeypatch, cli
     monkeypatch.setenv("ANTHROPIC_COVER_API_KEY", "test-key-not-real")
     get_settings.cache_clear()
     monkeypatch.setattr(chat_mod.anthropic, "Anthropic", lambda **_: SimpleNamespace(messages=FakeMessages()))
+    # Retrieval is tested elsewhere; here the chunks come from the items' own citations (no embedding model needed).
+    monkeypatch.setattr("app.search.search.search", lambda *a, **k: [])
     r = client.post("/api/chat", json={"apn": "2121005008", "question": "What about parcel 2121005008 height?"})
     assert r.status_code == 200
     body = r.json()
