@@ -5,7 +5,7 @@ defineProps<{ eyebrow: string; title: string; body: string; detail?: string }>()
 <template>
   <section class="card stop" role="status">
     <span class="eyebrow">{{ eyebrow }}</span>
-    <h2>{{ title }}</h2>
+    <h1>{{ title }}</h1>
     <p>{{ body }}</p>
     <p v-if="detail" class="small muted">{{ detail }}</p>
     <slot />
@@ -20,7 +20,7 @@ defineProps<{ eyebrow: string; title: string; body: string; detail?: string }>()
   flex-direction: column;
   gap: 12px;
 }
-h2 {
+h1 {
   margin: 0;
   font-size: 18px;
   line-height: 24px;

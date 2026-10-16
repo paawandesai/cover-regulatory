@@ -22,7 +22,10 @@ onMounted(async () => {
 
 <template>
   <main class="wrap">
-    <p v-if="error" class="card msg">{{ error }}</p>
+    <div v-if="error" class="card msg">
+      <h1>Report not available</h1>
+      <p>{{ error }}</p>
+    </div>
     <p v-else-if="!report" class="small muted">Loading…</p>
     <div v-else-if="report.status !== 'signed'" class="card msg">
       <h1>Awaiting sign-off</h1>

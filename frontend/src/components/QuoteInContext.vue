@@ -22,5 +22,5 @@ const parts = computed(() => {
 </script>
 
 <template>
-  <blockquote class="source"><template v-if="parts.cutBefore">…</template>{{ parts.before }}<mark v-if="parts.quote">{{ parts.quote }}</mark>{{ parts.after }}<template v-if="parts.cutAfter">…</template></blockquote>
+  <blockquote class="source" tabindex="0" aria-label="Source text"><template v-if="parts.cutBefore">…</template>{{ parts.before }}<mark v-if="parts.quote">{{ parts.quote }}</mark>{{ parts.after }}<template v-if="parts.cutAfter">…</template></blockquote>
 </template>

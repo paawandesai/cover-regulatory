@@ -64,7 +64,7 @@ const coverage = computed(() => {
 <template>
   <aside aria-label="Source text" class="card panel">
     <span class="eyebrow">Source text</span>
-    <h2 aria-live="polite">{{ item.title }}</h2>
+    <h2 aria-live="polite" tabindex="-1">{{ item.title }}</h2>
     <div class="meta">
       <span class="value">{{ formatValue(item) }}</span>
       <span class="mono small">{{ citeLabel(item) }}</span>
@@ -96,7 +96,7 @@ const coverage = computed(() => {
         </button>
       </div>
       <QuoteInContext v-if="chunk" :text="chunk.text" :start="current.quote_start" :end="current.quote_end" :context="320" />
-      <blockquote v-else-if="current.quote" class="source">
+      <blockquote v-else-if="current.quote" class="source" tabindex="0" aria-label="Source text">
         <mark>{{ current.quote }}</mark>
       </blockquote>
       <p v-else-if="loading" class="small muted">Loading the source text…</p>

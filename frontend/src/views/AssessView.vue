@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, nextTick, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ApiError, assess } from '../api'
 import AppHeader from '../components/AppHeader.vue'
@@ -28,13 +28,27 @@ const pickedId = ref<string | null>(null)
 const view = ref<'diagram' | 'map'>('diagram')
 const panel = ref<{ $el: HTMLElement } | null>(null)
 
+// Keyboard users land on the source panel's heading when they open a value, and Escape takes them back.
+let viaKeys = false
+let returnTo: HTMLElement | null = null
+const onKey = () => (viaKeys = true)
+const onPointer = () => (viaKeys = false)
+onMounted(() => (window.addEventListener('keydown', onKey, true), window.addEventListener('pointerdown', onPointer, true)))
+onBeforeUnmount(() => (window.removeEventListener('keydown', onKey, true), window.removeEventListener('pointerdown', onPointer, true)))
+
 // On narrow screens the source panel sits below the list; bring it into view when a row is picked.
 async function pick(id: string) {
   pickedId.value = id
-  if (window.matchMedia('(max-width: 1100px)').matches) {
-    await nextTick()
-    panel.value?.$el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const keys = viaKeys
+  returnTo = keys ? (document.activeElement as HTMLElement | null) : null
+  await nextTick()
+  if (keys) panel.value?.$el.querySelector<HTMLElement>('h2')?.focus()
+  if (window.matchMedia('(max-width: 1100px)').matches) panel.value?.$el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function backToList() {
+  returnTo?.focus()
+  returnTo = null
 }
 
 const PROJECT_KEYS = [
@@ -231,11 +245,11 @@ const stop = computed(() => {
       <RouterLink to="/review" class="small">Rule review</RouterLink>
     </AppHeader>
 
-    <div class="disclaimer">
+    <aside class="disclaimer" aria-label="Disclaimer">
       <p class="small">
         Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS.
       </p>
-    </div>
+    </aside>
 
     <main class="page">
       <StopState
@@ -348,7 +362,7 @@ const stop = computed(() => {
             <ReportRequest :apn="result.parcel.apn" :inputs="project" />
           </section>
 
-          <SourcePanel v-if="picked" ref="panel" class="right" :item="picked" :apn="result.parcel.apn" />
+          <SourcePanel v-if="picked" ref="panel" class="right" :item="picked" :apn="result.parcel.apn" @keydown.esc="backToList" />
         </div>
       </template>
 

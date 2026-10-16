@@ -184,6 +184,7 @@ async function act(decision: 'approved' | 'rejected') {
     </AppHeader>
 
     <main class="page">
+      <h1 v-if="signedIn" class="sr-only">Rule review</h1>
       <form v-if="!signedIn" class="card signin" @submit.prevent="signIn">
         <h1>Sign in to review rules</h1>
         <p class="small muted">
@@ -286,10 +287,10 @@ async function act(decision: 'approved' | 'rejected') {
 
           <section v-if="selected" aria-label="Selected rule" class="card detail">
             <div class="dhead">
-              <h1 :class="{ txt: selected.value_numeric == null }">
+              <h2 :class="{ txt: selected.value_numeric == null }">
                 {{ value(selected) }}
                 <span class="mono param">{{ selected.parameter }}</span>
-              </h1>
+              </h2>
               <span class="badge" :class="selected.validation === 'ok' ? 'ok' : 'bad'">
                 {{ VALIDATION[selected.validation] ?? selected.validation }}
               </span>
@@ -473,7 +474,7 @@ async function act(decision: 'approved' | 'rejected') {
   font-weight: 400;
   text-align: right;
 }
-.dhead h1.txt {
+.dhead h2.txt {
   font-size: 18px;
   line-height: 24px;
 }
@@ -492,7 +493,7 @@ async function act(decision: 'approved' | 'rejected') {
   align-items: baseline;
   justify-content: space-between;
 }
-.dhead h1 {
+.dhead h2 {
   margin: 0;
   font-size: 28px;
   line-height: 34px;
