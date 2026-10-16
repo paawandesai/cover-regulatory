@@ -29,9 +29,20 @@ def client(monkeypatch):
     monkeypatch.setenv("ADMIN_PASSWORD_SCRYPT", hash_password(PASSWORD))
     get_settings.cache_clear()
     ratelimit.reset()
+    with connect() as conn:
+        last = conn.execute("SELECT coalesce(max(id), 0) AS n FROM audit_log").fetchone()["n"]
     yield TestClient(app)
     ratelimit.reset()
     get_settings.cache_clear()
+    _drop_audit_after(last)
+
+
+def _drop_audit_after(last: int) -> None:
+    """Remove the audit rows these tests wrote (allowed only with the maintenance setting)."""
+    with connect() as conn:
+        conn.execute("SET LOCAL regengine.audit_maintenance = 'on'")
+        conn.execute("DELETE FROM audit_log WHERE id > %s", (last,))
+        conn.commit()
 
 
 def auth(user="reviewer", pw=PASSWORD):
@@ -360,3 +371,69 @@ def test_chat_with_nothing_checked_says_not_found():
         )
         == []
     )
+
+
+@pytest.fixture
+def named_reviewer():
+    with connect() as conn:
+        conn.execute(
+            "INSERT INTO reviewer (username, display_name, password_scrypt) VALUES ('test.rev', 'Test Reviewer', %s)",
+            (hash_password("another long password"),),
+        )
+        conn.commit()
+    yield auth("test.rev", "another long password")
+    with connect() as conn:
+        conn.execute("DELETE FROM reviewer WHERE username = 'test.rev'")
+        conn.commit()
+
+
+def test_named_reviewer_signs_in_and_is_audited(client, named_reviewer):
+    me = client.get("/api/admin/me", headers=named_reviewer).json()
+    assert me == {"username": "test.rev", "display_name": "Test Reviewer", "named": True}
+    assert client.get("/api/admin/me", headers=auth("test.rev", "wrong password!!")).status_code == 401
+    with connect() as conn:
+        fb = conn.execute(
+            "INSERT INTO feedback (apn, item_id, kind, comment) VALUES ('2121005008', 'front_yard', 'other', 'x') RETURNING id"
+        ).fetchone()["id"]
+        conn.commit()
+    try:
+        assert (
+            client.post(f"/api/admin/feedback/{fb}", json={"status": "dismissed"}, headers=named_reviewer).status_code
+            == 200
+        )
+        log = client.get("/api/admin/audit?object_type=feedback", headers=auth()).json()
+        assert log[0]["actor"] == "test.rev" and log[0]["display_name"] == "Test Reviewer"
+        assert log[0]["action"] == "feedback_dismissed" and log[0]["object_id"] == str(fb)
+    finally:
+        with connect() as conn:
+            conn.execute("DELETE FROM feedback WHERE id = %s", (fb,))
+            conn.commit()
+    with connect() as conn:
+        conn.execute("UPDATE reviewer SET active = false WHERE username = 'test.rev'")
+        conn.commit()
+    assert client.get("/api/admin/me", headers=named_reviewer).status_code == 401
+
+
+def test_audit_log_is_append_only():
+    import psycopg
+
+    with connect() as conn:
+        conn.execute(
+            "INSERT INTO audit_log (actor, action, object_type, object_id) VALUES ('t', 'test', 'reviewer', 'x')"
+        )
+        with pytest.raises(psycopg.errors.RaiseException):
+            conn.execute("DELETE FROM audit_log WHERE actor = 't'")
+        conn.rollback()
+
+
+def test_report_audit_never_holds_the_link(client):
+    r = client.post("/api/reports", json={"apn": "2121005008"})
+    token = r.json()["token"]
+    try:
+        client.post(f"/api/admin/reports/{token}/withdraw", headers=auth())
+        log = client.get("/api/admin/audit?object_type=report", headers=auth()).json()
+        assert log[0]["action"] == "report_withdrawn" and token not in str(log)
+    finally:
+        with connect() as conn:
+            conn.execute("DELETE FROM report WHERE token = %s", (token,))
+            conn.commit()

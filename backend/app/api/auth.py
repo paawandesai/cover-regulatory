@@ -35,20 +35,47 @@ def verify_password(password: str, stored: str) -> bool:
     return hmac.compare_digest(digest.hex(), digest_hex)
 
 
+def _any_reviewer() -> bool:
+    from app.db.connection import connect
+
+    with connect() as conn:
+        return conn.execute("SELECT 1 FROM reviewer WHERE active LIMIT 1").fetchone() is not None
+
+
+def _named_reviewer(username: str, password: str) -> str | None:
+    from app.api.reviewers import find
+    from app.db.connection import connect
+
+    with connect() as conn:
+        r = find(conn, username)
+        if r is None or not verify_password(password, r["password_scrypt"]):
+            return None
+        conn.execute("UPDATE reviewer SET last_login_at = now() WHERE username = %s", (username,))
+        conn.commit()
+    return r["username"]
+
+
 def require_admin(request: Request, credentials: Annotated[HTTPBasicCredentials | None, Depends(_basic)]) -> str:
+    """A named reviewer account, or the bootstrap ADMIN_USERNAME account from the environment."""
     s = get_settings()
-    if not s.admin_username or s.admin_password_scrypt is None:
+    if not (s.admin_username and s.admin_password_scrypt is not None) and not _any_reviewer():
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "admin review is not configured")
     ratelimit.check(request, "auth_fail")
-    ok = (
-        credentials is not None
-        and hmac.compare_digest(credentials.username.encode(), s.admin_username.encode())
-        and verify_password(credentials.password, s.admin_password_scrypt.get_secret_value())
-    )
-    if not ok:
+    who = None
+    if credentials is not None:
+        who = _named_reviewer(credentials.username, credentials.password)
+        if (
+            who is None
+            and s.admin_username
+            and s.admin_password_scrypt is not None
+            and hmac.compare_digest(credentials.username.encode(), s.admin_username.encode())
+            and verify_password(credentials.password, s.admin_password_scrypt.get_secret_value())
+        ):
+            who = s.admin_username
+    if who is None:
         ratelimit.record(request, "auth_fail")
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "invalid credentials", {"WWW-Authenticate": "Basic"})
-    return s.admin_username
+    return who
 
 
 if __name__ == "__main__":

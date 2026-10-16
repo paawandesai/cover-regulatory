@@ -70,7 +70,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | SB 9 and fire orders | `backend/app/engine/orders.py` | SB 9 two-unit and lot-split tests, Executive Order 9's suspension, and the EO 1 like-for-like and EO 8 Coastal Zone rebuild limits. |
 | Client reports | `backend/app/api/reports.py`, `report` table | Freezes an assessment into a report keyed by an unguessable token. The public link returns only the status until an admin signs with name and license; withdrawn reports return 404. |
 | Follow-up chat | `backend/app/api/chat.py` | Builds the prompt from the assessment's values (10-digit numbers scrubbed) and retrieved chunks as delimited data; the model returns sentences with quotes or item ids (structured output, no tools). Each quote is checked verbatim against its chunk; failing sentences are dropped. |
-| API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt. The optional invite gate is for the hosted demo. |
+| API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt, against named reviewer accounts (`reviewer` table, managed with `python -m app.api.reviewers`) or the bootstrap `ADMIN_USERNAME`. Every review action writes an `audit_log` row in the same transaction; a trigger makes the log append-only, and report entries hold a hash of the link token, never the link. The optional invite gate is for the hosted demo. |
 | Web app | `frontend/` | Vue 3 + TypeScript + MapLibre with the Forge design tokens. Assessment page, source-text panel, feedback, rule review and stop states. |
 | Packaging | `docker-compose.yml`, `*/Dockerfile`, `deploy/` | Database (PostGIS + pgvector), API with the embedding model built in, Caddy serving the app, and a daily feedback purge. |
 
@@ -144,8 +144,8 @@ How this would run in production on AWS. Nothing below is built; the PoC runs as
 What changes from the PoC:
 - Ingestion becomes scheduled and incremental: a changed source re-extracts only changed chunks, and any rule
   whose chunk hash changed drops back to pending until it is re-reviewed.
-- Review moves to named, licensed reviewers with SSO and an audit trail, replacing the shared admin password
-  and the demo's AI review.
+- Review moves from local named accounts (built) to SSO through the organisation's identity provider, keeping the
+  same audit log, and licensed reviewers replace the demo's AI review.
 - The assessment API stays stateless and deterministic, so it scales horizontally; results are cached per
   APN and rule-set version.
 - Every jurisdiction is a plug-in with its own code-regime map, rule set and source list.

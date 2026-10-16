@@ -123,7 +123,7 @@ The assessment took 129 ms (p50) before the prevailing front yard estimate, whic
 **Test suites** (2026-10-16): backend 83 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
 
 ## AI disclosure
-This tool uses an LLM only at ingestion, to extract candidate rule fragments from regulatory text. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
+This tool uses an LLM at ingestion, to extract candidate rule fragments from regulatory text, and in the optional follow-up chat, whose answers keep only sentences with quotes checked against the source. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
 
 ## Development
 
@@ -134,7 +134,8 @@ Requirements: Python 3.13 with `uv`, Postgres 16 with PostGIS and pgvector, Node
 ```sh
 cd backend
 cp ../.env.example .env            # set DATABASE_URL; secrets come from the environment, never the repo
-uv run python -m app.api.auth      # prints a scrypt hash for ADMIN_PASSWORD_SCRYPT (rule review sign-in)
+uv run python -m app.api.auth      # prints a scrypt hash for ADMIN_PASSWORD_SCRYPT (bootstrap rule review sign-in)
+uv run python -m app.api.reviewers add jdoe "Jane Doe"   # a named reviewer account (prompts for a password)
 uv run uvicorn app.api.main:app --no-access-log --port 8000
 ```
 
@@ -153,7 +154,7 @@ npm run build      # typecheck + production build into frontend/dist
 Vue 3 + TypeScript + MapLibre, styled with the Forge design tokens (`frontend/src/tokens.css`).
 Two pages: the assessment (`/?q=<APN or address>`) and rule review (`/review`, admin sign-in).
 The map draws County parcel outlines and Microsoft building outlines (attributed), with no basemap tiles, so no third-party tile host is contacted.
-Admin credentials are held in memory for the session and never written to browser storage.
+Admin credentials are held in memory for the session and never written to browser storage. Each reviewer should have a named account (`app.api.reviewers`), so every decision carries their name; the `ADMIN_USERNAME` account is for setting up. The Audit log tab lists every approval, rejection, feedback decision, report signature and withdrawal, and account change. The log is append-only (a database trigger refuses edits) and starts with wave 6; decisions before that are recorded only on each rule (`reviewed_by`).
 
 
 ### Running with Docker

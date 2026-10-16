@@ -15,7 +15,7 @@ from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request, Respo
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from app.api import ratelimit
+from app.api import ratelimit, reviewers
 from app.api.auth import require_admin
 from app.api.chat import router as chat_router
 from app.api.reports import router as reports_router
@@ -260,6 +260,8 @@ def decide_feedback(fid: int, body: FeedbackDecision, admin: Annotated[str, Depe
             "UPDATE feedback SET status = %s, reviewed_by = %s, reviewed_at = now() WHERE id = %s RETURNING id, status",
             (body.status, admin, fid),
         ).fetchone()
+        if row:
+            reviewers.record(conn, admin, f"feedback_{body.status}", "feedback", fid)
         conn.commit()
     if not row:
         raise HTTPException(404, "feedback not found")
@@ -316,5 +318,41 @@ def decide(fragment_id: int, body: Decision, admin: Annotated[str, Depends(requi
                WHERE id=%s""",
             (body.decision, admin, body.note, fragment_id),
         )
+        reviewers.record(
+            conn,
+            admin,
+            f"fragment_{body.decision}",
+            "rule_fragment",
+            fragment_id,
+            {"from": f["status"], "note": body.note},
+        )
         conn.commit()
     return {"id": fragment_id, "status": body.decision, "reviewed_by": admin}
+
+
+# --- reviewers and audit ----------------------------------------------------------------------------------
+
+
+@app.get("/api/admin/me")
+def whoami(admin: Annotated[str, Depends(require_admin)]):
+    with connect() as conn:
+        r = conn.execute("SELECT display_name FROM reviewer WHERE username = %s", (admin,)).fetchone()
+    return {"username": admin, "display_name": r["display_name"] if r else None, "named": r is not None}
+
+
+@app.get("/api/admin/audit")
+def audit(
+    _admin: Annotated[str, Depends(require_admin)],
+    object_type: Literal["rule_fragment", "feedback", "report", "reviewer"] | None = None,
+    actor: str | None = Query(None, max_length=40),
+    limit: int = Query(200, ge=1, le=1000),
+):
+    """Every review action, newest first. The log cannot be edited or deleted (a database trigger refuses)."""
+    with connect() as conn:
+        return conn.execute(
+            """SELECT a.id, a.at, a.actor, r.display_name, a.action, a.object_type, a.object_id, a.detail
+               FROM audit_log a LEFT JOIN reviewer r ON r.username = a.actor
+               WHERE (%(t)s::text IS NULL OR a.object_type = %(t)s) AND (%(a)s::text IS NULL OR a.actor = %(a)s)
+               ORDER BY a.id DESC LIMIT %(n)s""",
+            {"t": object_type, "a": actor, "n": limit},
+        ).fetchall()
