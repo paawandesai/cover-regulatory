@@ -1,0 +1,180 @@
+{
+ "checked_on": "2026-10-17",
+ "method": "Left-out item 17 (LA County R-1). Candidates extracted from Paawan's text copy of LA County Title 22 Volume I by the extraction prompt extract-v4 (Claude Opus 5.5), checked by Claude Sonnet 5.5 (Anthropic API) against each chunk, decided by Claude Opus 5.5 (via Claude Code). Fragments the engine does not use (reversed corner yard, acreage lot areas, Lancaster/Palmdale lot widths, flag lots) are left pending.",
+ "candidates": [
+  {
+   "fragment_id": 840,
+   "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+   "parameter": "front_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Used for every R-1 lot. The averaging allowance for partially developed blocks (22.110.080 B.1) is named in the explanation, not computed. Column order (Front, Corner Side, Reversed Corner, Interior Side, Rear) read from the flattened table header. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 20 and unit feet match the first number in the R-A/R-1/R-2 row, and front_yard_min_ft correctly names the Front column. The condition text captures the shared row and column order but omits that the 20 ft value is zone-limited and that the table is the only provision in the excerpt. The engine_rule's mention of a 22.110.080 B.1 averaging allowance is not supported by this excerpt, and the blanket phrase 'every lot in Zone R-1' overstates the scope. The core extraction is accurate, but it needs the caveats above.",
+    "second_model_missing_conditions": [
+     "The excerpt does not state any front-yard averaging allowance for partially developed blocks; the engine rule's reference to 22.110.080 B.1 comes from outside the excerpt and cannot be verified from it.",
+     "The excerpt covers only Table 22.18.040-A (R-A, R-1, R-2, R-3, R-4); it does not say whether other sections or overlay/specific plan standards modify yards on a given lot.",
+     "The table text is flattened, so the column mapping (20 = Front, 5 = Corner Side, 10 = Reversed Corner Side, 5 = Interior Side, 15 = Rear) is inferred from column order rather than stated explicitly.",
+     "The 20 ft front value is shared by R-A, R-1 and R-2 only; R-3 and R-4 use 15 ft, so the value must not be applied outside those three zones."
+    ]
+   }
+  },
+  {
+   "fragment_id": 841,
+   "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+   "parameter": "corner_side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Named in a note for corner lots only; reversed corner lots take the 10 ft column. Not used in the buildable area. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "In the R-A/R-1/R-2 row, the values read Front 20, Corner Side 5, Corner Side\u2014Reversed Corner Lot 10, Interior Side 5, Rear 15. A 5 ft corner side yard is therefore correct for R-A, R-1 and R-2, and the unit (feet) is correct. The parameter name fits the Corner Side column. The conditions omit the reversed-corner-lot exception, which carries a different value (10 ft), so the extraction is correct but incomplete.",
+    "second_model_missing_conditions": [
+     "Applies only to ordinary (non-reversed) corner lots; reversed corner lots in R-A, R-1 and R-2 require 10 ft (separate 'Corner Side\u2014Reversed Corner Lot' column)",
+     "The value is a minimum yard depth taken from a merged-row table for R-A/R-1/R-2 (Front 20, Corner Side 5, Reversed Corner 10, Interior Side 5, Rear 15); the quote alone does not show which number belongs to which column"
+    ]
+   }
+  },
+  {
+   "fragment_id": 843,
+   "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Interior side yard only, for lots 50 ft or wider (narrower lots use 22.110.080 C.2). Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "For the R-A/R-1/R-2 row, the values in order are Front 20, Corner Side 5, Reversed Corner Lot 10, Interior Side 5, Rear 15. The candidate's value of 5 and unit of feet correctly match the Interior Side column. The stated condition correctly narrows the value to the interior side. The extraction itself is sound, but the parameter name should be 'interior_side_yard_min_ft' to avoid confusion with the corner side columns. The engine_rule_using_it text adds an unsupported lot-width qualifier and should not be treated as part of the regulation.",
+    "second_model_missing_conditions": []
+   }
+  },
+  {
+   "fragment_id": 844,
+   "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+   "parameter": "rear_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Used for lots 75 ft or deeper (shallower lots may use 22.110.080 D). Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "In the flattened table, the R-A/R-1/R-2 row reads 20, 5, 10, 5, 15, which maps to front, corner side, corner side (reversed corner lot), interior side and rear. The rear yard is therefore 15 ft, and the R-3 row (15, 5, 7.5, 5, 15) and the R-4 rear entry (15) are consistent with that column order. The value, unit and parameter name are correct, and the excerpt gives no lot-depth or other exception for the rear yard in these zones. Caveats: (1) the candidate's applies_to lists only R-A, R-1 and R-2, but R-3 and R-4 also have a 15 ft rear yard, so the list is incomplete though not wrong. (2) The conditions field is thin. (3) The engine_rule_using_it text invents a 75 ft lot-depth criterion that the excerpt does not support.",
+    "second_model_missing_conditions": []
+   }
+  },
+  {
+   "fragment_id": 845,
+   "chunk_id": "lacounty_title22#lacc-22-18-040-b#1",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "Every building and structure on the lot; measured above grade. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree",
+    "second_model_explanation": "The excerpt says every residence and every other building and structure in R-A, R-1, R-2 and R-3 shall not exceed 35 feet above grade. The candidate's value (35), unit (ft), parameter name (height_max_ft) and applies_to list (R-A, R-1, R-2, R-3) all match. R-4 is correctly left out because it has a separate, different standard. The 'above grade' measurement basis is captured in the conditions. The excerpt contains no other exceptions, thresholds or lot-type limits, so the conditions are complete for this text. The engine rule is consistent with the excerpt, provided the lot actually falls under Title 22 and is in R-1 or another listed zone.",
+    "second_model_missing_conditions": []
+   }
+  },
+  {
+   "fragment_id": 847,
+   "chunk_id": "lacounty_title22#lacc-22-110-080-c#1",
+   "parameter": "side_yard_pct_lot_width",
+   "recommendation": "approve_with_note",
+   "note": "Permissive reduction: the engine shows max(10% of average width, 3 ft) for lots under 50 ft wide and says it is an allowance; interior side yards only. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value of 10 and the unit of percent match the text, and the parameter name side_yard_pct_lot_width is a reasonable description of 'interior side yards equal to 10 percent of the average width.' The conditions capture the under-50-ft width threshold and interior side yards, but omit the 3 ft minimum floor, which materially changes the result for lots under 30 ft wide. The permissive 'may' is also dropped. The engine rule adds an unsupported 'R-1' scope and '5 ft' baseline that are not in the excerpt, and it states the 10% as replacing the baseline rather than as an optional reduction bounded by a 3 ft minimum. The extraction is usable only if the 3 ft minimum is attached.",
+    "second_model_missing_conditions": [
+     "Minimum of three feet in width: 'in no event less than three feet'",
+     "Permissive 'may' (an allowance, not a mandate); the excerpt gives it as an option for narrow lots",
+     "Applies only to interior side yards, not corner side yards (reversed corner lots are covered separately in C.1)",
+     "Based on 'average width' of the lot, which the excerpt does not define here",
+     "The excerpt does not name the zone; the baseline 5 ft interior side yard in the engine rule is not in the excerpt and cannot be verified from it"
+    ]
+   }
+  },
+  {
+   "fragment_id": 848,
+   "chunk_id": "lacounty_title22#lacc-22-110-080-c#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Used only as the floor on the 10% narrow-lot side yard. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The number 3 and the unit ft match the text's floor of three feet, but the parameter name side_yard_min_ft suggests a general minimum side yard, whereas the text sets the interior side yard on lots under 50 ft wide at 10 percent of average width with a 3 ft floor. The candidate's condition mentions the 10 percent reduction but omits the formula as the primary driver, the interior-only limit, and that the provision is permissive. A more accurate extraction would use something like interior_side_yard_narrow_lot with formula 10% of average width and a min floor of 3 ft. As written it is acceptable only with the caveat that the floor must be combined with the percentage calculation.",
+    "second_model_missing_conditions": [
+     "The 3 ft is only a floor; the actual interior side yard is 10 percent of the average lot width, so the engine must compute 10% of average width and apply max(10% width, 3 ft)",
+     "Applies only to interior side yards, not corner side yards or reversed corner lots (which are covered by C.1 with a 5 ft minimum)",
+     "It is a permissive reduction (the lot 'may have'), applicable only where the lot is less than 50 feet wide; it is not a standalone minimum for all lots",
+     "The text says 'average width' of the lot; the candidate does not capture the width measurement basis",
+     "Provision operates as an exception within LACC 22.110.080 and does not override the base side yard requirements of the zone for lots 50 ft or wider",
+     "The candidate's 'lots less than 50 feet in width' is stated, but the width threshold is exclusive (strictly less than 50 ft)"
+    ]
+   }
+  },
+  {
+   "fragment_id": 849,
+   "chunk_id": "lacounty_title22#lacc-22-110-080-d#1",
+   "parameter": "rear_yard_pct_lot_depth",
+   "recommendation": "approve_with_note",
+   "note": "Permissive reduction: max(20% of average depth, 10 ft) for lots under 75 ft deep, shown as an allowance. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value of 20 and the unit of percent match the text, and the parameter name rear_yard_pct_lot_depth describes what is regulated (rear yard as a share of average lot depth). The 75 ft depth threshold is captured, but the candidate omits the 'in no event less than 10 feet' floor, which materially changes the result for lots under 50 ft deep. The text also says 'may', so it is an optional reduction. The engine rule adds an R-1 zone and a 15 ft baseline that the excerpt does not support. The extraction is acceptable only if a separate 10 ft minimum parameter is captured and the engine rule is corrected to apply max(20% of average depth, 10 ft).",
+    "second_model_missing_conditions": [
+     "Minimum floor of 10 feet in depth: rear yard may not be less than 10 feet even if 20 percent of average depth is smaller (e.g., a 40 ft deep lot gives 8 ft, which must be raised to 10 ft)",
+     "Permissive 'may have' language: the 20 percent figure is an allowance that reduces the otherwise-required rear yard, not a mandatory requirement",
+     "Depth measure: the 20 percent is based on the average depth of the lot, while the threshold is stated as 'in depth' without specifying average"
+    ]
+   }
+  },
+  {
+   "fragment_id": 850,
+   "chunk_id": "lacounty_title22#lacc-22-110-080-d#1",
+   "parameter": "rear_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Used only as the floor on the 20% shallow-lot rear yard. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 10 and the unit ft match the text, which says 'in no event less than 10 feet in depth'. The parameter name is acceptable only as the floor of the shallow-lot reduced rear yard. The conditions field correctly limits it to lots under 75 ft deep using the 20 percent option. But it omits the 20 percent of average depth formula, which sets the actual required yard whenever it exceeds 10 ft. It also omits that the provision is optional and that the 10 ft is a floor, not a standalone minimum. The candidate should be paired with a separate rule or formula field for 20 percent of average depth, or the conditions should be expanded, before an engine uses it.",
+    "second_model_missing_conditions": [
+     "The rear yard is 20 percent of the average lot depth. The 10 ft figure is only a floor on that result, so the required depth is max(0.20 x average depth, 10 ft).",
+     "The provision is permissive ('may have'). It is an optional reduction from the normal rear yard in the zone or development standards, and the excerpt does not state that base requirement.",
+     "The 10 ft floor applies only to lots under 75 ft in average depth that use this reduction. It is not a general rear yard minimum.",
+     "Depth is measured as 'average depth', which matters for irregular or non-rectangular lots."
+    ]
+   }
+  },
+  {
+   "fragment_id": 851,
+   "chunk_id": "lacounty_title22#lacc-22-110-130-a#2",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "5,000 sq ft read from 'the same as in Zone R-1-5000' with A.3.a.ii (a number over 100 is square feet of net area). Lots under A.1/A.2 (split by a boundary, or separated by deed before the ordinance) and flag-lot strips are named in the explanation; the lot comparison uses the Assessor's area, so it is approximate. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The quote, the list of zones (R-1, R-2, R-3-30U, R-4-50U, R-A, RPD, A-1, R-R, CPD, M-3) and the \"same as in Zone R-1-5000\" reference all match the excerpt. A null value with unit \"text\" is a faithful way to record a cross-reference. The 5,000 sq ft figure in the engine rule is a reasonable inference, since a number above 100 means square feet of net area under A.3.a.ii, but the text does not state it. The condition captures the \"no number\" trigger but omits the A.1/A.2 overrides, the A.5 lease-only rule and the A.3.b flag-lot exclusion. The parameter name lot_area_min_sqft is also a loose fit for a definition of \"required area\" paired with a text unit.",
+    "second_model_missing_conditions": [
+     "A.1 and A.2 take precedence: where a lot is split by a city boundary or Torrens/non-Torrens line, or where a recorded deed or contract of sale separated possession before the area ordinance was adopted, \"required lot area\" is simply the lot's own area, so no 5,000 sq ft minimum applies",
+     "A.5: a lot shown on a subdivision for lease only lacks the required area unless it complies with A.2, A.3 or A.4",
+     "A.3.b: the access strip of a flag lot is not counted in the required area, so a flag lot's area for comparison excludes the strip",
+     "The excerpt starts mid-sentence, so the lead-in to Subsection A (the definition of \"required lot area\") is missing; the applicability of A.4 depends on it"
+    ]
+   }
+  },
+  {
+   "fragment_id": 852,
+   "chunk_id": "lacounty_title22#lacc-22-110-130-a#2",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used when the zone has a number over 100 after the symbol (e.g. R-1-7500); same exceptions as 851. Read from a copy of Title 22 whose edition is not stated (2019 numbering, pre-2020 ADU terms), so the engine shows the value as an Interpretation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The quote and core reading are accurate: when a number greater than 100 follows the zoning symbol and A.1/A.2 do not apply, required area is a net area equal to that number of square feet. The parameter name lot_area_min_sqft is reasonable, though the text defines 'required lot area' and not strictly a minimum. The value is null with unit 'text', which is acceptable as a descriptive extraction but not machine-usable. The candidate captures the A.1/A.2 and >100 conditions but omits the flag-lot access strip exclusion in A.3.b, the acre-based branch for numbers under 100, the A.4 defaults for no-number zones, and the A.5 lease-only lot rule. Hence agree with caveat.",
+    "second_model_missing_conditions": [
+     "Applies only if A.1 and A.2 do not apply: A.1 (lot split by a city boundary or Torrens/non-Torrens line) sets required area as the area of the lot; A.2 (lot held by recorded deed or contract of sale separated before the area ordinance was adopted) also exempts the lot",
+     "Numbers 100 or less are handled separately in A.3.a.i, as acres with a minimum 40,000 sq ft (lot established on or after Sept 22, 1967) or 32,000 sq ft (before); the candidate does not say which branch applies when the number is exactly 100, and the text does not address it",
+     "Flag lot access strip is excluded from required area (A.3.b), so net area must exclude it",
+     "Where no number follows the zoning symbol, A.4 supplies defaults (e.g., R-1 same as R-1-5000), so the rule is incomplete for zones without a number",
+     "Lease-only subdivision lots (A.5) lack required area unless they comply with A.2, A.3, or A.4",
+     "Excerpt is truncated at the start; A.1 is only partially shown, so full exceptions cannot be confirmed"
+    ]
+   }
+  }
+ ]
+}

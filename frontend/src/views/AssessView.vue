@@ -147,15 +147,18 @@ const groups = computed(() => {
   const r = result.value
   if (!r) return []
   const of = (fams: string[]) => r.items.filter((i) => fams.includes(i.family))
-  // One envelope family per lot: R1 (12.08), R2 (12.09) or RE (12.07.01).
-  const env = (['r1_envelope', 'r2_envelope', 're_envelope'] as const).find((f) => r.items.some((i) => i.family === f)) ?? 'r1_envelope'
-  const zoneName = env === 'r1_envelope' ? 'R1' : env === 'r2_envelope' ? 'R2' : 'RE'
+  // One envelope family per lot: R1 (12.08), R2 (12.09), RE (12.07.01) or County R-1 (Title 22).
+  const envs = ['r1_envelope', 'r2_envelope', 're_envelope', 'county_r1_envelope'] as const
+  const env = envs.find((f) => r.items.some((i) => i.family === f)) ?? 'r1_envelope'
+  const zoneName = { r1_envelope: 'R1', r2_envelope: 'R2', re_envelope: 'RE', county_r1_envelope: 'County R-1' }[env]
   return [
     {
       title: `${zoneName} envelope`,
       sub: r.items.some((i) => i.family === env && i.label === 'withheld')
         ? 'Some values withheld for this lot'
-        : isHillside.value
+        : env === 'county_r1_envelope'
+          ? 'Title 22, from a copy whose edition is not stated'
+          : isHillside.value
           ? 'Hillside Area standards (LAMC 12.21 C.10)'
           : item('coastal')?.value
             ? 'Coastal Zone (LAMC 12.21.1)'
@@ -193,7 +196,7 @@ const zoningFetched = computed(() => formatDate(parcelItem('zone')?.source?.fetc
 
 const notFoundBody = computed(() => {
   const q = String(route.query.q ?? '').replace(/[\s-]/g, '')
-  const where = 'Only four study areas are loaded (Reseda, Boyle Heights, Pacific Palisades and a Westside strip by Beverly Hills).'
+  const where = 'Only five study areas are loaded (Reseda, Boyle Heights, Pacific Palisades, a Westside strip by Beverly Hills, and Del Aire in unincorporated LA County).'
   return /^\d+$/.test(q)
     ? q.length === 10
       ? `No parcel with that APN is loaded. ${where}`

@@ -89,7 +89,7 @@ def create_report(body: ReportIn, request: Request):
     except ParcelNotFound as e:
         raise HTTPException(404, str(e)) from e
     if result["status"] != "ok":
-        raise HTTPException(422, "only an assessed R1 parcel can be reported")
+        raise HTTPException(422, "only an assessed parcel can be reported")
     token = secrets.token_urlsafe(18)
     with connect() as conn:
         conn.execute(

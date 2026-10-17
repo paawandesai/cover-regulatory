@@ -14,7 +14,10 @@ def _confirm(lines: list[str]) -> str:
     return " Still to confirm: " + "; ".join(lines) + "." if lines else ""
 
 
-def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str], family: str = "R1") -> list[Item]:
+def sb9_items(
+    conn, ctx, lot_area: float | None, kinds: set[str], family: str = "R1", local: str = "City"
+) -> list[Item]:
+    """`local` names the agency that applies SB 9 here: the City, or the County on unincorporated land."""
     sb = R.load("SB9", conn)
     if sb.label == "uncited":
         return []
@@ -56,7 +59,8 @@ def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str], family: str = 
             return out
 
     units, protect, setback = sb.value("units"), sb.value("protect_sqft"), sb.value("setback_ft")
-    checked = [f"the lot is in a single-family zone ({ctx.zone.base_zone if ctx.zone else 'R1'})"]
+    zone_name = ctx.zone.base_zone if ctx.zone else ctx.county_zone.raw if ctx.county_zone else "R1"
+    checked = [f"the lot is in a single-family zone ({zone_name})"]
     confirm = [
         (
             "no demolition or alteration of rent-restricted or rent-controlled housing, or housing a tenant "
@@ -124,13 +128,13 @@ def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str], family: str = 
             + (
                 f"This {lot_area:,.0f} sq ft lot can be split into two lots of at least {smallest:,.0f} sq ft "
                 "(an equal split gives "
-                f"{lot_area / 2:,.0f} sq ft each). Each new lot can then have up to two homes; the City need not "
+                f"{lot_area / 2:,.0f} sq ft each). Each new lot can then have up to two homes; the {local} need not "
                 "allow more (66411.7(j)). The owner must sign an affidavit to live in one unit for 3 years, and a "
                 "lot created by an earlier SB 9 split cannot be split again (66411.7)."
                 if possible
                 else f"This {lot_area:,.0f} sq ft lot is too small for two lots of {min_sqft:,.0f} sq ft."
             )
-            + (" A City ordinance could set a smaller minimum; none is loaded." if not possible else "")
+            + (f" A {local} ordinance could set a smaller minimum; none is loaded." if not possible else "")
             + (site + _confirm(confirm) if possible else "")
         )
         split = rule_item("sb9_lot_split", "sb9", "SB 9 lot split", split_inputs, possible, None, why)

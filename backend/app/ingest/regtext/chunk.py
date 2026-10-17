@@ -99,11 +99,11 @@ def lamc_target(sentence: str) -> str | None:
     return f"LAMC {ref}"
 
 
-def _joined(pages: list[Page]) -> tuple[str, list[tuple[int, int]]]:
+def _joined(pages: list[Page], clean: bool = True) -> tuple[str, list[tuple[int, int]]]:
     """Concatenate pages and remember where each starts, so chunks can report page ranges."""
     parts, offsets, pos = [], [], 0
     for p in pages:
-        t = clean_page_text(p.text) + "\n\n"
+        t = (clean_page_text(p.text) if clean else p.text.strip()) + "\n\n"
         offsets.append((pos, p.number))
         parts.append(t)
         pos += len(t)
@@ -263,6 +263,43 @@ def chunk_order(pages: list[Page], label: str) -> list[Chunk]:
         if end - start < 40:
             continue  # a lettered heading straight followed by its first numbered paragraph
         chunks += _split_long(text[start:end], start, f"{label} {key}", heading[:160], offsets)
+    return chunks
+
+
+T22_SECTION = re.compile(r"^\s*(22\.\d{2,3}\.\d{3})\s+([A-Z][^\n]{2,})$", re.MULTILINE)
+_T22_SUBSECTION = re.compile(r"^([A-Z])\. +\S", re.MULTILINE)
+
+
+def chunk_title22(pages: list[Page], label: str) -> list[Chunk]:
+    """LA County Title 22 split at its sections ("22.18.040 Development Standards ...") and their lettered
+    subsections, as "LACC 22.18.040 A". Each chapter's list of sections repeats the headings, so the last
+    occurrence of a section number is the section itself. The copy is text already extracted from a PDF, so it is
+    not filtered for figure fragments: that filter would drop table rows such as "R-1" and "20 5 10 5 15"."""
+    text, offsets = _joined(pages, clean=False)
+    last: dict[str, re.Match] = {}
+    for m in T22_SECTION.finditer(text):
+        last[m.group(1)] = m
+    marks = sorted(last.values(), key=lambda m: m.start())
+    chunks: list[Chunk] = []
+    for i, m in enumerate(marks):
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(text)
+        body, sid, heading = text[m.start() : end], f"{label} {m.group(1)}", m.group(2).strip()[:160]
+        # Lettered subsections in order (A., B., C. ...); a letter out of sequence is a list item, not a subsection.
+        subs, want = [], "A"
+        for s in _T22_SUBSECTION.finditer(body):
+            if s.group(1) == want:
+                subs.append(s)
+                want = chr(ord(want) + 1)
+        if len(subs) < 2:
+            chunks += _split_long(body, m.start(), sid, heading, offsets)
+            continue
+        if body[: subs[0].start()].strip():
+            chunks += _split_long(body[: subs[0].start()], m.start(), sid, heading, offsets)
+        for j, s in enumerate(subs):
+            stop = subs[j + 1].start() if j + 1 < len(subs) else len(body)
+            chunks += _split_long(
+                body[s.start() : stop], m.start() + s.start(), f"{sid} {s.group(1)}", heading, offsets
+            )
     return chunks
 
 

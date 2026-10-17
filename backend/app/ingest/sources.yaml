@@ -20,6 +20,57 @@ datasets:
       Live layer, edited daily. Preferred over the CC0 data.gov copy, which is older. Contains both
       Chapter I and Chapter 1A zone strings.
 
+  - id: lacounty_zoning
+    name: Zoning (unincorporated Los Angeles County)
+    publisher: LA County Department of Regional Planning (GIS-NET)
+    service_url: https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/GISNET_Public/MapServer/345
+    license: LA County terms of use (informational; not for legal, engineering or surveying use)
+    target: zoning
+    scope: study_areas
+    fields: {ZONE: zone_string, Z_CATEGORY: category}
+    notes: >-
+      Zoning for the unincorporated County only (Title 22). Zone strings look like R-1, R-1-7500 or R-1-DP: a
+      number after the symbol is the required lot area (LACC 22.110.130 A.3), and -DP and similar are combining
+      zones (LACC 22.06.030).
+
+  - id: lacounty_unincorporated
+    name: Unincorporated areas of Los Angeles County (City and Community boundaries)
+    publisher: LA County Department of Regional Planning (GIS-NET)
+    service_url: https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/GISNET_Public/MapServer/41
+    license: LA County terms of use (informational; not for legal, engineering or surveying use)
+    target: boundary
+    boundary_kind: unincorporated
+    name_value: Unincorporated Los Angeles County
+    where: "JURISDICTION = 'UNINCORPORATED AREA'"
+    scope: all
+
+  - id: lacounty_csd
+    name: Community Standards Districts (LA County Title 22 Volume II)
+    publisher: LA County Department of Regional Planning (GIS-NET)
+    service_url: https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/GISNET_Public/MapServer/321
+    license: LA County terms of use (informational). Used for flagging only.
+    target: overlay
+    overlay_kind: county_csd
+    scope: study_areas
+
+  - id: lacounty_hma
+    name: Hillside Management Areas (LA County, slopes of 25 percent or more)
+    publisher: LA County Department of Regional Planning (GIS-NET)
+    service_url: https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/GISNET_Public/MapServer/414
+    license: LA County terms of use (informational). Used for flagging only.
+    target: overlay
+    overlay_kind: county_hma
+    scope: study_areas
+
+  - id: lacounty_setback_districts
+    name: Setback Districts (LA County)
+    publisher: LA County Department of Regional Planning (GIS-NET)
+    service_url: https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/GISNET_Public/MapServer/404
+    license: LA County terms of use (informational). Used for flagging only.
+    target: overlay
+    overlay_kind: county_setback_district
+    scope: study_areas
+
   - id: lacity_city_boundary
     name: City Boundary (City of Los Angeles)
     publisher: LA Bureau of Engineering (NavigateLA)

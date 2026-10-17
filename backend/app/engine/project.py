@@ -271,6 +271,8 @@ def summarize(items, ctx) -> dict:
     for i in items:
         counts[i.label] = counts.get(i.label, 0) + 1
     kinds = {o["kind"] for o in ctx.overlays}
+    county = getattr(ctx, "jurisdiction", "lacity") == "lacounty"
+    who = "the County" if county else "the City"
 
     rfa, h = _num(by.get("max_rfa")), _num(by.get("max_height"))
     units = _num(by.get("dwelling_units"))  # R2: one or two homes (LAMC 12.09)
@@ -281,7 +283,13 @@ def summarize(items, ctx) -> dict:
         else "A single-family home"
     )
     yards = [_num(by.get(k)) for k in ("front_yard", "side_yard", "rear_yard")]
-    if rfa is not None and h is not None and None not in yards:
+    if county and h is not None and None not in yards:
+        # Title 22 sets no floor area ratio for Zone R-1 in the loaded sections; height and yards bound the house.
+        house = (
+            f"{what} up to {h:g} ft high, with yards of {yards[0]:g} ft front, {yards[1]:g} ft each side and "
+            f"{yards[2]:g} ft rear."
+        )
+    elif rfa is not None and h is not None and None not in yards:
         house = (
             f"{what} of up to {rfa:,.0f} sq ft and {h:g} ft"
             if units is None
@@ -301,7 +309,7 @@ def summarize(items, ctx) -> dict:
     kinds_of_adu = []
     if st is not None:
         kinds_of_adu.append(
-            f"detached, {st:,.0f} sq ft that the City must approve"
+            f"detached, {st:,.0f} sq ft that {who} must approve"
             + (f" or up to {lo:,.0f} under the City ordinance" if lo else "")
         )
     if at is not None:
@@ -329,7 +337,7 @@ def summarize(items, ctx) -> dict:
     confirm, withheld = counts.get("interpretive", 0), counts.get("withheld", 0)
     parts = []
     if confirm:
-        parts.append(f"{confirm} value{'s' if confirm != 1 else ''} to confirm with the City")
+        parts.append(f"{confirm} value{'s' if confirm != 1 else ''} to confirm with {who}")
     if withheld:
         parts.append(f"{withheld} not modeled here")
     confidence = (
@@ -339,7 +347,7 @@ def summarize(items, ctx) -> dict:
     )
 
     paths: list[dict] = []
-    if st is not None:
+    if st is not None and not county:  # the County's own ADU ordinance is not loaded, so there is one path
         lo_item = by.get("adu_local_detached")
         paths.append(
             {

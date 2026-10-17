@@ -13,3 +13,6 @@ study_areas:
   - id: westside_city_edge
     purpose: Boundary with Beverly Hills and unincorporated County (outside-City path)
     bbox: [-118.430, 34.060, -118.415, 34.075]
+  - id: del_aire_county
+    purpose: Unincorporated County R-1 lots (Title 22), the second jurisdiction; flat, no Community Standards District
+    bbox: [-118.378, 33.910, -118.362, 33.922]
