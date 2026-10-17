@@ -19,7 +19,6 @@ from datetime import UTC, datetime
 import httpx
 
 from app.api.reviewers import record
-from app.config import get_settings
 from app.db.connection import connect
 from app.extract.validate import locate_quote
 from app.ingest.regtext import ingest as I
@@ -31,10 +30,7 @@ MANUAL_RECHECK_DAYS = int(os.environ.get("MANUAL_RECHECK_DAYS", "90"))
 def _download(doc: dict) -> bytes:
     if any(h in doc["url"] for h in I.NEVER_FETCH):
         raise ValueError("automated fetch from this host is not allowed")
-    s = get_settings()
-    r = httpx.get(doc["url"], headers={"User-Agent": s.http_user_agent}, timeout=120, follow_redirects=True)
-    r.raise_for_status()
-    return r.content
+    return I.fetch_allowed(doc["url"]).content
 
 
 def send_back_to_review(conn, document_id: str) -> dict:

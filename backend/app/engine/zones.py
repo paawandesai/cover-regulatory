@@ -108,7 +108,14 @@ def r2_items(conn, ctx, width, depth, lot_area, frame, kinds: set[str]):
         "units",
         f"R2 allows a two-family dwelling or two single-family dwellings (LAMC 12.09 A.2), with at least {per:,.0f} sq "
         f"ft of lot per home and no two-family dwelling on a lot under {floor:,.0f} sq ft (12.09 C.4). This "
-        f"{lot_area:,.0f} sq ft lot allows {units:g}. ADUs and a JADU are on top of this (see below). Apartments are "
+        f"{lot_area:,.0f} sq ft lot allows {units:g}."
+        + (
+            f" As a substandard lot of record of at least {floor:,.0f} sq ft it may still hold a two-family "
+            "dwelling (12.09 C.4); confirm with the City."
+            if units == 1 and floor <= lot_area < 2 * per
+            else ""
+        )
+        + " ADUs and a JADU are on top of this (see below). Apartments are "
         "allowed only on lots beside a commercial or industrial zone (12.09 A.3); not evaluated."
         if units is not None
         else "Lot area unknown.",

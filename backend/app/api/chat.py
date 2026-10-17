@@ -1,9 +1,10 @@
 """Follow-up questions about one assessed parcel, answered only from cited regulation text.
 
 The model never sees the APN or an address: the server builds the context from the assessment's own values
-(titles, numbers, labels, explanations, with any 10-digit number scrubbed) and from regulation chunks. The model
+(titles, numbers, labels, explanations, with anything shaped like an APN scrubbed) and from regulation chunks. The model
 has no tools and returns sentences, each backed by quotes. A sentence survives only if every quote occurs
-verbatim (whitespace aside) in the chunk it names, or it points at an assessment value by id. If nothing
+verbatim (whitespace aside) in the chunk it names, or it points at an assessment value by id. A sentence that says
+a requirement is waived or does not apply must take those words from its own quotes. If nothing
 survives, the answer is that the loaded text does not say. The question is never logged or stored."""
 
 import html
@@ -24,7 +25,14 @@ router = APIRouter()
 PROMPT_VERSION = "chat-v1"
 K = 6
 NOT_FOUND = "The loaded regulation text does not answer this. Ask the {who}, or a licensed professional."
-_APN = re.compile(r"\b\d{10}\b")
+_APN = re.compile(r"\b\d{4}-?\d{3}-?\d{3}\b")
+# Words that lift a requirement. Untrusted text may add a restriction but never remove one, so a sentence using them
+# survives only if its own quotes use the same words (the law itself says so), never on restated values alone.
+_REMOVAL = re.compile(
+    r"\b(variances?|exempt\w*|exemptions?|waive[sd]?|waivers?|not required|need not|(?:does|do|would) not apply"
+    r"|no longer appl(?:y|ies)|not subject to)\b|\bno\s+(?:\w+\s+){0,3}(?:is\s+)?(?:required|applies|needed)\b",
+    re.IGNORECASE,
+)
 
 SYSTEM = """You answer a follow-up question about a residential parcel's zoning assessment.
 
@@ -130,6 +138,15 @@ def _numbers_backed(text: str, sources: list[str]) -> bool:
     return all(_canon(n) in pool for n in _NUMBER.findall(text))
 
 
+def _removal_backed(text: str, quotes: list[str]) -> bool:
+    """A sentence that lifts a requirement must take those words from its quotes."""
+    said = {m.group(0).lower() for m in _REMOVAL.finditer(text)}
+    if not said:
+        return True
+    pool = " ".join(_norm(q) for q in quotes)
+    return bool(quotes) and all(_norm(w) in pool for w in said)
+
+
 def verify(answer: Answer, chunks: list[dict], items: list[dict]) -> list[dict]:
     """Keep the sentences whose every quote is in its chunk (or that point at real assessment values), and
     whose numbers all come from those quotes or values. The wording around them is still the model's."""
@@ -165,6 +182,8 @@ def verify(answer: Answer, chunks: list[dict], items: list[dict]) -> list[dict]:
                 i = by_item[r]
                 sources += [str(i.get("value") or ""), i.get("unit") or "", i.get("title") or ""]
             if not _numbers_backed(s.text, sources):
+                continue
+            if not _removal_backed(s.text, [q.quote for q in s.quotes]):
                 continue
             kept.append({"text": s.text, "citations": cites, "items": refs})
     return kept

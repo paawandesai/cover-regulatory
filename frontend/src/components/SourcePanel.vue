@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { chunk as fetchChunk } from '../api'
-import { citeLabel, formatDate, formatValue } from '../format'
+import { chapterName, citeLabel, formatDate, formatValue } from '../format'
 import type { Chunk, Citation, Item } from '../types'
 import FeedbackForm from './FeedbackForm.vue'
 import LabelBadge from './LabelBadge.vue'
@@ -105,7 +105,7 @@ const coverage = computed(() => {
           <dt>Document</dt>
           <dd>
             {{ chunk?.document_title ?? current.section_id
-            }}<template v-if="current.code_chapter"> · LAMC Chapter {{ current.code_chapter }}</template
+            }}<template v-if="current.code_chapter"> · {{ chapterName(current.code_chapter) }}</template
             ><template v-if="chunk?.manual_retrieval"> (saved by hand)</template>
           </dd>
         </div>

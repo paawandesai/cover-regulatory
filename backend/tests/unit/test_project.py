@@ -105,3 +105,19 @@ def test_parking_near_front_and_tall_ceilings():
 def test_plane_break():
     assert checks(side_wall_ft=50, height_ft=26)["plane_break"]["status"] == "confirm"
     assert checks(side_wall_ft=40)["plane_break"]["status"] == "fits"
+
+
+def test_county_lot_uses_the_county_adu_ordinance():
+    county = [i for i in ITEMS if i.id != "adu_local_detached"] + [item("county_adu", 1200.0, "interpretive")]
+    small = {
+        c["id"]: c for c in check_project(county, ProjectInputs(second_unit="detached", second_unit_sqft=700))["checks"]
+    }
+    assert "County must approve" in small["adu_detached"]["detail"]
+    big = {
+        c["id"]: c
+        for c in check_project(county, ProjectInputs(second_unit="detached", second_unit_sqft=1100))["checks"]
+    }
+    assert (big["adu_detached"]["based_on"], big["adu_detached"]["status"]) == ("county_adu", "confirm")
+    assert "County ordinance" in big["adu_detached"]["detail"]
+    s = summarize(county, NS(overlays=[], jurisdiction="lacounty"))
+    assert "under the County ordinance" in s["answer"] and "City" not in s["answer"]

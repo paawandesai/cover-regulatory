@@ -78,3 +78,8 @@ export function citeLabel(item: Item): string {
   if (!sections.length) return item.source?.dataset ? 'Map data' : ''
   return sections.length > 1 ? `${sections[0]} +${sections.length - 1}` : sections[0]
 }
+
+/** The code a chunk's code_chapter names: LAMC Chapter I or 1A for the City, Title 22 for the County. */
+export function chapterName(chapter: string): string {
+  return chapter === 'T22' ? 'LA County Code Title 22' : `LAMC Chapter ${chapter}`
+}

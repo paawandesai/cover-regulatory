@@ -193,6 +193,9 @@ const mapLabels = computed<Record<string, string>>(() => {
   if (out.max_rfa) out.max_rfa = `Buildable area (illustrative). ${out.max_rfa}`
   return out
 })
+const zoningSource = computed(() =>
+  parcelItem('zone')?.source?.dataset === 'lacounty_zoning' ? 'LA County zoning (GIS-NET)' : 'City of LA zoning layer',
+)
 const zoningFetched = computed(() => formatDate(parcelItem('zone')?.source?.fetched_at))
 
 const notFoundBody = computed(() => {
@@ -234,7 +237,7 @@ const stop = computed(() => {
 
 <template>
   <div>
-    <AppHeader title="Regulatory Engine" subtitle="City of Los Angeles · Chapter I · R1, R2, RE">
+    <AppHeader title="Regulatory Engine" subtitle="LA City (Chapter I: R1, R2, RE) · LA County (Title 22: R-1)">
       <form class="search" role="search" @submit.prevent="submit">
         <label for="q" class="sr-only">APN or street address</label>
         <input
@@ -349,8 +352,8 @@ const stop = computed(() => {
 
             <p class="small muted">
               Parcel data: LA County Assessor open parcels, fetched
-              {{ parcelFetched }}. Zoning: City of LA zoning layer, fetched {{ zoningFetched }}. Informational only; not suitable for legal,
-              engineering or surveying use.
+              {{ parcelFetched }}. Zoning: {{ zoningSource }}, fetched {{ zoningFetched }}. City limits: City of Los Angeles, Bureau of
+              Engineering (CC BY 4.0). Informational only; not suitable for legal, engineering or surveying use.
             </p>
           </section>
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { authority, authorityOf, citeLabel, formatApn, formatExisting, formatValue, labelText } from '../format'
+import { authority, authorityOf, chapterName, citeLabel, formatApn, formatExisting, formatValue, labelText } from '../format'
 import type { Assessment, Item } from '../types'
 
 const item = (over: Partial<Item>): Item => ({
@@ -56,5 +56,13 @@ describe('helpers', () => {
     expect(labelText('interpretive')).toBe('Interpretation, confirm with County')
     authority.value = 'City'
     expect(labelText('interpretive')).toBe('Interpretation, confirm with City')
+  })
+})
+
+describe('chapterName', () => {
+  it('names the County code for Title 22 chunks', () => {
+    expect(chapterName('T22')).toBe('LA County Code Title 22')
+    expect(chapterName('I')).toBe('LAMC Chapter I')
+    expect(chapterName('1A')).toBe('LAMC Chapter 1A')
   })
 })

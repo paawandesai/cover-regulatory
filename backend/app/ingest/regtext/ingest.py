@@ -42,7 +42,23 @@ HERE = Path(__file__).parent
 REPO = HERE.parents[3]
 # Downloaded PDFs; the scheduled refresh in the API image points this at a writable directory.
 RAW = Path(os.environ.get("REGTEXT_RAW_DIR") or REPO / "data" / "raw" / "regtext")
-NEVER_FETCH = ("amlegal.com", "municode.com", "upcodes.com", "iccsafe.org")
+NEVER_FETCH = ("amlegal.com", "municode.com", "upcodes.com", "iccsafe.org", "findlaw.com")
+
+
+def fetch_allowed(url: str) -> httpx.Response:
+    """GET an allowed source, following redirects only to allowed hosts (a redirect is checked like the first URL)."""
+    s = get_settings()
+
+    def check(req: httpx.Request) -> None:
+        if any(h in req.url.host for h in NEVER_FETCH):
+            raise ValueError(f"automated fetch from {req.url.host} is not allowed")
+
+    with httpx.Client(
+        headers={"User-Agent": s.http_user_agent}, timeout=120, follow_redirects=True, event_hooks={"request": [check]}
+    ) as c:
+        r = c.get(url)
+    r.raise_for_status()
+    return r
 
 
 def load_registry() -> list[dict]:
@@ -58,10 +74,7 @@ def _local_file(doc: dict) -> Path | None:
     RAW.mkdir(parents=True, exist_ok=True)
     p = RAW / f"{doc['id']}.pdf"
     if not p.exists():
-        s = get_settings()
-        r = httpx.get(doc["url"], headers={"User-Agent": s.http_user_agent}, timeout=120, follow_redirects=True)
-        r.raise_for_status()
-        p.write_bytes(r.content)
+        p.write_bytes(fetch_allowed(doc["url"]).content)
     return p
 
 
@@ -276,7 +289,14 @@ def ingest(doc: dict) -> dict | None:
             elif existing[cid] != h:
                 changed += 1
             else:
+                # Same text, but the document may now come from another source (a new URL or date): keep the
+                # provenance current without touching the text, its embedding or the rules read from it.
                 unchanged += 1
+                conn.execute(
+                    """UPDATE reg_chunk SET source_url = %s, retrieved_at = %s, effective_date = %s, code_chapter = %s
+                       WHERE id = %s""",
+                    (doc["url"], retrieved, doc.get("effective_date"), doc.get("code_chapter"), cid),
+                )
                 continue
             conn.execute(
                 """INSERT INTO reg_chunk (id, document_id, section_id, heading, text, page_start, page_end, source_url,

@@ -63,6 +63,33 @@ def test_chat_cannot_assert_a_variance_that_is_not_in_the_text():
     assert verify(Answer(sentences=[invented, wrong_number]), chunks, []) == []
 
 
+def test_chat_cannot_lift_a_requirement_on_restated_values_alone():
+    # A sentence with no quote, pointing at a real value and stating no number, used to pass every check.
+    from app.api.chat import Answer, Quote, Sentence, verify
+
+    chunks = [{"id": "c1", "text": DOC, "section_id": "99.99", "source_url": "", "page_start": None}]
+    items = [{"id": "rear_yard", "family": "r1_envelope", "value": 15, "unit": "ft", "title": "Rear yard"}]
+    claims = [
+        Sentence(text="A recorded variance waives the rear yard on this lot.", items=["rear_yard"]),
+        Sentence(text="No rear yard is required on this lot.", items=["rear_yard"]),
+        Sentence(
+            text="The rear yard does not apply here.",
+            items=["rear_yard"],
+            quotes=[Quote(chunk_id="c1", quote="a rear yard of not less than 15 feet in depth")],
+        ),
+    ]
+    assert verify(Answer(sentences=claims), chunks, items) == []
+    restated = Sentence(text="The rear yard here is 15 feet.", items=["rear_yard"])
+    assert [k["text"] for k in verify(Answer(sentences=[restated]), chunks, items)] == [restated.text]
+
+
+def test_chat_scrubs_dashed_apns_from_the_question():
+    from app.api.chat import build_prompt
+
+    prompt = build_prompt({"items": []}, "Can 4142-004-002 or 4142004002 add an ADU?", [])
+    assert "4142" not in prompt and prompt.count("[parcel]") == 2
+
+
 def test_schema_has_no_status_or_confidence_field():
     # The model cannot mark its own output approved or state a confidence.
     assert not {"status", "confidence", "approved"} & set(Fragment.model_fields)

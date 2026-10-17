@@ -7,6 +7,12 @@ import LabelBadge from './LabelBadge.vue'
 // The printable body of a client report: the frozen assessment, each value with its label and sources.
 const props = defineProps<{ report: Report }>()
 const a = computed(() => props.report.snapshot as Assessment)
+// Data credits the licences require (ODbL for the outlines behind footprint-based values, CC BY for City limits).
+const credits = computed(() => {
+  const seen = new Set<string>(['City limits: City of Los Angeles, Bureau of Engineering (CC BY 4.0)'])
+  for (const i of [...(a.value.parcel?.items ?? []), ...(a.value.items ?? [])]) if (i.source?.attribution) seen.add(i.source.attribution)
+  return [...seen]
+})
 watchEffect(() => (authority.value = authorityOf(a.value)))
 
 const SECTIONS: [string, string[]][] = [
@@ -93,6 +99,7 @@ const sections = (i: Item) => [...new Map(i.citations.map((c) => [c.section_id, 
       <p v-if="report.statement && report.signed">Sign-off statement: "{{ report.statement }}"</p>
       <p>{{ a.ai_disclosure }}</p>
       <p v-for="d in a.disclaimers" :key="d">{{ d }}</p>
+      <p>Data: {{ credits.join('; ') }}.</p>
       <p>
         Labels: "Derived from rule" is computed from reviewed regulation text; "Interpretation" needs confirming with the {{ authority }}; "Approximate"
         rests on map outlines; "Flag" is detected, not evaluated. The assessment is as of the date above; regulations and data may have changed

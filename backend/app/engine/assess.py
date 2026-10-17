@@ -37,8 +37,9 @@ AI_DISCLOSURE = (
     "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that "
     "passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the "
     "engine does not model. In this "
-    "demo that review was an AI review applied on the project owner's instruction, not a person's; each value's "
-    "source panel says which. No AI model is used to compute this assessment."
+    "demo the review was first an AI review applied on the project owner's instruction; the project owner then "
+    "approved most of the rules the engine reads, and the rest rest on the AI review alone. Each value's source "
+    "panel says which. No AI model is used to compute this assessment."
 )
 
 
@@ -342,7 +343,7 @@ def _r1_items(
             fy,
             front,
             "ft",
-            f"The lesser of {fy.value('pct')}% of lot depth ({depth:.0f} ft) and {fy.value('max_ft')} ft. Where the block "
+            f"The lesser of {fy.value('pct'):g}% of lot depth ({depth:.0f} ft) and {fy.value('max_ft'):g} ft. Where the block "
             "has a prevailing setback, the average of neighbouring front yards applies instead (up to 40 ft); see the "
             "estimate below."
             if depth
@@ -369,7 +370,7 @@ def _r1_items(
         else None
     )
     hwhy = (
-        f"{hmax} ft off the Hillside Area and Coastal Zone, or {hlow} ft where the roof is flat or slopes less than 25%. Where 40% of the homes on the block "
+        f"{hmax:g} ft off the Hillside Area and Coastal Zone, or {hlow:g} ft where the roof is flat or slopes less than 25%. Where 40% of the homes on the block "
         "are taller, their average height may apply instead; not evaluated."
         if hmax and hlow
         else None
@@ -475,19 +476,20 @@ def _r1_items(
     if width is not None and sy.value("base_ft") is not None:
         if width >= 50 or sy.value("narrow_pct") is None:
             side_base = sy.value("base_ft")
-            why = f"Lot is {width:.0f} ft wide (50 ft or more): {side_base} ft for a building up to two stories and 18 ft."
+            why = f"Lot is {width:.0f} ft wide (50 ft or more): {side_base:g} ft for a building up to two stories and 18 ft."
         else:
             side_base = max(round(width * sy.value("narrow_pct") / 100, 1), sy.value("narrow_min_ft") or 0)
             why = (
-                f"Lot is {width:.0f} ft wide (under 50 ft): {sy.value('narrow_pct')}% of width, but not less "
-                f"than {sy.value('narrow_min_ft')} ft, for a building up to two stories and 18 ft."
+                f"Lot is {width:.0f} ft wide (under 50 ft): {sy.value('narrow_pct'):g}% of width, but not less "
+                f"than {sy.value('narrow_min_ft') or 0:g} ft, for a building up to two stories and 18 ft."
             )
         side = side_base
         step = sy.value("per_10ft_over_18_ft")
         hside = min(design_height, hmax) if design_height and hmax else hmax
-        if (flat_land or hillside) and step and hside:
-            # 12.08 C.2(b): new construction off the Hillside Area and Coastal Zone adds 1 ft per 10 ft (or part)
-            # above 18 ft. Shown at the maximum height (or the project's height, when given) so the drawn buildable
+        if (flat_land or (hillside and "coastal_zone" not in kinds)) and step and hside:
+            # 12.08 C.2(b) (and Table 12.21 C.10-1 in the Hillside Area): new construction outside the Coastal Zone
+            # adds 1 ft per 10 ft (or part); in the Coastal Zone the per-story rule applies (12.21 C.10(a)(9)(ii)).
+            # Shown at the maximum height (or the project's height, when given) so the drawn buildable
             # area is safe for that house.
             extra = step * math.ceil(max(hside - 18, 0) / 10)
             side = side_base + extra
@@ -502,7 +504,9 @@ def _r1_items(
             per = sy.value("per_story_ft")
             why += (
                 f" In the Coastal Zone the per-story rule applies instead: add {per:g} ft for each "
-                "story above the second (LAMC 12.08 C.2(a))."
+                "story above the second ("
+                + ("LAMC 12.21 C.10(a)(9)(ii), in lieu of Table 12.21 C.10-1" if hillside else "LAMC 12.08 C.2(a)")
+                + ")."
                 if per
                 else ""
             )
