@@ -271,4 +271,4 @@ documents:
     drop_patterns:
       - '(?m)^Chapter 22\.\d+ [^\n]*\n'
     # Measurement rules, zones and suffixes, residential zones, hillside management and general site regulations.
-    section_prefixes: ["LACC 22.04.", "LACC 22.06.", "LACC 22.18.", "LACC 22.102.", "LACC 22.110."]
+    section_prefixes: ["LACC 22.04.", "LACC 22.06.", "LACC 22.14", "LACC 22.18.", "LACC 22.102.", "LACC 22.110."]

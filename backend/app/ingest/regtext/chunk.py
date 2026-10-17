@@ -267,7 +267,25 @@ def chunk_order(pages: list[Page], label: str) -> list[Chunk]:
 
 
 T22_SECTION = re.compile(r"^\s*(22\.\d{2,3}\.\d{3})\s+([A-Z][^\n]{2,})$", re.MULTILINE)
+# Chapter 22.14 (Definitions) has no numbered sections, so the division heading starts it; the other division
+# headings only end the section before them (their own text is a list of chapters).
+T22_DIVISION = re.compile(r"^DIVISION (\d+): ([^\n]+)$", re.MULTILINE)
 _T22_SUBSECTION = re.compile(r"^([A-Z])\. +\S", re.MULTILINE)
+
+
+@dataclass
+class _Mark:
+    """A section boundary that is not a regex match (a division heading), shaped like one."""
+
+    pos: int
+    number: str
+    title: str
+
+    def start(self) -> int:
+        return self.pos
+
+    def group(self, i: int) -> str:
+        return self.number if i == 1 else self.title
 
 
 def chunk_title22(pages: list[Page], label: str) -> list[Chunk]:
@@ -279,7 +297,10 @@ def chunk_title22(pages: list[Page], label: str) -> list[Chunk]:
     last: dict[str, re.Match] = {}
     for m in T22_SECTION.finditer(text):
         last[m.group(1)] = m
-    marks = sorted(last.values(), key=lambda m: m.start())
+    marks: list = list(last.values())
+    for d in T22_DIVISION.finditer(text):
+        marks.append(_Mark(d.start(), "22.14" if d.group(1) == "2" else f"Division {d.group(1)}", d.group(2)))
+    marks.sort(key=lambda m: m.start())
     chunks: list[Chunk] = []
     for i, m in enumerate(marks):
         end = marks[i + 1].start() if i + 1 < len(marks) else len(text)

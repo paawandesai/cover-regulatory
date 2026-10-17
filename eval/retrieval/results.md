@@ -92,16 +92,23 @@ Older dumps were restored into scratch databases and searched with the current c
 ## County set (2026-10-17)
 
 `county.yaml` has 30 questions written by Claude Sonnet 5.5 (`write_questions.py --set county`) from 30 sampled
-Title 22 chunks, the same way as the holdout: the writer saw one chunk at a time, never the search code. It was run
-once after it was written; nothing in search was tuned on it.
+Title 22 chunks, the same way as the holdout: the writer saw one chunk at a time, never the search code. Nothing in
+search was tuned on it.
+
+Writing it showed a chunking bug: Title 22's Definitions chapter (22.14) has no numbered sections, so its text had
+been filed under the section before it, as 59 chunks labelled "LACC 22.06.070 D". The chunker now starts a section at
+each division heading, so the definitions are "LACC 22.14". Nine of the questions came from those chunks; their
+label was corrected to LACC 22.14 and the set measured again:
 
 | Scope | recall@5 | MRR | p50 ms | p95 ms |
 |---|---|---|---|---|
-| **County** (Title 22 and state law, what the chat uses on a County parcel) | **0.80** | 0.669 | 66 | 105 |
-| All text, unscoped | 0.63 | 0.517 | 118 | 201 |
+| **County** (Title 22 and state law, what the chat uses on a County parcel) | **0.77** | 0.651 | 65 | 86 |
+| All text, unscoped | 0.60 | 0.407 | 104 | 162 |
+
+(Before the fix it read 0.80 and 0.63, counting the mislabelled chunks as right.)
 
 What this shows:
-- Scoping by jurisdiction matters: unscoped, City sections with the same subject (LAMC 12.10 to 12.12 density,
-  12.08 C.4 lot size) outrank the County's on 5 of the 30.
-- The 6 County-scoped misses are questions about County procedure (overlay precedence, conflicting ordinances,
+- Scoping by jurisdiction matters: unscoped, City sections on the same subject (LAMC 12.10 to 12.12 density,
+  12.08 C.4 lot size) outrank the County's.
+- The County-scoped misses are mostly questions on County procedure (overlay precedence, conflicting ordinances,
   temporary uses) where state ADU law's wording ranks first. They are outside what the County assessment uses.

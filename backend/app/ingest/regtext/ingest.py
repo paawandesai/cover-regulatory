@@ -213,7 +213,12 @@ def ingest(doc: dict) -> dict | None:
         pages = _trim(pages, **doc["trim"])
     chunks = chunk_document(doc, pages)
     if doc.get("section_prefixes"):
-        chunks = [c for c in chunks if c.section_id.startswith(tuple(doc["section_prefixes"]))]
+        # "LACC 22.18." keeps that chapter's sections; an entry without the trailing dot ("LACC 22.14") keeps that
+        # id only, so it does not also keep 22.140.
+        keep = doc["section_prefixes"]
+        chunks = [
+            c for c in chunks if any(c.section_id.startswith(p) if p.endswith(".") else c.section_id == p for p in keep)
+        ]
     retrieved = datetime.fromtimestamp(path.stat().st_mtime, UTC)
 
     # Stable ids: section slug plus ordinal within that section.

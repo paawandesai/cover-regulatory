@@ -2,6 +2,8 @@
 # from lacounty_title22 only). The writer saw only that chunk, never the search code or
 # the dev set (questions.yaml). Do not tune search on this file. Labels are the source chunk's section;
 # other sections may also answer a question, so recall here is a lower bound.
+# 2026-10-17: 9 labels changed from LACC 22.06.070 D to LACC 22.14 after a chunking fix showed those chunks were
+# the Definitions chapter (from_chunk keeps the old chunk id).
 questions:
 - q: My lot is zoned for 12 units per acre and isn't a full acre. How many square
     feet of lot do I need for each dwelling unit?
@@ -26,7 +28,7 @@ questions:
 - q: Does a house with an attached second unit count as a duplex, or is a duplex only
     a building with two separate dwelling units?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#55
 - q: If my lot has an overlay district on top of its base zoning, which rules win
     when they conflict, and what kinds of overlay districts exist?
@@ -53,12 +55,12 @@ questions:
 - q: How is the required rear yard depth measured on my lot when there is an alley
     behind it?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#60
 - q: Can I get an exception to build a wheelchair ramp in the required setback for
     a family member with a disability, and what counts as a reasonable accommodation?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#43
 - q: If the zoning code and another city ordinance both cover the same thing, which
     one wins when they conflict?
@@ -83,7 +85,7 @@ questions:
 - q: Does a room with just a bar sink or a gas or water hookup count as a kitchen
     even if there's no stove, for deciding if I'm adding a second unit?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#28
 - q: How many apartments can I build per acre on a multifamily-zoned lot, and does
     the limit still apply if my lot isn't a whole number of acres?
@@ -103,7 +105,7 @@ questions:
 - q: When figuring out how many parking spaces I need, does a big spare room or den
     count as a bedroom-type room, and how large does it have to be?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#24
 - q: If the county took part of my lot for a public park, will my remaining land still
     count as meeting the minimum lot size if it's at least 80% of the required area?
@@ -113,7 +115,7 @@ questions:
 - q: Is a sandwich board that I set out on the sidewalk in front of my shop treated
     as a freestanding sign if it isn't anchored to anything?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#49
 - q: How much space do I need to leave between my house and a detached garage or shed
     when both are on the same lot?
@@ -123,7 +125,7 @@ questions:
 - q: What counts as a child care center versus a family child care home under county
     zoning rules?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#10
 - q: If my housing project is built in phases, do I have to finish the open space
     at the same pace as the homes, and can that timeline be changed later if I run
@@ -144,7 +146,7 @@ questions:
 - q: If I'm building a new house in unincorporated Los Angeles County, will I have
     to pay a developer fee for the public library, and what does that fee cover?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#30
 - q: What kinds of land can count as open space in a planned residential development,
     like parks, playgrounds, or natural areas?
@@ -154,5 +156,5 @@ questions:
 - q: How does the code distinguish between a studio and a one-bedroom unit in a multifamily
     building, and how many rooms can each have?
   expect:
-  - LACC 22.06.070 D
+  - LACC 22.14
   from_chunk: lacounty_title22#lacc-22-06-070-d#35
