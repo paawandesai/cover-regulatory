@@ -242,6 +242,7 @@ cases:
       rear_yard: interpretive
       max_height: interpretive
       lot_minimum: interpretive
+    flags_include: [flag_county_pasd]   # South Bay PASD (22.318), adopted 2025-03-11
     flags_exclude: [flag_county_hma, flag_county_csd, flag_county_setback_district]
   - apn: "4144001012"   # Del Aire, County R-1, ~40 x 132 ft, 5,292 sq ft (narrow lot)
     status: ok

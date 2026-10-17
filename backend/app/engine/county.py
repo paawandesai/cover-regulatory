@@ -194,6 +194,32 @@ def overlay_notes(conn, ctx, items: list[Item]) -> list[Item]:
                 citations=chunk_citation(conn, "LACC 22.06.040", "supersede"),
             )
         )
+    if (kinds.get("county_pasd") or {}).get("name") == "South Bay":
+        out.append(
+            Item(
+                "flag_county_pasd",
+                "flag",
+                "South Bay Planning Area Standards District",
+                "Adds site standards; the yards and height above are unchanged",
+                None,
+                "flag",
+                rule_id="FLAG_COUNTY_PASD",
+                explanation="This lot is in the South Bay Planning Area Standards District (Chapter 22.318, adopted "
+                "2025-03-11), whose standards apply with the zone's and govern where they differ. For homes it adds: "
+                "fences and walls within 10 ft of the front property line at most 5.5 ft tall, with no more than "
+                "42 inches solid and half the part above that open, and at most 6 ft elsewhere in the front yard "
+                "(22.318.060 F.1.b); drought-tolerant front-yard planting (F.1.a); rooftop equipment, elevator shafts "
+                "and stairwells left out of the height limit (22.318.060 C); and shielded outdoor lighting and "
+                "screened mechanical equipment (22.318.070 C.1). The Del Aire and Wiseburn community standards "
+                "districts prohibit accessory commercial units (22.318.090, 22.318.150). It sets no yards or height "
+                "for Zone R-1, and it does not limit ADU floor area or height (22.140.640 G.1.a). Not checked "
+                "against a project here.",
+                citations=chunk_citation(conn, "LACC 22.318.060 F.1", "five and one-half feet")
+                + chunk_citation(conn, "LACC 22.318.060 C", "rooftop equipment")
+                + chunk_citation(conn, "LACC 22.318.070 C.1", "fully shielded")
+                + chunk_citation(conn, "LACC 22.318.090", "prohibited"),
+            )
+        )
     if "county_setback_district" in kinds:
         out.append(
             Item(

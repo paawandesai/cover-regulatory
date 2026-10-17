@@ -35,6 +35,7 @@ OVERLAY_NAME_FIELDS = (
     "ZONE",
     "hqta_type",
     "CSD_NAME",
+    "PASD_NAME",
     "SETBACK_NAME",
 )
 

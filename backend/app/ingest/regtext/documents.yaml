@@ -292,7 +292,28 @@ documents:
     headings: title22_nested
     trim: {start: "22.140.640 Accessory Dwelling Units and Junior Accessory", end: "SECTION 9."}
     drop_patterns:
-      - '(?m)^HOA\.[\d.]+ \d+$\n?'
+      - '(?m)^HOA\.[\d.]+\s+\d+$\n?'
+
+  - id: lacounty_south_bay_pasd
+    title: South Bay Planning Area Standards District (Title 22 Chapter 22.318), South Bay Area Plan Ordinance
+    publisher: Los Angeles County Board of Supervisors (ordinance as transmitted by County Counsel for adoption)
+    doc_type: ordinance
+    jurisdiction: Los Angeles County (unincorporated)
+    code_chapter: T22
+    fetch: url
+    url: https://file.lacounty.gov/SDSInter/bos/supdocs/200967.pdf
+    effective_date: 2025-04-11
+    effective_note: >-
+      Adopted by the Board on 2025-03-11 (Title 22 changes effective 2025-04-11); the transmitted copy, revised
+      2025-02-27, leaves the ordinance number blank. Chapter 22.318 holds the area-wide district and the community
+      standards districts of the South Bay communities, including Del Aire (22.318.090). Only Chapter 22.318 is
+      ingested.
+    ocr_text: false
+    drop_struck: true
+    headings: title22_nested
+    trim: {start: "SOUTH BAY PLANNING AREA STANDARDS DISTRICT", end: "SECTION 7."}
+    drop_patterns:
+      - '(?m)^HOA\.[\d.]+\s+\d+$\n?'
 
   - id: hcd_lacounty_adu_2025
     title: HCD review of LA County ADU Ordinance No. 2025-0029 (letter of 2025-12-01)
