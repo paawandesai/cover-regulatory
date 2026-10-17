@@ -1,0 +1,158 @@
+# Retrieval county set: 30 questions written by claude-sonnet-5-5 from one sampled chunk each (seed 20261016,
+# from lacounty_title22 only). The writer saw only that chunk, never the search code or
+# the dev set (questions.yaml). Do not tune search on this file. Labels are the source chunk's section;
+# other sections may also answer a question, so recall here is a lower bound.
+questions:
+- q: My lot is zoned for 12 units per acre and isn't a full acre. How many square
+    feet of lot do I need for each dwelling unit?
+  expect:
+  - LACC 22.110.120 A
+  from_chunk: lacounty_title22#lacc-22-110-120-a#1
+- q: What geology reports and slope measurements do I need to submit if I want to
+    build a house on a hillside in a rural hillside management area?
+  expect:
+  - LACC 22.102.040 B
+  from_chunk: lacounty_title22#lacc-22-102-040-b#1
+- q: My lot slopes steeply up from the street, can I build closer to the road than
+    the normal front setback?
+  expect:
+  - LACC 22.110.080 B
+  from_chunk: lacounty_title22#lacc-22-110-080-b#1
+- q: Can I build a small neighborhood church in a single-family residential zone,
+    and what kind of permit would I need?
+  expect:
+  - LACC 22.18.030 C
+  from_chunk: lacounty_title22#lacc-22-18-030-c#2
+- q: Does a house with an attached second unit count as a duplex, or is a duplex only
+    a building with two separate dwelling units?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#55
+- q: If my lot has an overlay district on top of its base zoning, which rules win
+    when they conflict, and what kinds of overlay districts exist?
+  expect:
+  - LACC 22.06.040
+  from_chunk: lacounty_title22#lacc-22-06-040#1
+- q: Can I build a covered structure over more than half of my required back yard
+    if I make up the lost open space somewhere else on my lot, and what does the replacement
+    area need to look like?
+  expect:
+  - LACC 22.110.030 D
+  from_chunk: lacounty_title22#lacc-22-110-030-d#1
+- q: Can I get a setback or yard requirement waived if my sloped lot makes it impractical
+    to comply, and does that require a public hearing?
+  expect:
+  - LACC 22.110.180
+  from_chunk: lacounty_title22#lacc-22-110-180#1
+- q: What does the planning director have to put in the staff report before a public
+    hearing on my project, like hazard mitigation and protecting habitat or scenic
+    resources?
+  expect:
+  - LACC 22.102.080 A
+  from_chunk: lacounty_title22#lacc-22-102-080-a#1
+- q: How is the required rear yard depth measured on my lot when there is an alley
+    behind it?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#60
+- q: Can I get an exception to build a wheelchair ramp in the required setback for
+    a family member with a disability, and what counts as a reasonable accommodation?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#43
+- q: If the zoning code and another city ordinance both cover the same thing, which
+    one wins when they conflict?
+  expect:
+  - LACC 22.04.020
+  from_chunk: lacounty_title22#lacc-22-04-020#1
+- q: Do the minimum lot size rules in single-family and agricultural zones apply when
+    I want to build a detached accessory structure or a second unit on my property?
+  expect:
+  - LACC 22.110.140 I
+  from_chunk: lacounty_title22#lacc-22-110-140-i#1
+- q: What types of residential zones does the county have in its unincorporated areas,
+    and what are they called?
+  expect:
+  - LACC 22.06.010 A
+  from_chunk: lacounty_title22#lacc-22-06-010-a#1
+- q: What kind of permit do I need to put up a model home in a residential neighborhood
+    while a new tract is being built?
+  expect:
+  - LACC 22.18.030 C
+  from_chunk: lacounty_title22#lacc-22-18-030-c#7
+- q: Does a room with just a bar sink or a gas or water hookup count as a kitchen
+    even if there's no stove, for deciding if I'm adding a second unit?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#28
+- q: How many apartments can I build per acre on a multifamily-zoned lot, and does
+    the limit still apply if my lot isn't a whole number of acres?
+  expect:
+  - LACC 22.110.120 B
+  from_chunk: lacounty_title22#lacc-22-110-120-b#1
+- q: How far can a back deck or front porch without a roof stick out into the required
+    yard setback, and how close to the property line can it be?
+  expect:
+  - LACC 22.110.090 D
+  from_chunk: lacounty_title22#lacc-22-110-090-d#1
+- q: If I bought a lot and the sale didn't follow the subdivision rules, can I back
+    out of the deal, and how long do I have to do it?
+  expect:
+  - LACC 22.110.140 H
+  from_chunk: lacounty_title22#lacc-22-110-140-h#1
+- q: When figuring out how many parking spaces I need, does a big spare room or den
+    count as a bedroom-type room, and how large does it have to be?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#24
+- q: If the county took part of my lot for a public park, will my remaining land still
+    count as meeting the minimum lot size if it's at least 80% of the required area?
+  expect:
+  - LACC 22.110.140 B
+  from_chunk: lacounty_title22#lacc-22-110-140-b#1
+- q: Is a sandwich board that I set out on the sidewalk in front of my shop treated
+    as a freestanding sign if it isn't anchored to anything?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#49
+- q: How much space do I need to leave between my house and a detached garage or shed
+    when both are on the same lot?
+  expect:
+  - LACC 22.110.050 A
+  from_chunk: lacounty_title22#lacc-22-110-050-a#1
+- q: What counts as a child care center versus a family child care home under county
+    zoning rules?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#10
+- q: If my housing project is built in phases, do I have to finish the open space
+    at the same pace as the homes, and can that timeline be changed later if I run
+    into financial hardship?
+  expect:
+  - LACC 22.18.050 D
+  from_chunk: lacounty_title22#lacc-22-18-050-d#1
+- q: Can I sell off part of my property to a neighbor if it would leave either piece
+    smaller than the minimum lot size or width for my zone?
+  expect:
+  - LACC 22.110.140 E
+  from_chunk: lacounty_title22#lacc-22-110-140-e#1
+- q: Where can I find out which zone my property is in, and how is the official zoning
+    map kept up to date?
+  expect:
+  - LACC 22.06.070 A
+  from_chunk: lacounty_title22#lacc-22-06-070-a#1
+- q: If I'm building a new house in unincorporated Los Angeles County, will I have
+    to pay a developer fee for the public library, and what does that fee cover?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#30
+- q: What kinds of land can count as open space in a planned residential development,
+    like parks, playgrounds, or natural areas?
+  expect:
+  - LACC 22.18.050 C
+  from_chunk: lacounty_title22#lacc-22-18-050-c#2
+- q: How does the code distinguish between a studio and a one-bedroom unit in a multifamily
+    building, and how many rooms can each have?
+  expect:
+  - LACC 22.06.070 D
+  from_chunk: lacounty_title22#lacc-22-06-070-d#35

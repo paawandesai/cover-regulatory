@@ -18,7 +18,7 @@ import yaml
 from app.search import search as s
 
 EVAL = Path(__file__).resolve().parents[3] / "eval" / "retrieval"
-SETS = {"dev": EVAL / "questions.yaml", "holdout": EVAL / "holdout.yaml"}
+SETS = {"dev": EVAL / "questions.yaml", "holdout": EVAL / "holdout.yaml", "county": EVAL / "county.yaml"}
 
 
 def _covers(expected: str, section_id: str) -> bool:

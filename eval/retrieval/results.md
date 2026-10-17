@@ -88,3 +88,20 @@ Older dumps were restored into scratch databases and searched with the current c
 - The fix: when a query names a zone, that zone's own section (read from the LAMC headings, so R1 is 12.08 and RE
   is 12.07.01) joins the fusion as a second ranked list. It was checked on the dev set only; the holdout was run once
   afterwards and is unchanged at 0.54. Its misses are mostly Government Code questions that name no zone.
+
+## County set (2026-10-17)
+
+`county.yaml` has 30 questions written by Claude Sonnet 5.5 (`write_questions.py --set county`) from 30 sampled
+Title 22 chunks, the same way as the holdout: the writer saw one chunk at a time, never the search code. It was run
+once after it was written; nothing in search was tuned on it.
+
+| Scope | recall@5 | MRR | p50 ms | p95 ms |
+|---|---|---|---|---|
+| **County** (Title 22 and state law, what the chat uses on a County parcel) | **0.80** | 0.669 | 66 | 105 |
+| All text, unscoped | 0.63 | 0.517 | 118 | 201 |
+
+What this shows:
+- Scoping by jurisdiction matters: unscoped, City sections with the same subject (LAMC 12.10 to 12.12 density,
+  12.08 C.4 lot size) outrank the County's on 5 of the 30.
+- The 6 County-scoped misses are questions about County procedure (overlay precedence, conflicting ordinances,
+  temporary uses) where state ADU law's wording ranks first. They are outside what the County assessment uses.

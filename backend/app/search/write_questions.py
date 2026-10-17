@@ -5,6 +5,7 @@ residential architect might ask that the chunk answers, in their own words. The 
 The set is for measuring only: nothing in search may be tuned on it.
 
 Run: uv run python -m app.search.write_questions [--n 50]      (needs ANTHROPIC_COVER_API_KEY)
+     uv run python -m app.search.write_questions --set county     (LA County Title 22 only, to county.yaml)
 """
 
 import argparse
@@ -19,7 +20,9 @@ from pydantic import BaseModel
 from app.config import get_settings
 from app.db.connection import connect
 
-OUT = Path(__file__).resolve().parents[3] / "eval" / "retrieval" / "holdout.yaml"
+EVAL = Path(__file__).resolve().parents[3] / "eval" / "retrieval"
+# Which chunks each set samples from, and where it is written.
+SETS = {"holdout": (None, EVAL / "holdout.yaml"), "county": ("lacounty_title22", EVAL / "county.yaml")}
 MODEL = "claude-sonnet-5-5"  # a different model from the one that wrote the search code and the dev set
 SEED = 20261016
 PER_DOC_CAP = 6
@@ -40,27 +43,30 @@ class Question(BaseModel):
     question: str
 
 
-def sample(conn, n: int) -> list[dict]:
+def sample(conn, n: int, document: str | None = None) -> list[dict]:
     rows = conn.execute(
         """SELECT id, document_id, section_id, text FROM reg_chunk
-           WHERE NOT mock AND length(text) > 300 ORDER BY id"""
+           WHERE NOT mock AND length(text) > 300 AND (%s::text IS NULL OR document_id = %s) ORDER BY id""",
+        (document, document),
     ).fetchall()
     rng = random.Random(SEED)
     by_doc: dict[str, list[dict]] = {}
     for r in rows:
         by_doc.setdefault(r["document_id"], []).append(r)
+    cap = PER_DOC_CAP if document is None else n * 2
     picked = []
     for doc in sorted(by_doc):
-        picked += rng.sample(by_doc[doc], min(PER_DOC_CAP, len(by_doc[doc])))
+        picked += rng.sample(by_doc[doc], min(cap, len(by_doc[doc])))
     rng.shuffle(picked)
     return picked[: n * 2]  # extra, since some passages are not usable
 
 
-def main(n: int) -> None:
+def main(n: int, qset: str = "holdout") -> None:
+    document, out_path = SETS[qset]
     client = anthropic.Anthropic(api_key=get_settings().anthropic_api_key.get_secret_value())
     out = []
     with connect() as conn:
-        chunks = sample(conn, n)
+        chunks = sample(conn, n, document)
     for c in chunks:
         if len(out) >= n:
             break
@@ -75,17 +81,20 @@ def main(n: int) -> None:
         q = r.parsed_output
         if q and q.usable and 10 <= len(q.question) <= 200:
             out.append({"q": q.question.strip(), "expect": [c["section_id"]], "from_chunk": c["id"]})
+    scope = f"at most {PER_DOC_CAP} chunks per document" if document is None else f"from {document} only"
     header = (
-        f"# Retrieval holdout: {len(out)} questions written by {MODEL} from one sampled chunk each (seed {SEED},\n"
-        f"# at most {PER_DOC_CAP} chunks per document). The writer saw only that chunk, never the search code or\n"
+        f"# Retrieval {qset} set: {len(out)} questions written by {MODEL} from one sampled chunk each (seed {SEED},\n"
+        f"# {scope}). The writer saw only that chunk, never the search code or\n"
         "# the dev set (questions.yaml). Do not tune search on this file. Labels are the source chunk's section;\n"
         "# other sections may also answer a question, so recall here is a lower bound.\n"
     )
-    OUT.write_text(header + yaml.safe_dump({"questions": out}, sort_keys=False, allow_unicode=True))
-    print(f"wrote {len(out)} questions to {OUT}")
+    out_path.write_text(header + yaml.safe_dump({"questions": out}, sort_keys=False, allow_unicode=True))
+    print(f"wrote {len(out)} questions to {out_path}")
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=50)
-    main(ap.parse_args().n)
+    ap.add_argument("--set", default="holdout", choices=sorted(SETS))
+    a = ap.parse_args()
+    main(a.n, a.set)
