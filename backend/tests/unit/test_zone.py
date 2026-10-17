@@ -64,3 +64,12 @@ def test_r2_and_re_families():
     assert not parse_zone("RE40-1-H").is_modeled  # -H supplemental district is listed as unmodeled
     assert parse_zone("RD2-1").family is None and not parse_zone("RD2-1").is_modeled
     assert parse_zone("RE12-1").family is None  # not an RE designation in 12.07.01 C.4
+
+
+def test_condition_notes_name_each_condition():
+    from app.engine.assess import _condition_notes
+
+    assert "can only lower the height" in _condition_notes(parse_zone("R2-2D"))
+    notes = _condition_notes(parse_zone("[Q]R2-1"))
+    assert "Q (Qualified)" in notes and "Tentative" not in notes
+    assert _condition_notes(parse_zone("R1-1")) == ""

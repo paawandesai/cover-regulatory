@@ -57,7 +57,7 @@ cases:
       adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
       adu_attached: 850           # 66321(b)/12.22 A.33(e)(3): 850 sq ft can't be refused; no existing home, so the 50% cap doesn't bite
       jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
-  - apn: "4359016023"   # vacant, R1-1, 16,403 sq ft, inside a specific plan
+  - apn: "4359016023"   # vacant, R1-1, 16,403 sq ft, inside the West LA transportation specific plan
     status: ok
     expect:
       guest_house: true       # 16,403 >= 10,000
@@ -71,7 +71,11 @@ cases:
       adu_local_detached: 1200.0  # LAMC 12.22 A.33(d)(1) and Gov. Code 66314(d): detached ADU up to 1,200 sq ft
       adu_attached: 850           # 66321(b)/12.22 A.33(e)(3): 850 sq ft can't be refused; no existing home, so the 50% cap doesn't bite
       jadu: 500.0                 # Gov. Code 66313(d): 500 sq ft, inside a proposed single-family home
-    flags_include: [overlay_plan]
+      plan_wla_timp: "Transportation fee; no envelope rules"   # WLA TIMP sets no envelope standards (Sections 1-13)
+    labels:
+      max_rfa: derived        # the plan is read, so it no longer turns the zone's values into interpretations
+      plan_wla_timp: interpretive
+    flags_exclude: [overlay_plan]
   - apn: "4412014028"   # vacant, Pacific Palisades, R1-1, hillside + coastal + 2025 fire perimeter
     status: ok
     expect:
@@ -161,7 +165,7 @@ cases:
       guest_house: true       # 20,000 sq ft minimum in RE (12.07.01 A.6)
       sb9_lot_split: true
     labels:
-      max_rfa: interpretive
+      max_rfa: derived
   - apn: "2126020001"   # R2-1-RIO, 7,666 sq ft, 48 ft wide
     status: ok
     expect:
@@ -194,6 +198,11 @@ cases:
     labels:
       side_yard: withheld
       max_height: withheld
+  - apn: "2118028002"   # R2-2D: a D limitation (12.32 G.4) and Height District 2
+    status: ok
+    labels:
+      max_height: withheld
+    flags_include: [zone_unmodeled]
   - apn: "4412004026"   # RD2-1: multiple-dwelling zone, not modeled
     status: zone_not_modeled
   - apn: "2118015001"   # [Q]C2-2D-CDO: commercial, outside the R1 family

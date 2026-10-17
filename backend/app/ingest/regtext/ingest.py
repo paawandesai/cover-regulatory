@@ -25,6 +25,7 @@ from app.db.connection import connect
 from app.ingest.regtext.chunk import (
     FAQ_HEADING,
     ORDER_NUMBER,
+    PLAN_SECTION,
     Chunk,
     Page,
     chunk_by_headings,
@@ -161,6 +162,7 @@ def _label(doc: dict) -> str:
         "eo1_revised": "EO 1",
         "eo8": "EO 8",
         "eo9": "EO 9",
+        "sp_wla_timp": "WLA TIMP",
     }.get(doc["id"], "Gov. Code" if doc["doc_type"] == "statute" else doc["title"])
 
 
@@ -175,6 +177,8 @@ def chunk_document(doc: dict, pages: list[Page]) -> list[Chunk]:
         return chunk_by_headings(pages, _label(doc), pattern=FAQ_HEADING)
     if doc.get("headings") == "letters":
         return chunk_order(pages, _label(doc))
+    if doc.get("headings") == "plan":
+        return chunk_by_headings(pages, _label(doc), pattern=PLAN_SECTION)
     if doc.get("headings") == "numbers":
         return chunk_by_headings(pages, _label(doc), pattern=ORDER_NUMBER)
     return chunk_by_headings(pages, _label(doc))
