@@ -272,3 +272,40 @@ documents:
       - '(?m)^Chapter 22\.\d+ [^\n]*\n'
     # Measurement rules, zones and suffixes, residential zones, hillside management and general site regulations.
     section_prefixes: ["LACC 22.04.", "LACC 22.06.", "LACC 22.14", "LACC 22.18.", "LACC 22.102.", "LACC 22.110."]
+
+  - id: lacounty_adu_ord_2025
+    title: LA County ADU Ordinance Amendment (Ord. No. 2025-0029), Title 22 Section 22.140.640
+    publisher: Los Angeles County Board of Supervisors (ordinance as transmitted by County Counsel for adoption)
+    doc_type: ordinance
+    jurisdiction: Los Angeles County (unincorporated)
+    code_chapter: T22
+    fetch: url
+    url: https://file.lacounty.gov/SDSInter/bos/supdocs/205125.pdf
+    effective_date: null
+    effective_note: >-
+      Adopted 2025-07-29 as Ord. No. 2025-0029 (per HCD's 2025-12-01 review letter; the transmitted copy leaves
+      the number blank). HCD found it non-compliant with State ADU Law in five respects, and the County planned a
+      2026 amendment, so state law prevails where they differ. Replaces the 2020 ADU ordinance (adopted
+      2020-10-13). Struck-through (deleted) text is dropped at ingestion. Only Section 22.140.640 is ingested.
+    ocr_text: false
+    drop_struck: true
+    headings: title22_nested
+    trim: {start: "22.140.640 Accessory Dwelling Units and Junior Accessory", end: "SECTION 9."}
+    drop_patterns:
+      - '(?m)^HOA\.[\d.]+ \d+$\n?'
+
+  - id: hcd_lacounty_adu_2025
+    title: HCD review of LA County ADU Ordinance No. 2025-0029 (letter of 2025-12-01)
+    publisher: California Department of Housing and Community Development
+    doc_type: letter
+    jurisdiction: Los Angeles County (unincorporated)
+    code_chapter: T22
+    fetch: url
+    url: https://www.hcd.ca.gov/sites/default/files/docs/policy-and-research/ordinance-review-letters/los-angeles-county-adu-findings-120125.pdf
+    effective_date: 2025-12-01
+    effective_note: >-
+      HCD's findings that the County ordinance does not comply with State ADU Law (unit counts, multifamily
+      detached ADUs, attached ADU height, front setback feasibility). The County had until 2025-12-31 to respond;
+      its response is not loaded.
+    ocr_text: false
+    headings: numbers

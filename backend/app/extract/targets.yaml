@@ -25,3 +25,4 @@ groups:
   fire_orders:   ["EO 1 B.3", "EO 8 A", "EO 8 B", "EO 9 1", "EO 9 2"]
   county_r1:     ["LACC 22.18.040 A", "LACC 22.18.040 B"]
   county_site:   ["LACC 22.110.080 C", "LACC 22.110.080 D", "LACC 22.110.130 A", "LACC 22.110.130 B"]
+  county_adu:    ["LACC 22.140.640 C", "LACC 22.140.640 E", "LACC 22.140.640 G.1.a", "LACC 22.140.640 G.1.b", "LACC 22.140.640 G.1.c", "LACC 22.140.640 G.1.d"]

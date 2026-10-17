@@ -232,9 +232,11 @@ cases:
       lot_minimum: 5000       # 22.110.130 A.4: plain R-1 takes the R-1-5000 area
       adu_state_detached: 800.0  # Gov. Code 66323(a)(2), binding on counties
       jadu: 500.0             # Gov. Code 66313(d)
+      county_adu: 1200.0      # 22.140.640 G.1.a (Ord. 2025-0029)
       sb9_two_unit: 2.0       # Gov. Code 65852.21(a)
       sb9_lot_split: true     # 66411.7(a): 5,259 >= 2 x 1,200
     labels:
+      county_adu: interpretive
       front_yard: interpretive
       side_yard: interpretive
       rear_yard: interpretive

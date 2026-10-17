@@ -354,6 +354,18 @@ RULES |= {
         Need("rear", "LACC 22.18.040 A", "rear_yard_min_ft", applies="R-1"),
         Need("corner_side", "LACC 22.18.040 A", "corner_side_yard_min_ft", applies="R-1"),
     ],
+    # The County's own ADU rules (Ord. 2025-0029); HCD found parts of it out of line with state law.
+    "COUNTY_ADU": [
+        Need("max_sqft", "LACC 22.140.640 G.1.a", "adu_max_floor_area_sqft", "1,200 square feet"),
+        Need("height_ft", "LACC 22.140.640 G.1.b", "adu_height_max_ft", "shall be 25 feet"),
+        Need("setback_ft", "LACC 22.140.640 G.1.c", "adu_side_rear_setback_ft", "four feet from the rear"),
+        Need("counts", "LACC 22.140.640 E", "adu_count_max", "attached to or within a single", numeric=False),
+        Need("no_parking", "LACC 22.140.640 G.1.d", "adu_parking_required", "outside of a V", numeric=False),
+    ],
+    "COUNTY_ADU_FIRE": [
+        Need("two_access", "LACC 22.140.640 C", "adu_allowed", "two distinct means", numeric=False),
+        Need("highway_front", "LACC 22.140.640 C", "adu_allowed", "single", numeric=False),
+    ],
     "COUNTY_REVERSED_CORNER": [
         Need("side_ft", "LACC 22.18.040 A", "other", applies="R-1", condition_has="Reversed Corner"),
     ],
