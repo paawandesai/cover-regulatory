@@ -76,3 +76,21 @@ frontend:
     when: always
     reports:
       junit: frontend/vitest-junit.xml
+
+# The AWS production setup (infra/aws): format, validate, and apply it to mocked providers. No AWS credentials are
+# used and nothing is created.
+terraform:
+  stage: check
+  image:
+    name: hashicorp/terraform:1.13.4
+    entrypoint: [""]
+  script:
+    - cd infra/aws
+    - terraform fmt -check -recursive
+    - terraform init -backend=false -input=false
+    - terraform validate
+    - terraform test -junit-xml=terraform-junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: infra/aws/terraform-junit.xml

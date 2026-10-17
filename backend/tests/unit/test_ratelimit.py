@@ -17,6 +17,7 @@ def req(ip="203.0.113.5", fwd=None):
 def fresh(monkeypatch):
     ratelimit.reset()
     monkeypatch.setenv("TRUST_PROXY_HEADERS", "false")
+    monkeypatch.delenv("TRUSTED_PROXY_HOPS", raising=False)
     get_settings.cache_clear()
     yield
     ratelimit.reset()
@@ -43,6 +44,18 @@ def test_forwarded_for_is_used_only_when_trusted(monkeypatch):
     assert ratelimit.client_key(a) != ratelimit.client_key(b)
     # The last entry is the one the proxy wrote; anything a client prepends is ignored.
     assert ratelimit.client_key(req("10.0.0.2", "1.2.3.4, 203.0.113.1")) == ratelimit.client_key(a)
+
+
+def test_proxy_hops_pick_the_viewer_behind_cloudfront_and_the_alb(monkeypatch):
+    monkeypatch.setenv("TRUST_PROXY_HEADERS", "true")
+    monkeypatch.setenv("TRUSTED_PROXY_HOPS", "2")
+    get_settings.cache_clear()
+    viewer = ratelimit.client_key(req("10.0.1.9", "203.0.113.1, 130.176.0.1"))
+    # A different CloudFront edge, and a forged entry the client prepended, change nothing.
+    assert ratelimit.client_key(req("10.0.1.9", "1.2.3.4, 203.0.113.1, 130.176.0.2")) == viewer
+    assert ratelimit.client_key(req("10.0.1.9", "203.0.113.2, 130.176.0.1")) != viewer
+    # Fewer entries than hops: use the first rather than fail.
+    assert ratelimit.client_key(req("10.0.1.9", "203.0.113.1")) == viewer
 
 
 def test_key_is_a_hash_not_the_ip():

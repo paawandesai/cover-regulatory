@@ -125,7 +125,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 
 The assessment took 129 ms (p50) before the prevailing front yard estimate, which reads every lot and building on the block face (measured 2026-10-16).
 
-**Test suites** (2026-10-16): backend 83 passed locally against the loaded database, frontend 7 passed. CI runs the secrets scan, lint, type checks, a production build and the backend tests that need no database. The golden, API and feedback tests need the loaded database, which can't go into CI (it holds hand-saved regulation text), so they skip there and must be run locally. Full results: `eval/test-results.md`.
+**Test suites** (2026-10-17): 129 passed: backend 120 against the loaded database, frontend 7, and 2 Terraform test runs that apply the AWS setup to mocked providers. CI runs the secrets scan, lint, type checks, a production build, the unit and frontend tests, the Terraform checks, and (job `db-tests`) the golden, API and adversarial suites against the private database dump. Full results: `eval/test-results.md`.
 
 ## AI disclosure
 This tool uses an LLM at ingestion, to extract candidate rule fragments from regulatory text, and in the optional follow-up chat, whose answers keep only sentences with quotes checked against the source. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.

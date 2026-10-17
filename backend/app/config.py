@@ -29,6 +29,8 @@ class Settings(BaseSettings):
     demo_invite_code: SecretStr | None = None
     # Behind the bundled Caddy proxy: take the client IP for rate limits from X-Forwarded-For.
     trust_proxy_headers: bool = False
+    # How many proxies in front of the API append to X-Forwarded-For: 1 for Caddy, 2 for CloudFront then the ALB.
+    trusted_proxy_hops: int = Field(default=1, ge=1)
 
     @field_validator("anthropic_api_key", "admin_password_scrypt", "demo_invite_code", mode="before")
     @classmethod

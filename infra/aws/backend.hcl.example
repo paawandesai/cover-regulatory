@@ -1,0 +1,6 @@
+# Copy to backend.hcl (not committed) and run: terraform init -backend-config=backend.hcl
+bucket       = "your-terraform-state-bucket" # versioned, encrypted, public access blocked
+key          = "cover-regulatory/prod.tfstate"
+region       = "us-west-2"
+encrypt      = true
+use_lockfile = true
