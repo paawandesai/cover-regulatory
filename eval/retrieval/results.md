@@ -69,3 +69,22 @@ What this shows:
   so the drop came with the City documents added in waves 2 to 7 (Chapter 1A, the fire orders, the specific plan
   and more state law). Which documents cause each miss was not traced. Nothing in search was tuned on the holdout.
 - There is no County question set yet.
+
+## Cause of the drop, and a fix (2026-10-17)
+
+Older dumps were restored into scratch databases and searched with the current code:
+
+| Database | Chunks | Dev recall@5 | Dev MRR | Holdout recall@5 | Holdout MRR |
+|---|---|---|---|---|---|
+| 2026-10-16 wave 5b | 2,906 | 0.844 | 0.673 | 0.58 | 0.472 |
+| 2026-10-17 wave 7a | 3,305 | 0.75 | 0.595 | 0.56 | 0.442 |
+| Today, before the fix | 3,694 | 0.75 | 0.595 | 0.54 | 0.421 |
+| **Today, with the zone boost** | 3,694 | **0.812** | **0.699** | **0.54** | **0.421** |
+
+- The drop came with wave 7a, which loaded 399 more LAMC chunks: the other zone sections (RW1, RU, RZ, RA, RS,
+  R3 to R5 and more), which read almost like R1's. "What side yard is required in the R1 zone?" then returned the
+  RW1 and RE side-yard rules ahead of 12.08 C.2. The documents added after 7a (Chapter 1A, the specific plan,
+  Title 22) do not change either set.
+- The fix: when a query names a zone, that zone's own section (read from the LAMC headings, so R1 is 12.08 and RE
+  is 12.07.01) joins the fusion as a second ranked list. It was checked on the dev set only; the holdout was run once
+  afterwards and is unchanged at 0.54. Its misses are mostly Government Code questions that name no zone.
