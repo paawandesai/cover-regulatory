@@ -65,16 +65,27 @@ def _status(fid: int) -> str:
 def test_changed_text_with_the_quote_goes_back_to_pending(fragment):
     _change_text("A new intro sentence. " + QUOTE, "h2")
     with connect() as conn:
-        assert R.send_back_to_review(conn, DOC) == {"to_pending": 1, "retired": 0}
+        assert R.send_back_to_review(conn, DOC) == {"to_pending": 1, "retired": 0, "kept_rejected": 0}
         conn.commit()
         log = conn.execute("SELECT actor, action FROM audit_log ORDER BY id DESC LIMIT 1").fetchone()
     assert _status(fragment) == "pending" and log == {"actor": "source-refresh", "action": "fragment_to_pending"}
 
 
+def test_changed_text_keeps_a_rejected_fragment_rejected(fragment):
+    with connect() as conn:
+        conn.execute("UPDATE rule_fragment SET status = 'rejected' WHERE id = %s", (fragment,))
+        conn.commit()
+    _change_text("A new intro sentence. " + QUOTE, "h4")
+    with connect() as conn:
+        assert R.send_back_to_review(conn, DOC) == {"to_pending": 0, "retired": 0, "kept_rejected": 1}
+        conn.commit()
+    assert _status(fragment) == "rejected"
+
+
 def test_changed_text_without_the_quote_is_retired(fragment):
     _change_text("The front yard shall be not less than 25 feet.", "h3")
     with connect() as conn:
-        assert R.send_back_to_review(conn, DOC) == {"to_pending": 0, "retired": 1}
+        assert R.send_back_to_review(conn, DOC) == {"to_pending": 0, "retired": 1, "kept_rejected": 0}
         conn.commit()
     assert _status(fragment) == "invalid"
 

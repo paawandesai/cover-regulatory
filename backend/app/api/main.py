@@ -354,7 +354,7 @@ def audit(
     actor: str | None = Query(None, max_length=40),
     limit: int = Query(200, ge=1, le=1000),
 ):
-    """Every review action, newest first. The log cannot be edited or deleted (a database trigger refuses)."""
+    """Every review action, newest first. The app cannot edit or delete entries (a database trigger refuses)."""
     with connect() as conn:
         return conn.execute(
             """SELECT a.id, a.at, a.actor, r.display_name, a.action, a.object_type, a.object_id, a.detail

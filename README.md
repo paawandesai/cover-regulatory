@@ -172,7 +172,7 @@ npm run build      # typecheck + production build into frontend/dist
 Vue 3 + TypeScript + MapLibre, styled with the Forge design tokens (`frontend/src/tokens.css`).
 Two pages: the assessment (`/?q=<APN or address>`) and rule review (`/review`, admin sign-in).
 The map draws County parcel outlines and Microsoft building outlines (attributed), with no basemap tiles, so no third-party tile host is contacted.
-Admin credentials are held in memory for the session and never written to browser storage. Each reviewer should have a named account (`app.api.reviewers`), so every decision carries their name; the `ADMIN_USERNAME` account is for setting up. The Sources tab shows the weekly source check: downloadable sources are re-fetched, and when one changes, every rule whose text changed goes back to review, so its value shows as an Interpretation until someone approves it again. Hand-saved sources (LAMC, Gov. Code) are never fetched and are listed as due for a hand re-check after 90 days. The Audit log tab lists every approval, rejection, feedback decision, report signature and withdrawal, and account change. The log is append-only (a database trigger refuses edits) and starts with wave 6; decisions before that are recorded only on each rule (`reviewed_by`).
+Admin credentials are held in memory for the session and never written to browser storage. Each reviewer should have a named account (`app.api.reviewers`), so every decision carries their name; the `ADMIN_USERNAME` account is for setting up. The Sources tab shows the weekly source check: downloadable sources are re-fetched, and when one changes, every approved rule whose text changed goes back to review (a rejected one stays rejected), so its value shows as an Interpretation until someone approves it again. Hand-saved sources (LAMC, Gov. Code) are never fetched and are listed as due for a hand re-check after 90 days. The Audit log tab lists every approval, rejection, feedback decision, report signature and withdrawal, and account change. A database trigger refuses edits and deletes from the app. The app connects as the table owner, so the owner role could still drop or truncate the table; a production setup would give the app role insert and select only. The log starts with wave 6; decisions before that are recorded only on each rule (`reviewed_by`).
 
 
 ### Running with Docker
@@ -186,7 +186,7 @@ docker compose exec api python -m app.db.migrate
 The database starts empty. Load it either way:
 
 - **From a dump** of a loaded database: `scripts/db-dump.sh regengine.dump` on the source machine, then
-  `scripts/db-restore.sh regengine.dump`. The dump contains regulation text saved by hand, so it stays out of git (short quotes appear in the browser-test fixtures).
+  `scripts/db-restore.sh regengine.dump`. The dump contains regulation text saved by hand, so it stays out of git (short quotes appear in the browser-test fixtures). The dump leaves out the rows a deployment writes for itself (reviewer accounts, client reports, feedback, source checks), and the restore keeps the ones already in the target database.
 - **From the sources**: run, inside the api container, `python -m app.ingest.load_datasets`,
   `python -m app.ingest.regtext.ingest`, `python -m app.search.index` and `python -m app.extract.extract`.
   The regulation text step needs the hand-saved files in `data/manual/` (the LAMC chapter, the Gov. Code pages and

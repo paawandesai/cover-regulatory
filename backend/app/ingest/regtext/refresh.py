@@ -38,7 +38,9 @@ def _download(doc: dict) -> bytes:
 
 
 def send_back_to_review(conn, document_id: str) -> dict:
-    """Decided fragments of this document whose chunk text changed: back to pending if the quote survived."""
+    """Decided fragments of this document whose chunk text changed: approved ones go back to pending if the quote
+    survived; rejected ones stay rejected (the engine reads pending values, so a text change must never bring back a
+    value a reviewer turned down). Either is retired if its quote is gone."""
     rows = conn.execute(
         """SELECT f.id, f.status, f.source_quote, c.text, c.content_hash FROM rule_fragment f
            JOIN reg_chunk c ON c.id = f.chunk_id
@@ -46,11 +48,18 @@ def send_back_to_review(conn, document_id: str) -> dict:
            FOR UPDATE OF f""",
         (document_id,),
     ).fetchall()
-    out = {"to_pending": 0, "retired": 0}
+    out = {"to_pending": 0, "retired": 0, "kept_rejected": 0}
     for r in rows:
         span = locate_quote(r["source_quote"], r["text"])
         note = f"Source text changed on {datetime.now(UTC).date()}; was {r['status']}."
-        if span:
+        if span and r["status"] == "rejected":
+            conn.execute(
+                """UPDATE rule_fragment SET chunk_hash = %s, quote_start = %s, quote_end = %s,
+                       review_note = left(coalesce(review_note || ' ', '') || %s, 2000) WHERE id = %s""",
+                (r["content_hash"], span[0], span[1], note + " Quote still present; stays rejected.", r["id"]),
+            )
+            out["kept_rejected"] += 1
+        elif span:
             conn.execute(
                 """UPDATE rule_fragment SET status = 'pending', chunk_hash = %s, quote_start = %s, quote_end = %s,
                        review_note = left(coalesce(review_note || ' ', '') || %s, 2000) WHERE id = %s""",

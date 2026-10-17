@@ -9,6 +9,7 @@ Counts live in each process, so with several API tasks a client gets the limit o
 the WAF's rate rules are the shared limit (infra/aws/waf.tf)."""
 
 import hashlib
+import ipaddress
 import secrets
 import threading
 import time
@@ -39,7 +40,20 @@ def client_key(request: Request) -> str:
         if fwd:
             hops = fwd.split(",")
             ip = hops[-min(get_settings().trusted_proxy_hops, len(hops))].strip()
-    return hashlib.sha256(_SALT + ip.encode()).hexdigest()[:24]
+    return hashlib.sha256(_SALT + _network(ip).encode()).hexdigest()[:24]
+
+
+def _network(ip: str) -> str:
+    """An IPv6 client is limited per /64, since one subscriber usually holds the whole /64 and can rotate within it."""
+    try:
+        addr = ipaddress.ip_address(ip)
+    except ValueError:
+        return ip
+    if addr.version == 6:
+        if addr.ipv4_mapped is not None:
+            return str(addr.ipv4_mapped)
+        return str(ipaddress.ip_network(f"{addr}/64", strict=False))
+    return str(addr)
 
 
 def _prune(q: deque[float], window: float, now: float) -> None:

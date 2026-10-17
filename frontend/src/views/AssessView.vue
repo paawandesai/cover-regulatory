@@ -603,8 +603,10 @@ h2 {
   min-width: 0;
 }
 .rv {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   min-width: 120px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
