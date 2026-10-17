@@ -1,4 +1,5 @@
-import type { Item, Label } from './types'
+import { ref } from 'vue'
+import type { Assessment, Item, Label } from './types'
 
 export const LABEL_TEXT: Record<Label, string> = {
   verified: 'Verified parcel data',
@@ -9,6 +10,18 @@ export const LABEL_TEXT: Record<Label, string> = {
   approximate: 'Approximate',
   flag: 'Flag, not evaluated',
   mock: 'MOCK data',
+}
+
+// Who to confirm an interpretation with: the City, or the County for an unincorporated parcel.
+export const authority = ref<'City' | 'County'>('City')
+
+export function authorityOf(a: Assessment | null | undefined): 'City' | 'County' {
+  const regime = a?.parcel.items.find((i) => i.id === 'code_regime')?.value
+  return typeof regime === 'string' && regime.startsWith('LA County') ? 'County' : 'City'
+}
+
+export function labelText(label: Label): string {
+  return label === 'interpretive' ? `Interpretation, confirm with ${authority.value}` : LABEL_TEXT[label]
 }
 
 const num = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 })

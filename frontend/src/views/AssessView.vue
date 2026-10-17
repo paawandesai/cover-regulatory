@@ -12,7 +12,7 @@ import ScenarioPanel from '../components/ScenarioPanel.vue'
 import SummaryCard from '../components/SummaryCard.vue'
 import SourcePanel from '../components/SourcePanel.vue'
 import StopState from '../components/StopState.vue'
-import { citeLabel, formatApn, formatDate, formatExisting, formatValue } from '../format'
+import { authority, authorityOf, citeLabel, formatApn, formatDate, formatExisting, formatValue } from '../format'
 import type { Assessment, Item, Label, ProjectInputs } from '../types'
 
 // MapLibre is large; load it only when the map view is opened.
@@ -87,6 +87,7 @@ async function load(q: string) {
   try {
     const r = await assess(q, project.value)
     result.value = r
+    authority.value = authorityOf(r)
     document.title = `APN ${formatApn(r.parcel.apn)} · Regulatory Engine`
     const first = r.items.find((i) => i.citations.length && i.family !== 'parcel') ?? r.items[0]
     if (!keepPick || ![...r.items, ...r.parcel.items].some((i) => i.id === keepPick)) pickedId.value = first?.id ?? null

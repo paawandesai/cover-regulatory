@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { LABEL_TEXT } from '../format'
+import { labelText } from '../format'
 import type { Label } from '../types'
 
 defineProps<{ label: Label; text?: string }>()
 </script>
 
 <template>
-  <span class="badge" :class="label">{{ text ?? LABEL_TEXT[label] }}</span>
+  <span class="badge" :class="label">{{ text ?? labelText(label) }}</span>
 </template>
 
 <style scoped>

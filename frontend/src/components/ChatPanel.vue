@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { ApiError, askChat } from '../api'
+import { authority } from '../format'
 import type { ChatAnswer, Item } from '../types'
 
 // A follow-up question about this parcel. The server answers only with sentences whose quotes it found in the
@@ -69,7 +70,7 @@ async function ask() {
         </div>
         <p class="small muted">
           {{ answer.disclosure }}<template v-if="answer.dropped"> {{ answer.dropped }} removed.</template> Interpretation, confirm with the
-          City.
+          {{ authority }}.
         </p>
       </div>
     </form>
