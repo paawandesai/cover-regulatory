@@ -35,6 +35,9 @@ def verify_password(password: str, stored: str) -> bool:
     return hmac.compare_digest(digest.hex(), digest_hex)
 
 
+_DUMMY_HASH = hash_password(secrets.token_hex(16))
+
+
 def _any_reviewer() -> bool:
     from app.db.connection import connect
 
@@ -48,7 +51,11 @@ def _named_reviewer(username: str, password: str) -> str | None:
 
     with connect() as conn:
         r = find(conn, username)
-        if r is None or not verify_password(password, r["password_scrypt"]):
+        if r is None:
+            # Same scrypt cost as a real account, so timing doesn't reveal which usernames exist.
+            verify_password(password, _DUMMY_HASH)
+            return None
+        if not verify_password(password, r["password_scrypt"]):
             return None
         conn.execute("UPDATE reviewer SET last_login_at = now() WHERE username = %s", (username,))
         conn.commit()

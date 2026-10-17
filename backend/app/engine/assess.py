@@ -29,8 +29,9 @@ COUNTY_DISCLAIMER = (
     "informational purposes; it may not be suitable for legal, engineering, or surveying use."
 )
 TOOL_DISCLAIMER = (
-    "Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City "
-    "Planning and LADBS before relying on it."
+    "Decision support for licensed professionals, not a zoning determination. Confirm every result with the "
+    "jurisdiction before relying on it: LA City Planning and LADBS in the City, LA County Regional Planning and "
+    "Public Works in unincorporated areas."
 )
 AI_DISCLOSURE = (
     "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that "
@@ -1086,7 +1087,8 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
     }
     if ctx.status == "outside_city":
         result["notes"] = [
-            f"Outside the City of Los Angeles ({ctx.jurisdiction_hint}). This tool models City zoning only."
+            f"Outside the City of Los Angeles ({ctx.jurisdiction_hint}). This tool models the City and "
+            + "unincorporated LA County only."
         ]
         return result
     if ctx.status == "regime_not_modeled":

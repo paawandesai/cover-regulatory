@@ -255,7 +255,7 @@ const stop = computed(() => {
 
     <aside class="disclaimer" aria-label="Disclaimer">
       <p class="small">
-        Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS.
+        Decision support for licensed professionals, not a zoning determination. Confirm every result with the City (LA City Planning and LADBS) or, in unincorporated areas, the County.
       </p>
     </aside>
 

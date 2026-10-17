@@ -13,6 +13,8 @@ class Settings(BaseSettings):
 
     llm_provider: str = "anthropic"
     llm_model_id: str = "claude-opus-5-5"
+    # Writes the retrieval holdout questions: a different model from the one that wrote the search code and dev set.
+    eval_model_id: str = "claude-sonnet-5-5"
     # The project environment provides ANTHROPIC_COVER_API_KEY; ANTHROPIC_API_KEY also works locally.
     anthropic_api_key: SecretStr | None = Field(
         default=None, validation_alias=AliasChoices("ANTHROPIC_COVER_API_KEY", "ANTHROPIC_API_KEY")

@@ -23,7 +23,6 @@ from app.db.connection import connect
 EVAL = Path(__file__).resolve().parents[3] / "eval" / "retrieval"
 # Which chunks each set samples from, and where it is written.
 SETS = {"holdout": (None, EVAL / "holdout.yaml"), "county": ("lacounty_title22", EVAL / "county.yaml")}
-MODEL = "claude-sonnet-5-5"  # a different model from the one that wrote the search code and the dev set
 SEED = 20261016
 PER_DOC_CAP = 6
 
@@ -72,7 +71,7 @@ def main(n: int, qset: str = "holdout") -> None:
             break
         body = html.escape(c["text"][:6000], quote=False)
         r = client.messages.parse(
-            model=MODEL,
+            model=get_settings().eval_model_id,
             max_tokens=500,
             system=SYSTEM,
             messages=[{"role": "user", "content": f"<passage>\n{body}\n</passage>"}],
@@ -83,7 +82,7 @@ def main(n: int, qset: str = "holdout") -> None:
             out.append({"q": q.question.strip(), "expect": [c["section_id"]], "from_chunk": c["id"]})
     scope = f"at most {PER_DOC_CAP} chunks per document" if document is None else f"from {document} only"
     header = (
-        f"# Retrieval {qset} set: {len(out)} questions written by {MODEL} from one sampled chunk each (seed {SEED},\n"
+        f"# Retrieval {qset} set: {len(out)} questions written by {get_settings().eval_model_id} from one sampled chunk each (seed {SEED},\n"
         f"# {scope}). The writer saw only that chunk, never the search code or\n"
         "# the dev set (questions.yaml). Do not tune search on this file. Labels are the source chunk's section;\n"
         "# other sections may also answer a question, so recall here is a lower bound.\n"

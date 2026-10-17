@@ -11,7 +11,8 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
  ┌──────────────────────────────┐   ┌─────────────────────────────────────────────────────────────────┐
  │ Public GIS layers            │   │ Regulation text                                                 │
  │ County parcels, City zoning, │   │ LAMC Chapter I (saved by hand), BMO/ADU ordinances, ZA Memo 143,│
- │ boundary, plan areas,        │   │ Gov. Code 66310-66342, SB 9, Mayor's EOs 1/8/9, rebuild FAQ     │
+ │ boundary, plan areas,        │   │ Gov. Code 66310-66342, SB 9, Mayor's EOs 1/8/9, rebuild FAQ,    │
+ │                              │   │ Ch. 1A Arts. 1/6, County Title 22, Ord. 2025-0029, Ch. 22.318   │
  │ overlays, fire perimeters,   │   └───────────────┬─────────────────────────────────────────────────┘
  │ Microsoft footprints (ODbL)  │                   │ parse, chunk by section id (12.08 C.2(a) ...)
  └──────────────┬───────────────┘                   │
@@ -34,9 +35,9 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
  │ PostGIS + pgvector           │          └───────────────────┘
  └──────────────┬───────────────┘
                 │
-                │            QUERY TIME (no model calls)
+                │            QUERY TIME (no model calls; the optional chat is separate)
                 ▼
- APN or address ─► resolve.py ─► stop? (outside City / Chapter 1A / not R1) ─► explicit stop result
+ APN or address ─► resolve.py ─► stop? (outside City and County / Chapter 1A / zone not modeled) ─► explicit stop result
                                    │
                                    ▼
                      geometry.py: fitted rectangle, street vs alley sides (EPSG:2229)
@@ -110,10 +111,10 @@ Zone R-1) was added second, in wave 9, and the table says what each part took fo
 | Parcel and zoning layers | `backend/app/ingest/sources.yaml`, `study_areas.yaml` | Its parcel, zoning and overlay layers, with licenses | GIS-NET zoning, Community Standards Districts, Hillside Management Areas and Setback Districts; parcels and footprints came from the same County layers; `load_datasets.py --area` reloads one area |
 | Zone parser | `backend/app/parcel/zone.py` | Its zone-string grammar (base zone, height district, qualifiers, suffixes) | `parse_county_zone`: base zone, required lot area (R-1-7500), lot acres, units per acre, combining zones |
 | Regulation text | `backend/app/ingest/regtext/` | A chunker for its code's section numbering, and sources allowed to be fetched or saved by hand | `chunk_title22` (22.18.040 A); the text was supplied by the project owner, since the County's code publisher may not be crawled; migration 012 allows code chapter `T22` |
-| Rule definitions | `backend/app/engine/rules.py` | The parameters each rule needs, keyed by that code's section ids | Five rules (yards, narrow lot, shallow lot, height, lot area), extracted and reviewed like the City's |
+| Rule definitions | `backend/app/engine/rules.py` | The parameters each rule needs, keyed by that code's section ids | Eight rules (yards, narrow lot, shallow lot, height, lot area, reversed corner side yard, the County ADU and its fire-zone access rule), extracted and reviewed like the City's |
 | Rule assembly | `backend/app/engine/assess.py` | Which rules apply to which zones, overlays that withhold or downgrade values, and the stop states | `engine/county.py`, reached from `assess` before the City's zone checks; SB 9 and the summary take the jurisdiction's name |
 | Search and chat | `backend/app/search/search.py`, `backend/app/api/chat.py` | Which documents govern there | A `jurisdiction` scope: the chat answers a County parcel from Title 22 and state law only |
-| Golden cases | `backend/tests/golden/cases.yaml` | Parcels with expected values worked out from that code | Five Del Aire parcels |
+| Golden cases | `backend/tests/golden/cases.yaml` | Parcels with expected values worked out from that code | Six Del Aire parcels |
 
 State ADU law (Gov. Code 66310-66342) and the geometry, labels, citations and review flow carry over unchanged to any California city.
 
@@ -138,7 +139,7 @@ How this would run in production on AWS. The PoC runs as one Docker Compose host
                          + pgvector (Multi-AZ)     keyed by APN + rule-set version)
                                           ▲
   Jurisdiction plug-ins: jurisdiction → code regime → rule set → sources
-  (LA City Chapter I today; Chapter 1A, LA County, other cities added as plug-ins, not forks)
+  (LA City Chapter I and County R-1 today, part of Chapter 1A; other cities added as plug-ins, not forks)
 
   Observability: CloudWatch metrics (status codes, latency, opaque ids only), self-hosted tracing
   for extraction runs, alarms on source changes and on stale ingests.
