@@ -19,6 +19,7 @@ _PREFIX = re.compile(r"^(\(T\)|\[T\]|\(Q\)|\[Q\]|\(F\)|\[F\]|Q(?=[A-Z])|T(?=[A-Z
 _HEIGHT = re.compile(r"^(?P<num>\d)(?P<suffix>XL|VL|SS|L)?(?P<d>D)?$")
 
 R1_VARIATION = re.compile(r"^R1(?P<kind>[VFRH])(?P<num>\d)$")
+RE_ZONE = re.compile(r"^RE(?P<size>9|11|15|20|40)$")
 
 # Supplemental districts that change development standards on R1 lots. Detected and flagged, not modeled.
 SUPPLEMENTAL_DESCRIPTIONS = {
@@ -55,9 +56,20 @@ class ParsedZone:
         return self.base_zone is not None and (self.base_zone == "R1" or bool(R1_VARIATION.match(self.base_zone)))
 
     @property
+    def family(self) -> str | None:
+        """The modeled zone family: "R1" (with its variations), "R2" or "RE"; None for any other zone."""
+        if self.is_r1_family:
+            return "R1"
+        if self.base_zone == "R2":
+            return "R2"
+        if RE_ZONE.match(self.base_zone or ""):
+            return "RE"
+        return None
+
+    @property
     def is_modeled(self) -> bool:
-        """R1, or an R1V, R1F or R1R variation, with no qualifier, condition or supplemental district."""
-        return (self.base_zone == "R1" or bool(R1_VARIATION.match(self.base_zone or ""))) and not self.unmodeled
+        """A modeled zone (R1 and its variations, R2, RE9-RE40) with no qualifier, condition or supplemental district."""
+        return self.family is not None and not self.unmodeled
 
     @property
     def is_plain_r1(self) -> bool:
@@ -100,9 +112,10 @@ def parse_zone(raw: str) -> ParsedZone:
         unmodeled.append("(F) funded improvement classification not modeled")
     if d_limit:
         unmodeled.append("D development limitation: parcel-specific ordinance not modeled")
-    if base and base != "R1" and not R1_VARIATION.match(base):
-        unmodeled.append(f"Zone {base} is outside the modeled R1 family")
-    if base and (base == "R1" or R1_VARIATION.match(base)) and height is None:
+    modeled_base = bool(base and (base in ("R1", "R2") or R1_VARIATION.match(base) or RE_ZONE.match(base)))
+    if base and not modeled_base:
+        unmodeled.append(f"Zone {base} is not modeled (only R1, R2 and RE)")
+    if modeled_base and height is None:
         unmodeled.append("No height district in zone string")
     for sup in supplemental:
         desc = SUPPLEMENTAL_DESCRIPTIONS.get(sup, "supplemental district")

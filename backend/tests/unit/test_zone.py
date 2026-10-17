@@ -56,3 +56,11 @@ def test_chapter_1a_string():
 
 def test_manufacturing_mr1_is_not_r1():
     assert not parse_zone("MR1-1").is_r1_family
+
+
+def test_r2_and_re_families():
+    assert parse_zone("R2-1").family == "R2" and parse_zone("R2-1").is_modeled
+    assert parse_zone("RE15-1").family == "RE" and parse_zone("RE40-1-H").family == "RE"
+    assert not parse_zone("RE40-1-H").is_modeled  # -H supplemental district is listed as unmodeled
+    assert parse_zone("RD2-1").family is None and not parse_zone("RD2-1").is_modeled
+    assert parse_zone("RE12-1").family is None  # not an RE designation in 12.07.01 C.4

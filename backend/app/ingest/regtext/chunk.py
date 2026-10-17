@@ -304,6 +304,7 @@ def chunk_lamc(pages: list[Page], keep_prefixes: tuple[str, ...] = ("12.", "13."
             groups.append((current_id, sec_title, list(current)))
 
     has_depth = any(_INDENT.search(ln) for ln in lines)
+    sub_depth = 0  # most sections put "A." at depth 0; some (R2, R3 ...) nest the whole section one level deeper
     for raw in lines:
         # Depth 0 is a top-level block (subsection headings); subdivisions sit at L2 or L3; deeper lists
         # ("A. That the ..." findings inside a subdivision) never open a new subsection or subdivision.
@@ -313,7 +314,7 @@ def chunk_lamc(pages: list[Page], keep_prefixes: tuple[str, ...] = ("12.", "13."
             continue
         if m := _LAMC_SEC.match(line):
             flush()
-            sec, subsec, subdiv = m.group(1), None, None
+            sec, subsec, subdiv, sub_depth = m.group(1), None, None, 0
             sec_title = f"SEC. {sec}. {m.group(2)}".strip()
             current, current_id = [line], (f"LAMC {sec}" if sec.startswith(keep_prefixes) else None)
             continue
@@ -321,14 +322,20 @@ def chunk_lamc(pages: list[Page], keep_prefixes: tuple[str, ...] = ("12.", "13."
             continue
         # Markers must continue the sequence (A, B, C ... / 1, 2, 3 ...), so a cross-reference that
         # happens to start a line ("C. and Sec. 12.22 C.") is not mistaken for a new subsection.
-        if (not has_depth or depth == 0) and (m := _LAMC_SUBSEC.match(line)) and _next_letter(subsec, m.group(1)):
+        if has_depth and subsec is None and depth in (1, 2) and (m := _LAMC_SUBSEC.match(line)) and m.group(1) == "A":
+            sub_depth = depth
+        if (
+            (not has_depth or depth == sub_depth)
+            and (m := _LAMC_SUBSEC.match(line))
+            and _next_letter(subsec, m.group(1))
+        ):
             flush()
             subsec, subdiv = m.group(1), None
             current, current_id = [line], f"LAMC {sec} {subsec}"
             continue
         if (
             subsec
-            and (not has_depth or depth <= 3)
+            and (not has_depth or depth <= sub_depth + 3)
             and (m := _LAMC_SUBDIV.match(line))
             and _next_number(subdiv, m.group(1))
         ):

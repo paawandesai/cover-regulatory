@@ -14,11 +14,34 @@ def _confirm(lines: list[str]) -> str:
     return " Still to confirm: " + "; ".join(lines) + "." if lines else ""
 
 
-def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[Item]:
+def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str], family: str = "R1") -> list[Item]:
     sb = R.load("SB9", conn)
     if sb.label == "uncited":
         return []
     out: list[Item] = []
+    if family == "R2":
+        # 65852.21(a) and 66411.7(a)(3)(A) apply only in a single-family residential zone; R2 already allows two homes.
+        cites = chunk_citation(conn, "Gov. Code 65852.21(a)", "within a single-family residential zone")
+        why = (
+            "SB 9 applies only to a lot in a single-family residential zone (Gov. Code 65852.21(a), 66411.7(a)(3)). "
+            "R2 is a two-family zone, which already allows two homes (see above)."
+        )
+        for item_id, title in (("sb9_two_unit", "SB 9 two-unit development"), ("sb9_lot_split", "SB 9 lot split")):
+            out.append(
+                Item(
+                    item_id,
+                    "sb9",
+                    title,
+                    False,
+                    None,
+                    "interpretive" if cites else "uncited",
+                    rule_id=sb.rule_id,
+                    coverage=1.0 if cites else None,
+                    explanation=why,
+                    citations=list(cites),
+                )
+            )
+        return out
     if "fire_perimeter_2025" in kinds and "vhfhsz" in kinds:
         eo9 = R.load("EO9_SB9", conn)
         if eo9.label != "uncited":
@@ -33,7 +56,7 @@ def sb9_items(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[Item]:
             return out
 
     units, protect, setback = sb.value("units"), sb.value("protect_sqft"), sb.value("setback_ft")
-    checked = ["the lot is in a single-family zone (R1)"]
+    checked = [f"the lot is in a single-family zone ({ctx.zone.base_zone if ctx.zone else 'R1'})"]
     confirm = [
         (
             "no demolition or alteration of rent-restricted or rent-controlled housing, or housing a tenant "

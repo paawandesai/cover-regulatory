@@ -148,6 +148,54 @@ cases:
       adu_attached: 850       # 50% x 1,529 = 764, raised to 850
     labels:
       rear_yard: interpretive    # 12.21 C.1(h): a through lot has a front yard at each end
+  # R2 and RE (wave 7). Flat land, Height District 1.
+  - apn: "4359015009"   # RE20-1, 24,208 sq ft, inside a specific plan area (so interpretive)
+    status: ok
+    expect:
+      front_yard: 25.0        # 20% of 191 ft, capped at 25 ft (12.07.01 C.1)
+      side_yard: 10.0         # RE20: 10 ft (12.07.01 C.2(b))
+      rear_yard: 25.0         # 25% of 191 ft, capped at 25 ft (12.07.01 C.3)
+      max_height: 36.0        # RE11-RE40 off the Hillside Area and Coastal Zone (12.21.1)
+      max_rfa: 8473           # 35% x 24,208 (12.07.01 C.5)
+      lot_minimums: true      # 20,000 sq ft and 80 ft
+      guest_house: true       # 20,000 sq ft minimum in RE (12.07.01 A.6)
+      sb9_lot_split: true
+    labels:
+      max_rfa: interpretive
+  - apn: "2126020001"   # R2-1-RIO, 7,666 sq ft, 48 ft wide
+    status: ok
+    expect:
+      dwelling_units: 2       # 2,500 sq ft per home, at most two (12.09 A.2, C.4)
+      front_yard: 20.0        # the R1 front yard (12.09 C.1)
+      side_yard: 6.8          # 10% of 48 ft = 4.8 ft, plus 2 ft for a 33 ft building (12.08 C.2(b))
+      rear_yard: 15.0
+      max_height: 33.0        # R2 (12.21.1)
+      lot_minimums: false     # under 50 ft wide (12.09 C.4)
+      sb9_two_unit: false     # SB 9 applies only in single-family zones
+      guest_house: false
+    labels:
+      max_rfa: interpretive   # 3 x buildable area, measured on the fitted outline
+      sb9_two_unit: interpretive
+  - apn: "2126009001"   # R2-2-RIO: Height District 2, envelope withheld
+    status: ok
+    expect:
+      max_rfa: null
+      max_height: null
+      dwelling_units: 2
+    labels:
+      max_rfa: withheld
+      front_yard: withheld
+  - apn: "4411004013"   # RE15-1 in a Hillside Area: envelope withheld
+    status: ok
+    expect:
+      front_yard: null
+      max_rfa: null
+      lot_minimums: true
+    labels:
+      side_yard: withheld
+      max_height: withheld
+  - apn: "4412004026"   # RD2-1: multiple-dwelling zone, not modeled
+    status: zone_not_modeled
   - apn: "2118015001"   # [Q]C2-2D-CDO: commercial, outside the R1 family
     status: zone_not_modeled
   - apn: "5179003026"   # Boyle Heights: Chapter 1A in effect

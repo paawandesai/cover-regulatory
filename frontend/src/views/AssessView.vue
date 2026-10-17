@@ -147,17 +147,20 @@ const groups = computed(() => {
   const r = result.value
   if (!r) return []
   const of = (fams: string[]) => r.items.filter((i) => fams.includes(i.family))
+  // One envelope family per lot: R1 (12.08), R2 (12.09) or RE (12.07.01).
+  const env = (['r1_envelope', 'r2_envelope', 're_envelope'] as const).find((f) => r.items.some((i) => i.family === f)) ?? 'r1_envelope'
+  const zoneName = env === 'r1_envelope' ? 'R1' : env === 'r2_envelope' ? 'R2' : 'RE'
   return [
     {
-      title: 'R1 envelope',
-      sub: isHillside.value
-        ? 'Hillside Area standards (LAMC 12.21 C.10)'
-        : r.items.some((i) => i.family === 'r1_envelope' && i.label === 'withheld')
-          ? 'Some values withheld for this lot'
+      title: `${zoneName} envelope`,
+      sub: r.items.some((i) => i.family === env && i.label === 'withheld')
+        ? 'Some values withheld for this lot'
+        : isHillside.value
+          ? 'Hillside Area standards (LAMC 12.21 C.10)'
           : item('coastal')?.value
             ? 'Coastal Zone (LAMC 12.21.1)'
-            : 'Flat-land R1',
-      rows: of(['r1_envelope']),
+            : `Flat-land ${zoneName}`,
+      rows: of([env]),
     },
     {
       title: 'What can be built',
@@ -217,7 +220,7 @@ const stop = computed(() => {
     default:
       return {
         title: `Zone ${zone.value ?? 'unknown'} is not modeled`,
-        body: note || 'Only the R1 one-family zone family is modeled.',
+        body: note || 'Only the R1, R2 and RE zones are modeled.',
         detail: 'No rules are shown rather than rules from the wrong zone.',
       }
   }
@@ -226,7 +229,7 @@ const stop = computed(() => {
 
 <template>
   <div>
-    <AppHeader title="Regulatory Engine" subtitle="City of Los Angeles · Chapter I · R1">
+    <AppHeader title="Regulatory Engine" subtitle="City of Los Angeles · Chapter I · R1, R2, RE">
       <form class="search" role="search" @submit.prevent="submit">
         <label for="q" class="sr-only">APN or street address</label>
         <input
@@ -367,9 +370,9 @@ const stop = computed(() => {
       </template>
 
       <section v-else-if="!loading" class="card intro">
-        <h1>Check what can be built on a City of LA R1 lot</h1>
+        <h1>Check what can be built on a City of LA residential lot</h1>
         <p>
-          Enter a 10-digit APN or a street address. You get the R1 envelope, ADU, JADU and guest house limits, each with the regulation text
+          Enter a 10-digit APN or a street address. You get the zone envelope (R1, R2 or RE), ADU, JADU and guest house limits, each with the regulation text
           it comes from and a label saying how much to trust it.
         </p>
         <p class="small muted">Try 2121-005-008 (Reseda), 4412-014-028 (Pacific Palisades) or 5179-003-026 (Boyle Heights).</p>
