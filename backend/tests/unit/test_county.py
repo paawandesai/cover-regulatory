@@ -37,3 +37,20 @@ def test_county_zone_strings():
     assert z.base == "A-1" and z.lot_acres == 1 and z.family != "COUNTY_R1"
     z = parse_county_zone("R-3-20U")
     assert z.units_per_acre == 20 and "not modeled" in z.unmodeled[0]
+
+
+def test_title22_definitions_chapter_gets_its_own_id():
+    text = """22.06.070 Zoning Map
+D. The map is on file.
+DIVISION 2: DEFINITIONS
+Chapters:
+Corner lot. A lot situated at the intersection of two or more streets.
+Reversed corner lot. A corner lot whose street side lot line continues a front lot line.
+DIVISION 3: ZONES
+22.16.010 Purpose
+Zones are established, with enough text here to make a chunk of its own.
+"""
+    ids = [c.section_id for c in chunk_title22([Page(1, text)], "LACC")]
+    assert ids == ["LACC 22.06.070", "LACC 22.14", "LACC Division 3", "LACC 22.16.010"]
+    defs = next(c for c in chunk_title22([Page(1, text)], "LACC") if c.section_id == "LACC 22.14")
+    assert "Reversed corner lot" in defs.text and "22.16.010" not in defs.text
