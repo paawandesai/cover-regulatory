@@ -168,3 +168,32 @@ export interface ChatAnswer {
   dropped: number
   disclosure: string
 }
+
+export interface Me {
+  username: string
+  display_name: string | null
+  named: boolean
+}
+
+export interface AuditRow {
+  id: number
+  at: string
+  actor: string
+  display_name: string | null
+  action: string
+  object_type: 'rule_fragment' | 'feedback' | 'report' | 'reviewer'
+  object_id: string
+  detail: Record<string, unknown>
+}
+
+export interface SourceRow {
+  id: string
+  title: string
+  source_url: string
+  retrieved_at: string
+  manual_retrieval: boolean
+  checked_at: string | null
+  outcome: 'unchanged' | 'changed' | 'failed' | 'manual_due' | 'manual_ok' | null
+  detail: Record<string, number | string | null> | null
+  pending: number
+}

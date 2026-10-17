@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import { ApiError, clearCredentials, decide, fragments, hasCredentials, setCredentials } from '../api'
+import { ApiError, clearCredentials, decide, fragments, hasCredentials, setCredentials, whoAmI } from '../api'
 import AppHeader from '../components/AppHeader.vue'
 import FeedbackList from '../components/FeedbackList.vue'
+import AuditList from '../components/AuditList.vue'
 import ReportList from '../components/ReportList.vue'
+import SourceList from '../components/SourceList.vue'
 import QuoteInContext from '../components/QuoteInContext.vue'
-import type { Fragment } from '../types'
+import type { Fragment, Me } from '../types'
 
 type Status = Fragment['status']
 const TABS: [Status, string][] = [
@@ -44,7 +46,7 @@ const user = ref('')
 const password = ref('')
 const authError = ref<string | null>(null)
 const tab = ref<Status>('pending')
-const mode = ref<'rules' | 'feedback' | 'reports'>('rules')
+const mode = ref<'rules' | 'feedback' | 'reports' | 'audit' | 'sources'>('rules')
 
 // From the feedback queue: jump to a rule candidate wherever it is listed.
 async function openFragment(id: number) {
@@ -83,11 +85,12 @@ async function signIn() {
   try {
     await loadAll()
     signedIn.value = true
+    await loadMe()
   } catch (e) {
     clearCredentials()
     authError.value =
       e instanceof ApiError && e.status === 503
-        ? "Admin sign-in isn't set up on the server. Set ADMIN_USERNAME and ADMIN_PASSWORD_SCRYPT."
+        ? "Admin sign-in isn't set up on the server. Add a reviewer account, or set ADMIN_USERNAME and ADMIN_PASSWORD_SCRYPT."
         : e instanceof ApiError && e.status === 429
           ? 'Too many failed sign-ins. Wait 15 minutes and try again.'
           : e instanceof ApiError && e.status === 401
@@ -96,13 +99,19 @@ async function signIn() {
   }
 }
 
+const me = ref<Me | null>(null)
+async function loadMe() {
+  me.value = await whoAmI().catch(() => null)
+}
+
 function signOut() {
+  me.value = null
   clearCredentials()
   signedIn.value = false
   lists.value = { pending: [], invalid: [], approved: [], rejected: [] }
 }
 
-if (signedIn.value) loadAll().catch(signOut)
+if (signedIn.value) loadAll().then(loadMe).catch(signOut)
 
 const families = computed(() =>
   [
@@ -168,13 +177,14 @@ async function act(decision: 'approved' | 'rejected') {
 
 <template>
   <div>
-    <AppHeader title="Rule review" :subtitle="signedIn ? 'Admin · signed in' : 'Admin'">
+    <AppHeader title="Rule review" :subtitle="signedIn ? `Admin · signed in${me ? ` as ${me.display_name ?? me.username}` : ''}` : 'Admin'">
       <span class="spacer" />
       <button v-if="signedIn" type="button" class="link small" @click="signOut">Sign out</button>
       <RouterLink to="/" class="small">Back to assessment</RouterLink>
     </AppHeader>
 
     <main class="page">
+      <h1 v-if="signedIn" class="sr-only">Rule review</h1>
       <form v-if="!signedIn" class="card signin" @submit.prevent="signIn">
         <h1>Sign in to review rules</h1>
         <p class="small muted">
@@ -220,6 +230,12 @@ async function act(decision: 'approved' | 'rejected') {
           >
             Client reports
           </button>
+          <button type="button" class="tab" :class="{ on: mode === 'audit' }" :aria-pressed="mode === 'audit'" @click="mode = 'audit'">
+            Audit log
+          </button>
+          <button type="button" class="tab" :class="{ on: mode === 'sources' }" :aria-pressed="mode === 'sources'" @click="mode = 'sources'">
+            Sources
+          </button>
           <template v-if="mode === 'rules'">
             <label for="fam" class="sr-only">Rule family</label>
             <select id="fam" v-model="family" class="field small">
@@ -240,6 +256,8 @@ async function act(decision: 'approved' | 'rejected') {
 
         <FeedbackList v-if="mode === 'feedback'" @open-fragment="openFragment" />
         <ReportList v-else-if="mode === 'reports'" />
+        <AuditList v-else-if="mode === 'audit'" @open-fragment="openFragment" />
+        <SourceList v-else-if="mode === 'sources'" />
         <div v-else class="cols">
           <section aria-label="Candidate rules" class="card listcol">
             <p v-if="!list.length" class="empty small muted">Nothing here.</p>
@@ -269,10 +287,10 @@ async function act(decision: 'approved' | 'rejected') {
 
           <section v-if="selected" aria-label="Selected rule" class="card detail">
             <div class="dhead">
-              <h1 :class="{ txt: selected.value_numeric == null }">
+              <h2 :class="{ txt: selected.value_numeric == null }">
                 {{ value(selected) }}
                 <span class="mono param">{{ selected.parameter }}</span>
-              </h1>
+              </h2>
               <span class="badge" :class="selected.validation === 'ok' ? 'ok' : 'bad'">
                 {{ VALIDATION[selected.validation] ?? selected.validation }}
               </span>
@@ -456,7 +474,7 @@ async function act(decision: 'approved' | 'rejected') {
   font-weight: 400;
   text-align: right;
 }
-.dhead h1.txt {
+.dhead h2.txt {
   font-size: 18px;
   line-height: 24px;
 }
@@ -475,7 +493,7 @@ async function act(decision: 'approved' | 'rejected') {
   align-items: baseline;
   justify-content: space-between;
 }
-.dhead h1 {
+.dhead h2 {
   margin: 0;
   font-size: 28px;
   line-height: 34px;

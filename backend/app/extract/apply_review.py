@@ -10,6 +10,7 @@ import argparse
 import json
 from pathlib import Path
 
+from app.api.reviewers import record
 from app.db.connection import connect
 
 REVIEWER = "ai-review"
@@ -40,6 +41,14 @@ def apply(path: Path, instructed_by: str) -> dict[str, int]:
             conn.execute(
                 "UPDATE rule_fragment SET status=%s, reviewed_by=%s, reviewed_at=now(), review_note=%s WHERE id=%s",
                 (decision, REVIEWER, note[:2000], c["fragment_id"]),
+            )
+            record(
+                conn,
+                REVIEWER,
+                f"fragment_{decision}",
+                "rule_fragment",
+                c["fragment_id"],
+                {"instructed_by": instructed_by, "file": path.name},
             )
             counts[decision] += 1
         conn.commit()

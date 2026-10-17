@@ -69,7 +69,7 @@ const ariaLabel = computed(() => {
 </script>
 
 <template>
-  <svg :viewBox="`0 0 ${W} ${H}`" role="img" :aria-label="ariaLabel" class="diagram">
+  <svg :viewBox="`0 0 ${W} ${H}`" role="group" :aria-label="ariaLabel" class="diagram">
     <path :d="drawing.lot" fill="#ffffff" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round" />
     <path v-if="drawing.env" :d="drawing.env" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 4" />
     <path v-if="drawing.bldg" :d="drawing.bldg" fill="var(--ink-muted)" fill-opacity="0.35" stroke="var(--ink-muted)" stroke-width="1" />
@@ -84,6 +84,7 @@ const ariaLabel = computed(() => {
         tabindex="0"
         @click="emit('pick', 'rear_yard')"
         @keydown.enter="emit('pick', 'rear_yard')"
+        @keydown.space.prevent="emit('pick', 'rear_yard')"
       >
         REAR {{ yards.rear }} FT
       </text>
@@ -97,6 +98,7 @@ const ariaLabel = computed(() => {
         tabindex="0"
         @click="emit('pick', 'front_yard')"
         @keydown.enter="emit('pick', 'front_yard')"
+        @keydown.space.prevent="emit('pick', 'front_yard')"
       >
         FRONT {{ yards.front }} FT
       </text>
@@ -107,6 +109,7 @@ const ariaLabel = computed(() => {
         tabindex="0"
         @click="emit('pick', 'side_yard')"
         @keydown.enter="emit('pick', 'side_yard')"
+        @keydown.space.prevent="emit('pick', 'side_yard')"
         :x="drawing.left - 10"
         :y="drawing.midY"
         text-anchor="middle"

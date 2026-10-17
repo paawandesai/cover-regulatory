@@ -60,6 +60,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Slope bands | `backend/app/ingest/slope.py` | For each Hillside Area parcel, samples the USGS 3DEP elevation model on a grid of about 3 ft, computes slope per cell and stores the area in each LAMC 12.21 C.10(b) slope band (`parcel_slope`). An estimate of the surveyed slope analysis map. |
 | Table reader | `backend/app/extract/tables.py` | Reads the R1 variation and Hillside tables cell by cell (no model) into pending candidates, checked like model output. |
 | Regulation ingestion | `backend/app/ingest/regtext/` | Parse ordinance PDFs and saved HTML into chunks keyed by section id. Each chunk keeps a content hash. |
+| Source check | `backend/app/ingest/regtext/refresh.py`, `source_check` table | Weekly (compose `refresh` service): re-downloads each `fetch: url` document and compares SHA-256. A changed file is re-ingested; each decided rule on a changed chunk goes back to pending if its quote is still verbatim, or is retired if not, with an audit entry. Hand-saved sources are never fetched and are listed as due after 90 days. Results show on the Sources tab of Rule review. |
 | Search | `backend/app/search/` | Exact section-id lookup first, then pgvector cosine search over local embeddings. Full-text search is the fallback. |
 | Extraction | `backend/app/extract/` | Claude (model id from config, structured output) reads groups of chunks into rule fragments. Regulation text is wrapped as data. The schema has no field for status or confidence. |
 | Deterministic checks | `backend/app/extract/validate.py` | Rejects a fragment whose quote is not verbatim in the chunk, whose number is not in the quote, or whose unit doesn't match. Re-running marks fragments stale when their chunk's text changes. |
@@ -70,7 +71,7 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | SB 9 and fire orders | `backend/app/engine/orders.py` | SB 9 two-unit and lot-split tests, Executive Order 9's suspension, and the EO 1 like-for-like and EO 8 Coastal Zone rebuild limits. |
 | Client reports | `backend/app/api/reports.py`, `report` table | Freezes an assessment into a report keyed by an unguessable token. The public link returns only the status until an admin signs with name and license; withdrawn reports return 404. |
 | Follow-up chat | `backend/app/api/chat.py` | Builds the prompt from the assessment's values (10-digit numbers scrubbed) and retrieved chunks as delimited data; the model returns sentences with quotes or item ids (structured output, no tools). Each quote is checked verbatim against its chunk; failing sentences are dropped. |
-| API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt. The optional invite gate is for the hosted demo. |
+| API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt, against named reviewer accounts (`reviewer` table, managed with `python -m app.api.reviewers`) or the bootstrap `ADMIN_USERNAME`. Every review action writes an `audit_log` row in the same transaction; a trigger makes the log append-only, and report entries hold a hash of the link token, never the link. The optional invite gate is for the hosted demo. |
 | Web app | `frontend/` | Vue 3 + TypeScript + MapLibre with the Forge design tokens. Assessment page, source-text panel, feedback, rule review and stop states. |
 | Packaging | `docker-compose.yml`, `*/Dockerfile`, `deploy/` | Database (PostGIS + pgvector), API with the embedding model built in, Caddy serving the app, and a daily feedback purge. |
 
@@ -142,10 +143,11 @@ How this would run in production on AWS. Nothing below is built; the PoC runs as
 ```
 
 What changes from the PoC:
-- Ingestion becomes scheduled and incremental: a changed source re-extracts only changed chunks, and any rule
-  whose chunk hash changed drops back to pending until it is re-reviewed.
-- Review moves to named, licensed reviewers with SSO and an audit trail, replacing the shared admin password
-  and the demo's AI review.
+- Ingestion is scheduled (built for downloadable sources: a weekly check re-ingests a changed file and sends
+  every rule whose chunk changed back to review). Next: re-extract only the changed chunks automatically, and
+  alert by email or chat rather than only on the Sources tab.
+- Review moves from local named accounts (built) to SSO through the organisation's identity provider, keeping the
+  same audit log, and licensed reviewers replace the demo's AI review.
 - The assessment API stays stateless and deterministic, so it scales horizontally; results are cached per
   APN and rule-set version.
 - Every jurisdiction is a plug-in with its own code-regime map, rule set and source list.

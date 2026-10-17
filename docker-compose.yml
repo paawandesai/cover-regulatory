@@ -25,6 +25,7 @@ services:
       ADMIN_USERNAME: ${ADMIN_USERNAME:-}
       ADMIN_PASSWORD_SCRYPT: ${ADMIN_PASSWORD_SCRYPT:-}
       DEMO_INVITE_CODE: ${DEMO_INVITE_CODE:-}
+      ANTHROPIC_COVER_API_KEY: ${ANTHROPIC_COVER_API_KEY:-}  # optional; enables the follow-up chat
       TRUST_PROXY_HEADERS: "true"  # the api is reached only through the web (Caddy) container
     depends_on:
       db: { condition: service_healthy }
@@ -37,6 +38,16 @@ services:
     environment:
       DATABASE_URL: postgresql://regengine:${POSTGRES_PASSWORD}@db:5432/regengine
       FEEDBACK_RETENTION_DAYS: ${FEEDBACK_RETENTION_DAYS:-14}
+    depends_on: [api]
+    restart: unless-stopped
+
+  # Weekly source check: re-fetches downloadable regulation documents; changed text sends its rules back to review.
+  refresh:
+    image: cover-regulatory-api
+    command: ["sh", "-c", "sleep 3600; while true; do python -m app.ingest.regtext.refresh; sleep 604800; done"]
+    environment:
+      DATABASE_URL: postgresql://regengine:${POSTGRES_PASSWORD}@db:5432/regengine
+      REGTEXT_RAW_DIR: /tmp/regtext
     depends_on: [api]
     restart: unless-stopped
 

@@ -12,7 +12,7 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, Depends, HTTPException, Path, Request
 from pydantic import BaseModel, Field
 
-from app.api import ratelimit
+from app.api import ratelimit, reviewers
 from app.api.auth import require_admin
 from app.db.connection import connect
 
@@ -144,6 +144,15 @@ def sign_report(token: Annotated[str, TOKEN], body: SignIn, admin: Annotated[str
                WHERE token = %s AND status = 'awaiting_signoff' RETURNING token, status""",
             (body.signer_name.strip(), body.signer_license.strip(), body.note, admin, token),
         ).fetchone()
+        if row:
+            reviewers.record(
+                conn,
+                admin,
+                "report_signed",
+                "report",
+                reviewers.token_ref(token),
+                {"license": body.signer_license.strip()},
+            )
         conn.commit()
     if row is None:
         raise HTTPException(409, "report is not awaiting sign-off")
@@ -151,12 +160,14 @@ def sign_report(token: Annotated[str, TOKEN], body: SignIn, admin: Annotated[str
 
 
 @router.post("/api/admin/reports/{token}/withdraw")
-def withdraw_report(token: Annotated[str, TOKEN], _admin: Annotated[str, Depends(require_admin)]):
+def withdraw_report(token: Annotated[str, TOKEN], admin: Annotated[str, Depends(require_admin)]):
     with connect() as conn:
         row = conn.execute(
             "UPDATE report SET status = 'withdrawn' WHERE token = %s AND status <> 'withdrawn' RETURNING token, status",
             (token,),
         ).fetchone()
+        if row:
+            reviewers.record(conn, admin, "report_withdrawn", "report", reviewers.token_ref(token))
         conn.commit()
     if row is None:
         raise HTTPException(404, "report not found")

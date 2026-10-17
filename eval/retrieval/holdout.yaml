@@ -1,0 +1,270 @@
+# Retrieval holdout: 50 questions written by claude-sonnet-5-5 from one sampled chunk each (seed 20261016,
+# at most 6 chunks per document). The writer saw only that chunk, never the search code or
+# the dev set (questions.yaml). Do not tune search on this file. Labels are the source chunk's section;
+# other sections may also answer a question, so recall here is a lower bound.
+questions:
+- q: I own a unit in a planned development with an HOA and want to record a condominium
+    plan for my lot. Do I need the HOA's approval first, and what kind of approval
+    counts?
+  expect:
+  - Gov. Code 66342(g)
+  from_chunk: gov_66310_article4#gov--code-66342-g#1
+- q: Can a recycling drop-off site use some of the required parking spots for collecting
+    recyclables, and how many?
+  expect:
+  - LAMC 12.21 A.18(d)
+  from_chunk: lamc_chapter1#lamc-12-21-a-18-d#2
+- q: If I split my lot using the new urban lot split law, can the city still require
+    them to allow an ADU or junior ADU on those same parcels?
+  expect:
+  - Gov. Code 65852.21(f)
+  from_chunk: gov_65852_21#gov--code-65852-21-f#1
+- q: I'm rebuilding my home that burned in the January 2025 LA fires and it's near
+    the coast. How close to a coastal bluff or canyon bluff can I build, and do I
+    still need a discretionary coastal permit?
+  expect:
+  - EO 8 A
+  from_chunk: eo8#eo-8-a#2
+- q: Can a city require parking for an apartment building approved under the streamlined
+    process if it's close to a bus or train stop?
+  expect:
+  - Gov. Code 65913.4(e)
+  from_chunk: gov_65913_4#gov--code-65913-4-e#1
+- q: After a wildfire destroyed my house, do I have to wait for the housing department
+    to issue a replacement unit determination before I can submit my rebuild plans
+    to the planning department?
+  expect:
+  - EO 8 B
+  from_chunk: eo8#eo-8-b#2
+- q: How big can a junior ADU be, and does it need its own bathroom or can it share
+    one with the main house?
+  expect:
+  - Gov. Code 66313(d)
+  from_chunk: gov_66310_article1#gov--code-66313-d#1
+- q: Can I turn my attached garage into a junior accessory dwelling unit, or does
+    it have to be inside the main living area of the house?
+  expect:
+  - Gov. Code 66333(d)
+  from_chunk: gov_66310_article3#gov--code-66333-d#1
+- q: Can I build my house taller than the normal height limit if my lot is on a steep
+    slope, and how do retaining walls affect how height is measured?
+  expect:
+  - Ord. 184,802 Sec. 13 (LAMC 12.08 C.7)
+  from_chunk: ord_184802_bmo#ord--184-802-sec--13--lamc-12-08-c-7#1
+- q: Can I pay off my mortgage with a refinance before changing my condo plan, and
+    will my lender still need to approve later changes?
+  expect:
+  - Gov. Code 66342(a)
+  from_chunk: gov_66310_article4#gov--code-66342-a#2
+- q: How wide do my side yards need to be for a two-story house on a 40-foot-wide
+    lot in Los Angeles, and do I need to break up a long tall side wall?
+  expect:
+  - Ord. 184,802 Sec. 10 (LAMC 12.08 C.2)
+  from_chunk: ord_184802_bmo#ord--184-802-sec--10--lamc-12-08-c-2#1
+- q: If I convert a bedroom into a junior ADU, can the city make me add another parking
+    space, and can they still charge me for an inspection?
+  expect:
+  - Gov. Code 66334
+  from_chunk: gov_66310_article3#gov--code-66334#1
+- q: How much total floor area can I build on a 7,500 square foot lot in a single-family
+    zone that allows flexible massing, and what is the maximum lot coverage and building
+    height?
+  expect:
+  - Ord. 184,802 Sec. 11 (LAMC 12.08 C.5)(b)
+  from_chunk: ord_184802_bmo#ord--184-802-sec--11--lamc-12-08-c-5--b#1
+- q: How quickly will the city review my building permit application to rebuild a
+    home that was destroyed in the wildfires?
+  expect:
+  - EO 1 B.4
+  from_chunk: eo1_revised#eo-1-b-4#1
+- q: Can the city refuse to approve my ADU permit if the main house has existing code
+    violations, and when would they be allowed to do that?
+  expect:
+  - Gov. Code 66311.7(b)
+  from_chunk: gov_66310_article1#gov--code-66311-7-b#1
+- q: My house burned down and it was one story in front with two stories in back.
+    Am I allowed to rebuild it as two stories across the whole house?
+  expect:
+  - Palisades Rebuild FAQ Q9
+  from_chunk: palisades_rebuild_faq#palisades-rebuild-faq-q9#1
+- q: If my city has its own rules about junior accessory dwelling units that conflict
+    with the state law, which one wins, and can the city be more lenient than the
+    state?
+  expect:
+  - Gov. Code 66339.5
+  from_chunk: gov_66310_article3#gov--code-66339-5#1
+- q: I want to build an accessory dwelling unit on my property near the beach in Los
+    Angeles. Do I need a hearing or special permit because it's in the coastal zone?
+  expect:
+  - ZA Memo 143 IV
+  from_chunk: za_memo_143#za-memo-143-iv#6
+- q: Can I build a duplex on my single-family lot without a public hearing, and what
+    disqualifies a property like if a tenant lived there recently or it's in a historic
+    district?
+  expect:
+  - Gov. Code 65852.21(a)
+  from_chunk: gov_65852_21#gov--code-65852-21-a#1
+- q: Do I need to do environmental review under CEQA when a city leases its own land
+    or gives financial help for an affordable housing project that gets streamlined
+    approval?
+  expect:
+  - Gov. Code 65913.4(k)
+  from_chunk: gov_65913_4#gov--code-65913-4-k#1
+- q: Do I need a safety inspection of my backyard ADU before I can record a condominium
+    plan to sell it separately, and what proof is accepted?
+  expect:
+  - Gov. Code 66342(c)
+  from_chunk: gov_66310_article4#gov--code-66342-c#1
+- q: If my city's ADU rules conflict with the state ADU law, which one wins, and can
+    the city still make its rules easier than the state's?
+  expect:
+  - Gov. Code 66325
+  from_chunk: gov_66310_article2#gov--code-66325#1
+- q: My backyard unit was built without a permit several years ago. Can the city refuse
+    to legalize it just because it doesn't meet current ADU rules or local ordinance
+    requirements?
+  expect:
+  - Gov. Code 66311.7(a)
+  from_chunk: gov_66310_article1#gov--code-66311-7-a#1
+- q: If I want to build a backyard rental unit, can I sell it separately from my main
+    house, and do I have to fix existing nonconforming things on my property first?
+  expect:
+  - Ord. 186,481 Sec. 2 (LAMC 12.22 A.33)(g)
+  from_chunk: ord_186481_adu#ord--186-481-sec--2--lamc-12-22-a-33--g#2
+- q: Can I do an urban lot split on my property if the existing house was rented out
+    to a tenant within the past few years or is under rent control?
+  expect:
+  - Gov. Code 66411.7(i)
+  from_chunk: gov_66411_7#gov--code-66411-7-i#1
+- q: How big can my house be compared to my lot size, and is there a way to get extra
+    floor area if I make the upper floors smaller or step back the front of the house?
+  expect:
+  - Ord. 184,802 Sec. 4 (LAMC 12.07 C.5)
+  from_chunk: ord_184802_bmo#ord--184-802-sec--4--lamc-12-07-c-5#1
+- q: Does my bank or mortgage lender have to sign off before I can record a condominium
+    plan, and what does their consent paperwork need to include?
+  expect:
+  - Gov. Code 66342(d)
+  from_chunk: gov_66310_article4#gov--code-66342-d#1
+- q: Can a city count the backyard cottages it permits toward its cap on how many
+    new homes can be built each year?
+  expect:
+  - Gov. Code 66318
+  from_chunk: gov_66310_article2#gov--code-66318#1
+- q: Are there design rules for a tiny house on wheels used as a backyard unit, like
+    roof slope, window type, and whether it can have slide-out rooms?
+  expect:
+  - Ord. 186,481 Sec. 2 (LAMC 12.22 A.33)(i)
+  from_chunk: ord_186481_adu#ord--186-481-sec--2--lamc-12-22-a-33--i#6
+- q: Can my city make its rules for backyard cottages so strict on size, parking,
+    and fees that I basically can't build one?
+  expect:
+  - Gov. Code 66311
+  from_chunk: gov_66310_article1#gov--code-66311#1
+- q: If I build an accessory dwelling unit, will the city treat it as a change in
+    occupancy type under the building code?
+  expect:
+  - ZA Memo 143 III
+  from_chunk: za_memo_143#za-memo-143-iii#2
+- q: If I'm building an ADU or small housing project in the coastal zone, do I still
+    need a coastal development permit, and does the city have to hold a public hearing
+    for it?
+  expect:
+  - Gov. Code 65852.21(k)
+  from_chunk: gov_65852_21#gov--code-65852-21-k#1
+- q: I'm trying to legalize a backyard apartment that was built without a permit years
+    ago, before 2020. Will the city charge me impact fees or utility connection fees
+    to get it permitted?
+  expect:
+  - Gov. Code 66311.7(e)
+  from_chunk: gov_66310_article1#gov--code-66311-7-e#1
+- q: I'm rebuilding my house that burned in the wildfire and it meets all the objective
+    zoning rules. Do my neighbors still get a mailed notice, or just a sign posted
+    on the property?
+  expect:
+  - EO 8 B
+  from_chunk: eo8#eo-8-b#3
+- q: Can my city require a minimum lot size before I'm allowed to build a backyard
+    granny unit, or can it only set rules like height, setbacks and parking?
+  expect:
+  - Gov. Code 66314(b)
+  from_chunk: gov_66310_article2#gov--code-66314-b#1
+- q: Can a city make me add a parking space for each unit when I split my lot into
+    two homes, or are there cases where they can't require parking?
+  expect:
+  - Gov. Code 65852.21(c)
+  from_chunk: gov_65852_21#gov--code-65852-21-c#1
+- q: Can I convert my unused basement or garage in an apartment building into several
+    small rental units, and how many is the city required to let me add?
+  expect:
+  - Gov. Code 66323(a)
+  from_chunk: gov_66310_article2#gov--code-66323-a#1
+- q: If I want to put a movable tiny house on wheels in my backyard as an ADU, which
+    of the ADU standards do I have to meet and which ones don't apply?
+  expect:
+  - Ord. 186,481 Sec. 2 (LAMC 12.22 A.33)(b)
+  from_chunk: ord_186481_adu#ord--186-481-sec--2--lamc-12-22-a-33--b#1
+- q: My ADU will hook up to a septic system. Can the city make me submit a percolation
+    test with my permit application, and how old can that test be?
+  expect:
+  - Gov. Code 66323(f)
+  from_chunk: gov_66310_article2#gov--code-66323-f#1
+- q: If I rebuild my burned-down house bigger than what was there before, do I still
+    need coastal review, or can I skip it if the new design meets all the zoning rules?
+  expect:
+  - Palisades Rebuild FAQ Q12
+  from_chunk: palisades_rebuild_faq#palisades-rebuild-faq-q12#1
+- q: What paperwork do I need to record with the county when transferring property,
+    and do I have to file an ownership change report at the same time?
+  expect:
+  - Gov. Code 66341(d)
+  from_chunk: gov_66310_article4#gov--code-66341-d#1
+- q: My city never passed its own ADU ordinance. Does that mean they can still turn
+    down my permit application at their discretion, or do they have to review it by
+    a set standard?
+  expect:
+  - Gov. Code 66320
+  from_chunk: gov_66310_article2#gov--code-66320#1
+- q: Do I need to add a parking space if I convert part of my house into a junior
+    accessory dwelling unit, and will the city charge a separate utility connection
+    fee for it?
+  expect:
+  - ZA Memo 143 II
+  from_chunk: za_memo_143#za-memo-143-ii#5
+- q: If my house burned down in the fires and it didn't meet current setback or height
+    rules, can I rebuild it the same way, and how much bigger can it be?
+  expect:
+  - Palisades Rebuild FAQ Q3
+  from_chunk: palisades_rebuild_faq#palisades-rebuild-faq-q3#1
+- q: Can I open a dog kennel in an industrial zone if it's close to a residential
+    neighborhood, or do I need special approval?
+  expect:
+  - LAMC 12.18
+  from_chunk: lamc_chapter1#lamc-12-18#2
+- q: Is there a task force that helps speed up rebuilding permits after a wildfire
+    and works to remove roadblocks for homeowners?
+  expect:
+  - EO 1 B.2
+  from_chunk: eo1_revised#eo-1-b-2#1
+- q: If a tribe and the city can't agree on how to protect a possible tribal cultural
+    resource on my site, can I still use the fast ministerial approval process for
+    my housing project?
+  expect:
+  - Gov. Code 65913.4(b)
+  from_chunk: gov_65913_4#gov--code-65913-4-b#4
+- q: Can a city hold up or add extra conditions to approval of street or utility improvements
+    needed for my housing project just because the project qualifies for streamlined
+    ministerial approval?
+  expect:
+  - Gov. Code 65913.4(i)
+  from_chunk: gov_65913_4#gov--code-65913-4-i#2
+- q: If I tear down my garage to build a backyard unit, do I have to build new parking
+    to replace it?
+  expect:
+  - Ord. 186,481 Sec. 2 (LAMC 12.22 A.33)(i)
+  from_chunk: ord_186481_adu#ord--186-481-sec--2--lamc-12-22-a-33--i#4
+- q: How long does the city have to approve or deny my housing development application
+    once it's complete, and what happens if they miss the deadline?
+  expect:
+  - Gov. Code 65852.21(h)
+  from_chunk: gov_65852_21#gov--code-65852-21-h#1
