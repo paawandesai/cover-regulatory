@@ -1,0 +1,115 @@
+{
+ "checked_on": "2026-10-17",
+ "method": "Left-out item: LA County ADU ordinance (Ord. 2025-0029, Section 22.140.640, fetched from file.lacounty.gov with struck-through text dropped). Candidates extracted by extract-v5 (Claude Opus 5.5), checked by Claude Sonnet 5.5 (Anthropic API) against each chunk, decided by Claude Opus 5.5 (via Claude Code). Fragments the engine does not use are left pending. Fragment 916 (the unit counts in Table 22.140.640-A) stays pending: its quote is flattened table text and the second model disagreed; the engine states those counts in words as an Interpretation.",
+ "candidates": [
+  {
+   "fragment_id": 913,
+   "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-c#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve_with_note",
+   "note": "Used for a flag on County lots in a Very High Fire Hazard Severity Zone. The single-access exception (fragment 915) is cited and stated in the flag. In the 2025 text the Hillside Management Area condition and JADUs were struck, so the flag names ADUs only and excludes state-exempt ADUs (Subsection H). Access is not checked.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The null value is appropriate because the text sets no numeric standard; it is a conditional prohibition. The 'boolean' unit is acceptable, and the parameter adu_allowed fits what the text regulates. The 24-foot width, non-overlap, Public Works standards, and Subsection H exclusion are captured correctly. The candidate's conditions field omits the C.2 exception, which appears only in the engine_rule_using_it text, and does not clearly state that any portion of the lot within the zone triggers the rule. The extraction is substantively sound but should carry those conditions in the conditions field, so it is agree_with_caveat.",
+    "second_model_missing_conditions": [
+     "Subsection C.2 exception: ADUs are permitted on lots with a single means of vehicular access if the lot fronts a highway and vehicles enter directly from the highway (not captured in the candidate's conditions field, only in the engine rule)",
+     "Trigger applies if any portion of the lot is within a Very High Fire Hazard Severity Zone, as depicted in the General Plan",
+     "Two access routes are measured from the lot frontage to the point of intersection with a highway and must not overlap",
+     "Access standards are those approved by Public Works"
+    ],
+    "quote_in_chunk": true
+   }
+  },
+  {
+   "fragment_id": 915,
+   "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-c#1",
+   "parameter": "adu_allowed",
+   "recommendation": "approve_with_note",
+   "note": "The highway-frontage exception to the fire-zone prohibition; stated in the same flag.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The quote and parameter match the text: C.2 says ADUs are permitted on single-access lots that front a highway with direct entry. The unit 'boolean' is acceptable, but value is null while value_text is 'permitted', so the structured value is inconsistent and should be true. The conditions capture the highway-frontage and direct-entry tests but omit the VHFHSZ precondition, the Subsection H carve-out, and the C.1 two-access alternative. The extraction is usable only with these caveats and a corrected boolean value.",
+    "second_model_missing_conditions": [
+     "Applies only to lots located wholly or partly within a Very High Fire Hazard Severity Zone (as depicted in the General Plan); the candidate lists this only in applies_to, not in conditions",
+     "Exception applies to the Subsection C.1 prohibition and does not remove other ADU requirements",
+     "Subsection H ADUs are carved out of the C prohibition altogether and are not covered by this exception",
+     "C.1 default: outside the exception, ADUs are prohibited in the VHFHSZ unless two distinct, non-overlapping vehicular accesses to a highway, each at least 24 ft wide exclusive of sidewalks and built to Public Works standards",
+     "Reference to Figure 22.140.640-A, which defines the access configurations, is not captured"
+    ],
+    "quote_in_chunk": true
+   }
+  },
+  {
+   "fragment_id": 922,
+   "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-a#1",
+   "parameter": "adu_max_floor_area_sqft",
+   "recommendation": "approve_with_note",
+   "note": "General maximum for a new ADU. The no-maximum cases (inside the home, conversion with up to 150 sq ft added) are not shown. The value is an Interpretation because HCD found the ordinance non-compliant in part.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 1,200 and unit sqft match the text, and the parameter name adu_max_floor_area_sqft fits what (a) regulates. The conditions field correctly records the (b) no-maximum exceptions, but it omits the truncated qualifier on the cap and the preemption of Planning Area Standards District, Community Standards District, and Specific Plan floor area/lot coverage rules in (2). The engine rule also drops the exceptions by saying they are 'not shown', so the rule as applied is incomplete. The number is fine as a general cap for a new ADU, but it needs the exceptions and overlay preemption attached, and the cut-off condition should be verified against the full ordinance.",
+    "second_model_missing_conditions": [
+     "The 1,200 sq ft cap in (a) is truncated in the excerpt: 'if the accessory ...' is followed by an incomplete qualifier, so the full condition on when the cap applies is not shown and cannot be confirmed.",
+     "Cap applies 'except as provided in Subsection (b)'; the candidate lists the no-max exceptions in conditions but the engine_rule_using_it states they are 'not shown', so they are not carried into the rule.",
+     "Section G.1.a.ii(2): ADUs are not subject to any Planning Area Standards District, Community Standards District, or Specific Plan provision on floor area, gross structural area, or lot coverage, so local overlays cannot reduce or alter this limit.",
+     "Minimum floor area of 150 sq ft with one habitable room of at least 70 sq ft (i.) is a separate parameter and is not captured here."
+    ],
+    "quote_in_chunk": true
+   }
+  },
+  {
+   "fragment_id": 925,
+   "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-b#1",
+   "parameter": "adu_height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "General maximum height for an attached or detached ADU on a lot with a home. The explanation names the Community Standards District limit (not below 16 ft detached); the scenic-route cap (G.1.b.iv) and the no-maximum conversions are not computed.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The 25 ft value and ft unit match G.1.b.i, and the parameter name fits a general ADU maximum height. The candidate captures the no-max-height exceptions in ii, but it omits the G.1.b.iii standards-district limits (with their transit-based minimum heights) and the G.1.b.iv scenic-route limit of the lesser of the residence height or 18 ft. The engine note's statement that a CSD cannot go below 16 ft for detached ADUs is incomplete, because the floor rises to 18 ft (+2 ft) near major transit and for multi-family lots. The extraction is usable as the baseline cap only with those caveats attached.",
+    "second_model_missing_conditions": [
+     "Scenic resources (G.1.b.iv): within 200 feet of an adopted route with scenic qualities, Scenic Route, Scenic Drive, or Scenic Highway, height is limited to the lesser of the height of the primary residence or 18 feet (subject to the minimum heights in iii.1-3)",
+     "Planning Area Standards District/CSD/Specific Plan limits (G.1.b.iii) apply to new ADUs or expanded portions, with floor heights of 16 ft detached; 18 ft (+2 ft for roof pitch matching) within 1/2 mile walking distance of a major transit stop or high-quality transit corridor; 18 ft for detached ADU on a multi-family lot",
+     "The candidate conditions mention only the no-max-height exceptions (ii) and omit iii and iv; the engine note mentions the CSD but not the transit-based minimums or the scenic override"
+    ],
+    "quote_in_chunk": true
+   }
+  },
+  {
+   "fragment_id": 931,
+   "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-c#1",
+   "parameter": "adu_side_rear_setback_ft",
+   "recommendation": "approve_with_note",
+   "note": "Rear, interior side and corner side setback for a new ADU. The no-setback conversions (G.1.c.ii) and the front-yard allowance for an ADU of 800 sq ft or less (G.1.c.i) are not computed.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 4 and unit ft match the text, and the parameter name for rear and interior/corner side setbacks fits G.1.c.iii(1). The candidate captures the main exemption in G.1.c.ii, so the core extraction is sound. It is incomplete, though: it omits the reversed corner side line rule for ADUs above garages, the step-back exemption, the front yard encroachment allowance, and the projection limits in G.1.c.iv. The engine rule also says only 'new ADU' and drops expanded portions of existing structures. Hence agree with caveat.",
+    "second_model_missing_conditions": [
+     "Reversed corner side lot line: ADU built above a garage must be at least 4 ft from it (G.1.c.iii(2)), a separate lot line type not covered by the parameter",
+     "No step-back requirements apply to ADUs (G.1.c.iii(3))",
+     "Front yard: ADU of 800 sq ft or less may encroach into the required front yard setback only if no other ground-level location exists on the property (G.1.c.i)",
+     "Projections (eaves etc.) must comply with 22.110.090 and be no closer than 2.5 ft to the property line; where no setback is required, projections may not cross the property line (G.1.c.iv)",
+     "The 4 ft setback applies via 'notwithstanding contrary provisions in Title 22', overriding base zone setbacks for ADUs not described in G.1.c.ii",
+     "The no-setback exemption in G.1.c.ii(2) is itself subject to the exception in G.1.c.iv (projections)"
+    ],
+    "quote_in_chunk": true
+   }
+  },
+  {
+   "fragment_id": 935,
+   "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-d#1",
+   "parameter": "adu_parking_required",
+   "recommendation": "approve_with_note",
+   "note": "Shown only when the lot is outside a Very High Fire Hazard Severity Zone.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The quote matches G.1.d.i and the parameter name is accurate. The condition (outside a VHFHSZ) is captured in applies_to and the quote, so the extraction is complete for this clause alone. However, value is null with unit 'boolean', which is inconsistent. It should be false (parking required = false) to match the parameter name, so the value is flagged incorrect. The unit is fine. The extraction also omits the companion VHFHSZ rule in G.1.d.ii, which the engine needs to avoid over-applying the waiver. Use is acceptable only if the VHFHSZ status is checked and the null value is changed to false.",
+    "second_model_missing_conditions": [
+     "Scope limited to ADUs outside a Very High Fire Hazard Severity Zone; inside a VHFHSZ parking is required per Chapter 22.112 unless exceptions (a)-(g) apply (no bedroom, within 1/2 mile walking distance of public transit, historic district, part of existing/proposed residence or accessory structure, on-street permits not offered to ADU occupant, car share within one block, ADU application submitted with new residence application)",
+     "Replacement parking not required when a garage, carport or covered parking is demolished or converted for the ADU (G.1.d.ii.2)",
+     "Where parking is required, it may be on a driveway or tandem (G.1.d.ii.3)"
+    ],
+    "quote_in_chunk": true
+   }
+  }
+ ]
+}

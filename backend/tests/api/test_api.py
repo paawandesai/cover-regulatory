@@ -529,3 +529,18 @@ def test_human_re_review_records_the_person_and_the_earlier_ai_decision(tmp_path
                 )
             conn.commit()
         _drop_audit_after(last)
+
+
+def test_county_adu_in_a_fire_zone_flags_the_access_rule_and_keeps_state_adus():
+    from app.db.connection import connect
+    from app.engine.county import county_adu_items
+
+    with connect() as conn:
+        outside = county_adu_items(conn, set())
+        inside = county_adu_items(conn, {"vhfhsz"})
+    assert [i.id for i in outside] == ["county_adu"]
+    assert outside[0].value == 1200 and outside[0].label == "interpretive"
+    assert "No parking is required" in outside[0].explanation and "HCD" in outside[0].explanation
+    flag = next(i for i in inside if i.id == "flag_county_adu_fire")
+    assert flag.label == "interpretive" and flag.citations
+    assert "two separate" in flag.explanation and "22.140.640 H" in flag.explanation

@@ -232,6 +232,64 @@ def overlay_notes(conn, ctx, items: list[Item]) -> list[Item]:
     return out
 
 
+ADU_ORDINANCE = (
+    " From the County's ADU ordinance (Ord. 2025-0029, adopted 2025-07-29). In December 2025 the state housing "
+    "department (HCD) found parts of it out of line with state ADU law: it leaves out units state law allows, and "
+    "its height limits inside Community Standards Districts leave out the 25 ft state law allows for an attached ADU. "
+    "The County planned to amend it. "
+    "Where state law allows more, state law applies."
+)
+
+
+def county_adu_items(conn, kinds: set[str]) -> list[Item]:
+    """The County's own ADU limits, labelled Interpretation: HCD found the ordinance non-compliant in part."""
+    ca = R.load("COUNTY_ADU", conn)
+    sqft, height, setback = ca.value("max_sqft"), ca.value("height_ft"), ca.value("setback_ft")
+    fire = bool({"vhfhsz", "vhfhsz_2025"} & kinds)
+    why = None
+    if None not in (sqft, height, setback):
+        why = (
+            f"An ADU of up to {sqft:,.0f} sq ft (22.140.640 G.1.a) and up to {height:g} ft tall, attached or detached "
+            f"(G.1.b), at least {setback:g} ft from the rear, interior side and corner side lot lines (G.1.c). On a "
+            "single-family lot the County allows one ADU attached to or within the home or an accessory building, one "
+            "detached ADU and one JADU (Table 22.140.640-A). A Community Standards District may set a lower height, "
+            "but not below 16 ft for a detached ADU."
+        )
+        why += (
+            " This lot is in a Very High Fire Hazard Severity Zone, so parking rules apply (G.1.d.ii)."
+            if fire
+            else " No parking is required outside a Very High Fire Hazard Severity Zone (G.1.d.i)."
+        )
+    item = rule_item("county_adu", "adu", "ADU under the County's ordinance", ca, sqft, "sqft", why)
+    out = [item]
+    if fire:
+        fa = R.load("COUNTY_ADU_FIRE", conn)
+        out.append(
+            Item(
+                "flag_county_adu_fire",
+                "flag",
+                "ADUs in a Very High Fire Hazard Severity Zone",
+                True,
+                None,
+                "interpretive",
+                rule_id=fa.rule_id,
+                coverage=1.0,
+                explanation="On a lot in a Very High Fire Hazard Severity Zone the County prohibits the ADU above "
+                "unless the lot has two separate, non-overlapping access roads to a highway, each at least 24 ft wide "
+                "and built to Public Works standards, or fronts a highway that cars enter directly (22.140.640 C). "
+                "This does not apply to the ADUs state law requires the County to approve (22.140.640 H), such as the "
+                "state-law detached ADU above, or to a JADU. The access roads are not checked here.",
+                citations=fa.citations(),
+            )
+        )
+    for i in out:
+        if i.label == "derived":
+            i.label, i.coverage = "interpretive", 1.0
+        if i.explanation:
+            i.explanation += ADU_ORDINANCE
+    return out
+
+
 def building_types(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[Item]:
     items: list[Item] = []
     st = R.load("ADU_STATE_DETACHED", conn)
@@ -247,13 +305,13 @@ def building_types(conn, ctx, lot_area: float | None, kinds: set[str]) -> list[I
                 f"One detached new ADU up to {st.value('max_sqft'):.0f} sq ft, with side and rear setbacks of no more than "
                 f"{st.value('setback_ft'):.0f} ft and a height of at least {st.value('height_ft'):.0f} ft allowed, on a lot "
                 "with an existing or proposed single-family home. State law requires counties as well as cities to "
-                "approve it ministerially (Gov. Code 66323). The County's own ADU ordinance is not in the copy loaded "
-                "here, which predates it."
+                "approve it ministerially (Gov. Code 66323). The County's own ordinance allows more (next item)."
             )
             if None not in (st.value("max_sqft"), st.value("setback_ft"), st.value("height_ft"))
             else None,
         )
     )
+    items += county_adu_items(conn, kinds)
     j = R.load("JADU", conn)
     items.append(
         rule_item(

@@ -26,7 +26,7 @@ from app.extract.validate import check
 
 log = logging.getLogger(__name__)
 
-PROMPT_VERSION = "extract-v4"  # v2: SB 9 and fire rebuild; v3: R2 and RE zones; v4: LA County R-1
+PROMPT_VERSION = "extract-v5"  # v2: SB 9 and fire rebuild; v3: R2 and RE zones; v4: LA County R-1; v5: County ADUs
 TARGETS = Path(__file__).with_name("targets.yaml")
 
 SYSTEM = f"""You read zoning and housing law and record the rules it states, for a reviewer to check.
@@ -42,7 +42,8 @@ Rules for every fragment:
   value_numeric null.
 - Use null for anything the text does not say. An empty fragments list is a correct answer.
 - parameter is one of: {", ".join(PARAMETERS)}. Use "other" when none fits.
-- rule_family "adu_state" is for state law (Government Code) and "adu_local" for the City's own ADU rules.
+- rule_family "adu_state" is for state law (Government Code) and "adu_local" for a city's or the County's own ADU
+  rules (LAMC 12.22 A.33, or Title 22 Section 22.140.640).
 - rule_family "r2_envelope" is for the R2 Two-Family Zone (LAMC 12.09) and "re_envelope" for the RE Residential
   Estate Zone (LAMC 12.07.01); "r1_envelope" stays for R1 and for rules shared by several zones.
 - rule_family "county_r1_envelope" is for Los Angeles County Title 22 (section numbers 22.xx.xxx), which governs

@@ -170,10 +170,15 @@ def _label(doc: dict) -> str:
         "ch1a_art1": "Ch. 1A",
         "ch1a_art6": "Ch. 1A",
         "lacounty_title22": "LACC",
+        "lacounty_adu_ord_2025": "LACC",
+        "hcd_lacounty_adu_2025": "HCD letter",
     }.get(doc["id"], "Gov. Code" if doc["doc_type"] == "statute" else doc["title"])
 
 
 def chunk_document(doc: dict, pages: list[Page]) -> list[Chunk]:
+    # A County ordinance restating whole Title 22 sections is chunked as Title 22, so its ids match the code's.
+    if doc.get("headings") == "title22_nested":
+        return chunk_title22(pages, _label(doc), nested=True)
     if doc["doc_type"] == "ordinance":
         return chunk_ordinance(pages, _label(doc))
     if doc["doc_type"] == "code_section":

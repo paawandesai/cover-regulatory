@@ -54,3 +54,17 @@ Zones are established, with enough text here to make a chunk of its own.
     assert ids == ["LACC 22.06.070", "LACC 22.14", "LACC Division 3", "LACC 22.16.010"]
     defs = next(c for c in chunk_title22([Page(1, text)], "LACC") if c.section_id == "LACC 22.14")
     assert "Reversed corner lot" in defs.text and "22.16.010" not in defs.text
+
+
+def test_title22_nested_splits_a_long_subsection_at_its_paragraphs():
+    long = "x " * 1300
+    text = (
+        "22.140.640 Accessory Dwelling Units\nA. Purpose. Short.\n"
+        f"B. Development Standards.\n1. Accessory Dwelling Units.\na. Floor Area. {long}\nb. Height. {long}\n"
+        "C. Exempt Units. Short.\n"
+    )
+    ids = [c.section_id for c in chunk_title22([Page(1, text)], "LACC", nested=True)]
+    assert "LACC 22.140.640 B.1.a" in ids and "LACC 22.140.640 B.1.b" in ids and "LACC 22.140.640 C" in ids
+    # Without nested, the Volume I copy keeps its existing ids.
+    flat = [c.section_id for c in chunk_title22([Page(1, text)], "LACC")]
+    assert not any(".1." in i for i in flat)

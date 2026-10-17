@@ -288,11 +288,50 @@ class _Mark:
         return self.number if i == 1 else self.title
 
 
-def chunk_title22(pages: list[Page], label: str) -> list[Chunk]:
+# Below a lettered subsection, Title 22 numbers its paragraphs "1." and letters the next level "a.".
+_T22_LEVELS = (re.compile(r"^(\d{1,2})\. +[A-Z(]", re.MULTILINE), re.compile(r"^([a-z])\. +[A-Z(]", re.MULTILINE))
+
+
+def _in_sequence(matches, first: str) -> list[re.Match]:
+    out, want = [], first
+    for m in matches:
+        if m.group(1) == want:
+            out.append(m)
+            want = str(int(want) + 1) if want.isdigit() else chr(ord(want) + 1)
+    return out
+
+
+def _split_nested(body: str, start: int, sid: str, heading: str, offsets, level: int = 0) -> list[Chunk]:
+    """A subsection longer than a chunk, split at its numbered paragraphs and then their lettered ones, as
+    "LACC 22.140.640 G.1.b", the form the code's own cross references use ("Subsection G.1.b.iii")."""
+    if len(body) <= MAX_CHARS or level >= len(_T22_LEVELS):
+        return _split_long(body, start, sid, heading, offsets)
+    parts = _in_sequence(_T22_LEVELS[level].finditer(body), "1" if level == 0 else "a")
+    if not parts:
+        return _split_long(body, start, sid, heading, offsets)
+    out: list[Chunk] = []
+    if body[: parts[0].start()].strip():
+        out += _split_long(body[: parts[0].start()], start, sid, heading, offsets)
+    for j, p in enumerate(parts):
+        stop = parts[j + 1].start() if j + 1 < len(parts) else len(body)
+        out += _split_nested(
+            body[p.start() : stop],
+            start + p.start(),
+            f"{sid}.{p.group(1)}",
+            heading,
+            offsets,
+            level + 1,
+        )
+    return out
+
+
+def chunk_title22(pages: list[Page], label: str, nested: bool = False) -> list[Chunk]:
     """LA County Title 22 split at its sections ("22.18.040 Development Standards ...") and their lettered
     subsections, as "LACC 22.18.040 A". Each chapter's list of sections repeats the headings, so the last
     occurrence of a section number is the section itself. The copy is text already extracted from a PDF, so it is
-    not filtered for figure fragments: that filter would drop table rows such as "R-1" and "20 5 10 5 15"."""
+    not filtered for figure fragments: that filter would drop table rows such as "R-1" and "20 5 10 5 15".
+    With nested, a subsection too long for one chunk is split at its numbered and lettered paragraphs; the County's
+    ordinances use this, and the Volume I copy keeps its existing ids without it."""
     text, offsets = _joined(pages, clean=False)
     last: dict[str, re.Match] = {}
     for m in T22_SECTION.finditer(text):
@@ -318,9 +357,8 @@ def chunk_title22(pages: list[Page], label: str) -> list[Chunk]:
             chunks += _split_long(body[: subs[0].start()], m.start(), sid, heading, offsets)
         for j, s in enumerate(subs):
             stop = subs[j + 1].start() if j + 1 < len(subs) else len(body)
-            chunks += _split_long(
-                body[s.start() : stop], m.start() + s.start(), f"{sid} {s.group(1)}", heading, offsets
-            )
+            split = _split_nested if nested else _split_long
+            chunks += split(body[s.start() : stop], m.start() + s.start(), f"{sid} {s.group(1)}", heading, offsets)
     return chunks
 
 
