@@ -9,7 +9,7 @@ const props = defineProps<{ report: Report }>()
 const a = computed(() => props.report.snapshot as Assessment)
 
 const SECTIONS: [string, string[]][] = [
-  ['Zone envelope', ['r1_envelope', 'r2_envelope', 're_envelope']],
+  ['Zone envelope', ['r1_envelope', 'r2_envelope', 're_envelope', 'county_r1_envelope']],
   ['What can be built', ['guest_house', 'adu', 'jadu']],
   ['SB 9', ['sb9']],
   ['Specific plan', ['plan']],

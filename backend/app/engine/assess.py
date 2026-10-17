@@ -8,6 +8,7 @@ from dataclasses import asdict
 from datetime import UTC, datetime
 
 from app.db.connection import connect
+from app.engine import county
 from app.engine import rules as R
 from app.engine.ch1a import ch1a_items
 from app.engine.geometry import envelope, lot_frame
@@ -985,6 +986,74 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
     return out
 
 
+def _county(ctx: ParcelContext, project, result: dict) -> dict:
+    """Unincorporated County land under Title 22. Only Zone R-1 is modeled (app/engine/county.py)."""
+    cz = ctx.county_zone
+    result["notes"].append(
+        "This parcel is in unincorporated Los Angeles County, so the County's zoning code (Title 22) applies, not the "
+        "City's. Title 22 was read from a copy whose edition is not stated, so every County value is an Interpretation."
+    )
+    if not (cz and cz.family):
+        result["status"] = "zone_not_modeled"
+        result["notes"].append(
+            f"County zone {cz.base if cz else 'unknown'} is not modeled. For unincorporated County land this tool models "
+            "Zone R-1 only."
+        )
+        return result
+    if not cz.is_modeled:
+        result["notes"].append(f"{cz.raw}: " + "; ".join(cz.unmodeled) + ".")
+    lot_area = float(ctx.lot_area_sqft.value) if ctx.lot_area_sqft else None
+    frame = lot_frame(ctx.apn)
+    width = depth = None
+    if frame and frame.front_side is not None:
+        width, depth = round(frame.width_ft, 1), round(frame.depth_ft, 1)
+    kinds = {o["kind"] for o in ctx.overlays}
+    with connect() as conn:
+        items: list[Item] = [
+            Item(
+                "lot_dimensions",
+                "parcel",
+                "Lot width x depth (from parcel shape)",
+                f"{width:.0f} x {depth:.0f}" if width else None,
+                "ft",
+                "approximate" if width else "uncited",
+                rule_id="GEOM_ORIENTED_RECTANGLE",
+                explanation="Computed from the County parcel outline: a fitted rectangle, with the front taken as the "
+                "street-facing side. Illustrative, not survey-grade."
+                if width
+                else "Could not tell which side faces the street.",
+            )
+        ]
+        buildings, fp_item, _ = _footprints(conn, ctx.apn)
+        items.append(fp_item)
+        env, front, side, rear = county.envelope_items(conn, ctx, width, depth, lot_area)
+        if frame and width and depth and (frame.corner or width > depth):
+            # A corner lot's front is its shorter street side; a lot read as wider than deep may be one.
+            for i in env:
+                if i.id in ("front_yard", "side_yard", "rear_yard"):
+                    i.explanation = (i.explanation or "") + (
+                        " This lot was read as a corner lot; check which side is the front."
+                        if frame.corner
+                        else " The front was taken on the lot's long side; if the short side is the front, this "
+                        "changes."
+                    )
+        if not cz.is_modeled:
+            for i in env:
+                i.explanation = (i.explanation or "") + " Not modeled for this zone: " + "; ".join(cz.unmodeled) + "."
+        items += env
+        items += county.building_types(conn, ctx, lot_area, kinds)
+        items += county.overlay_notes(conn, ctx, env)
+    if frame and None not in (front, side, rear):
+        result["geometry"] = envelope(frame, front, side, rear) | {
+            "yards_ft": {"front": front, "side": side, "rear": rear},
+            "buildings": buildings,
+        }
+    result["items"] = [asdict(i) | {"label_text": i.label_text} for i in items]
+    result["summary"] = summarize(items, ctx)
+    result["project"] = check_project(items, project, None, False) if project and not project.empty else None
+    return result
+
+
 def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
     ctx = resolve(query)
     result = {
@@ -1033,6 +1102,8 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
                 items = ch1a_items(conn, z1a, lot, _zone_source(ctx))
             result["items"] = [asdict(i) | {"label_text": i.label_text} for i in items]
         return result
+    if ctx.jurisdiction == "lacounty":
+        return _county(ctx, project, result)
     if not (ctx.zone and ctx.zone.family):
         result["status"] = "zone_not_modeled"
         result["notes"].append(

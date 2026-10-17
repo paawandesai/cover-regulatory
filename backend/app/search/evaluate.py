@@ -25,13 +25,13 @@ def _covers(expected: str, section_id: str) -> bool:
     return re.search(r"(^|\()" + re.escape(expected) + r"($|[ .(),])", section_id) is not None
 
 
-def evaluate(k: int = 5, mode: str = "hybrid", qset: str = "dev") -> dict:
+def evaluate(k: int = 5, mode: str = "hybrid", qset: str = "dev", jurisdiction: str | None = None) -> dict:
     qs = yaml.safe_load(SETS[qset].read_text())["questions"]
     s.search("warm up the embedding model")  # first call loads the model; not counted
     hits_at_k, rr, latencies, misses = 0, [], [], []
     for item in qs:
         t0 = time.perf_counter()
-        results = s.search(item["q"], k=k, mode=mode)
+        results = s.search(item["q"], k=k, mode=mode, jurisdiction=jurisdiction)
         latencies.append((time.perf_counter() - t0) * 1000)
         rank = next(
             (i for i, h in enumerate(results, 1) if any(_covers(e, h.section_id) for e in item["expect"])), None
@@ -46,6 +46,7 @@ def evaluate(k: int = 5, mode: str = "hybrid", qset: str = "dev") -> dict:
     return {
         "set": qset,
         "mode": mode,
+        "jurisdiction": jurisdiction,
         "k": k,
         "questions": len(qs),
         "recall_at_k": round(hits_at_k / len(qs), 3),
@@ -61,5 +62,6 @@ if __name__ == "__main__":
     ap.add_argument("--k", type=int, default=5)
     ap.add_argument("--mode", default="hybrid", choices=["hybrid", "full_text", "embedding"])
     ap.add_argument("--set", default="dev", choices=sorted(SETS))
+    ap.add_argument("--jurisdiction", choices=["city", "county"])
     a = ap.parse_args()
-    print(json.dumps(evaluate(a.k, a.mode, a.set), indent=2))
+    print(json.dumps(evaluate(a.k, a.mode, a.set, a.jurisdiction), indent=2))

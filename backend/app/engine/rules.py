@@ -346,6 +346,29 @@ def hillside_needs(zone: str, hd_row: str) -> list[Need]:
 
 
 # R2 Two-Family Zone (LAMC 12.09). Yards are the R1 yards (12.09 C.1-C.3 refer to 12.08 C.1-C.3).
+# LA County Title 22, Zone R-1 (unincorporated County). Table 22.18.040-A gives R-A, R-1 and R-2 one shared row.
+RULES |= {
+    "COUNTY_R1_YARDS": [
+        Need("front", "LACC 22.18.040 A", "front_yard_min_ft", applies="R-1"),
+        Need("side", "LACC 22.18.040 A", "side_yard_min_ft", applies="R-1"),
+        Need("rear", "LACC 22.18.040 A", "rear_yard_min_ft", applies="R-1"),
+        Need("corner_side", "LACC 22.18.040 A", "corner_side_yard_min_ft", applies="R-1"),
+    ],
+    "COUNTY_NARROW_LOT": [
+        Need("pct", "LACC 22.110.080 C", "side_yard_pct_lot_width", "less than 50 feet"),
+        Need("min_ft", "LACC 22.110.080 C", "side_yard_min_ft", "less than 50 feet"),
+    ],
+    "COUNTY_SHALLOW_LOT": [
+        Need("pct", "LACC 22.110.080 D", "rear_yard_pct_lot_depth", "less than 75 feet"),
+        Need("min_ft", "LACC 22.110.080 D", "rear_yard_min_ft", "less than 75 feet"),
+    ],
+    "COUNTY_R1_HEIGHT": [Need("max_ft", "LACC 22.18.040 B", "height_max_ft", applies="R-1")],
+    "COUNTY_LOT_AREA": [
+        Need("default", "LACC 22.110.130 A", "lot_area_min_sqft", "R-1-5000", numeric=False),
+        Need("numbered", "LACC 22.110.130 A", "lot_area_min_sqft", "net area of the number", numeric=False),
+    ],
+}
+
 RULES |= {
     "R2_USE": [Need("rule", "LAMC 12.09 A.2", "dwelling_units_max", "two single", numeric=False)],
     "R2_YARDS": [

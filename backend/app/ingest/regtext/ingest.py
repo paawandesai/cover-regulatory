@@ -34,6 +34,7 @@ from app.ingest.regtext.chunk import (
     chunk_order,
     chunk_ordinance,
     chunk_statute,
+    chunk_title22,
     indent_marker,
 )
 
@@ -120,6 +121,8 @@ def not_struck(obj: dict, segments: list[tuple[float, float, float]]) -> bool:
 
 
 def _pages(path: Path, indent_markers: bool = False, drop_struck: bool = False) -> list[Page]:
+    if path.suffix.lower() == ".txt":  # text already extracted from a PDF by the person who saved it
+        return [Page(1, path.read_text(encoding="utf-8", errors="ignore"))]
     if path.suffix.lower() in (".html", ".htm"):
         parser = _HTMLText(indent_markers)
         parser.feed(path.read_text(encoding="utf-8", errors="ignore"))
@@ -166,6 +169,7 @@ def _label(doc: dict) -> str:
         "sp_wla_timp": "WLA TIMP",
         "ch1a_art1": "Ch. 1A",
         "ch1a_art6": "Ch. 1A",
+        "lacounty_title22": "LACC",
     }.get(doc["id"], "Gov. Code" if doc["doc_type"] == "statute" else doc["title"])
 
 
@@ -180,6 +184,8 @@ def chunk_document(doc: dict, pages: list[Page]) -> list[Chunk]:
         return chunk_by_headings(pages, _label(doc), pattern=FAQ_HEADING)
     if doc.get("headings") == "letters":
         return chunk_order(pages, _label(doc))
+    if doc.get("headings") == "title22":
+        return chunk_title22(pages, _label(doc))
     if doc.get("headings") == "ch1a":
         return chunk_ch1a(pages, _label(doc))
     if doc.get("headings") == "plan":
@@ -206,6 +212,8 @@ def ingest(doc: dict) -> dict | None:
     if doc.get("trim"):
         pages = _trim(pages, **doc["trim"])
     chunks = chunk_document(doc, pages)
+    if doc.get("section_prefixes"):
+        chunks = [c for c in chunks if c.section_id.startswith(tuple(doc["section_prefixes"]))]
     retrieved = datetime.fromtimestamp(path.stat().st_mtime, UTC)
 
     # Stable ids: section slug plus ordinal within that section.

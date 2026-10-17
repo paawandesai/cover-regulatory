@@ -220,3 +220,49 @@ cases:
       ch1a_density: 4         # floor(6,757 / 1,500) (Div. 6B.2, Sec. 6C.1.2 D.3)
   - apn: "4327028024"   # Beverly Hills: outside the City
     status: outside_city
+  # Unincorporated LA County, Del Aire (wave 9). Hand calculations by Claude Code from the Title 22 copy Paawan supplied
+  # (edition not stated), not yet spot-checked by Paawan. Every Title 22 value is labelled interpretive because of the edition.
+  - apn: "4142004002"   # Del Aire, County R-1, ~70 x 85 ft, 5,259 sq ft, interior lot
+    status: ok
+    expect:
+      front_yard: 20.0        # Table 22.18.040-A
+      side_yard: 5.0          # Table 22.18.040-A; width 70 >= 50, so 22.110.080 C.2 does not apply
+      rear_yard: 15.0         # Table 22.18.040-A; depth 85 >= 75, so 22.110.080 D does not apply
+      max_height: 35.0        # 22.18.040 B.1
+      lot_minimum: 5000       # 22.110.130 A.4: plain R-1 takes the R-1-5000 area
+      adu_state_detached: 800.0  # Gov. Code 66323(a)(2), binding on counties
+      jadu: 500.0             # Gov. Code 66313(d)
+      sb9_two_unit: 2.0       # Gov. Code 65852.21(a)
+      sb9_lot_split: true     # 66411.7(a): 5,259 >= 2 x 1,200
+    labels:
+      front_yard: interpretive
+      side_yard: interpretive
+      rear_yard: interpretive
+      max_height: interpretive
+      lot_minimum: interpretive
+    flags_exclude: [flag_county_hma, flag_county_csd, flag_county_setback_district]
+  - apn: "4144001012"   # Del Aire, County R-1, ~40 x 132 ft, 5,292 sq ft (narrow lot)
+    status: ok
+    expect:
+      side_yard: 4.0          # 22.110.080 C.2: width 40 < 50, so max(10% x 40 = 4.0, 3)
+      front_yard: 20.0
+      rear_yard: 15.0
+      max_height: 35.0
+      lot_minimum: 5000
+  - apn: "4143016041"   # Del Aire, County R-1, ~88 x 59 ft, 3,460 sq ft (shallow, substandard)
+    status: ok
+    expect:
+      rear_yard: 11.7         # 22.110.080 D: depth 58.6 < 75, so max(20% x 58.6 = 11.72, 10)
+      side_yard: 5.0
+      front_yard: 20.0
+      max_height: 35.0
+      lot_minimum: 5000       # 3,460 is below it: a substandard lot (22.110.150)
+      sb9_lot_split: true     # 3,460 >= 2 x 1,200
+  - apn: "4142007019"   # Del Aire, County R-1, ~70 x 85 ft, touches a Hillside Management Area
+    status: ok
+    expect:
+      front_yard: 20.0
+      max_height: 35.0
+    flags_include: [flag_county_hma]
+  - apn: "4144001800"   # Del Aire, County R-3: not modeled
+    status: zone_not_modeled

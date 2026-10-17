@@ -1,7 +1,7 @@
 # Architecture
 
-The engine answers one question for a City of Los Angeles parcel: what may be built here under the R1 rules,
-and what text says so. It is built around one design choice. **The AI reads the regulations once, at
+The engine answers one question for a City of Los Angeles parcel, or one in unincorporated LA County's Zone R-1:
+what may be built here, and what text says so. It is built around one design choice. **The AI reads the regulations once, at
 ingestion, and a review step approves what it read (in this demo, an AI review applied on the owner's
 instruction, recorded as `reviewed_by = 'ai-review'`). Answering a question is plain, deterministic code.** That
 keeps answers repeatable, citable and fast, and it keeps the model away from addresses and user input.
@@ -101,17 +101,19 @@ The model never sets a label. Labels come from review status and the determinist
 
 ## Adding a jurisdiction
 
-The pipeline is organised by jurisdiction, but only LA City Chapter I is built, and these parts are LA-specific:
+The pipeline is organised by jurisdiction. LA City Chapter I was built first; unincorporated LA County (Title 22,
+Zone R-1) was added second, in wave 9, and the table says what each part took for it.
 
-| Part | Where | What a new jurisdiction needs |
-|---|---|---|
-| Boundary and code regime | `backend/app/parcel/resolve.py`, `boundary` and `code_regime_area` tables | Its boundary layer and a map from areas to the code in force there |
-| Parcel and zoning layers | `backend/app/ingest/sources.yaml`, `study_areas.yaml` | Its parcel, zoning and overlay layers, with licenses |
-| Zone parser | `backend/app/parcel/zone.py` | Its zone-string grammar (base zone, height district, qualifiers, suffixes) |
-| Regulation text | `backend/app/ingest/regtext/` | A chunker for its code's section numbering, and sources allowed to be fetched or saved by hand |
-| Rule definitions | `backend/app/engine/rules.py` | The parameters each rule needs, keyed by that code's section ids |
-| Rule assembly | `backend/app/engine/assess.py` | Which rules apply to which zones, overlays that withhold or downgrade values, and the stop states |
-| Golden cases | `backend/tests/golden/cases.yaml` | Parcels with expected values worked out from that code |
+| Part | Where | What a new jurisdiction needs | What the County took |
+|---|---|---|---|
+| Boundary and code regime | `backend/app/parcel/resolve.py`, `boundary` and `code_regime_area` tables | Its boundary layer and a map from areas to the code in force there | The County's unincorporated-area boundary (a `boundary` row of kind `unincorporated`); `resolve` sets `jurisdiction` and keeps each jurisdiction's zoning apart by source |
+| Parcel and zoning layers | `backend/app/ingest/sources.yaml`, `study_areas.yaml` | Its parcel, zoning and overlay layers, with licenses | GIS-NET zoning, Community Standards Districts, Hillside Management Areas and Setback Districts; parcels and footprints came from the same County layers; `load_datasets.py --area` reloads one area |
+| Zone parser | `backend/app/parcel/zone.py` | Its zone-string grammar (base zone, height district, qualifiers, suffixes) | `parse_county_zone`: base zone, required lot area (R-1-7500), lot acres, units per acre, combining zones |
+| Regulation text | `backend/app/ingest/regtext/` | A chunker for its code's section numbering, and sources allowed to be fetched or saved by hand | `chunk_title22` (22.18.040 A); the text was supplied by the project owner, since the County's code publisher may not be crawled; migration 012 allows code chapter `T22` |
+| Rule definitions | `backend/app/engine/rules.py` | The parameters each rule needs, keyed by that code's section ids | Five rules (yards, narrow lot, shallow lot, height, lot area), extracted and reviewed like the City's |
+| Rule assembly | `backend/app/engine/assess.py` | Which rules apply to which zones, overlays that withhold or downgrade values, and the stop states | `engine/county.py`, reached from `assess` before the City's zone checks; SB 9 and the summary take the jurisdiction's name |
+| Search and chat | `backend/app/search/search.py`, `backend/app/api/chat.py` | Which documents govern there | A `jurisdiction` scope: the chat answers a County parcel from Title 22 and state law only |
+| Golden cases | `backend/tests/golden/cases.yaml` | Parcels with expected values worked out from that code | Five Del Aire parcels |
 
 State ADU law (Gov. Code 66310-66342) and the geometry, labels, citations and review flow carry over unchanged to any California city.
 

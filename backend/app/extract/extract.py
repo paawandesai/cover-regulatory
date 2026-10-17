@@ -26,7 +26,7 @@ from app.extract.validate import check
 
 log = logging.getLogger(__name__)
 
-PROMPT_VERSION = "extract-v3"  # v2: SB 9 and fire rebuild families; v3: R2 and RE zone families
+PROMPT_VERSION = "extract-v4"  # v2: SB 9 and fire rebuild; v3: R2 and RE zones; v4: LA County R-1
 TARGETS = Path(__file__).with_name("targets.yaml")
 
 SYSTEM = f"""You read zoning and housing law and record the rules it states, for a reviewer to check.
@@ -45,6 +45,8 @@ Rules for every fragment:
 - rule_family "adu_state" is for state law (Government Code) and "adu_local" for the City's own ADU rules.
 - rule_family "r2_envelope" is for the R2 Two-Family Zone (LAMC 12.09) and "re_envelope" for the RE Residential
   Estate Zone (LAMC 12.07.01); "r1_envelope" stays for R1 and for rules shared by several zones.
+- rule_family "county_r1_envelope" is for Los Angeles County Title 22 (section numbers 22.xx.xxx), which governs
+  unincorporated County land: record its rules for Zone R-1, including rules it states for several zones at once.
 - rule_family "sb9" is for two-unit developments and urban lot splits (Gov. Code 65852.21, 66411.7), and
   "fire_rebuild" for rebuilding rules in emergency orders after a fire.
 

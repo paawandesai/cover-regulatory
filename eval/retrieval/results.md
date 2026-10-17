@@ -50,3 +50,22 @@ What this shows:
   related text and the follow-up chat, which only keeps sentences whose quotes it can find, so a retrieval miss
   there gives "does not answer this" rather than a wrong answer.
 - The questions are model-written, not written by a person. A person-written set is still the stronger test.
+
+## Re-measured with the County text (2026-10-17)
+
+Wave 9 added 247 chunks of LA County Title 22 (corpus now 3,694 chunks). Search now takes a jurisdiction:
+`city` leaves out Title 22, `county` keeps Title 22 and state law. The follow-up chat uses the parcel's own.
+
+| Set | Scope | recall@5 | MRR | p50 ms | p95 ms |
+|---|---|---|---|---|---|
+| Dev (32) | All text | 0.75 | 0.595 | 46 | 117 |
+| Dev (32) | City | 0.75 | 0.595 | 50 | 117 |
+| Holdout (50) | All text | 0.54 | 0.421 | 110 | 177 |
+| Holdout (50) | City | 0.54 | 0.421 | 113 | 163 |
+
+What this shows:
+- The County text does not change City results: the numbers with and without it are the same.
+- Both sets are lower than on 2026-10-16 (dev 0.81, holdout 0.56). Leaving Title 22 out does not bring them back,
+  so the drop came with the City documents added in waves 2 to 7 (Chapter 1A, the fire orders, the specific plan
+  and more state law). Which documents cause each miss was not traced. Nothing in search was tuned on the holdout.
+- There is no County question set yet.

@@ -2,6 +2,7 @@
 
     uv run python -m app.ingest.load_datasets            # every dataset
     uv run python -m app.ingest.load_datasets lacity_zoning lacounty_parcels
+    uv run python -m app.ingest.load_datasets --area del_aire_county lacounty_parcels   # one study area only
 
 Each run replaces that source's rows, records last_modified / retrieved_at in `source`, and prints counts.
 Parcel owner and valuation fields are never requested (see the allowlist in sources.yaml).
@@ -33,6 +34,8 @@ OVERLAY_NAME_FIELDS = (
     "NAME_ALF",
     "ZONE",
     "hqta_type",
+    "CSD_NAME",
+    "SETBACK_NAME",
 )
 
 POLY = "ST_Multi(ST_CollectionExtract(ST_MakeValid(ST_SetSRID(ST_GeomFromGeoJSON(%s), 4326)), 3))"
@@ -91,7 +94,9 @@ def _features(ds: dict, areas: list[dict], fields: list[str]):
         yield from iter_features(ds["service_url"], fields, bbox=tuple(a["bbox"]), where=ds.get("where", "1=1"))
 
 
-def load(ds: dict, areas: list[dict]) -> int:
+def load(ds: dict, areas: list[dict], only_area: bool = False) -> int:
+    """With only_area, `areas` is one study area: rows of this source inside its box are replaced and the rest kept,
+    so a new area can be added without re-fetching (and changing) the others."""
     now = datetime.now(UTC)
     target = ds["target"]
     n = 0
@@ -106,7 +111,14 @@ def load(ds: dict, areas: list[dict]) -> int:
             "footprint_odbl": "building_footprint_odbl",
             "slope": "parcel_slope",
         }[target]
-        conn.execute(f"DELETE FROM {table} WHERE source_id = %s", (ds["id"],))
+        if only_area and ds.get("scope") != "all":
+            w, so, e, no = areas[0]["bbox"]
+            conn.execute(
+                f"DELETE FROM {table} WHERE source_id = %s AND ST_Intersects(geom, ST_MakeEnvelope(%s,%s,%s,%s,4326))",
+                (ds["id"], w, so, e, no),
+            )
+        else:
+            conn.execute(f"DELETE FROM {table} WHERE source_id = %s", (ds["id"],))
 
         if target == "slope":
             from app.ingest.slope import load_slopes
@@ -137,14 +149,16 @@ def load(ds: dict, areas: list[dict]) -> int:
                 n += 1
 
         elif target == "zoning":
-            for f in _features(ds, areas, ["Zoning", "CATEGORY"]):
+            src = {col: name for name, col in ds["fields"].items()}  # zone_string -> publisher's field name
+            for f in _features(ds, areas, [src["zone_string"], src["category"]]):
                 p = f["properties"]
-                if not f.get("geometry") or not p.get("Zoning"):
+                zone = (p.get(src["zone_string"]) or "").strip()
+                if not f.get("geometry") or not zone:
                     continue
                 conn.execute(
                     f"INSERT INTO zoning (zone_string, category, geom, source_id, source_object_id, fetched_at) "
                     f"VALUES (%s,%s,{POLY},%s,%s,%s) ON CONFLICT (source_id, source_object_id) DO NOTHING",
-                    (p["Zoning"], p.get("CATEGORY"), json.dumps(f["geometry"]), ds["id"], p["__oid"], now),
+                    (zone, p.get(src["category"]), json.dumps(f["geometry"]), ds["id"], p["__oid"], now),
                 )
                 n += 1
 
@@ -221,11 +235,20 @@ def load(ds: dict, areas: list[dict]) -> int:
 
 def main(argv: list[str]) -> None:
     sources, areas = load_config()
+    only = None
+    if "--area" in argv:
+        i = argv.index("--area")
+        only, argv = argv[i + 1], argv[:i] + argv[i + 2 :]
+        areas = [a for a in areas if a["id"] == only]
+        if not areas:
+            raise SystemExit(f"no study area {only}")
     wanted = set(argv)
     for ds in sources:
         if wanted and ds["id"] not in wanted:
             continue
-        count = load(ds, areas)
+        if only and ds.get("scope") == "all":
+            continue  # already complete
+        count = load(ds, areas, only_area=bool(only))
         print(f"{ds['id']}: {count} rows")
 
 

@@ -38,7 +38,7 @@ db-tests:
   stage: check
   image: pgvector/pgvector:0.8.1-pg16-bookworm
   variables:
-    DB_DUMP_VERSION: "2026.10.17-wave7c"
+    DB_DUMP_VERSION: "2026.10.17-wave9"
     DATABASE_URL: postgresql://regengine@localhost:5432/regengine
     UV_PROJECT_ENVIRONMENT: /tmp/venv
   before_script:

@@ -2,7 +2,8 @@
 
 The order matters and is fixed:
   1. find the parcel
-  2. point-in-City test (outside the City -> stop, explicit result)
+  2. point-in-City test; outside the City, unincorporated County land goes to the County path (Title 22) and
+     anything else stops with an explicit result
   3. code regime from the Community Plan Area (Chapter 1A -> stop, explicit result)
   4. zone string, overlays, lot facts
 """
@@ -13,7 +14,7 @@ from app.db.connection import connect
 from app.parcel.apn import InvalidAPN, looks_like_apn, normalize_apn
 from app.parcel.geocode import census_geocode, normalize_street_address
 from app.parcel.provenance import Sourced
-from app.parcel.zone import ParsedZone, parse_zone
+from app.parcel.zone import CountyZone, ParsedZone, parse_county_zone, parse_zone
 
 
 class ParcelNotFound(LookupError):
@@ -39,6 +40,8 @@ class ParcelContext:
     situs: Sourced | None = None
     parcel_source: Sourced | None = None
     notes: list[str] = field(default_factory=list)
+    jurisdiction: str = "lacity"  # lacity | lacounty (unincorporated, Title 22)
+    county_zone: CountyZone | None = None
 
 
 def _find_apn(conn, query: str) -> tuple[str, str]:
@@ -83,6 +86,57 @@ def _city_name(situs_city: str | None) -> str:
     return name.title()
 
 
+def _zones(conn, apn: str, source_id: str) -> list[dict]:
+    zones = conn.execute(
+        """SELECT z.zone_string, z.source_id, z.fetched_at,
+                  ST_Area(ST_Transform(ST_Intersection(z.geom, p.geom), 2229)) / NULLIF(ST_Area(ST_Transform(p.geom, 2229)),0) AS share,
+                  ST_Intersects(z.geom, ST_PointOnSurface(p.geom)) AS at_center
+           FROM zoning z JOIN parcel p ON ST_Intersects(z.geom, p.geom)
+           WHERE p.apn=%s AND z.source_id=%s ORDER BY share DESC""",
+        (apn, source_id),
+    ).fetchall()
+    # Ignore slivers from digitizing differences between the parcel and zoning layers.
+    return [z for z in zones if (z["share"] or 0) >= 0.02]
+
+
+def _overlays(conn, apn: str) -> list[dict]:
+    return [
+        dict(o)
+        for o in conn.execute(
+            """SELECT o.kind, o.name, o.source_id, o.fetched_at FROM overlay o JOIN parcel p ON ST_Intersects(o.geom, p.geom)
+               WHERE p.apn=%s ORDER BY o.kind""",
+            (apn,),
+        ).fetchall()
+    ]
+
+
+def _county_context(conn, apn: str, county: dict, common: dict) -> ParcelContext:
+    """Unincorporated County land: Title 22 applies (LACC 22.02.030 A.1), with the County's own zoning map."""
+    zones = _zones(conn, apn, "lacounty_zoning")
+    primary = next((z for z in zones if z["at_center"]), zones[0] if zones else None)
+    notes = []
+    if len({z["zone_string"] for z in zones}) > 1:
+        notes.append(
+            "Parcel is split-zoned; the zone at the parcel's interior point is used, and the others are listed."
+        )
+    if not zones:
+        notes.append("No County zoning polygon found for this parcel in the loaded data.")
+    return ParcelContext(
+        status="ok",
+        in_city=False,
+        jurisdiction_hint="Unincorporated Los Angeles County",
+        community_plan_area=None,
+        code_regime=Sourced("LA County Title 22", county["source_id"], county["fetched_at"]),
+        zone_strings=[Sourced(z["zone_string"], z["source_id"], z["fetched_at"]) for z in zones],
+        split_zoned=len({z["zone_string"] for z in zones}) > 1,
+        overlays=_overlays(conn, apn),
+        notes=notes,
+        jurisdiction="lacounty",
+        county_zone=parse_county_zone(primary["zone_string"]) if primary else None,
+        **common,
+    )
+
+
 def resolve(query: str) -> ParcelContext:
     with connect() as conn:
         try:
@@ -120,6 +174,14 @@ def resolve(query: str) -> ParcelContext:
             (apn,),
         ).fetchone()
         if not city:
+            county = conn.execute(
+                """SELECT b.name, b.source_id, b.fetched_at FROM boundary b, parcel p
+                   WHERE p.apn=%s AND b.kind='unincorporated' AND ST_Intersects(b.geom, ST_PointOnSurface(p.geom))
+                   LIMIT 1""",
+                (apn,),
+            ).fetchone()
+            if county:
+                return _county_context(conn, apn, county, ctx_common)
             return ParcelContext(
                 status="outside_city",
                 in_city=False,
@@ -148,16 +210,7 @@ def resolve(query: str) -> ParcelContext:
         else:
             regime_val = Sourced(regime, None, None, "interpretive")
 
-        zones = conn.execute(
-            """SELECT z.zone_string, z.source_id, z.fetched_at,
-                      ST_Area(ST_Transform(ST_Intersection(z.geom, p.geom), 2229)) / NULLIF(ST_Area(ST_Transform(p.geom, 2229)),0) AS share,
-                      ST_Intersects(z.geom, ST_PointOnSurface(p.geom)) AS at_center
-               FROM zoning z JOIN parcel p ON ST_Intersects(z.geom, p.geom)
-               WHERE p.apn=%s ORDER BY share DESC""",
-            (apn,),
-        ).fetchall()
-        # Ignore slivers from digitizing differences between the parcel and zoning layers.
-        zones = [z for z in zones if (z["share"] or 0) >= 0.02]
+        zones = _zones(conn, apn, "lacity_zoning")
         zone_vals = [Sourced(z["zone_string"], z["source_id"], z["fetched_at"]) for z in zones]
         primary = next((z for z in zones if z["at_center"]), zones[0] if zones else None)
         parsed = parse_zone(primary["zone_string"]) if primary else None
@@ -165,11 +218,7 @@ def resolve(query: str) -> ParcelContext:
             regime = "1A"
             regime_val = Sourced("1A", primary["source_id"], primary["fetched_at"])
 
-        overlays = conn.execute(
-            """SELECT o.kind, o.name, o.source_id, o.fetched_at FROM overlay o JOIN parcel p ON ST_Intersects(o.geom, p.geom)
-               WHERE p.apn=%s ORDER BY o.kind""",
-            (apn,),
-        ).fetchall()
+        overlays = _overlays(conn, apn)
 
         notes = []
         if len({z["zone_string"] for z in zones}) > 1:
@@ -188,7 +237,7 @@ def resolve(query: str) -> ParcelContext:
             zone_strings=zone_vals,
             zone=parsed,
             split_zoned=len({z["zone_string"] for z in zones}) > 1,
-            overlays=[dict(o) for o in overlays],
+            overlays=overlays,
             notes=notes,
             **ctx_common,
         )

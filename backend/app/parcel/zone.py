@@ -160,3 +160,63 @@ def parse_ch1a(raw: str) -> Ch1aZone | None:
         return None
     supplemental = tuple(p for g in groups[2:] for p in g.split("-") if p)
     return Ch1aZone(raw, *built, *activity, supplemental)
+
+
+# LA County Title 22 zone symbols (unincorporated County): "R-1", "R-1-7500", "R-A-10000", "R-3-30U", "C-3-DP".
+_COUNTY_COMBINING = {
+    "BE": "Billboard Exclusion",
+    "DP": "Development Program",
+    "P": "Parking",
+    "CRS": "Commercial-Residential",
+}
+
+
+@dataclass(frozen=True)
+class CountyZone:
+    raw: str
+    base: str | None  # "R-1", "R-A", "C-3"
+    lot_area_sqft: int | None = None  # a number over 100 after the symbol: required net lot area (22.110.130 A.3.a.ii)
+    lot_acres: float | None = None  # a number of 100 or less: required gross area in acres (A.3.a.i)
+    units_per_acre: int | None = None  # "30U" (22.06.020)
+    combining: tuple[str, ...] = ()
+    unmodeled: tuple[str, ...] = ()
+
+    @property
+    def family(self) -> str | None:
+        return "COUNTY_R1" if self.base == "R-1" else None
+
+    @property
+    def is_modeled(self) -> bool:
+        return self.family is not None and not self.unmodeled
+
+
+def parse_county_zone(raw: str) -> CountyZone:
+    tokens = [t for t in (raw or "").strip().upper().replace(" ", "").split("-") if t]
+    if not tokens:
+        return CountyZone(raw=raw, base=None, unmodeled=("No zone",))
+    base = tokens[0]
+    rest = tokens[1:]
+    if rest and re.fullmatch(r"[0-9A-Z](?:\.5)?", rest[0]):
+        base, rest = f"{base}-{rest[0]}", rest[1:]
+    area = acres = units = None
+    combining: list[str] = []
+    unmodeled: list[str] = []
+    for t in rest:
+        if re.fullmatch(r"\d+U", t):
+            units = int(t[:-1])
+        elif re.fullmatch(r"[\d,]+(?:\.\d+)?", t):
+            n = float(t.replace(",", ""))
+            if n > 100:
+                area = int(n)
+            else:
+                acres = n
+        elif t in _COUNTY_COMBINING:
+            combining.append(t)
+            unmodeled.append(f"-{t} ({_COUNTY_COMBINING[t]} combining zone) not modeled")
+        else:
+            unmodeled.append(f"-{t} not recognized")
+    if base != "R-1":
+        unmodeled.insert(0, f"Zone {base} is not modeled (only County Zone R-1)")
+    if acres is not None:
+        unmodeled.append(f"Required area of {acres:g} acres not modeled")
+    return CountyZone(raw, base, area, acres, units, tuple(combining), tuple(unmodeled))

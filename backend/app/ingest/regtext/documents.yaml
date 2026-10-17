@@ -253,3 +253,22 @@ documents:
       Saved 2026-10-15 from the viewer's current edition (2026 Rev. 9, "current through legislation
       effective June 30, 2026" per its cover page). The publisher notes postings can lag legislation by up
       to three months. Only Sections 12.x and 13.x are ingested.
+  - id: lacounty_title22
+    title: LA County Code Title 22 (Planning and Zoning), Volume I, Countywide Provisions
+    publisher: Los Angeles County, text copy supplied by the project owner
+    doc_type: zoning_code
+    jurisdiction: Los Angeles County (unincorporated)
+    code_chapter: T22
+    fetch: manual
+    url: https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances
+    local_path: data/manual/lacounty_title22_vol1.txt
+    headings: title22
+    effective_note: >-
+      Edition not stated in the copy. It uses the 2019 reorganized numbering and still has "Second Units"
+      (22.140.550) rather than Accessory Dwelling Units, so it predates the County's 2020 ADU amendments; later
+      amendments may not be reflected. Every value read from it is shown as an interpretation.
+    # Running page headers repeat the chapter title on every page.
+    drop_patterns:
+      - '(?m)^Chapter 22\.\d+ [^\n]*\n'
+    # Measurement rules, zones and suffixes, residential zones, hillside management and general site regulations.
+    section_prefixes: ["LACC 22.04.", "LACC 22.06.", "LACC 22.18.", "LACC 22.102.", "LACC 22.110."]

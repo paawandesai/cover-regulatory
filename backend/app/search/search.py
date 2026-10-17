@@ -86,9 +86,27 @@ _COLUMNS = """c.id, c.section_id, c.heading, c.text, c.document_id, c.source_url
               c.effective_date::text, c.code_chapter, c.mock"""
 
 
-def search(query: str, k: int = 10, document_ids: list[str] | None = None, mode: str = "hybrid") -> list[Hit]:
-    """mode "full_text" or "embedding" runs one retriever alone (plus the section-id lookup), for evaluation."""
-    doc_filter = ("AND c.document_id = ANY(%(docs)s) " if document_ids else "") + "AND NOT c.mock"
+JURISDICTION_FILTERS = {
+    # State law applies in both; Title 22 is the County's code, everything else loaded is the City's.
+    "city": "AND c.code_chapter IS DISTINCT FROM 'T22' ",
+    "county": "AND (c.code_chapter = 'T22' OR c.document_id LIKE 'gov\\_%%') ",
+}
+
+
+def search(
+    query: str,
+    k: int = 10,
+    document_ids: list[str] | None = None,
+    mode: str = "hybrid",
+    jurisdiction: str | None = None,
+) -> list[Hit]:
+    """mode "full_text" or "embedding" runs one retriever alone (plus the section-id lookup), for evaluation.
+    jurisdiction "city" or "county" keeps to the text that governs there."""
+    doc_filter = (
+        ("AND c.document_id = ANY(%(docs)s) " if document_ids else "")
+        + JURISDICTION_FILTERS.get(jurisdiction or "", "")
+        + "AND NOT c.mock"
+    )
     params: dict = {"q": query, "n": CANDIDATES, "docs": document_ids}
     rows: dict[str, dict] = {}
     scores: dict[str, float] = {}

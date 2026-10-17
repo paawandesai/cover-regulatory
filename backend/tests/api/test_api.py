@@ -359,6 +359,45 @@ def test_chat_keeps_only_checked_quotes_and_never_sends_the_apn(monkeypatch, cli
     assert "2121005008" not in prompt and "Reseda" not in prompt
 
 
+def test_chat_on_a_county_parcel_searches_county_text_and_names_the_county(monkeypatch, client):
+    from types import SimpleNamespace
+
+    from app.api import chat as chat_mod
+
+    sent, scopes = {}, []
+
+    class FakeMessages:
+        def parse(self, **kw):
+            sent.update(kw)
+            return SimpleNamespace(parsed_output=chat_mod.Answer(sentences=[]), stop_reason="end_turn", model="fake")
+
+    monkeypatch.setenv("ANTHROPIC_COVER_API_KEY", "test-key-not-real")
+    get_settings.cache_clear()
+    monkeypatch.setattr(chat_mod.anthropic, "Anthropic", lambda **_: SimpleNamespace(messages=FakeMessages()))
+    monkeypatch.setattr("app.search.search.search", lambda *a, **k: scopes.append(k.get("jurisdiction")) or [])
+    r = client.post("/api/chat", json={"apn": "4142004002", "question": "How tall can a garage be?"})
+    assert r.status_code == 200
+    assert scopes == ["county"]
+    assert 'Say "the County"' in sent["system"] and "Ask the County" in r.json()["answer"]
+    # The citations sent along are the County's and state law's, never the City's.
+    assert "LAMC" not in sent["messages"][0]["content"]
+
+
+def test_search_scoped_by_jurisdiction():
+    from app.search.search import JURISDICTION_FILTERS
+
+    with connect() as conn:
+        for scope, ok in (
+            ("city", lambda r: r["code_chapter"] != "T22"),
+            ("county", lambda r: r["code_chapter"] == "T22" or r["document_id"].startswith("gov_")),
+        ):
+            rows = conn.execute(
+                "SELECT c.document_id, c.code_chapter FROM reg_chunk c WHERE true "
+                + JURISDICTION_FILTERS[scope].replace("%%", "%")
+            ).fetchall()
+            assert rows and all(ok(r) for r in rows), scope
+
+
 def test_chat_with_nothing_checked_says_not_found():
     from app.api import chat as chat_mod
 

@@ -154,10 +154,14 @@ def get_chunk(chunk_id: str):
 
 
 @app.get("/api/search")
-def search_chunks(q: str = Query(min_length=2, max_length=300), k: int = Query(8, ge=1, le=25)):
+def search_chunks(
+    q: str = Query(min_length=2, max_length=300),
+    k: int = Query(8, ge=1, le=25),
+    jurisdiction: str | None = Query(None, pattern="^(city|county)$"),
+):
     from app.search.search import search  # loads the embedding model on first use
 
-    return [h.__dict__ for h in search(q, k=k)]
+    return [h.__dict__ for h in search(q, k=k, jurisdiction=jurisdiction)]
 
 
 # --- assessment -------------------------------------------------------------------------------------------
