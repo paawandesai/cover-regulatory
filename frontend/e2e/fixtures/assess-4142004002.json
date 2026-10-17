@@ -1,0 +1,931 @@
+{
+ "ai_disclosure": "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the engine does not model. In this demo that review was an AI review applied on the project owner's instruction, not a person's; each value's source panel says which. No AI model is used to compute this assessment.",
+ "disclaimers": [
+  "Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS before relying on it.",
+  "Parcel boundaries and attributes come from the Los Angeles County Assessor's open parcel data, provided for informational purposes; it may not be suitable for legal, engineering, or surveying use."
+ ],
+ "generated_at": "2026-10-17T00:00:00Z",
+ "geometry": {
+  "buildings": [
+   {
+    "coordinates": [
+     [
+      [
+       -118.366259336,
+       33.921862442
+      ],
+      [
+       -118.366363943,
+       33.921862442
+      ],
+      [
+       -118.366363943,
+       33.921762285
+      ],
+      [
+       -118.366259336,
+       33.921762285
+      ],
+      [
+       -118.366259336,
+       33.921862442
+      ]
+     ]
+    ],
+    "type": "Polygon"
+   }
+  ],
+  "envelope": {
+   "coordinates": [
+    [
+     [
+      -118.36639037596584,
+      33.92184190929066
+     ],
+     [
+      -118.36636730742374,
+      33.92186115237475
+     ],
+     [
+      -118.36625122538591,
+      33.921861175640785
+     ],
+     [
+      -118.3662511779523,
+      33.9216963055752
+     ],
+     [
+      -118.3663664473905,
+      33.921696282472396
+     ],
+     [
+      -118.36638952664961,
+      33.921715510550925
+     ],
+     [
+      -118.36641670889517,
+      33.92171548668143
+     ],
+     [
+      -118.36641674551326,
+      33.9218418960641
+     ],
+     [
+      -118.36639037596584,
+      33.92184190929066
+     ]
+    ]
+   ],
+   "type": "Polygon"
+  },
+  "envelope_area_sqft": 2850,
+  "front_mid": [
+   -118.36618527873053,
+   33.921778753234754
+  ],
+  "label": "illustrative, not survey-grade",
+  "lot": {
+   "coordinates": [
+    [
+     [
+      -118.3661858279894,
+      33.921874927880715
+     ],
+     [
+      -118.36635083426273,
+      33.92187489378221
+     ],
+     [
+      -118.36639037596584,
+      33.92184190929066
+     ],
+     [
+      -118.36646618774999,
+      33.921841871249036
+     ],
+     [
+      -118.36646601036394,
+      33.92177869860608
+     ],
+     [
+      -118.36646583261768,
+      33.92171544352891
+     ],
+     [
+      -118.36638952664961,
+      33.921715510550925
+     ],
+     [
+      -118.36634996038048,
+      33.921682546602064
+     ],
+     [
+      -118.36618525113683,
+      33.921682579798464
+     ],
+     [
+      -118.3661858279894,
+      33.921874927880715
+     ]
+    ]
+   ],
+   "type": "Polygon"
+  },
+  "yards": [
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.36641674551326,
+        33.9218418960641
+       ],
+       [
+        -118.36641670889517,
+        33.92171548668143
+       ],
+       [
+        -118.36646583261768,
+        33.92171544352891
+       ],
+       [
+        -118.36646601036394,
+        33.92177869860608
+       ],
+       [
+        -118.36646618774999,
+        33.921841871249036
+       ],
+       [
+        -118.36641674551326,
+        33.9218418960641
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "rear"
+   },
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.3661858279894,
+        33.921874927880715
+       ],
+       [
+        -118.36618525113683,
+        33.921682579798464
+       ],
+       [
+        -118.36625117399952,
+        33.92168256653902
+       ],
+       [
+        -118.36625122933863,
+        33.92187491439255
+       ],
+       [
+        -118.3661858279894,
+        33.921874927880715
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "front"
+   },
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.36635083426273,
+        33.92187489378221
+       ],
+       [
+        -118.36625122933863,
+        33.92187491439255
+       ],
+       [
+        -118.36625122538591,
+        33.921861175640785
+       ],
+       [
+        -118.36636730742374,
+        33.92186115237475
+       ],
+       [
+        -118.36635083426273,
+        33.92187489378221
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "side"
+   },
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.3663664473905,
+        33.921696282472396
+       ],
+       [
+        -118.3662511779523,
+        33.9216963055752
+       ],
+       [
+        -118.36625117399952,
+        33.92168256653902
+       ],
+       [
+        -118.36634996038048,
+        33.921682546602064
+       ],
+       [
+        -118.3663664473905,
+        33.921696282472396
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "side"
+   }
+  ],
+  "yards_ft": {
+   "front": 20.0,
+   "rear": 15.0,
+   "side": 5.0
+  }
+ },
+ "items": [
+  {
+   "citations": [],
+   "coverage": null,
+   "explanation": "Computed from the County parcel outline: a fitted rectangle, with the front taken as the street-facing side. Illustrative, not survey-grade.",
+   "family": "parcel",
+   "id": "lot_dimensions",
+   "label": "approximate",
+   "label_text": "Approximate",
+   "rule_id": "GEOM_ORIENTED_RECTANGLE",
+   "source": null,
+   "title": "Lot width x depth (from parcel shape)",
+   "unit": "ft",
+   "value": "70 x 85"
+  },
+  {
+   "citations": [],
+   "coverage": null,
+   "explanation": "Approximate outlines traced from imagery by machine learning; they can miss, merge or misplace buildings and may predate recent demolition or construction. Not a survey.",
+   "family": "parcel",
+   "id": "existing_footprint",
+   "label": "approximate",
+   "label_text": "Approximate",
+   "rule_id": null,
+   "source": {
+    "attribution": "Building footprints \u00a9 Microsoft, ODbL",
+    "dataset": "ms_global_building_footprints",
+    "fetched_at": "2026-10-17T16:09:56.201147+00:00"
+   },
+   "title": "Existing buildings (outline)",
+   "unit": null,
+   "value": "1 building, about 1,157 sq ft"
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 840,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 843,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 844,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 841,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "20 ft for Zone R-1 (Table 22.18.040-A). Where other lots on the block have buildings, a front yard as deep as the average of the two neighboring lots is allowed instead (22.110.080 B.1); not computed. Read from a copy of Title 22 whose edition is not stated (2019 numbering, before the County's 2020 ADU amendments); later amendments may change this.",
+   "family": "county_r1_envelope",
+   "id": "front_yard",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "COUNTY_R1_YARDS",
+   "source": null,
+   "title": "Front yard (minimum)",
+   "unit": "ft",
+   "value": 20.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 840,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 843,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 844,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 841,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "5 ft on each interior side for Zone R-1 (Table 22.18.040-A). On a corner lot the street side yard is 5 ft, and more on a reversed corner lot (Table 22.18.040-A); corner lots are not detected here. Read from a copy of Title 22 whose edition is not stated (2019 numbering, before the County's 2020 ADU amendments); later amendments may change this.",
+   "family": "county_r1_envelope",
+   "id": "side_yard",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "COUNTY_R1_YARDS",
+   "source": null,
+   "title": "Side yards (minimum, each)",
+   "unit": "ft",
+   "value": 5.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 840,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 843,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 844,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 841,
+     "quote": "20 5 10 5 15",
+     "quote_end": 287,
+     "quote_start": 275,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "15 ft for Zone R-1 (Table 22.18.040-A). Read from a copy of Title 22 whose edition is not stated (2019 numbering, before the County's 2020 ADU amendments); later amendments may change this.",
+   "family": "county_r1_envelope",
+   "id": "rear_yard",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "COUNTY_R1_YARDS",
+   "source": null,
+   "title": "Rear yard (minimum)",
+   "unit": "ft",
+   "value": 15.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lacounty_title22#lacc-22-18-040-b#1",
+     "code_chapter": "T22",
+     "fragment_id": 845,
+     "quote": "and structure shall not exceed a height of 35 feet above grade.",
+     "quote_end": 158,
+     "quote_start": 95,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.18.040 B",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "No building or structure on an R-1 lot may be more than 35 ft above grade (22.18.040 B.1). Title 22 sets no floor area ratio for Zone R-1 in the sections loaded here; a Community Standards District can add one. Read from a copy of Title 22 whose edition is not stated (2019 numbering, before the County's 2020 ADU amendments); later amendments may change this.",
+   "family": "county_r1_envelope",
+   "id": "max_height",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "COUNTY_R1_HEIGHT",
+   "source": null,
+   "title": "Maximum height",
+   "unit": "ft",
+   "value": 35.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lacounty_title22#lacc-22-110-130-a#2",
+     "code_chapter": "T22",
+     "fragment_id": 851,
+     "quote": "In Zones R-1, R-2, R-3-30U, R-4-50U, R-A, RPD, A-1, R-R, CPD, and M-3, the same as in Zone R-1-5000;",
+     "quote_end": 2097,
+     "quote_start": 1996,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.110.130 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    },
+    {
+     "chunk_id": "lacounty_title22#lacc-22-110-130-a#2",
+     "code_chapter": "T22",
+     "fragment_id": 852,
+     "quote": "A net area of the number of square feet shown by such number if such number is greater than 100.",
+     "quote_end": 1550,
+     "quote_start": 1453,
+     "retrieved_at": "2026-10-17 16:10:17.389339+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.110.130 A",
+     "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "In R-1, with no number after the zone symbol, Zone R-1 takes the required area of Zone R-1-5000 (22.110.130 A.3, A.4). This lot is 5,259 sq ft (Assessor), so it meets that. A lot created before the area requirement by deed or recorded map keeps its own area as the required area (A.1, A.2), and a flag lot's access strip does not count (A.3.b). Read from a copy of Title 22 whose edition is not stated (2019 numbering, before the County's 2020 ADU amendments); later amendments may change this.",
+   "family": "county_r1_envelope",
+   "id": "lot_minimum",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "COUNTY_LOT_AREA",
+   "source": null,
+   "title": "Required lot area",
+   "unit": "sqft",
+   "value": 5000
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+     "code_chapter": null,
+     "fragment_id": 159,
+     "quote": "(A) A total floor area limitation of not more than 800 square feet of livable space.",
+     "quote_end": 1512,
+     "quote_start": 1428,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66323(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+     "code_chapter": null,
+     "fragment_id": 158,
+     "quote": "(2) One detached, new construction, accessory dwelling unit that does not exceed four-foot side and rear yard setbacks for a lot with a proposed or existing single-family dwelling.",
+     "quote_end": 1343,
+     "quote_start": 1163,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66323(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+     "code_chapter": null,
+     "fragment_id": 145,
+     "quote": "A height of 16 feet for a detached accessory dwelling unit on a lot with an existing or proposed single family or multifamily dwelling unit.",
+     "quote_end": 1384,
+     "quote_start": 1244,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66321(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
+    }
+   ],
+   "coverage": null,
+   "explanation": "One detached new ADU up to 800 sq ft, with side and rear setbacks of no more than 4 ft and a height of at least 16 ft allowed, on a lot with an existing or proposed single-family home. State law requires counties as well as cities to approve it ministerially (Gov. Code 66323). The County's own ADU ordinance is not in the copy loaded here, which predates it.",
+   "family": "adu",
+   "id": "adu_state_detached",
+   "label": "derived",
+   "label_text": "Derived from rule ADU_STATE_DETACHED",
+   "rule_id": "ADU_STATE_DETACHED",
+   "source": null,
+   "title": "Detached ADU the County must approve (state law)",
+   "unit": "sqft",
+   "value": 800.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66310_article1#gov--code-66313-d#1",
+     "code_chapter": null,
+     "fragment_id": 123,
+     "quote": "\u201cJunior accessory dwelling unit\u201d means a unit that is no more than 500 square feet of interior livable space in size and contained entirely within a single-family residence.",
+     "quote_end": 177,
+     "quote_start": 4,
+     "retrieved_at": "2026-10-15 15:58:41.877473+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66313(d)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66313"
+    },
+    {
+     "chunk_id": "gov_66310_article3#gov--code-66333-a#1",
+     "code_chapter": null,
+     "fragment_id": 174,
+     "quote": "(a) Limit the number of junior accessory dwelling units to one per residential lot zoned for single-family residences with a single-family residence built, or proposed to be built, on the lot.",
+     "quote_end": 192,
+     "quote_start": 0,
+     "retrieved_at": "2026-10-15 15:58:41.883036+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66333(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66333"
+    }
+   ],
+   "coverage": null,
+   "explanation": "One JADU of up to 500 sq ft within the single-family home (Gov. Code 66333). A deed restriction is required, and the owner must live on the lot if the JADU shares a bathroom with the home.",
+   "family": "jadu",
+   "id": "jadu",
+   "label": "derived",
+   "label_text": "Derived from rule JADU",
+   "rule_id": "JADU",
+   "source": null,
+   "title": "Junior ADU (inside the home)",
+   "unit": "sqft",
+   "value": 500.0
+  },
+  {
+   "citations": [],
+   "coverage": null,
+   "explanation": "Title 22's use regulations for guest houses (22.18.030, 22.140) are not modeled here.",
+   "family": "flag",
+   "id": "guest_house",
+   "label": "flag",
+   "label_text": "Flag, not evaluated",
+   "rule_id": "FLAG_COUNTY_GUEST_HOUSE",
+   "source": null,
+   "title": "Guest house",
+   "unit": null,
+   "value": null
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_65852_21#gov--code-65852-21-a#1",
+     "code_chapter": null,
+     "fragment_id": 615,
+     "quote": "A proposed housing development containing no more than two residential units within a single-family residential zone shall be considered ministerially, without discretionary review or a hearing, if the proposed housing development meets all of the following requirements:",
+     "quote_end": 286,
+     "quote_start": 15,
+     "retrieved_at": "2026-10-15 15:58:41.890592+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 65852.21(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
+    },
+    {
+     "chunk_id": "gov_65852_21#gov--code-65852-21-b#1",
+     "code_chapter": null,
+     "fragment_id": 619,
+     "quote": "The local agency shall not impose objective zoning standards, objective subdivision standards, and objective design standards that would have the effect of physically precluding the construction of up to two units or that would physically preclude either of the two units from being at least 800 square feet in floor area.",
+     "quote_end": 584,
+     "quote_start": 262,
+     "retrieved_at": "2026-10-15 15:58:41.890592+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 65852.21(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
+    },
+    {
+     "chunk_id": "gov_65852_21#gov--code-65852-21-b#1",
+     "code_chapter": null,
+     "fragment_id": 621,
+     "quote": "Notwithstanding subparagraph (A), in all other circumstances not described in clause (i), a local agency may require a setback of up to four feet from the side and rear lot lines.",
+     "quote_end": 969,
+     "quote_start": 790,
+     "retrieved_at": "2026-10-15 15:58:41.890592+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 65852.21(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
+    },
+    {
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "code_chapter": null,
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
+     "quote_end": 1136,
+     "quote_start": 736,
+     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "review_status": "code-cited",
+     "section_id": "Gov. Code 65913.4(a)",
+     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "Up to 2 homes on the lot, approved ministerially (Gov. Code 65852.21(a)). Local standards may not prevent two units of at least 800 sq ft each, and side and rear setbacks may be at most 4 ft (none for an existing structure rebuilt in place) (65852.21(b)). Checked: the lot is in a single-family zone (R-1); no historic preservation overlay (HPOZ) is mapped here. The loaded maps show no Very High fire hazard zone, earthquake fault zone or 100-year flood plain here (Gov. Code 65913.4(a)(6)(D), (F) and (G)). Still to confirm: no demolition or alteration of rent-restricted or rent-controlled housing, or housing a tenant occupied in the last 3 years; no units withdrawn from rent under the Ellis Act in the last 15 years; the Gov. Code 65913.4(a)(6) sites not mapped here: farmland (B), wetlands (C), listed hazardous waste sites (E), a regulatory floodway (H), natural community conservation plan lands (I), protected species habitat (J) and conservation easements (K). SB 9 uses that section as it read on 2021-09-16; the copy loaded here is the 2026 text, whose (B)-(K) list the same kinds of site.",
+   "family": "sb9",
+   "id": "sb9_two_unit",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "SB9",
+   "source": null,
+   "title": "SB 9 two-unit development",
+   "unit": "units",
+   "value": 2.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-a#1",
+     "code_chapter": null,
+     "fragment_id": 633,
+     "quote": "(1) The parcel map subdivides an existing parcel to create no more than two new parcels of approximately equal lot area provided that one parcel shall not be smaller than 40 percent of the lot area of the original parcel proposed for subdivision.",
+     "quote_end": 561,
+     "quote_start": 315,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66411.7(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-a#1",
+     "code_chapter": null,
+     "fragment_id": 635,
+     "quote": "(2) (A) Except as provided in subparagraph (B), both newly created parcels are no smaller than 1,200 square feet.",
+     "quote_end": 676,
+     "quote_start": 563,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66411.7(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-c#1",
+     "code_chapter": null,
+     "fragment_id": 641,
+     "quote": "agency may require a setback of up to four feet from the side and rear lot lines.",
+     "quote_end": 1142,
+     "quote_start": 1061,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66411.7(c)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-j#1",
+     "code_chapter": null,
+     "quote": "more than two units on a parcel created through the exercise of the authority contained within this section.\n\n(2) For the purposes of this section, \u201cunit\u201d means\nany dwelling unit, including, but not limited to, a unit or units created pursuant to Section 65852.21, a primary dwelling, an accessory dwelling unit as defined in subdivision (a) of Section 66313, or a junior accessory dwelling unit as d",
+     "quote_end": 646,
+     "quote_start": 246,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "code-cited",
+     "section_id": "Gov. Code 66411.7(j)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "code_chapter": null,
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
+     "quote_end": 1136,
+     "quote_start": 736,
+     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "review_status": "code-cited",
+     "section_id": "Gov. Code 65913.4(a)",
+     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "Two new lots of about equal size, neither under 40% of the lot (2,104 sq ft) nor under 1,200 sq ft (Gov. Code 66411.7(a)). This 5,259 sq ft lot can be split into two lots of at least 2,104 sq ft (an equal split gives 2,630 sq ft each). Each new lot can then have up to two homes; the County need not allow more (66411.7(j)). The owner must sign an affidavit to live in one unit for 3 years, and a lot created by an earlier SB 9 split cannot be split again (66411.7). The loaded maps show no Very High fire hazard zone, earthquake fault zone or 100-year flood plain here (Gov. Code 65913.4(a)(6)(D), (F) and (G)). Still to confirm: no demolition or alteration of rent-restricted or rent-controlled housing, or housing a tenant occupied in the last 3 years; no units withdrawn from rent under the Ellis Act in the last 15 years; the Gov. Code 65913.4(a)(6) sites not mapped here: farmland (B), wetlands (C), listed hazardous waste sites (E), a regulatory floodway (H), natural community conservation plan lands (I), protected species habitat (J) and conservation easements (K). SB 9 uses that section as it read on 2021-09-16; the copy loaded here is the 2026 text, whose (B)-(K) list the same kinds of site.",
+   "family": "sb9",
+   "id": "sb9_lot_split",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "SB9",
+   "source": null,
+   "title": "SB 9 lot split",
+   "unit": null,
+   "value": true
+  }
+ ],
+ "notes": [
+  "This parcel is in unincorporated Los Angeles County, so the County's zoning code (Title 22) applies, not the City's. Title 22 was read from a copy whose edition is not stated, so every County value is an Interpretation."
+ ],
+ "parcel": {
+  "apn": "4142004002",
+  "items": [
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "lot_area",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_parcels",
+     "fetched_at": "2026-10-17T16:09:37.997997+00:00"
+    },
+    "title": "Lot area",
+    "unit": "sqft",
+    "value": 5259
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "zone",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_zoning",
+     "fetched_at": "2026-10-17T16:06:16.435031+00:00"
+    },
+    "title": "Zone",
+    "unit": null,
+    "value": "R-1"
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": "Not in the loaded data.",
+    "family": "parcel",
+    "id": "community_plan_area",
+    "label": "uncited",
+    "label_text": "No cited source found",
+    "rule_id": null,
+    "source": null,
+    "title": "Community Plan Area",
+    "unit": null,
+    "value": null
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "code_regime",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_unincorporated",
+     "fetched_at": "2026-10-17T16:06:26.443079+00:00"
+    },
+    "title": "Zoning code in effect",
+    "unit": null,
+    "value": "LA County Title 22"
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "existing",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_parcels",
+     "fetched_at": "2026-10-17T16:09:37.997997+00:00"
+    },
+    "title": "Existing building (Assessor)",
+    "unit": null,
+    "value": {
+     "bathrooms": 1,
+     "bedrooms": 3,
+     "sqft_main": 996,
+     "units": 1,
+     "year_built": 1944
+    }
+   }
+  ],
+  "jurisdiction": "Unincorporated Los Angeles County",
+  "matched_by": "apn"
+ },
+ "project": null,
+ "status": "ok",
+ "summary": {
+  "answer": "A single-family home up to 35 ft high, with yards of 20 ft front, 5 ft each side and 15 ft rear. Plus one ADU (detached, 800 sq ft that the County must approve) and one JADU of up to 500 sq ft inside the home (Gov. Code 66323). SB 9 may also allow two homes or a lot split, to confirm.",
+  "confidence": "7 values to confirm with the County.",
+  "counts": {
+   "approximate": 2,
+   "derived": 2,
+   "flag": 1,
+   "interpretive": 7
+  },
+  "paths": []
+ }
+}

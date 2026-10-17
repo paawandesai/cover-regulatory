@@ -77,6 +77,23 @@ frontend:
     reports:
       junit: frontend/vitest-junit.xml
 
+# Browser tests: the built app in Chromium, with the API answered from recorded fixtures (frontend/e2e/fixtures).
+e2e:
+  stage: check
+  image: mcr.microsoft.com/playwright:v1.56.1-noble
+  before_script:
+    - cd frontend && npm ci --no-audit --no-fund
+  script:
+    - npx vite build
+    - npx playwright test
+  artifacts:
+    when: always
+    paths:
+      - frontend/test-results/
+    expire_in: 7 days
+    reports:
+      junit: frontend/e2e-junit.xml
+
 # The AWS production setup (infra/aws): format, validate, and apply it to mocked providers. No AWS credentials are
 # used and nothing is created.
 terraform:
