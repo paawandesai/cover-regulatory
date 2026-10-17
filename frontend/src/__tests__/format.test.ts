@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { citeLabel, formatApn, formatExisting, formatValue } from '../format'
-import type { Item } from '../types'
+import { authority, authorityOf, citeLabel, formatApn, formatExisting, formatValue, labelText } from '../format'
+import type { Assessment, Item } from '../types'
 
 const item = (over: Partial<Item>): Item => ({
   id: 'x',
@@ -47,5 +47,14 @@ describe('helpers', () => {
     expect(citeLabel(item({ citations: [c('LAMC 12.08 C.2'), c('LAMC 12.08 C.2'), c('LAMC 12.21 C.10')] }))).toBe(
       'LAMC 12.08 C.2 +1',
     )
+  })
+  it('names the County for an unincorporated parcel', () => {
+    const a = (value: string) => ({ parcel: { items: [{ id: 'code_regime', value }] } }) as unknown as Assessment
+    expect(authorityOf(a('LA County Title 22'))).toBe('County')
+    expect(authorityOf(a('LAMC Chapter I'))).toBe('City')
+    authority.value = 'County'
+    expect(labelText('interpretive')).toBe('Interpretation, confirm with County')
+    authority.value = 'City'
+    expect(labelText('interpretive')).toBe('Interpretation, confirm with City')
   })
 })

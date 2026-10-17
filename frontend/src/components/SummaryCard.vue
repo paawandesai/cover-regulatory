@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { LABEL_TEXT } from '../format'
+import { labelText } from '../format'
 import type { Label, Summary } from '../types'
 import LabelBadge from './LabelBadge.vue'
 
@@ -16,7 +16,7 @@ const counts = computed(() => ORDER.filter((l) => props.summary.counts[l]).map((
     <p class="small">{{ summary.confidence }}</p>
     <div class="counts" :aria-label="'Values by label'">
       <span v-for="c in counts" :key="c.label" class="count">
-        <LabelBadge :label="c.label" :text="`${c.n} · ${LABEL_TEXT[c.label]}`" />
+        <LabelBadge :label="c.label" :text="`${c.n} · ${labelText(c.label)}`" />
       </span>
     </div>
     <details v-if="summary.paths.length">

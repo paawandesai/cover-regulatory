@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { formatApn, formatDate, formatValue } from '../format'
+import { computed, watchEffect } from 'vue'
+import { authority, authorityOf, formatApn, formatDate, formatValue } from '../format'
 import type { Assessment, Item, Report } from '../types'
 import LabelBadge from './LabelBadge.vue'
 
 // The printable body of a client report: the frozen assessment, each value with its label and sources.
 const props = defineProps<{ report: Report }>()
 const a = computed(() => props.report.snapshot as Assessment)
+watchEffect(() => (authority.value = authorityOf(a.value)))
 
 const SECTIONS: [string, string[]][] = [
   ['Zone envelope', ['r1_envelope', 'r2_envelope', 're_envelope', 'county_r1_envelope']],
@@ -93,7 +94,7 @@ const sections = (i: Item) => [...new Map(i.citations.map((c) => [c.section_id, 
       <p>{{ a.ai_disclosure }}</p>
       <p v-for="d in a.disclaimers" :key="d">{{ d }}</p>
       <p>
-        Labels: "Derived from rule" is computed from reviewed regulation text; "Interpretation" needs confirming with the City; "Approximate"
+        Labels: "Derived from rule" is computed from reviewed regulation text; "Interpretation" needs confirming with the {{ authority }}; "Approximate"
         rests on map outlines; "Flag" is detected, not evaluated. The assessment is as of the date above; regulations and data may have changed
         since.
       </p>
