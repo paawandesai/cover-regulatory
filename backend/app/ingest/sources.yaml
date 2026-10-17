@@ -53,6 +53,15 @@ datasets:
     overlay_kind: county_csd
     scope: study_areas
 
+  - id: lacounty_pasd
+    name: Planning Area Standards Districts (LA County Title 22 Division 10)
+    publisher: LA County Department of Regional Planning (GIS-NET)
+    service_url: https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/GISNET_Public/MapServer/440
+    license: LA County terms of use (informational). Used for flagging only.
+    target: overlay
+    overlay_kind: county_pasd
+    scope: study_areas
+
   - id: lacounty_hma
     name: Hillside Management Areas (LA County, slopes of 25 percent or more)
     publisher: LA County Department of Regional Planning (GIS-NET)

@@ -130,6 +130,8 @@ table at load time. Summary:
 | HPOZ, Specific Plans | LA City Planning | City Planning web terms |
 | Coastal Zone | LA County Regional Planning (Coastal Commission boundary) | County terms |
 | Palisades Fire perimeter 2025 | LA County Public Works | County terms |
+| Planning Area Standards Districts | LA County Regional Planning (GIS-NET) | County terms; flagging only |
+| County ordinances (ADU Ord. 2025-0029, South Bay Area Plan Ord.) | LA County Board of Supervisors (file.lacounty.gov) | Public law; text not redistributed in the repo |
 | Building footprints (Global ML Building Footprints, tile 023012311) | Microsoft | ODbL 1.0, kept in a separate table and attributed (see Notes) |
 | Address geocoding fallback | US Census Geocoder | Public domain (US Government work); called at query time with the typed address only |
 | Regulation text (LAMC Chapter I, City ordinances and ZA memos, Gov. Code) | City Clerk, City Planning, State of California | Enacted law and public records. LAMC and Gov. Code pages were saved by hand, not crawled; Gov. Code 65913.4 is a FindLaw page printed by the project owner. The files stay out of git (`data/manual/`) |

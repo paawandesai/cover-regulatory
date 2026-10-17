@@ -171,6 +171,7 @@ def _label(doc: dict) -> str:
         "ch1a_art6": "Ch. 1A",
         "lacounty_title22": "LACC",
         "lacounty_adu_ord_2025": "LACC",
+        "lacounty_south_bay_pasd": "LACC",
         "hcd_lacounty_adu_2025": "HCD letter",
     }.get(doc["id"], "Gov. Code" if doc["doc_type"] == "statute" else doc["title"])
 
