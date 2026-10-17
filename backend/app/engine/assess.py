@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 
 from app.db.connection import connect
 from app.engine import rules as R
+from app.engine.ch1a import ch1a_items
 from app.engine.geometry import envelope, lot_frame
 from app.engine.item import Item
 from app.engine.item import chunk_citation as _chunk_citation
@@ -20,7 +21,7 @@ from app.engine.project import ProjectInputs, check_project, summarize
 from app.engine.zones import r2_items, re_items
 from app.parcel.provenance import Sourced
 from app.parcel.resolve import ParcelContext, resolve
-from app.parcel.zone import R1_VARIATION
+from app.parcel.zone import R1_VARIATION, parse_ch1a
 
 COUNTY_DISCLAIMER = (
     "Parcel boundaries and attributes come from the Los Angeles County Assessor's open parcel data, provided for "
@@ -1016,10 +1017,21 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
         ]
         return result
     if ctx.status == "regime_not_modeled":
+        z1a = parse_ch1a(ctx.zone_strings[0].value) if ctx.zone_strings else None
         result["notes"].append(
-            "This parcel is under the City's new Zoning Code (Chapter 1A), which this tool does "
-            "not model. Chapter I rules would be wrong here, so none are shown."
+            "This parcel is under the City's new Zoning Code (Chapter 1A). Chapter I rules would be wrong here, so "
+            "none are shown."
+            + (
+                " Only the zone string and the number of homes its Density District allows are modeled."
+                if z1a
+                else " This tool does not model it."
+            )
         )
+        if z1a:
+            with connect() as conn:
+                lot = float(ctx.lot_area_sqft.value) if ctx.lot_area_sqft else None
+                items = ch1a_items(conn, z1a, lot, _zone_source(ctx))
+            result["items"] = [asdict(i) | {"label_text": i.label_text} for i in items]
         return result
     if not (ctx.zone and ctx.zone.family):
         result["status"] = "zone_not_modeled"

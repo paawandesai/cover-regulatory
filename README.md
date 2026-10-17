@@ -50,7 +50,7 @@ No AI model runs when you ask for an assessment. The AI work happens once, at in
 
 ## What it does NOT do
 - It does not cover jurisdictions outside the City of Los Angeles. Such parcels get an explicit "outside City of Los Angeles" result.
-- It does not model LAMC Chapter 1A (the new Zoning Code, in effect in the Downtown and Boyle Heights Community Plan Areas). Those parcels get a "code regime not modeled" result.
+- It models only a small part of LAMC Chapter 1A (the new Zoning Code, in effect in the Downtown and Boyle Heights Community Plan Areas). Those parcels still get a "code regime not modeled" result, with no Chapter I rules, plus their zone string split into its five districts (Article 1) and the number of homes their Density District allows (Article 6, for example 2 per lot in 2L, or one per 1,500 sq ft in 15). Form, frontage, development standards, use and the CPIO (Articles 2 to 5) are not loaded, so no envelope is shown.
 - It models the R1 zone family (with its Hillside, Coastal Zone and variation rules) and flat R2 and RE lots in Height District 1. RS, RD, R3 and the other multiple-dwelling zones are not modeled. HPOZs, specific plans, fire hazard zone rules, and Hillside grading and access rules are detected and flagged, not applied.
 - Hillside floor area depends on slope bands estimated from the USGS 3DEP elevation model on a grid of about 3 ft; the City requires a surveyed slope analysis map, which can differ. A Hillside lot with no slope estimate has its floor area withheld.
 - The fire hazard zone applied is the City's current map (LA GeoHub). CAL FIRE's 2025 recommended map is loaded for comparison; in the loaded areas it adds no City lots.
