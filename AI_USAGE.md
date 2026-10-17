@@ -6,6 +6,9 @@ This repository is written with Claude Code (Anthropic) working with the develop
 ## Model used by the application
 Configured by `LLM_MODEL_ID` (Anthropic API). The model id, the served model and the prompt version are recorded on every extraction run (`extraction_run.model_id`, `served_model`, `prompt_version`). Explanations shown in the app are fixed templates written in code, not model output, and no model runs when an assessment is requested. The one model call at query time is the optional follow-up chat (`backend/app/api/chat.py`, prompt `chat-v1`, model from `LLM_MODEL_ID`): its answer is shown as AI-written, each quote is checked verbatim against the source chunk, sentences that fail are removed, and the answer carries "Interpretation, confirm with the City". The model never sees the APN or address.
 
+## Human review of the AI-approved rules
+On 2026-10-17 the project owner (Paawan) was sent every AI-approved rule in a review sheet with its source quote and link, and chose to approve the 356 that the engine reads in assessments. They are recorded under his name (`reviewed_by = 'Paawan'`) with `python -m app.extract.human_review backend/data/verification/2026-10-17-paawan-review.csv --reviewer "Paawan"`, and the earlier AI decision is kept in the audit log. The other 272 approved rules (mostly table cells no loaded lot reads) remain AI-reviewed only, as the rows below describe.
+
 ## Model-generated artifacts not independently verified
 | Artifact | Produced by | Verified? |
 |---|---|---|
