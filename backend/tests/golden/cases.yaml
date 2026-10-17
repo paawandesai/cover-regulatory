@@ -249,6 +249,13 @@ cases:
       rear_yard: 15.0
       max_height: 35.0
       lot_minimum: 5000
+  - apn: "4142004001"   # Del Aire, County R-1, reversed corner lot (key lot 4142004033 fronts its side street)
+    status: ok
+    expect:
+      street_side_yard: 10.0  # Table 22.18.040-A, Corner Side, Reversed Corner Lot column
+      side_yard: 5.0
+    labels:
+      street_side_yard: interpretive
   - apn: "4143016041"   # Del Aire, County R-1, ~88 x 59 ft, 3,460 sq ft (shallow, substandard)
     status: ok
     expect:

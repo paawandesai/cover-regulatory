@@ -354,6 +354,9 @@ RULES |= {
         Need("rear", "LACC 22.18.040 A", "rear_yard_min_ft", applies="R-1"),
         Need("corner_side", "LACC 22.18.040 A", "corner_side_yard_min_ft", applies="R-1"),
     ],
+    "COUNTY_REVERSED_CORNER": [
+        Need("side_ft", "LACC 22.18.040 A", "other", applies="R-1", condition_has="Reversed Corner"),
+    ],
     "COUNTY_NARROW_LOT": [
         Need("pct", "LACC 22.110.080 C", "side_yard_pct_lot_width", "less than 50 feet"),
         Need("min_ft", "LACC 22.110.080 C", "side_yard_min_ft", "less than 50 feet"),

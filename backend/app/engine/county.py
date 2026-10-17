@@ -23,7 +23,10 @@ def _interpretive(items: list[Item]) -> list[Item]:
     return items
 
 
-def envelope_items(conn, ctx, width, depth, lot_area) -> tuple[list[Item], float | None, float | None, float | None]:
+def envelope_items(
+    conn, ctx, width, depth, lot_area, corner: str | None = None
+) -> tuple[list[Item], float | None, float | None, float | None]:
+    """corner is None for an interior lot, "corner" or "reversed" (a reversed corner lot) as read from the map."""
     cz = ctx.county_zone
     yards = R.load("COUNTY_R1_YARDS", conn)
     narrow = R.load("COUNTY_NARROW_LOT", conn)
@@ -59,18 +62,16 @@ def envelope_items(conn, ctx, width, depth, lot_area) -> tuple[list[Item], float
                 f"average width but not less than {n_min:g} ft: {side:g} ft (22.110.080 C.2), instead of the zone's "
                 f"{base_side:g} ft. It is an allowance; {base_side:g} ft also complies."
             )
-        corner = yards.value("corner_side")
-        if corner is not None:
-            side_why += (
-                f" On a corner lot the street side yard is {corner:g} ft, and more on a reversed corner lot "
-                "(Table 22.18.040-A); corner lots are not detected here."
-            )
+        if corner is None:
+            side_why += " This lot was read as an interior lot, so there is no street side yard."
     side_item = rule_item(
         "side_yard", "county_r1_envelope", "Side yards (minimum, each)", side_rules, side, "ft", side_why
     )
     if side_rules is narrow:
         side_item.citations = yards.citations() + side_item.citations
     items.append(side_item)
+    if corner is not None:
+        items.append(_street_side(conn, yards, corner))
 
     base_rear = yards.value("rear")
     rear, rear_why, rear_rules = base_rear, None, yards
@@ -134,6 +135,43 @@ def envelope_items(conn, ctx, width, depth, lot_area) -> tuple[list[Item], float
         why = None
     items.append(rule_item("lot_minimum", "county_r1_envelope", "Required lot area", la, required, "sqft", why))
     return _interpretive(items), front, side, rear
+
+
+def _street_side(conn, yards, corner: str) -> Item:
+    """The corner side yard, on the street side of a corner lot (Table 22.18.040-A)."""
+    if corner == "reversed":
+        rc = R.load("COUNTY_REVERSED_CORNER", conn)
+        ft = rc.value("side_ft")
+        item = rule_item(
+            "street_side_yard",
+            "county_r1_envelope",
+            "Street side yard (reversed corner lot)",
+            rc,
+            ft,
+            "ft",
+            f"The lot behind this one fronts its side street, so this reads as a reversed corner lot, whose street side "
+            f"yard is {ft:g} ft (Table 22.18.040-A, Corner Side, Reversed Corner Lot column). Where the front yard of "
+            "the key lot behind it is under 10 ft, this side yard may match it but not be less than 5 ft "
+            "(22.110.080 C.1). Which lots are reversed corner lots was read from the parcel map; confirm it."
+            if ft is not None
+            else None,
+        )
+        item.citations = yards.citations() + item.citations
+        return item
+    ft = yards.value("corner_side")
+    return rule_item(
+        "street_side_yard",
+        "county_r1_envelope",
+        "Street side yard (corner lot)",
+        yards,
+        ft,
+        "ft",
+        f"This lot was read as a corner lot. Its street side yard is {ft:g} ft (Table 22.18.040-A, Corner Side column), "
+        "the same as the interior side. If the lot behind it fronts the side street, it is a reversed corner lot and "
+        "needs more; the parcel map did not show that here."
+        if ft is not None
+        else None,
+    )
 
 
 def overlay_notes(conn, ctx, items: list[Item]) -> list[Item]:

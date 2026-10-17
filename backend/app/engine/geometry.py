@@ -153,3 +153,28 @@ def envelope(frame: LotFrame, front_ft: float, side_ft: float, rear_ft: float) -
         "yards": yards,
         "label": "illustrative, not survey-grade",
     }
+
+
+def rear_neighbour_fronts_side_street(frame: LotFrame, apn: str) -> tuple[bool, str | None]:
+    """On a corner lot, whether the lot behind it fronts this lot's side street, which makes this a reversed corner
+    lot (its street side lot line continues the front lot line of the lot to its rear). Returns that lot's APN."""
+    if not frame.corner or frame.front_side is None:
+        return False, None
+    a, b = _sides(frame.lot_ft.minimum_rotated_rectangle)[(frame.front_side + 2) % 4]
+    mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
+    cx, cy = frame.origin
+    vx, vy = mx - cx, my - cy
+    n = math.hypot(vx, vy) or 1.0
+    probe = (mx + vx / n * 5, my + vy / n * 5)
+    with connect() as conn:
+        row = conn.execute(
+            """SELECT apn FROM parcel WHERE apn <> %s
+               AND ST_Contains(geom, ST_Transform(ST_SetSRID(ST_Point(%s, %s), 2229), 4326)) LIMIT 1""",
+            (apn, *probe),
+        ).fetchone()
+    if row is None:
+        return False, None
+    other = lot_frame(row["apn"])
+    if other is None or other.front_side is None:
+        return False, row["apn"]
+    return abs(math.cos(math.radians(other.angle_deg - frame.angle_deg))) < 0.5, row["apn"]
