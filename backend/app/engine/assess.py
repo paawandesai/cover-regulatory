@@ -11,7 +11,7 @@ from app.db.connection import connect
 from app.engine import county
 from app.engine import rules as R
 from app.engine.ch1a import ch1a_items
-from app.engine.geometry import envelope, lot_frame
+from app.engine.geometry import envelope, lot_frame, rear_neighbour_fronts_side_street
 from app.engine.item import Item
 from app.engine.item import chunk_citation as _chunk_citation
 from app.engine.item import rule_item as _rule_item
@@ -1026,7 +1026,11 @@ def _county(ctx: ParcelContext, project, result: dict) -> dict:
         ]
         buildings, fp_item, _ = _footprints(conn, ctx.apn)
         items.append(fp_item)
-        env, front, side, rear = county.envelope_items(conn, ctx, width, depth, lot_area)
+        corner = None
+        if frame and frame.corner:
+            reversed_corner, _ = rear_neighbour_fronts_side_street(frame, ctx.apn)
+            corner = "reversed" if reversed_corner else "corner"
+        env, front, side, rear = county.envelope_items(conn, ctx, width, depth, lot_area, corner)
         if frame and width and depth and (frame.corner or width > depth):
             # A corner lot's front is its shorter street side; a lot read as wider than deep may be one.
             for i in env:
