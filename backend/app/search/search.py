@@ -1,7 +1,9 @@
 """Search over ingested regulation chunks.
 
 1. A section reference in the query ("12.22 A.33", "Gov Code 66323") is looked up exactly and ranks first.
-2. pgvector cosine search on local nomic embeddings ranks the rest.
+2. pgvector cosine search on local nomic embeddings ranks the rest. When the query names a zone ("R1", "RE15"),
+   that zone's own LAMC section joins the fusion as a second ranked list, so the zone sections that read alike
+   (RW1, RS, RU, RZ next to R1) don't crowd it out.
 3. Postgres full-text search can join through reciprocal-rank fusion (FTS_WEIGHT); it is off by default
    because it lowered accuracy on the labeled question set, and it is the fallback when embeddings are missing.
 
@@ -27,6 +29,39 @@ _LAMC_REF = re.compile(
 )
 # "Gov Code 66323", "Government Code Section 66314(d)", or a bare 66xxx / 65852.21 number
 _GOV_REF = re.compile(r"\b(6[56]\d{3}(?:\.\d+)?)((?:\([a-z0-9]+\))*)")
+
+
+# "SEC. 12.08. “R1” ONE-FAMILY ZONE." -> zone R1 is section 12.08
+_ZONE_HEADING = re.compile(r"^SEC\. (1[0-9]\.\d{2}(?:\.\d+)?)\. [“\"]?([A-Z][A-Z0-9.]*?)[”\"]? ")
+_zone_sections: dict[str, str] | None = None
+
+
+def zone_sections(conn) -> dict[str, str]:
+    """Zone symbol -> LAMC section, read from the section headings once per process."""
+    global _zone_sections
+    if _zone_sections is None:
+        out: dict[str, str] = {}
+        for r in conn.execute(
+            "SELECT DISTINCT heading FROM reg_chunk WHERE document_id = 'lamc_chapter1' AND heading LIKE 'SEC. 12.%%'"
+        ).fetchall():
+            m = _ZONE_HEADING.match(r["heading"] or "")
+            if m and "ZONE" in r["heading"].upper() and re.fullmatch(r"[A-Z]{1,3}\d?(?:\.5)?", m.group(2)):
+                out.setdefault(m.group(2), f"LAMC {m.group(1)}")
+        _zone_sections = out
+    return _zone_sections
+
+
+def named_zone_sections(query: str, conn) -> list[str]:
+    """LAMC sections of the zones a query names: "R1" -> 12.08; "RE15" or "RE" -> 12.07.01."""
+    zones = zone_sections(conn)
+    found = []
+    for m in re.finditer(r"\b([A-Z]{1,3}\d?(?:\.5)?)(?:-?\d+)?\b", query):
+        sym = m.group(1).replace("-", "")
+        for cand in (sym, re.sub(r"\d+$", "", sym)):
+            if cand in zones and len(cand) >= 2:
+                found.append(zones[cand])
+                break
+    return list(dict.fromkeys(found))
 
 
 @dataclass
@@ -163,6 +198,10 @@ def search(
             ).fetchall()
         )
         add(vec, "embedding")
+        zone_secs = named_zone_sections(query, conn)
+        if zone_secs and vec:
+            pat = re.compile(r"^(?:" + "|".join(re.escape(z) for z in zone_secs) + r")($| )")
+            add([r for r in vec if pat.match(r["section_id"])], "zone")
         # Full text joins the fusion when it is weighted, when it is the only retriever asked for, or when no
         # chunk has an embedding yet (e.g. right after an ingest, before the indexer has run).
         if mode == "full_text":

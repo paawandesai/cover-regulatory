@@ -121,7 +121,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 - Feedback cannot change a rule.
 - The extraction schema has no status or confidence field for a model to set.
 
-**Retrieval** (`eval/retrieval/results.md`): on a 50-question holdout written by a second model from sampled chunks (it never saw the search code), recall@5 was 0.56 and MRR 0.44 with embeddings plus section-id lookup on 2026-10-16. On the 32-question dev set that search was tuned on it was 0.81, so the dev number overstates accuracy. Re-measured on 2026-10-17 with the documents added since, they are 0.54 and 0.75; the County text, which a City search now leaves out, does not change them. The holdout counts only the source chunk's section as right, which makes it a lower bound. Assessment values do not depend on search.
+**Retrieval** (`eval/retrieval/results.md`): on a 50-question holdout written by a second model from sampled chunks (it never saw the search code), recall@5 was 0.56 and MRR 0.44 with embeddings plus section-id lookup on 2026-10-16. On the 32-question dev set that search was tuned on it was 0.81, so the dev number overstates accuracy. On 2026-10-17 they were 0.54 and 0.75: the other zones' sections loaded in wave 7a read like R1's and crowded it out. A query that names a zone now also ranks that zone's own section, which brings the dev set back to 0.81 (MRR 0.70); the holdout, run once afterwards, stays at 0.54. The County text, which a City search leaves out, changes neither. The holdout counts only the source chunk's section as right, which makes it a lower bound. Assessment values do not depend on search.
 
 **Latency**, in process, after warm-up:
 
@@ -132,7 +132,7 @@ Measured 2026-10-16 on the development machine (4 CPU cores, no GPU, Postgres on
 
 The assessment took 129 ms (p50) before the prevailing front yard estimate, which reads every lot and building on the block face (measured 2026-10-16).
 
-**Test suites** (2026-10-17): 140 passed: backend 130 against the loaded database, frontend 8, and 2 Terraform test runs that apply the AWS setup to mocked providers. CI runs the secrets scan, lint, type checks, a production build, the unit and frontend tests, the Terraform checks, and (job `db-tests`) the golden, API and adversarial suites against the private database dump. Full results: `eval/test-results.md`.
+**Test suites** (2026-10-17): 141 passed: backend 131 against the loaded database, frontend 8, and 2 Terraform test runs that apply the AWS setup to mocked providers. CI runs the secrets scan, lint, type checks, a production build, the unit and frontend tests, the Terraform checks, and (job `db-tests`) the golden, API and adversarial suites against the private database dump. Full results: `eval/test-results.md`.
 
 ## AI disclosure
 This tool uses an LLM at ingestion, to extract candidate rule fragments from regulatory text, and in the optional follow-up chat, whose answers keep only sentences with quotes checked against the source. Explanations are fixed templates, and no model runs when an assessment is requested. Values that rest on unreviewed AI readings are labeled "Interpretation" in the UI. See `AI_USAGE.md` for what was generated and what was independently verified.
