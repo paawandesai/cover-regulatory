@@ -36,7 +36,8 @@ def test_golden(case):
     assert set(case.get("flags_include", [])) <= flags
     assert not (set(case.get("flags_exclude", [])) & flags)
     if case["status"] != "ok":
-        assert r["items"] == []
+        # A stopped parcel shows no zone rules; a Chapter 1A parcel shows only its zone string and density.
+        assert {i["family"] for i in r["items"]} <= ({"ch1a"} if case["status"] == "regime_not_modeled" else set())
     assert any("not for legal" in d or "not be suitable for legal" in d for d in r["disclaimers"])
     assert r["ai_disclosure"]
 

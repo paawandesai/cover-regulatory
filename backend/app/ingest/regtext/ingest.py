@@ -29,6 +29,7 @@ from app.ingest.regtext.chunk import (
     Chunk,
     Page,
     chunk_by_headings,
+    chunk_ch1a,
     chunk_lamc,
     chunk_order,
     chunk_ordinance,
@@ -163,6 +164,8 @@ def _label(doc: dict) -> str:
         "eo8": "EO 8",
         "eo9": "EO 9",
         "sp_wla_timp": "WLA TIMP",
+        "ch1a_art1": "Ch. 1A",
+        "ch1a_art6": "Ch. 1A",
     }.get(doc["id"], "Gov. Code" if doc["doc_type"] == "statute" else doc["title"])
 
 
@@ -177,6 +180,8 @@ def chunk_document(doc: dict, pages: list[Page]) -> list[Chunk]:
         return chunk_by_headings(pages, _label(doc), pattern=FAQ_HEADING)
     if doc.get("headings") == "letters":
         return chunk_order(pages, _label(doc))
+    if doc.get("headings") == "ch1a":
+        return chunk_ch1a(pages, _label(doc))
     if doc.get("headings") == "plan":
         return chunk_by_headings(pages, _label(doc), pattern=PLAN_SECTION)
     if doc.get("headings") == "numbers":

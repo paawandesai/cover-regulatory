@@ -133,3 +133,30 @@ def parse_zone(raw: str) -> ParsedZone:
         supplemental=supplemental,
         unmodeled=tuple(unmodeled),
     )
+
+
+_CH1A_BRACKETS = re.compile(r"\[([^\]]+)\]")
+
+
+@dataclass(frozen=True)
+class Ch1aZone:
+    """A Chapter 1A zone string, [FORM-FRONTAGE-STANDARDS][USE-DENSITY][supplemental...] (LAMC Ch. 1A Sec. 1.3.1)."""
+
+    raw: str
+    form: str
+    frontage: str
+    standards: str
+    use: str
+    density: str
+    supplemental: tuple[str, ...] = ()
+
+
+def parse_ch1a(raw: str) -> Ch1aZone | None:
+    groups = _CH1A_BRACKETS.findall((raw or "").strip().upper())
+    if len(groups) < 2:
+        return None
+    built, activity = groups[0].split("-"), groups[1].split("-")
+    if len(built) != 3 or len(activity) != 2:
+        return None
+    supplemental = tuple(p for g in groups[2:] for p in g.split("-") if p)
+    return Ch1aZone(raw, *built, *activity, supplemental)

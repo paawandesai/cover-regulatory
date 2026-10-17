@@ -209,5 +209,14 @@ cases:
     status: zone_not_modeled
   - apn: "5179003026"   # Boyle Heights: Chapter 1A in effect
     status: regime_not_modeled
+    expect:
+      ch1a_density: 2.0       # [H3-MU3-3][RX2-2L][CPIO]: Density District 2L, two units per lot (Div. 6B.1)
+    labels:
+      ch1a_zone: verified
+      ch1a_density: interpretive   # the CPIO is not loaded
+  - apn: "5189012015"   # Boyle Heights [VN1-MU3-3][RX2-15][CPIO], 6,757 sq ft
+    status: regime_not_modeled
+    expect:
+      ch1a_density: 4         # floor(6,757 / 1,500) (Div. 6B.2, Sec. 6C.1.2 D.3)
   - apn: "4327028024"   # Beverly Hills: outside the City
     status: outside_city

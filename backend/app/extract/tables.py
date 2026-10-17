@@ -6,7 +6,7 @@ six lot-size rows of floor-area ratios with a lot coverage column, and the mass 
 origin, envelope depth). Every cell becomes a candidate fragment whose quote is the whole row, checked like a model
 fragment (quote in chunk, number in quote) and stored as 'pending' for review. No model is involved.
 
-Run: uv run python -m app.extract.tables [--hillside]
+Run: uv run python -m app.extract.tables [--hillside | --ch1a-density]
 """
 
 import re
@@ -175,14 +175,53 @@ def read_hillside(chunk_id: str, text: str) -> list[Fragment]:
     return out
 
 
+DENSITY_SECTIONS = ("Ch. 1A Div. 6B.1", "Ch. 1A Div. 6B.2")
+_LOT_LIMITED = re.compile(r"^(\d{1,2})L (\d{1,2})$")
+_AREA_BASED = re.compile(r"^(\d{1,2}) (\d{3,4}) (\d{3,4}) (Applicable|Market-contingent|As Mapped)$")
+
+
+def read_density(chunk_id: str, text: str) -> list[Fragment]:
+    """Chapter 1A Div. 6B.1 (dwelling units per lot in 1L-4L) and Div. 6B.2 (lot area per household dwelling unit in
+    the numbered districts). "FA" and "N" rows hold words, not numbers, and are left to the engine's cited text."""
+    out: list[Fragment] = []
+    cells = _cells(text)
+    head = next((c for c in cells if c.text == "Density District Per Lot (max)"), None)
+    for c in cells:
+        if m := _LOT_LIMITED.match(c.text):
+            param, district, value = "units_per_lot_max", f"{m.group(1)}L", float(m.group(2))
+            unit, cond = "count", "Lot-Limited Density District (Div. 6B.1)"
+        elif m := _AREA_BASED.match(c.text):
+            param, district, value = "lot_area_per_unit_sqft", m.group(1), float(m.group(2))
+            unit, cond = "sqft", "Lot Area-Based Density District (Div. 6B.2); household dwelling unit"
+        else:
+            continue
+        out.append(
+            Fragment(
+                chunk_id=chunk_id,
+                rule_family="ch1a_density",
+                parameter=param,
+                applies_to=[district],
+                conditions=cond,
+                value_numeric=value,
+                unit=unit,
+                value_text=None,
+                # A row like "2L 2" is too short to locate on its own, so the quote starts at the column heading.
+                source_quote=text[head.start if param == "units_per_lot_max" and head else c.start : c.end],
+            )
+        )
+    return out
+
+
 def main() -> None:
     with connect() as conn:
         hillside = "--hillside" in sys.argv
+        density = "--ch1a-density" in sys.argv
+        sections = DENSITY_SECTIONS if density else HILLSIDE_SECTIONS if hillside else SECTIONS
         chunks = conn.execute(
             "SELECT id, text, content_hash FROM reg_chunk WHERE section_id = ANY(%s) AND NOT mock ORDER BY id",
-            (list(HILLSIDE_SECTIONS if hillside else SECTIONS),),
+            (list(sections),),
         ).fetchall()
-        reader = read_hillside if hillside else read_table
+        reader = read_density if density else read_hillside if hillside else read_table
         run_id = conn.execute(
             """INSERT INTO extraction_run (model_id, served_model, prompt_version, chunk_ids, status, finished_at)
                VALUES (%s, %s, %s, %s, 'ok', now()) RETURNING id""",

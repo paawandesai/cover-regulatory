@@ -273,17 +273,25 @@ def summarize(items, ctx) -> dict:
     kinds = {o["kind"] for o in ctx.overlays}
 
     rfa, h = _num(by.get("max_rfa")), _num(by.get("max_height"))
+    units = _num(by.get("dwelling_units"))  # R2: one or two homes (LAMC 12.09)
+    what = (
+        f"Up to {units:g} home{'s' if units != 1 else ''}"
+        + (" (a two-family dwelling or two houses)" if units == 2 else "")
+        if units is not None
+        else "A single-family home"
+    )
     yards = [_num(by.get(k)) for k in ("front_yard", "side_yard", "rear_yard")]
     if rfa is not None and h is not None and None not in yards:
         house = (
-            f"A single-family home of up to {rfa:,.0f} sq ft and {h:g} ft, with yards of {yards[0]:g} ft front, "
-            f"{yards[1]:g} ft each side and {yards[2]:g} ft rear."
-        )
+            f"{what} of up to {rfa:,.0f} sq ft and {h:g} ft"
+            if units is None
+            else f"{what}, with up to {rfa:,.0f} sq ft of floor area in all, {h:g} ft high"
+        ) + f", with yards of {yards[0]:g} ft front, {yards[1]:g} ft each side and {yards[2]:g} ft rear."
     else:
         names = {"max_rfa": "floor area", "max_height": "height", "front_yard": "yard"}
         missing = [n for k, n in names.items() if k in by and by[k].value is None]
         joined = ", ".join(missing[:-1]) + " and " + missing[-1] if len(missing) > 1 else "".join(missing)
-        house = "A single-family home. " + (
+        house = f"{what}. " + (
             f"The {joined} limits are not modeled for this lot (see each value)."
             if missing
             else "Some envelope values are not determined."
@@ -313,7 +321,11 @@ def summarize(items, ctx) -> dict:
             " SB 9 may also allow two homes" + (" or a lot split" if split and split.value else "") + ", to confirm."
         )
     elif sb2 is not None and sb2.value is False:
-        answer += " SB 9 is not available here (Executive Order 9)."
+        answer += (
+            " SB 9 does not apply in a two-family zone."
+            if units is not None
+            else " SB 9 is not available here (Executive Order 9)."
+        )
     confirm, withheld = counts.get("interpretive", 0), counts.get("withheld", 0)
     parts = []
     if confirm:

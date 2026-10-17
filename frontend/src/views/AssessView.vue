@@ -272,6 +272,23 @@ const stop = computed(() => {
 
       <template v-else-if="result && stop">
         <StopState :eyebrow="`APN ${formatApn(result.parcel.apn)}`" :title="stop.title" :body="stop.body" :detail="stop.detail" />
+        <section v-if="result.items.length" class="card stop-items" aria-label="What the loaded text says">
+          <h2>What the loaded Chapter 1A text says</h2>
+          <div v-for="i in result.items" :key="i.id" class="stop-item">
+            <div class="stop-head">
+              <strong>{{ i.title }}</strong>
+              <span class="mono">{{ formatValue(i) }}</span>
+              <LabelBadge :label="i.label" :text="i.label_text" />
+            </div>
+            <p class="small">{{ i.explanation }}</p>
+            <p v-if="i.citations.length" class="small muted">
+              Sources:
+              <template v-for="(c, n) in i.citations" :key="n">
+                <a v-if="c.source_url" :href="c.source_url" target="_blank" rel="noopener">{{ c.section_id }}</a><span v-else>{{ c.section_id }}</span>{{ n < i.citations.length - 1 ? ', ' : '' }}
+              </template>
+            </p>
+          </div>
+        </section>
         <p v-for="d in result.disclaimers" :key="d" class="small muted stop-note">{{ d }}</p>
       </template>
 
@@ -287,7 +304,7 @@ const stop = computed(() => {
                 <span class="eyebrow">APN</span>
                 <span class="mono small">{{ formatApn(result.parcel.apn) }}</span>
               </div>
-              <h1>{{ zone ? `${zone} one-family lot` : 'Parcel' }}</h1>
+              <h1>{{ zone ? `${zone} lot` : 'Parcel' }}</h1>
               <button
                 v-for="f in facts"
                 :key="f.k"
@@ -393,6 +410,26 @@ const stop = computed(() => {
   flex: 1 1 auto;
   min-width: 0;
   height: 44px;
+}
+.stop-items {
+  max-width: 640px;
+  margin-top: 16px;
+  padding: 24px;
+}
+.stop-items h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+.stop-item + .stop-item {
+  border-top: 1px solid var(--line);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.stop-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
 }
 .stop-note {
   max-width: 640px;

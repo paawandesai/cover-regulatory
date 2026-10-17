@@ -9,6 +9,7 @@ RuleFamily = Literal[
     "r1_envelope",
     "r2_envelope",
     "re_envelope",
+    "ch1a_density",
     "guest_house",
     "adu_state",
     "adu_local",
@@ -77,6 +78,7 @@ PARAMETERS: dict[str, Unit] = {
     "sb9_suspended": "boolean",
     "dwelling_units_max": "count",
     "lot_area_per_unit_sqft": "sqft",
+    "units_per_lot_max": "count",
     "other": "text",
 }
 

@@ -1,0 +1,204 @@
+{
+ "checked_on": "2026-10-17",
+ "method": "Wave 7 (left-out item 16, Chapter 1A density). Table cells of LAMC Chapter 1A Div. 6B.1 and 6B.2 (publication update 2026-08-20), read by the deterministic table reader (no model), checked by Claude Sonnet 5.5 (Anthropic API) against each chunk, decided by Claude Opus 5.5 (via Claude Code).",
+ "candidates": [
+  {
+   "fragment_id": 799,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-1#1",
+   "parameter": "units_per_lot_max",
+   "recommendation": "approve_with_note",
+   "note": "Used only for a lot whose zone string names this Lot-Limited Density District; ADUs and JADUs are exempt (Sec. 6C.1.1 E), named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table gives 1L a maximum of 1 dwelling unit per lot, so the value 1 and unit count are correct. The parameter units_per_lot_max matches the 'Dwelling Units Per Lot (max)' column. The applies_to of 1L is correct. The condition is vague: it names the district type but not the scope limit, that is, the value applies only to lots designated 1L. The excerpt is truncated and cites Sec. 6C.1.1 without its content, so possible exceptions can't be verified. The extraction is accurate but should carry an explicit district-designation precondition and a note that other provisions may modify the cap."
+   }
+  },
+  {
+   "fragment_id": 800,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-1#1",
+   "parameter": "units_per_lot_max",
+   "recommendation": "approve_with_note",
+   "note": "Used only for a lot whose zone string names this Lot-Limited Density District; ADUs and JADUs are exempt (Sec. 6C.1.1 E), named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table maps 2L to 2 dwelling units per lot (max), so value 2, unit count, and parameter units_per_lot_max are correct. The condition limiting it to Lot-Limited Density Districts and applies_to 2L matches the excerpt. The caveat is that the excerpt is truncated and the number applies only within the 2L district; the engine must verify the lot's district designation and not treat the cap as exclusive of other provisions outside this excerpt."
+   }
+  },
+  {
+   "fragment_id": 801,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-1#1",
+   "parameter": "units_per_lot_max",
+   "recommendation": "approve_with_note",
+   "note": "Used only for a lot whose zone string names this Lot-Limited Density District; ADUs and JADUs are exempt (Sec. 6C.1.1 E), named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The excerpt's table gives 3L a maximum of 3 dwelling units per lot, so the value 3 and the unit count are correct. The parameter units_per_lot_max matches the 'Dwelling Units Per Lot (max)' column. The applicability to 3L is correct, and the condition naming the Lot-Limited Density District is accurate but terse. It does not state that the cap applies only to the L districts and not to lot area-based districts, which the excerpt separates by a heading, nor does it flag that the excerpt is truncated and cross-references Sec. 6C.1.1. The extraction is accurate but should carry that scoping caveat."
+   }
+  },
+  {
+   "fragment_id": 802,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-1#1",
+   "parameter": "units_per_lot_max",
+   "recommendation": "approve_with_note",
+   "note": "Used only for a lot whose zone string names this Lot-Limited Density District; ADUs and JADUs are exempt (Sec. 6C.1.1 E), named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table maps 4L to 4 dwelling units per lot (max). Value 4 and unit 'count' are correct, and 'units_per_lot_max' matches the text. The condition (Lot-Limited Density District, 4L) is captured by the conditions and applies_to fields. The engine rule's 'regardless of lot area' wording is consistent with lot-limited districts, but it should be limited to 4L lots only. The caveat is that the excerpt is a fragment, so interactions with other Chapter 1A provisions can't be verified from this text."
+   }
+  },
+  {
+   "fragment_id": 803,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The row '2 200 100 Applicable' gives 200 min sq ft of lot area per household dwelling unit in Density District 2, 100 for efficiency units, and minimum density as Applicable. The value 200 and the unit sq ft are correct for household units, and the conditions field names household units. The parameter name is generic, though, and the conditions leave out the efficiency-unit value, the mixed-unit allowance, the minimum-density flag, and the cross-references to Sec. 6C.1.2 and 6C.1.3 that may qualify the limit. Hence agree with caveats."
+   }
+  },
+  {
+   "fragment_id": 804,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table row '3 300 150 Applicable' shows 300 min SF of lot area per household dwelling unit and 150 per efficiency dwelling unit, so the value 300 and unit sqft are correct for household units in Density District 3. The parameter name 'lot_area_per_unit_sqft' is ambiguous because the same row has two different per-unit values, though the conditions mention household units. The conditions omit the efficiency unit alternative, the combination allowance, and the cross-references to other Part 6C sections, so the candidate is usable only with those caveats."
+   }
+  },
+  {
+   "fragment_id": 805,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The row '4 400 200 Applicable' gives 400 sf of lot area per household dwelling unit and 200 sf per efficiency dwelling unit in the 4 Density District, so the value 400 and the unit sqft are right for household units. The parameter name is too generic, because the same row has a different value for efficiency units, and the conditions omit the efficiency-unit alternative, the mixed-unit allowance and the applicable minimum density. The quote supports the value but the candidate is incomplete as a standalone rule, so it is agreed with caveats."
+   }
+  },
+  {
+   "fragment_id": 806,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The row for Density District 6 lists 600 sq ft of lot area per household dwelling unit and 300 for efficiency units, so the value, unit and parameter (lot area per household dwelling unit) are correct. The parameter name 'lot_area_per_unit_sqft' is generic and could be confused with the efficiency value of 300, but the conditions field does specify household. The conditions are incomplete because the efficiency unit alternative, the mixing allowance, and the minimum density applicability are not carried over, and the cross-referenced sections may refine the calculation."
+   }
+  },
+  {
+   "fragment_id": 807,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The quoted row '8 800 400 Applicable' gives 800 sq ft of lot area per household dwelling unit and 400 sq ft per efficiency dwelling unit for Density District 8, in sq ft. The value, unit and household-unit reading are correct. The parameter name is generic and the conditions omit the efficiency unit value, the mixed-unit allowance, the minimum density requirement, and the cross-referenced sections. The extraction is usable if the parameter is renamed to household-specific and the caveats are carried along."
+   }
+  },
+  {
+   "fragment_id": 808,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The row '10 1000 1000 Applicable' gives 1000 sq ft of lot area per household dwelling unit, with the same 1000 for efficiency units. The value and unit are correct. The parameter fits the household column, and the conditions field names it. However, the conditions leave out the efficiency-unit column, the allowance for combinations of unit types, and the minimum-density requirement. The rounding and the dependence on the cross-referenced sections come from the engine or from text outside the excerpt. Overall the extraction is accurate but incomplete, so I agree with caveats."
+   }
+  },
+  {
+   "fragment_id": 809,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table row '12 1200 1200 Applicable' supports 1200 sq ft of lot area per household dwelling unit for Density District 12, so value, unit and parameter name are right. The conditions are incomplete: the same row also sets 1200 per efficiency dwelling unit, the text allows any combination of the two unit types, and a minimum density requirement is 'Applicable'. The excerpt also defers to Secs. 6C.1.2/6C.1.3 for the detailed rules. The extraction is acceptable as the household-unit lot-area figure but needs these caveats before being used as a full maximum-density rule."
+   }
+  },
+  {
+   "fragment_id": 810,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table row for Density District 15 shows 1500 min SF per household dwelling unit and 1500 per efficiency dwelling unit, followed by 'Market-contingent' for the minimum dwelling units per lot area. The value 1500 and unit sqft match the quote, and the parameter name lot_area_per_unit_sqft is a fair description of the household column. However, the parameter name is generic and does not distinguish household from efficiency units, and the conditions omit the mixed-unit allowance, the cross-referenced sections that may modify the calculation, and the market-contingent minimum density status. The extraction is accurate but needs these caveats before being used as a deterministic floor(lot area / value) rule."
+   }
+  },
+  {
+   "fragment_id": 811,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table row for Density District 20 shows 2000 for household units and 2000 for efficiency units, so the value 2000 and unit sq ft are correct. The parameter name 'lot_area_per_unit_sqft' fits, though it is generic and should specify household dwelling unit (the efficiency value is identical in this district). The conditions leave out that efficiency units use a separate column and may be mixed with household units, that the 'Market-contingent' entry relates to minimum density rather than the maximum, and that the controlling sections for the maximum calculation are only referenced here, not reproduced. The extraction is accurate on the number but should be used with these caveats."
+   }
+  },
+  {
+   "fragment_id": 812,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table row for Density District 25 shows 2500 min SF of lot area per household dwelling unit and 2500 per efficiency dwelling unit, so the value, unit and parameter are correct. The conditions are incomplete: the candidate mentions only household units, though the same value applies to efficiency units and the two types can be combined on a lot. The 'As Mapped' text refers to minimum density, which is a different matter. The cited sections (6C.1.2, 6C.1.3) with the detailed rules are not in the excerpt, so the candidate's formula is a simplification."
+   }
+  },
+  {
+   "fragment_id": 813,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The row for Density District 30 shows 3000 min SF per household dwelling unit and 3000 min SF per efficiency dwelling unit, so the value 3000 and the unit sqft are correct, and the parameter lot_area_per_unit_sqft matches the lot-area-based maximum density. Conditions are incomplete: the candidate names only household units, omits efficiency units and the combination rule, and ignores that the maximum is governed by Sec. 6C.1.1-6C.1.3 which are only referenced, not reproduced. The candidate is usable with caveats."
+   }
+  },
+  {
+   "fragment_id": 814,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The row for Density District 40 reads '40 4000 4000 As Mapped', so 4000 sq ft per household dwelling unit is correct and the unit (sqft) matches. The parameter name lot_area_per_unit_sqft is acceptable, though it is ambiguous since the table has separate household and efficiency columns that are both 4000 here. The conditions omit that the table limits both unit types, that any combination is allowed, and that the excerpt points to other sections (6C.1.1, 6C.1.2, 6C.1.3, 6C.2.1) that can alter the result. The 'As Mapped' column concerns minimum density, not this value. The value is correct but should be applied with caveats."
+   }
+  },
+  {
+   "fragment_id": 815,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table row '50 5000 5000 As Mapped' gives 5000 min SF of lot area per household dwelling unit and per efficiency dwelling unit for Density District 50, so the value and sqft unit are correct, and lot_area_per_unit_sqft describes the parameter. The candidate's conditions only mention household units and omit that the same value applies to efficiency units, that mixes are allowed, that minimum density is 'As Mapped', and that the full rule lives in Sec. 6C.1.2. The engine rule is reasonable for household units in district 50 but should be tied to the lot's mapped Density District and note the caveats above."
+   }
+  },
+  {
+   "fragment_id": 816,
+   "chunk_id": "ch1a_art6#ch--1a-div--6b-2#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used as the household dwelling unit limit only; efficiency units (third column), minimum density (fourth column) and the Sec. 6C.1.2 rules (alley area, fractions not counted, ADUs exempt) are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The row for Density District 60 reads '60 6000 6000 As Mapped', so household lot area per unit is 6000 min SF and the candidate's value and unit are correct. The parameter name 'lot_area_per_unit_sqft' fits but is ambiguous since the table has separate household and efficiency columns (both 6000 here); the candidate correctly notes household. The conditions omit the combined household/efficiency allowance, the separate minimum-density 'As Mapped' column, and the fact that the engine's floor() computation and rounding are not stated in the excerpt. The numeric extraction is sound but the engine rule is under-conditioned."
+   }
+  }
+ ]
+}

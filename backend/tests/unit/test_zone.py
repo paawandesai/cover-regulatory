@@ -73,3 +73,19 @@ def test_condition_notes_name_each_condition():
     notes = _condition_notes(parse_zone("[Q]R2-1"))
     assert "Q (Qualified)" in notes and "Tentative" not in notes
     assert _condition_notes(parse_zone("R1-1")) == ""
+
+
+def test_chapter_1a_zone_string_parts():
+    from app.parcel.zone import parse_ch1a
+
+    z = parse_ch1a("[H3-MU3-3][RX2-2L][CPIO]")
+    assert (z.form, z.frontage, z.standards, z.use, z.density, z.supplemental) == (
+        "H3",
+        "MU3",
+        "3",
+        "RX2",
+        "2L",
+        ("CPIO",),
+    )
+    assert parse_ch1a("[VF2-WH1-4][P1-FA]").density == "FA"
+    assert parse_ch1a("R1-1") is None

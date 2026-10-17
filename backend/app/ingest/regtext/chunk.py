@@ -45,6 +45,13 @@ _ROMAN_HEADING = re.compile(r"^\s*([IVX]{1,5})\.\s+(\S.*)$", re.MULTILINE)
 FAQ_HEADING = re.compile(r"^\s*(Q\d{1,3})\.\s+(\S.*)$", re.MULTILINE)
 # Specific plans: upper-case section headings ("Section 5. GENERAL REQUIREMENTS"), and the LAMC section a fee ordinance
 # printed with the plan adds ("SEC. 19.19. WESTSIDE MOBILITY TRANSPORTATION FEES"). Title-case lines are the contents.
+# Chapter 1A articles: "Sec. 6C.1.2. LOT AREA PER HOUSEHOLD DWELLING UNIT" (the PDF text sometimes lower-cases the
+# letter), and a table division on its own line ("Div. 6B.2."). A bare "Sec. 6C.1.2." is a table column reference, not
+# a heading. Page headers and footers are dropped before chunking (documents.yaml drop_patterns).
+CH1A_SECTION = re.compile(
+    r"^\s*(?:(Sec\. \d{1,2}[A-Ca-c]?\.\d{1,2}\.\d{1,2})\.\s+([A-Z][A-Z0-9 ,&()'’/.-]{3,})|(Div\. \d{1,2}[A-Ca-c]\.\d{1,2})\.\s*)$",
+    re.MULTILINE,
+)
 PLAN_SECTION = re.compile(r"^\s*(Section \d{1,2}|SEC\. \d{1,2}\.\d{1,2})\.\s+([A-Z][A-Z ,&'’-]{3,})$", re.MULTILINE)
 # Executive orders: top-level lettered paragraphs ("B. Rebuilding"), or numbered ones in a short order.
 ORDER_LETTER = re.compile(r"^\s*([A-H])\.\s+([A-Z]\S*(?: \S+){0,8})\s*$", re.MULTILINE)
@@ -64,6 +71,9 @@ def clean_page_text(text: str) -> str:
             keep.append(s)
             continue
         if re.fullmatch(r"\d{1,3}", s):  # page number
+            continue
+        if re.fullmatch(r"\d{1,2}L \d{1,2}", s):  # a Chapter 1A lot-limited density row ("2L 2")
+            keep.append(s)
             continue
         if letters < 3 and not re.search(r"\d+\s*(feet|ft|%|percent)", s, re.IGNORECASE):
             continue  # figure fragments such as "/", "5 FT", "• •"
@@ -253,6 +263,20 @@ def chunk_order(pages: list[Page], label: str) -> list[Chunk]:
         if end - start < 40:
             continue  # a lettered heading straight followed by its first numbered paragraph
         chunks += _split_long(text[start:end], start, f"{label} {key}", heading[:160], offsets)
+    return chunks
+
+
+def chunk_ch1a(pages: list[Page], label: str) -> list[Chunk]:
+    """A Chapter 1A article split at its sections and table divisions, as "Ch. 1A Sec. 6C.1.2"."""
+    text, offsets = _joined(pages)
+    marks = list(CH1A_SECTION.finditer(text))
+    chunks: list[Chunk] = []
+    for i, m in enumerate(marks):
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(text)
+        if end - m.start() < 40:
+            continue  # a division heading followed straight by its first section
+        key = (m.group(1) or m.group(3)).upper().replace("SEC.", "Sec.").replace("DIV.", "Div.")
+        chunks += _split_long(text[m.start() : end], m.start(), f"{label} {key}", (m.group(2) or key)[:160], offsets)
     return chunks
 
 

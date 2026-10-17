@@ -103,6 +103,51 @@ documents:
     ocr_text: false
     headings: numbers
 
+  # LAMC Chapter 1A (the new Zoning Code, in effect in Downtown and Boyle Heights). Only the zone string (Article 1)
+  # and density (Article 6) are modeled.
+  - id: ch1a_art1
+    title: LAMC Chapter 1A, Article 1 (Introductory Provisions), publication of the City's Zoning Code site
+    publisher: Los Angeles City Planning (zoning.lacity.org downloads)
+    doc_type: zoning_code
+    jurisdiction: City of Los Angeles
+    code_chapter: "1A"
+    fetch: url
+    ocr_text: false
+    headings: ch1a
+    # Running headers and footers on every page are not law.
+    drop_patterns:
+      - '(?m)^[A-Z]+ City of Los Angeles(?:\n|$)'
+      - '(?m)^\[ F[Oo][Rr][Mm] - .*\[ U[Ss][Ee] - \](?:\n|$)'
+      - '(?m)^.*\| Article \d+ City of Los Angeles(?:\n|$)'
+      - '(?m)^(?:Div|Contents)\b.*Zoning Code Chapter 1A(?:\n|$)'
+      - '(?m)^.*\| \d{1,2}-\d{1,3}(?:\n|$)'
+      - '(?m)^(?:Established by|Last amended by) Ord\..*(?:\n|$)'
+      - '(?m)^Article Publication Update \|.*(?:\n|$)'
+    url: https://zoning.lacity.org/sites/default/files/zcode_download/article_1.pdf
+    effective_date: 2025-01-27
+    effective_note: Established by Ord. 188,418, operative 2025-01-27.
+  - id: ch1a_art6
+    title: LAMC Chapter 1A, Article 6 (Density), publication update 2026-08-20
+    publisher: Los Angeles City Planning (zoning.lacity.org downloads)
+    doc_type: zoning_code
+    jurisdiction: City of Los Angeles
+    code_chapter: "1A"
+    fetch: url
+    ocr_text: false
+    headings: ch1a
+    # Running headers and footers on every page are not law.
+    drop_patterns:
+      - '(?m)^[A-Z]+ City of Los Angeles(?:\n|$)'
+      - '(?m)^\[ F[Oo][Rr][Mm] - .*\[ U[Ss][Ee] - \](?:\n|$)'
+      - '(?m)^.*\| Article \d+ City of Los Angeles(?:\n|$)'
+      - '(?m)^(?:Div|Contents)\b.*Zoning Code Chapter 1A(?:\n|$)'
+      - '(?m)^.*\| \d{1,2}-\d{1,3}(?:\n|$)'
+      - '(?m)^(?:Established by|Last amended by) Ord\..*(?:\n|$)'
+      - '(?m)^Article Publication Update \|.*(?:\n|$)'
+    url: https://zoning.lacity.org/sites/default/files/zcode_download/article_6.pdf
+    effective_date: 2026-08-20
+    effective_note: Established by Ord. 188,418 (operative 2025-01-27); Div. 6B.2 last amended by Ord. 189,007, effective 2026-08-20.
+
   # Specific plans, from City Planning's document library. A plan in the registry in app/engine/plans.py is applied;
   # any other plan is flagged.
   - id: sp_wla_timp
