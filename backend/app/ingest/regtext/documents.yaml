@@ -103,6 +103,24 @@ documents:
     ocr_text: false
     headings: numbers
 
+  # Specific plans, from City Planning's document library. A plan in the registry in app/engine/plans.py is applied;
+  # any other plan is flagged.
+  - id: sp_wla_timp
+    title: West Los Angeles Transportation Improvement and Mitigation Specific Plan (Ord. 186,108), with the TIA fee ordinance (LAMC 19.19)
+    publisher: Los Angeles City Planning
+    doc_type: specific_plan
+    jurisdiction: City of Los Angeles
+    code_chapter: null
+    fetch: url
+    url: https://planning.lacity.gov/odocument/1fcb412d-0cc8-41eb-99e5-03ad84311928
+    effective_date: 2019-06-28
+    effective_note: >-
+      City Planning's copy of the plan as amended by Ord. 186,108 (effective 2019-06-28), printed with Ord. 186,105,
+      which added LAMC 19.19 and its fee table. LAMC 19.19 was amended again in 2026 (Ord. 188,796), so the fee amounts
+      here may be out of date; the fee is indexed every year.
+    ocr_text: false
+    headings: plan
+
   # Saved by hand (leginfo refuses automated requests; LAMC consolidated text is only on amlegal's viewer).
   - id: gov_66310_article1
     title: Gov. Code Title 7, Div. 1, Ch. 13, Art. 1 (ADU law, findings and definitions)

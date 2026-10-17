@@ -43,6 +43,9 @@ _LETTER_PARA = re.compile(r"^\s*\(([a-z])\)(?:\s+|(?=\(\d))", re.MULTILINE)
 _ROMAN_HEADING = re.compile(r"^\s*([IVX]{1,5})\.\s+(\S.*)$", re.MULTILINE)
 # FAQ documents: "Q11. Can I build an Accessory Dwelling Unit ...?"
 FAQ_HEADING = re.compile(r"^\s*(Q\d{1,3})\.\s+(\S.*)$", re.MULTILINE)
+# Specific plans: upper-case section headings ("Section 5. GENERAL REQUIREMENTS"), and the LAMC section a fee ordinance
+# printed with the plan adds ("SEC. 19.19. WESTSIDE MOBILITY TRANSPORTATION FEES"). Title-case lines are the contents.
+PLAN_SECTION = re.compile(r"^\s*(Section \d{1,2}|SEC\. \d{1,2}\.\d{1,2})\.\s+([A-Z][A-Z ,&'’-]{3,})$", re.MULTILINE)
 # Executive orders: top-level lettered paragraphs ("B. Rebuilding"), or numbered ones in a short order.
 ORDER_LETTER = re.compile(r"^\s*([A-H])\.\s+([A-Z]\S*(?: \S+){0,8})\s*$", re.MULTILINE)
 ORDER_NUMBER = re.compile(r"^\s*(\d{1,2})\.\s+(\S.*)$", re.MULTILINE)

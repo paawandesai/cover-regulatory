@@ -14,6 +14,7 @@ from app.engine.item import Item
 from app.engine.item import chunk_citation as _chunk_citation
 from app.engine.item import rule_item as _rule_item
 from app.engine.orders import rebuild_items, sb9_items
+from app.engine.plans import plan_items, unmodeled_plans
 from app.engine.prevailing import prevailing
 from app.engine.project import ProjectInputs, check_project, summarize
 from app.engine.zones import r2_items, re_items
@@ -809,6 +810,60 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None, family: st
     return items
 
 
+# What each zone-change condition can do (LAMC 12.32 G). The conditions themselves are in the zone change ordinance
+# for this parcel, found by its case number (City Planning's ZIMAS lists them); those ordinances are not loaded.
+_CONDITIONS = {
+    "T": (
+        "LAMC 12.32 G.1(d)",
+        (
+            "While in the T (Tentative) classification, the lot may be used only as the earlier zone allowed, until the "
+            "map is recorded or the required dedications and improvements are done (12.32 G.1(d))."
+        ),
+    ),
+    "Q": (
+        "LAMC 12.32 G.2(a)",
+        (
+            "A Q (Qualified) condition can bar some of the zone's uses and set its own development standards "
+            "(12.32 G.2(a), G.3); on RA, RE, RS and R1 lots it may only mitigate the zone change's environmental effects "
+            "(12.32 G.2(j))."
+        ),
+    ),
+    "D": (
+        "LAMC 12.32 G.4",
+        (
+            "A D (Development Limitation) can only lower the height or floor area, or limit lot coverage or setbacks "
+            "(12.32 G.4), so any height and floor area shown here are upper limits."
+        ),
+    ),
+}
+
+
+def _conditions(zone) -> list[str]:
+    keys = [k for k in ("T", "Q") if k in zone.prefixes]
+    return keys + (["D"] if zone.development_limitation else [])
+
+
+def _condition_notes(zone) -> str:
+    keys = _conditions(zone)
+    if not keys:
+        return ""
+    return (
+        " "
+        + " ".join(_CONDITIONS[k][1] for k in keys)
+        + " The conditions are in the zone change ordinance for this parcel, found by its case number on City "
+        "Planning's ZIMAS; that ordinance is not loaded."
+    )
+
+
+def _condition_cites(conn, zone) -> list[dict]:
+    out = []
+    for k in _conditions(zone):
+        out += _chunk_citation(conn, _CONDITIONS[k][0])
+    if "Q" in _conditions(zone):
+        out += _chunk_citation(conn, "LAMC 12.32 G.2(j)")
+    return out
+
+
 def _flags(conn, ctx: ParcelContext) -> list[Item]:
     kinds = {o["kind"] for o in ctx.overlays}
     out: list[Item] = []
@@ -873,8 +928,8 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 "Very High Fire Hazard",
             )
         )
-    if "specific_plan" in kinds or "hpoz" in kinds:
-        names = ", ".join(sorted({o["name"] for o in ctx.overlays if o["kind"] in ("specific_plan", "hpoz")}))
+    if unmodeled_plans(ctx):
+        names = ", ".join(unmodeled_plans(ctx))
         out.append(
             Item(
                 "overlay_plan",
@@ -883,7 +938,14 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 names,
                 None,
                 "flag",
-                explanation="Its standards can override the zone's. Not modeled.",
+                explanation="Its standards can override the zone's. Not modeled."
+                + (
+                    " In an HPOZ, exterior work also needs the preservation board's review under the HPOZ rules "
+                    "(LAMC 12.20.3, which now points to Chapter 1A Div. 13B.8; not loaded)."
+                    if "hpoz" in kinds
+                    else ""
+                ),
+                citations=_chunk_citation(conn, "LAMC 12.20.3") if "hpoz" in kinds else [],
                 source=_overlay_source(ctx, ("specific_plan", "hpoz")),
             )
         )
@@ -897,8 +959,9 @@ def _flags(conn, ctx: ParcelContext) -> list[Item]:
                 None,
                 "flag",
                 explanation="These parts of the zone string change the rules for this parcel (a parcel-specific "
-                "ordinance, an R1 variation table, a height district or a supplemental district). Read them before "
-                "relying on any value here.",
+                "ordinance, a height district or a supplemental district). Read them before relying on any value here."
+                + _condition_notes(ctx.zone),
+                citations=_condition_cites(conn, ctx.zone),
                 source=_zone_source(ctx),
             )
         )
@@ -1072,7 +1135,7 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
                     if i.id in ids and i.value is not None:
                         i.value, i.label, i.coverage = None, "withheld", None
                         i.explanation = "Not modeled here: the flat-land R1 rule does not apply " + where
-        overlay_plan = bool({"specific_plan", "hpoz"} & kinds)
+        overlay_plan = bool(unmodeled_plans(ctx))  # a plan in app/engine/plans.py is applied, not flagged
         if not ctx.zone.is_modeled or overlay_plan:
             for i in r1:
                 if i.label == "derived":
@@ -1105,6 +1168,7 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
         items += sb9_items(conn, ctx, lot_area, kinds, family)
         flat = R.load("R1_HEIGHT", conn).value("max_ft") if family == "R1" else None
         items += rebuild_items(conn, ctx, kinds, outline_sqft, flat)
+        items += plan_items(conn, ctx)
         items += _flags(conn, ctx)
     if frame and None not in (front, side, rear):
         if frame.through:

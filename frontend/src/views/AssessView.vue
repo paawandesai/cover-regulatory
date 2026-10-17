@@ -168,6 +168,7 @@ const groups = computed(() => {
       rows: of(['guest_house', 'adu', 'jadu']),
     },
     { title: 'SB 9', sub: 'Two homes, or a lot split, under state law', rows: of(['sb9']) },
+    { title: 'Specific plan', sub: 'Plans whose text is loaded', rows: of(['plan']) },
     { title: 'Fire rebuild', sub: "Mayor's emergency orders after the January 2025 fires", rows: of(['rebuild']) },
     { title: 'Flags', sub: 'Shown, not evaluated', rows: of(['flag']) },
   ].filter((g) => g.rows.length)

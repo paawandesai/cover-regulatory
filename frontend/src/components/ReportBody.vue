@@ -12,6 +12,7 @@ const SECTIONS: [string, string[]][] = [
   ['Zone envelope', ['r1_envelope', 'r2_envelope', 're_envelope']],
   ['What can be built', ['guest_house', 'adu', 'jadu']],
   ['SB 9', ['sb9']],
+  ['Specific plan', ['plan']],
   ['Fire rebuild', ['rebuild']],
   ['Conditions flagged, not evaluated', ['flag']],
 ]
