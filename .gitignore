@@ -54,3 +54,6 @@ frontend/dist/
 *.tfplan
 terraform.tfvars
 backend.hcl
+frontend/test-results/
+frontend/playwright-report/
+frontend/e2e-junit.xml

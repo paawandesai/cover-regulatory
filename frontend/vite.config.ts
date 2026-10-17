@@ -9,5 +9,5 @@ export default defineConfig({
     proxy: { '/api': { target: process.env.API_URL ?? 'http://127.0.0.1:8000', changeOrigin: false } },
   },
   worker: { format: 'es' },
-  test: { environment: 'jsdom' },
+  test: { environment: 'jsdom', include: ['src/**/*.test.ts'] },
 })
