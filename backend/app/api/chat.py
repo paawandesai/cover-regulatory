@@ -116,8 +116,23 @@ def load_chunks(conn, question: str, result: dict) -> list[dict]:
     return sorted(rows, key=lambda r: order[r["id"]])
 
 
+_NUMBER = re.compile(r"\d+(?:[.,]\d+)*")
+
+
+def _canon(n: str) -> str:
+    n = n.replace(",", "")
+    return n.rstrip("0").rstrip(".") if "." in n else n
+
+
+def _numbers_backed(text: str, sources: list[str]) -> bool:
+    """Every number the sentence states appears, as a whole number, in its quotes, sections or restated values."""
+    pool = {_canon(n) for n in _NUMBER.findall(" ".join(sources))}
+    return all(_canon(n) in pool for n in _NUMBER.findall(text))
+
+
 def verify(answer: Answer, chunks: list[dict], items: list[dict]) -> list[dict]:
-    """Keep the sentences whose every quote is in its chunk (or that point at real assessment values)."""
+    """Keep the sentences whose every quote is in its chunk (or that point at real assessment values), and
+    whose numbers all come from those quotes or values. The wording around them is still the model's."""
     by_id = {c["id"]: c for c in chunks}
     by_item = {i["id"]: i for i in items if i["family"] != "parcel"}
     kept = []
@@ -145,6 +160,12 @@ def verify(answer: Answer, chunks: list[dict], items: list[dict]) -> list[dict]:
                     if c.get("section_id") and c["section_id"] not in seen:
                         seen.add(c["section_id"])
                         cites.append({k: c.get(k) for k in ("chunk_id", "section_id", "quote", "source_url")})
+            sources = [c.get("quote") or "" for c in cites] + [c.get("section_id") or "" for c in cites]
+            for r in refs:
+                i = by_item[r]
+                sources += [str(i.get("value") or ""), i.get("unit") or "", i.get("title") or ""]
+            if not _numbers_backed(s.text, sources):
+                continue
             kept.append({"text": s.text, "citations": cites, "items": refs})
     return kept
 
@@ -187,6 +208,7 @@ def chat(body: ChatIn, request: Request):
         "dropped": dropped,
         "prompt_version": PROMPT_VERSION,
         "model": response.model,
-        "disclosure": "Written by an AI model from the cited text; every quote was checked against the source. "
+        "disclosure": "Written by an AI model from the cited text. Every quote was checked against the source and "
+        "every number against the quotes or the assessment; the wording around them was not. "
         "Sentences that did not check out were removed.",
     }

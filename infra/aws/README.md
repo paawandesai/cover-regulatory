@@ -67,6 +67,7 @@ Prerequisites: an AWS account, a Route 53 hosted zone for the domain, the AWS CL
 ## Restoring the database
 - **To a point in time within 14 days:** use `aws rds restore-db-instance-to-point-in-time` into a new instance. Then either swap names, or point `DATABASE_URL` at the new instance by importing it into state.
 - **From a daily or monthly snapshot:** restore it in AWS Backup (vault `regengine-<environment>`) into a new instance, the same way.
+- **Retention:** the purge job deletes feedback and client reports after `FEEDBACK_RETENTION_DAYS`, but snapshots taken before that keep them for 35 days (daily) or a year (monthly). The stated retention applies to the live database only; shorten the backup rules before production if that matters.
 - **To rebuild from scratch:** create a new instance, then run `./restore.sh` with the latest dump. The regulation data comes from that dump. Feedback, reports, reviewers and the audit log come only from backups.
 
 ## Rotating secrets

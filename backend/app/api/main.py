@@ -23,7 +23,9 @@ from app.config import get_settings
 from app.db.connection import connect
 
 log = logging.getLogger("app.api")
-app = FastAPI(title="Home Building Regulatory Engine (PoC)", docs_url="/api/docs", openapi_url="/api/openapi.json")
+app = FastAPI(
+    title="Home Building Regulatory Engine (PoC)", docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url=None
+)
 app.include_router(reports_router)
 app.include_router(chat_router)
 
@@ -41,7 +43,8 @@ def _invite_token(code: str) -> str:
 async def invite_gate(request: Request, call_next):
     """Hosted demo only: with DEMO_INVITE_CODE set, API routes need the invite cookie."""
     code = get_settings().demo_invite_code
-    path = request.url.path
+    # The raw ASGI path: request.url is rebuilt from the Host header, which a client controls.
+    path = request.scope["path"]
     # A signed client report opens by its unguessable link without the invite, so the client can read it.
     report_link = request.method == "GET" and path.startswith("/api/reports/")
     if code and path.startswith("/api/") and path not in _OPEN_PATHS and not report_link:

@@ -221,7 +221,7 @@ cases:
   - apn: "4327028024"   # Beverly Hills: outside the City
     status: outside_city
   # Unincorporated LA County, Del Aire (wave 9). Hand calculations by Claude Code from the Title 22 copy Paawan supplied
-  # (edition not stated), not yet spot-checked by Paawan. Every Title 22 value is labelled interpretive because of the edition.
+  # (edition not stated), spot-checked by Paawan on 2026-10-17. Every Title 22 value is labelled interpretive because of the edition.
   - apn: "4142004002"   # Del Aire, County R-1, ~70 x 85 ft, 5,259 sq ft, interior lot
     status: ok
     expect:

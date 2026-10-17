@@ -19,8 +19,8 @@ quotes this run).
 
 What this does and does not show:
 - The question set is small and was written by the same author (Claude Code) who wrote the search code, and
-  the fusion weight was chosen on it. There is no holdout, so these numbers are a sanity check, not a
-  validated accuracy figure.
+  the fusion weight was chosen on it. There was no holdout when this was written (one was added on 2026-10-16, below), so these numbers are a
+  sanity check, not a validated accuracy figure.
 - Full text did not help on this set at any weight tried, so it is off by default and used only when no
   embeddings exist. That differs from the plan (decision D15 called for fusion) and is recorded here.
 - Misses cluster on questions whose best answer is spread across ZA Memo 143 sections and state law. Those
@@ -68,7 +68,7 @@ What this shows:
 - Both sets are lower than on 2026-10-16 (dev 0.81, holdout 0.56). Leaving Title 22 out does not bring them back,
   so the drop came with the City documents added in waves 2 to 7 (Chapter 1A, the fire orders, the specific plan
   and more state law). Which documents cause each miss was not traced. Nothing in search was tuned on the holdout.
-- There is no County question set yet.
+- There was no County question set at this point (one was added later the same day, below).
 
 ## Cause of the drop, and a fix (2026-10-17)
 
