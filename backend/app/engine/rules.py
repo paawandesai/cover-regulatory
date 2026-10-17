@@ -343,3 +343,79 @@ def hillside_needs(zone: str, hd_row: str) -> list[Need]:
         for k, b in enumerate(HILLSIDE_BANDS)
     ]
     return needs
+
+
+# R2 Two-Family Zone (LAMC 12.09). Yards are the R1 yards (12.09 C.1-C.3 refer to 12.08 C.1-C.3).
+RULES |= {
+    "R2_USE": [Need("rule", "LAMC 12.09 A.2", "dwelling_units_max", "two single", numeric=False)],
+    "R2_YARDS": [
+        Need("front", "LAMC 12.09 C.1", "front_yard_min_ft", "Same as required", numeric=False),
+        Need("side", "LAMC 12.09 C.2", "side_yard_min_ft", "Same as required", numeric=False),
+        Need("rear", "LAMC 12.09 C.3", "rear_yard_min_ft", "Same as required", numeric=False),
+    ],
+    "R2_DENSITY": [
+        Need("per_unit_sqft", "LAMC 12.09 C.4", "lot_area_per_unit_sqft", "minimum lot area per dwelling unit"),
+        Need("two_family_min_sqft", "LAMC 12.09 C.4", "lot_area_min_sqft", "In no case"),
+    ],
+    "R2_LOT_MINIMUMS": [
+        Need("area_sqft", "LAMC 12.09 C.4", "lot_area_min_sqft", "Every lot shall have a minimum width"),
+        Need("width_ft", "LAMC 12.09 C.4", "lot_width_min_ft", "Every lot shall have a minimum width"),
+    ],
+    "R2_HEIGHT": [Need("max_ft", "LAMC 12.21.1", "height_max_ft", "In the R2 Zone, no Building")],
+    "R2_FLOOR_AREA": [
+        Need("buildable_x", "LAMC 12.21.1 A.1", "other", "all other zones, except the RA, RE, RS, and R1 Zones")
+    ],
+    # RE Residential Estate Zone (LAMC 12.07.01), off the Hillside Area and Coastal Zone.
+    "RE_FRONT_YARD": [
+        Need("pct", "LAMC 12.07.01 C.1", "front_yard_pct_lot_depth", "20% of the depth"),
+        Need("max_ft", "LAMC 12.07.01 C.1", "front_yard_max_ft", "20% of the depth"),
+    ],
+    "RE_REAR_YARD": [
+        Need("pct", "LAMC 12.07.01 C.3", "rear_yard_pct_lot_depth", "25% of the depth"),
+        Need("max_ft", "LAMC 12.07.01 C.3", "other", "rear yard need not exceed 25 feet"),
+    ],
+    "GUEST_HOUSE_RE": [
+        Need("min_lot_sqft", "LAMC 12.07.01 A.6", "alq_min_lot_area_sqft"),
+        Need("stories", "LAMC 12.07.01 A.6", "stories_max", "not exceeding two stories"),
+    ],
+}
+
+
+def re_needs(zone: str) -> dict[str, list[Need]]:
+    """Side yard, height, lot minimum and floor area inputs for one RE designation (RE9, RE11, RE15, RE20, RE40)."""
+    sec = "LAMC 12.07.01 C.2"
+    common = [
+        Need("per_story_ft", sec, "side_yard_extra_per_story_ft", "more than two- stories"),
+        Need("in_lieu", sec, "other", "In lieu of the additional side yard requirement", numeric=False),
+    ]
+    if zone in ("RE9", "RE11"):
+        side = [
+            Need("base_ft", sec, "side_yard_min_ft", "Notwithstanding the above paragraph"),
+            Need("narrow_pct", sec, "side_yard_pct_lot_width", "Notwithstanding the above paragraph"),
+        ]
+    elif zone == "RE15":
+        side = [
+            Need("pct", sec, "side_yard_pct_lot_width", "designated RE15"),
+            Need("min_ft", sec, "side_yard_min_ft", "designated RE15"),
+            Need("max_ft", sec, "other", "designated RE15"),
+        ]
+    else:
+        side = [Need("base_ft", sec, "side_yard_min_ft", "RE20 or RE40")]
+    height_quote = "R1, RS, or RE9" if zone == "RE9" else "RE11, RE15, RE20, RE 40"
+    rfa = (
+        [Need("pct", "LAMC 12.07.01 C.5", "rfa_max_pct_lot_area", "less than 15,000 square feet")]
+        if zone in ("RE9", "RE11")
+        else [Need("pct", "LAMC 12.07.01 C.5", "rfa_max_pct_lot_area", "RE15, RE20 and RE40")]
+    )
+    return {
+        "side": side + common,
+        "height": [
+            Need("max_ft", "LAMC 12.21.1", "height_max_ft", height_quote, pick="max"),
+            Need("low_roof_ft", "LAMC 12.21.1", "height_max_ft", height_quote, pick="min"),
+        ],
+        "lot": [
+            Need("area_sqft", "LAMC 12.07.01 C.4", "lot_area_min_sqft", applies=zone),
+            Need("width_ft", "LAMC 12.07.01 C.4", "lot_width_min_ft", applies=zone),
+        ],
+        "rfa": rfa,
+    }

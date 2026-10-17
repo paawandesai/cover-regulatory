@@ -1,0 +1,28 @@
+{
+ "checked_on": "2026-10-17",
+ "method": "Wave 7 (left-out item 15). RE accessory living quarters (LAMC 12.07.01 A.6), extracted by Claude Opus 5.5 (prompt extract-v3), checked by Claude Sonnet 5.5 (Anthropic API) against the chunk, decided by Claude Opus 5.5 (via Claude Code). The other four candidates from this run stay pending.",
+ "candidates": [
+  {
+   "fragment_id": 770,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-a-6#1",
+   "parameter": "alq_min_lot_area_sqft",
+   "recommendation": "approve_with_note",
+   "note": "The zone comes from the section (LAMC 12.07.01 is the RE zone), not the excerpt. Used as the RE lot-area test for accessory living quarters; the two-story limit, parking (12.21 A) and location rules (12.21 C, 12.22 C) are named in the explanation, not checked.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value of 20,000 and the unit of sq ft match A.6(a), and the parameter name fits the text. Conditions are null, yet the excerpt attaches further requirements to accessory buildings: the two-story limit when uses are combined, the parking requirement, and the cross-references for location. The 'guest house' label and the RE zone tag are not in the text. The extraction is basically right but needs these caveats."
+   }
+  },
+  {
+   "fragment_id": 773,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-a-6#1",
+   "parameter": "stories_max",
+   "recommendation": "approve_with_note",
+   "note": "Shown in the RE guest house explanation as the two-story limit on a building holding accessory living quarters, a recreation room or a garage; it does not apply to stables, and quarters are not allowed at all under 20,000 sq ft.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value of 2 and the unit of stories match the quoted sentence in A.6(c). The parameter name stories_max is acceptable, but the conditions are incomplete. The quote limits only the listed uses, and the 20,000 sq ft minimum lot area in (a) gates accessory living quarters and servant's quarters entirely. The candidate's condition, 'applies to one building combining any of these uses', misstates the text, which also covers single-use buildings. The extraction should carry the lot-area gate and the use scope, and the RE zone scope should be confirmed from the section context."
+   }
+  }
+ ]
+}

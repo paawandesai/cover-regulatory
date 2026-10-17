@@ -1,0 +1,548 @@
+{
+ "checked_on": "2026-10-17",
+ "method": "Wave 7 (left-out item 15, R2 and RE zones). Candidates from LAMC 12.09, 12.07.01 C and 12.21.1, extracted by Claude Opus 5.5 (prompt extract-v3). The 34 candidates the engine uses were checked by Claude Sonnet 5.5 (Anthropic API) against each chunk, then decided by Claude Opus 5.5 (via Claude Code); 21 exact duplicates from repeated runs were rejected. The rest stay pending for a reviewer.",
+ "candidates": [
+  {
+   "fragment_id": 684,
+   "chunk_id": "lamc_chapter1#lamc-12-09-a-2#1",
+   "parameter": "dwelling_units_max",
+   "recommendation": "approve_with_note",
+   "note": "Read as a permitted-use list item: the engine says up to two dwellings (one two-family dwelling or two single-family dwellings) and does not treat it as a numeric cap.",
+   "checks": {
+    "second_model": "disagree",
+    "second_model_explanation": "The excerpt is a permitted-use list item allowing a two-family dwelling or two single-family dwellings. The candidate's null value and 'text' unit are consistent with the absence of a number, but the parameter 'dwelling_units_max' overstates the text: it is a permitted-use provision, not a numeric maximum-unit standard. A 'two' is implied for both alternatives, but the excerpt does not state a cap and does not include the parent clause identifying the zone. The 'applies_to: R2' is inferred from outside the excerpt. Since conditions are null and the downstream engine rule uses it for yards, height, and floor area, which this text does not govern, the extraction should be recast as a permitted_use entry (e.g., parameter 'permitted_use_residential_two_unit') rather than a unit-count maximum."
+   }
+  },
+  {
+   "fragment_id": 688,
+   "chunk_id": "lamc_chapter1#lamc-12-09-c-1#1",
+   "parameter": "front_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Cross-reference: the engine applies the R1 front yard rule (12.08 C.1) and cites this subdivision too.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The excerpt gives no numeric value, only a reference to the R1 Zone front yard in Sec. 12.08 C.1. Null with unit 'text' and the verbatim value_text faithfully captures that. The parameter name front_yard_min_ft matches a front yard requirement, though 'min_ft' implies a number the text does not provide. The excerpt contains no exceptions, thresholds, or lot-type limits of its own, so conditions null is acceptable, but any conditions in Sec. 12.08 C.1 are inherited by reference and are not in this excerpt. Applies_to R2 is consistent with the section (12.09 is the R2 zone). The extraction is faithful but unusable as a number until the cross-reference is resolved."
+   }
+  },
+  {
+   "fragment_id": 689,
+   "chunk_id": "lamc_chapter1#lamc-12-09-c-2#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Cross-reference: the engine applies the R1 side yard rule (12.08 C.2) and cites this subdivision too.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The null value is faithful because the excerpt states no number, and value_text captures the cross-reference accurately. The parameter name side_yard_min_ft matches the subject (side yard), but the unit 'text' conflicts with the _ft suffix and with a numeric field. The excerpt itself lists no thresholds or exceptions, so conditions are complete as far as this text goes, but the real requirement lives in LAMC 12.08 C.2 and must be resolved before use. The applies_to of R2 is consistent with Sec. 12.09, the R2 Two-Family Zone. Verdict: agree as a reference-type extraction, with the caveat that it is not directly usable as a numeric rule."
+   }
+  },
+  {
+   "fragment_id": 690,
+   "chunk_id": "lamc_chapter1#lamc-12-09-c-3#1",
+   "parameter": "rear_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Cross-reference: the engine applies the R1 rear yard rule (12.08 C.3) and cites this subdivision too.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The excerpt only says the R2 rear yard is the same as required in the R1 Zone per Sec. 12.08 C.3. The candidate preserves this as null value, unit 'text', and a verbatim value_text, which is faithful, with no invented number. The parameter name matches the regulated item (rear yard), and the excerpt has no thresholds or exceptions of its own, so conditions are complete as far as this text goes. Caveat: the rule is not usable standalone, because the actual dimension lives in Sec. 12.08 C.3 and must be linked and resolved. The applies_to of R2 is consistent with Sec. 12.09."
+   }
+  },
+  {
+   "fragment_id": 691,
+   "chunk_id": "lamc_chapter1#lamc-12-09-c-4#1",
+   "parameter": "lot_width_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "The substandard-lot proviso and the 4,000 sq ft two-family floor are separate fragments and shown in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 50 and the unit ft match the text, and the parameter lot_width_min_ft correctly describes the minimum lot width. The conditions field is incomplete: it paraphrases the substandard-lot proviso but leaves out the 4,000 sq ft floor for two-family dwellings, the fact that the proviso also covers lots under 5,000 sq ft, and the Section 12.22 C exceptions. The candidate is usable as a base width value but needs these caveats."
+   }
+  },
+  {
+   "fragment_id": 692,
+   "chunk_id": "lamc_chapter1#lamc-12-09-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "The substandard-lot proviso and the 4,000 sq ft two-family floor are separate fragments and shown in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The 5,000 sq ft value, sqft unit and the minimum lot area parameter match the first sentence of the quote. The conditions captured only the substandard-lot allowance and omit the 4,000 sq ft absolute floor for two-family dwellings, which is the most important limit for an R2 duplex engine. They also omit the width requirement, the 2,500 sq ft per-unit rule, the RD1.5 carve-out for lots adjoining commercial/industrial zones, and the 12.22 C exceptions. The substandard-lot wording is also paraphrased loosely: the lot must have been held under separate ownership or of record when the article became effective, and the 5,000 sq ft cap refers to uses requiring more area."
+   }
+  },
+  {
+   "fragment_id": 693,
+   "chunk_id": "lamc_chapter1#lamc-12-09-c-4#1",
+   "parameter": "lot_area_per_unit_sqft",
+   "recommendation": "approve_with_note",
+   "note": "The engine divides the lot area by 2,500 sq ft and caps the result at the two dwellings 12.09 A.2 allows; the RD1.5 exception for lots beside commercial zones is flagged, not applied.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 2,500 sq ft and the unit sqft match the quoted text, and the parameter name lot_area_per_unit_sqft correctly describes the per-dwelling-unit minimum. The candidate captures the main RD1.5 exception, but omits other conditions in the excerpt that change when the value applies: the substandard-lot proviso, the 4,000 sq ft minimum for two-family dwellings, the 50 ft / 5,000 sq ft lot minimums, and the cross-reference to 12.22 C. Hence it is accurate but incomplete, so agree with caveat."
+   }
+  },
+  {
+   "fragment_id": 694,
+   "chunk_id": "lamc_chapter1#lamc-12-09-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Used only as the floor below which a two-family dwelling is not allowed (quote names two-family dwellings); not used as the general lot minimum.",
+   "checks": {
+    "second_model": "disagree",
+    "second_model_explanation": "The number 4,000 and the unit sqft match the quote, but the parameter name lot_area_min_sqft misdescribes it. The text sets the minimum lot area at 5,000 sq ft, and 4,000 sq ft is an absolute floor for two-family dwellings on grandfathered substandard lots. The candidate's conditions say substandard lots are covered but omit the grandfathering requirement (separate ownership or of record at the effective date), the 5,000 sq ft general minimum, the per-unit density, and the adjoining commercial/industrial lot rule. A more accurate parameter would be something like two_family_min_lot_area_substandard_sqft with the grandfathering condition."
+   }
+  },
+  {
+   "fragment_id": 696,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-1#1",
+   "parameter": "front_yard_pct_lot_depth",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The 20% value, the percent unit and the parameter name all match the quoted text. The candidate mentions the 25 ft cap and the 40% averaging, but it leaves out several conditions that change the required yard. These are the 10 ft variance requirement, the shallowest-average tie-break, the lots excluded from the count, the 40 ft absolute ceiling and the key-lot provisions. Zone applicability to RE is not stated in the excerpt. So the extraction is accurate as a base value but incomplete as a standalone rule."
+   }
+  },
+  {
+   "fragment_id": 697,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-1#1",
+   "parameter": "front_yard_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "As for R1, 25 ft caps the 20%-of-depth base requirement; prevailing-setback averaging is not computed for RE and is named in the explanation.",
+   "checks": {
+    "second_model": "disagree",
+    "second_model_explanation": "The number 25 and unit ft match the quote, but the label is wrong. The text says the 20%-of-depth front yard need not exceed 25 ft, so 25 ft is the cap on that base formula only. It is not a maximum front yard, because the averaging proviso can raise the requirement up to 40 ft. The conditions field also omits the averaging, key lot, and 40 ft ceiling provisions. The excerpt is the R2 section (12.07.01), so the applies_to of RE Zone is not supported. A better extraction would be something like front_yard_base_requirement_cap_ft = 25 with the 20% depth formula, the averaging override, and the 40 ft ceiling listed as separate conditions or parameters."
+   }
+  },
+  {
+   "fragment_id": 703,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "side_yard_pct_lot_width",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value of 10 percent of lot width matches the RE15 sentence, and the unit is correct. The parameter name describes the regulated item. The min of 5 ft and max of 10 ft are captured, but the extraction omits the additions for height or stories and the precedence of specific plans, HPOZs and subdivision approvals, which change the applicable side yard. So it is accurate but incomplete."
+   }
+  },
+  {
+   "fragment_id": 704,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The number 5 and unit ft match the quote as the floor, but the parameter name side_yard_min_ft suggests a flat minimum, whereas the text sets the yard at 10% of lot width with a 5 ft floor and a 10 ft cap. The conditions field captures only the floor and omits the 10 ft maximum, the added width for stories above the second or height above 18 ft, and the precedence of specific plans, HPOZs, and subdivision approvals. Usable only with these caveats, ideally by recording the formula (max(5, 0.10*width), capped at 10) instead of a single value."
+   }
+  },
+  {
+   "fragment_id": 705,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value of 10 and unit of ft match the text, and the quote is accurate. The parameter 'other' is vague. It should be something like a maximum base side yard for RE15, and the conditions are too thin. The 10 ft cap applies only to RE15 and only to the base formula (10% of lot width, 5 ft minimum). The (c) story and height add-ons are separate and additive or alternative, so the total required side yard can exceed 10 ft. Subdivision (d) overrides from specific plans, HPOZs and subdivision approvals. The entry is usable only if tagged RE15-only and as a cap on the base requirement."
+   }
+  },
+  {
+   "fragment_id": 706,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The 7 ft figure, ft unit and side_yard_min_ft name all match the quoted paragraph for non-Hillside, non-Coastal RE9/RE11 lots. The candidate captures the lot-width exception (under 70 ft wide, 10% of width, not less than 3 ft) and the Hillside/Coastal exclusion. It omits the height and story add-ons from (c) and the precedence clause in (d), both of which change the yard that actually applies. The candidate is usable as a base minimum only if the engine adds those modifiers."
+   }
+  },
+  {
+   "fragment_id": 707,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "side_yard_pct_lot_width",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 10 percent, the unit, and the parameter name match the quoted sentence, and the candidate captures the core conditions (non-Hillside, non-Coastal, lot under 70 ft, 3-ft minimum, RE9/RE11). However, the extraction omits that this is a discretionary reduction from a 7-ft base side yard, and it leaves out the added side yard for height or stories and the precedence of specific plans, HPOZs and subdivision approvals. These affect the final yard an engine would compute, so the candidate is acceptable only with those caveats."
+   }
+  },
+  {
+   "fragment_id": 708,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "side_yard_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The 10 ft value, ft unit and side_yard_min_ft parameter match the RE20/RE40 sentence, and applies_to is correctly limited to those zones. But conditions is null even though the excerpt has modifiers that change the required yard: subdivision (c) adds width for height or stories, and (d) lets specific plans, HPOZs and subdivision approvals take precedence. The base value is right, but it should be stored with these caveats."
+   }
+  },
+  {
+   "fragment_id": 709,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "side_yard_extra_per_story_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value (1 ft), unit (ft), and parameter name match the quoted sentence in subdivision (c). However, the candidate omits the immediately following 'in lieu' paragraph, which replaces the per-story rule with a height-based rule for new construction or ground floor additions in RE9/RE11/RE15/RE20 outside Hillside and Coastal areas, as well as the precedence clause in (d). Because the candidate's own engine context is a non-Hillside, non-Coastal flat lot, the omitted exception is the controlling rule in most cases there. The extraction is accurate as far as it goes but incomplete."
+   }
+  },
+  {
+   "fragment_id": 710,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-2#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The candidate quotes the one-foot-per-ten-feet increment above 18 ft accurately and correctly lists the exclusions and the 'in lieu of' relationship. The null value with unit 'text' and parameter 'other' is vague but does not contradict the text, and a structured parameter such as a side yard height increment would be better. The candidate omits the subdivision (d) precedence clause. It also does not say the increment is added to a base side yard that depends on zone and lot width."
+   }
+  },
+  {
+   "fragment_id": 712,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-3#1",
+   "parameter": "rear_yard_pct_lot_depth",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The excerpt requires a rear yard of at least 25% of lot depth, capped at 25 feet. The value 25.0 in percent and the parameter name rear_yard_pct_lot_depth match this. The cap is recorded in the conditions text. The only problem is scope: the excerpt never mentions the RE zone, so applies_to cannot be confirmed from it. The zone should be checked against the section heading, and the cap should be stored as a separate numeric field (25 ft)."
+   }
+  },
+  {
+   "fragment_id": 713,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-3#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "25 ft caps the 25%-of-depth rear yard; the engine uses min(25% of depth, 25 ft).",
+   "checks": {
+    "second_model": "disagree",
+    "second_model_explanation": "The 25 ft figure and the ft unit match the text, but only as the upper limit on the rear yard requirement. The text sets a minimum of 25% of lot depth, capped at 25 ft. The candidate keeps only the cap and labels the parameter 'other', although the text clearly regulates rear yard depth. The conditions field says 'Maximum required rear yard' and leaves out the 25%-of-depth formula that determines the actual requirement. The applies_to value of RE Zone and the engine rule's flat, non-Hillside, Height District 1 scoping are not stated in the excerpt. A correct extraction would use a rear-yard parameter and record the 25% of depth rule with the 25 ft cap."
+   }
+  },
+  {
+   "fragment_id": 715,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_width_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table gives RE9 a minimum lot width of 65 feet and a minimum lot area of 9,000 sq ft. The value, unit, parameter name and zone scoping (applies_to RE9) all match the text. The null conditions field omits several limits in the excerpt: the substandard-lot allowance under 17.05 H, the 12.22 C exceptions to area regulations, and the Hillside General Plan provision. The H provision is named for area, but it bears on lot size. The RE-to-RE11 default for plain RE maps also limits when the 65 ft figure applies. The extraction is accurate for a standard RE9 lot, but it should carry these conditions."
+   }
+  },
+  {
+   "fragment_id": 716,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 9,000 sq ft, the unit, and the parameter name match the RE9 row of the table, and applies_to is limited to RE9. However, the conditions field is null although the excerpt contains several conditions: the default of plain 'RE' to RE11, the Hillside density-based increase, the substandard-lot allowance under 17.05 H, the per-dwelling-unit rule, and the 12.22 C exceptions. The engine_rule context excludes Hillside, which partly mitigates that risk, but the candidate itself should carry the conditions."
+   }
+  },
+  {
+   "fragment_id": 717,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_width_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The RE11 table row gives a minimum lot width of 70 feet, so the value, unit and parameter name (lot_width_min_ft) are correct. The conditions field is null, but the excerpt contains several qualifiers that change when the value applies: the RE-to-RE11 default, the Hillside density provision, the substandard-lot allowance under Sec. 17.05 H, and the Sec. 12.22 C exceptions. The applies_to value of RE11 is accurate but should also cover unlabeled RE. The core number is right, so I agree with a caveat about the missing conditions."
+   }
+  },
+  {
+   "fragment_id": 718,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 11,000 square feet, the unit, and the RE11 scope match the table row quoted. The parameter name fits, since the table gives minimum lot area. The conditions field is null, though, while the excerpt has several qualifiers that change when the value applies: the default RE-to-RE11 rule, the hillside increase, the substandard-lot allowance, the per-dwelling-unit rule with its two-family exception, and the Sec. 12.22 C exceptions. The number is correct but should carry these caveats."
+   }
+  },
+  {
+   "fragment_id": 719,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_width_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table gives RE15 a minimum lot width of 80 feet and a minimum lot area of 15,000 sq ft, so the value, unit and parameter name are correct. The conditions field is null even though the excerpt contains exceptions that change when the minimum applies: the substandard-lot allowance, hillside general-plan limits, and the 12.22 C exceptions. The extraction is accurate but should carry these caveats and be scoped to RE-zoned lots designated RE15."
+   }
+  },
+  {
+   "fragment_id": 720,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 15,000 square feet for RE15 minimum lot area matches the table, the unit is correct, and the parameter name fits. However, the candidate has null conditions even though the excerpt includes Hillside increases, the 17.05 H substandard lot allowance, 12.22 C exceptions, and the per-dwelling-unit area rule, all of which change when the value applies. The engine description limits scope to flat non-Hillside lots, which partly mitigates this, but the conditions should still be captured."
+   }
+  },
+  {
+   "fragment_id": 721,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_width_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The RE20 row of the table gives a minimum lot width of 80 feet, so the value, unit and parameter name match the text. The candidate lists conditions as null, but the excerpt contains exceptions that change when the value applies: the hillside General Plan density provision, the 17.05 H substandard-lot allowance, and the 12.22 C exceptions. The applies_to of RE20 is correct, but the RE-defaults-to-RE11 rule should be noted. Because the base value is right but the conditions are omitted, the verdict is agree with caveat."
+   }
+  },
+  {
+   "fragment_id": 722,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table row for RE20 gives 20,000 square feet minimum lot area, so the value, unit, and parameter name (lot_area_min_sqft) match, and applies_to is correctly limited to RE20. The conditions field is null even though the excerpt contains several qualifiers: Hillside density-based increases, the substandard-lot allowance under 17.05 H, the per-dwelling-unit lot area rule with its two-family exception, and the 12.22 C exceptions. Because those conditions change when the value applies, the extraction is correct but incomplete."
+   }
+  },
+  {
+   "fragment_id": 723,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_width_min_ft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The table gives RE40 a minimum lot width of 80 feet and a minimum lot area of 40,000 sq ft, so the value, unit and parameter name are correct and the quote supports them. The candidate lists no conditions, yet the excerpt has substandard-lot relief under 17.05 H, the 12.22 C exceptions and a hillside density provision that can change how the minimum applies. The extraction is accurate but needs those caveats attached."
+   }
+  },
+  {
+   "fragment_id": 724,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-4#1",
+   "parameter": "lot_area_min_sqft",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 40,000 square feet for RE40 matches the table, the unit is correct, and the parameter lot_area_min_sqft describes the minimum lot area. The candidate has conditions null, but the excerpt includes several qualifiers: the Hillside increase, the recorded-lot exception for substandard lots, the Sec. 12.22 C exceptions, and the per-dwelling-unit rule with its two-family carve-out. Because the applies_to restriction to RE40 is correct but the conditions are missing, the extraction is accurate on its core number but incomplete."
+   }
+  },
+  {
+   "fragment_id": 743,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "approve_with_note",
+   "note": "Applies to R2 lots outside Hillside Areas and the Coastal Zone; the block-average exception and specific-plan precedence are named in the explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The value 33 ft and the unit are correct for the R2 Zone, and the parameter height_max_ft matches the text, which regulates maximum building and structure height. The quote is accurate. The candidate does record the Hillside Area/Coastal Zone exclusion. It omits the block-average exception and the precedence of Specific Plans, HPOZ and subdivision approvals, both of which change when 33 ft applies. The candidate is therefore usable only with those caveats."
+   }
+  },
+  {
+   "fragment_id": 760,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "other",
+   "recommendation": "approve_with_note",
+   "note": "Applies to R2 (and other non-RA/RE/RS/R1 residential zones) in Height District 1 only; the engine uses it only for R2 off the Hillside Area and Coastal Zone.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": ""
+   }
+  },
+  {
+   "fragment_id": 762,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "rfa_max_pct_lot_area",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": "The 40 percent value, the percent unit, and the parameter name match the quoted sentence for RE9 and RE11 zones on lots under 15,000 sq ft. The candidate correctly captures the lot-size threshold, the zone limit, and the Hillside/Coastal exclusion. It omits the 20 percent bonus (methods (a) and (b), one per property), which raises the allowable floor area to 48 percent. It also does not state that the cap covers all buildings and accessory buildings. The value is a base figure, not a hard maximum, so the verdict is agree with caveat. The excerpt does not address R2 zones, so the rule must not be applied to R2 lots."
+   }
+  },
+  {
+   "fragment_id": 764,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "rfa_max_pct_lot_area",
+   "recommendation": "approve_with_note",
+   "note": "Conditions the second check listed (height/story add-ons, specific-plan precedence, substandard lots) are applied or named in the engine's explanation.",
+   "checks": {
+    "second_model": "agree_with_caveat",
+    "second_model_explanation": ""
+   }
+  },
+  {
+   "fragment_id": 740,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#1",
+   "parameter": "height_max_ft",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #225 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 728,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #761 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 730,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #752 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 732,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "rfa_bonus_pct",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #765 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 737,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #54 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 738,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #55 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 739,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #56 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 741,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#1",
+   "parameter": "height_max_ft",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #227 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 742,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#1",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #228 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 744,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #229 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 745,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #230 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 746,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #231 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 747,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #232 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 748,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "height_max_ft",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #233 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 749,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #234 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 754,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "rfa_bonus_pct",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #765 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 755,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #767 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 756,
+   "chunk_id": "lamc_chapter1#lamc-12-07-01-c-5#1",
+   "parameter": "other",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #768 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 757,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #56 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 758,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #54 from a repeated extraction of the same chunk.",
+   "checks": {}
+  },
+  {
+   "fragment_id": 759,
+   "chunk_id": "lamc_chapter1#lamc-12-21-1-a-1#1",
+   "parameter": "rfa_ratio",
+   "recommendation": "reject",
+   "note": "Duplicate of fragment #55 from a repeated extraction of the same chunk.",
+   "checks": {}
+  }
+ ]
+}

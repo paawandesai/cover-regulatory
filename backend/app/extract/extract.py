@@ -26,13 +26,13 @@ from app.extract.validate import check
 
 log = logging.getLogger(__name__)
 
-PROMPT_VERSION = "extract-v2"  # v2: SB 9 and fire rebuild families
+PROMPT_VERSION = "extract-v3"  # v2: SB 9 and fire rebuild families; v3: R2 and RE zone families
 TARGETS = Path(__file__).with_name("targets.yaml")
 
 SYSTEM = f"""You read zoning and housing law and record the rules it states, for a reviewer to check.
 
 You receive one or more documents, each with a chunk_id. Return a fragment for each concrete rule a document
-states about single-family lots, accessory living quarters (guest houses), ADUs, JADUs, two-unit
+states about single-family lots, two-family (R2) and estate (RE) lots, accessory living quarters (guest houses), ADUs, JADUs, two-unit
 developments and lot splits, or rebuilding after a fire.
 
 Rules for every fragment:
@@ -43,6 +43,8 @@ Rules for every fragment:
 - Use null for anything the text does not say. An empty fragments list is a correct answer.
 - parameter is one of: {", ".join(PARAMETERS)}. Use "other" when none fits.
 - rule_family "adu_state" is for state law (Government Code) and "adu_local" for the City's own ADU rules.
+- rule_family "r2_envelope" is for the R2 Two-Family Zone (LAMC 12.09) and "re_envelope" for the RE Residential
+  Estate Zone (LAMC 12.07.01); "r1_envelope" stays for R1 and for rules shared by several zones.
 - rule_family "sb9" is for two-unit developments and urban lot splits (Gov. Code 65852.21, 66411.7), and
   "fire_rebuild" for rebuilding rules in emergency orders after a fire.
 

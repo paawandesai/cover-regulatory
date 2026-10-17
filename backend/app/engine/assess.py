@@ -16,6 +16,7 @@ from app.engine.item import rule_item as _rule_item
 from app.engine.orders import rebuild_items, sb9_items
 from app.engine.prevailing import prevailing
 from app.engine.project import ProjectInputs, check_project, summarize
+from app.engine.zones import r2_items, re_items
 from app.parcel.provenance import Sourced
 from app.parcel.resolve import ParcelContext, resolve
 from app.parcel.zone import R1_VARIATION
@@ -656,7 +657,7 @@ def _r1_items(
     return items, front, side, rear
 
 
-def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[Item]:
+def _building_types(conn, ctx: ParcelContext, lot_area: float | None, family: str = "R1") -> list[Item]:
     items: list[Item] = []
     kinds = {o["kind"] for o in ctx.overlays}
     coastal = "coastal_zone" in kinds
@@ -666,9 +667,17 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[It
         if coastal
         else ""
     )
-    gh = R.load("GUEST_HOUSE", conn)
+    # R2 allows the R1 uses and accessory buildings (12.09 A.1, A.5); RE has its own lot minimum (12.07.01 A.6).
+    r2_note = (
+        " On an R2 lot with a two-family dwelling, the multifamily ADU rules in Gov. Code 66323(a)(3) and (a)(4) apply "
+        "instead; not modeled."
+        if family == "R2"
+        else ""
+    )
+    gh = R.load("GUEST_HOUSE_RE" if family == "RE" else "GUEST_HOUSE", conn)
     minlot = gh.value("min_lot_sqft")
     allowed = (lot_area >= minlot) if (lot_area and minlot) else None
+    section = {"RE": "LAMC 12.07.01 A.6", "R2": "LAMC 12.09 A.1, 12.08 A.7"}.get(family, "LAMC 12.08 A.7")
     gi = _rule_item(
         "guest_house",
         "guest_house",
@@ -679,13 +688,15 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[It
         (
             f"Allowed as an accessory use only on a lot of at least {minlot:,.0f} sq ft; this lot is "
             f"{lot_area:,.0f} sq ft. Accessory living quarters are for guests only: no kitchen, not rented, at most two "
-            "stories, and they count toward the lot's residential floor area (LAMC 12.03, 12.08 A.7). With a kitchen "
-            "or for rent it is an ADU instead (see below)."
+            f"stories, and they count toward the lot's floor area (LAMC 12.03, {section}). With a kitchen or for rent "
+            "it is an ADU instead (see below)."
         )
         if minlot and lot_area
         else None,
     )
     gi.citations += _chunk_citation(conn, "LAMC 12.03", "ACCESSORY LIVING QUARTERS")
+    if family == "R2":
+        gi.citations += _chunk_citation(conn, "LAMC 12.09 A.1")
     items.append(gi)
 
     st = R.load("ADU_STATE_DETACHED", conn)
@@ -702,6 +713,7 @@ def _building_types(conn, ctx: ParcelContext, lot_area: float | None) -> list[It
                 f"{st.value('setback_ft'):.0f} ft, and a height of at least {st.value('height_ft'):.0f} ft allowed, on a lot "
                 "with an existing or proposed single-family home. The City must approve it ministerially, including in "
                 "a fire hazard or Hillside Area (Gov. Code 66323). See the height the City must allow below."
+                + r2_note
                 + coastal_note
             )
             if None not in (st.value("max_sqft"), st.value("setback_ft"), st.value("height_ft"))
@@ -946,10 +958,15 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
             "not model. Chapter I rules would be wrong here, so none are shown."
         )
         return result
-    if not (ctx.zone and ctx.zone.is_r1_family):
+    if not (ctx.zone and ctx.zone.family):
         result["status"] = "zone_not_modeled"
-        result["notes"].append("Only the R1 one-family zone family is modeled.")
+        result["notes"].append(
+            f"Zone {ctx.zone.base_zone if ctx.zone else 'unknown'} is not modeled. This tool models the one-family R1 "
+            "zones (with R1V, R1F, R1R and R1H), the R2 two-family zone and the RE9 to RE40 estate zones. "
+            "Multiple-dwelling zones such as RD, R3, R4 and R5 have their own density, yard and floor area rules."
+        )
         return result
+    family = ctx.zone.family
 
     lot_area = float(ctx.lot_area_sqft.value) if ctx.lot_area_sqft else None
     frame = lot_frame(ctx.apn)
@@ -1000,9 +1017,22 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
                 f"{ctx.zone.raw}: " + "; ".join(ctx.zone.unmodeled) + ". The values below are shown for reference "
                 "and labeled accordingly."
             )
-        r1, front, side, rear = _r1_items(
-            conn, ctx, width, depth, lot_area, frame, project.height_ft if project else None
-        )
+        kinds = {o["kind"] for o in ctx.overlays}
+        if family == "R1":
+            r1, front, side, rear = _r1_items(
+                conn, ctx, width, depth, lot_area, frame, project.height_ft if project else None
+            )
+        elif family == "R2":
+            r1, front, side, rear = r2_items(conn, ctx, width, depth, lot_area, frame, kinds)
+            if front is not None:
+                # 12.09 C.1 is the R1 front yard, prevailing setback included.
+                pv = _prevailing_items(conn, ctx, frame, R.load("R1_FRONT_YARD", conn))
+                for it in pv:
+                    it.family = "r2_envelope"
+                at = next(n for n, i in enumerate(r1) if i.id == "front_yard") + 1
+                r1[at:at] = pv
+        else:
+            r1, front, side, rear = re_items(conn, ctx, width, depth, lot_area, frame, kinds)
         if long_front:
             # The front may really be the short side (an unrecognised corner lot), which swaps width and depth.
             for it in r1:
@@ -1015,7 +1045,6 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
                     it.explanation = (it.explanation or "") + (
                         " The front was taken on the lot's long side; if the short side is the front, this changes."
                     )
-        kinds = {o["kind"] for o in ctx.overlays}
         # Flat-land R1 numbers are wrong in the Hillside Area (LAMC 12.21 C.10 replaces them) and the Coastal Zone
         # floor area differs; showing them would mislead, so the values are withheld there.
         # The flat-land floor area and 33/28 ft height also exclude the Coastal Zone (12.08 C.5(a), 12.21.1), and the R1
@@ -1030,7 +1059,12 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
             ),
         }
         variation = ctx.zone.base_zone if R1_VARIATION.match(ctx.zone.base_zone or "") else None
-        if "coastal_zone" in kinds and not variation and not (ctx.zone.height_district or "").startswith("1"):
+        if (
+            family == "R1"
+            and "coastal_zone" in kinds
+            and not variation
+            and not (ctx.zone.height_district or "").startswith("1")
+        ):
             kinds = kinds | {"coastal_zone_unmodeled"}
         for kind, (ids, where) in withheld.items():
             if kind in kinds:
@@ -1047,14 +1081,15 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
                     " Not modeled for this zone string: " + "; ".join(ctx.zone.unmodeled) + "."
                     if not ctx.zone.is_modeled
                     else " A specific plan or HPOZ here can set its own yards and height, which take precedence "
-                    "(LAMC 12.08 C.2, 12.21.1); not modeled."
+                    f"({'LAMC 12.08 C.2' if family != 'RE' else 'LAMC 12.07.01 C.2(d)'}, 12.21.1); not modeled."
                 )
         items += r1
         ex = R.load("RFA_EXEMPTIONS", conn)
         rfa_ex = {k: f.value for k, f in ex.found.items()} if ex.label == "derived" else None
         rfa_item = next((i for i in items if i.id == "max_rfa"), None)
         coastal_floor = "coastal_zone" in kinds and "hillside" not in kinds
-        if coastal_floor:
+        if coastal_floor or family == "R2":
+            # R2 is limited by Floor Area (12.21.1 A.1), not Residential Floor Area.
             rfa_ex = None  # 12.03: Residential Floor Area (and its exemptions) does not apply in the Coastal Zone
         if rfa_ex and rfa_item is not None and rfa_item.value is not None:
             rfa_item.explanation = (rfa_item.explanation or "") + (
@@ -1066,9 +1101,9 @@ def assess(query: str, project: "ProjectInputs | None" = None) -> dict:
                 "in all. Lattice-roof porches and qualifying basements are not counted either."
             )
             rfa_item.citations += ex.citations()
-        items += _building_types(conn, ctx, lot_area)
-        items += sb9_items(conn, ctx, lot_area, kinds)
-        flat = R.load("R1_HEIGHT", conn).value("max_ft")
+        items += _building_types(conn, ctx, lot_area, family)
+        items += sb9_items(conn, ctx, lot_area, kinds, family)
+        flat = R.load("R1_HEIGHT", conn).value("max_ft") if family == "R1" else None
         items += rebuild_items(conn, ctx, kinds, outline_sqft, flat)
         items += _flags(conn, ctx)
     if frame and None not in (front, side, rear):

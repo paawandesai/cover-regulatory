@@ -6,7 +6,17 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 RuleFamily = Literal[
-    "r1_envelope", "guest_house", "adu_state", "adu_local", "jadu", "sb9", "fire_rebuild", "flag", "other"
+    "r1_envelope",
+    "r2_envelope",
+    "re_envelope",
+    "guest_house",
+    "adu_state",
+    "adu_local",
+    "jadu",
+    "sb9",
+    "fire_rebuild",
+    "flag",
+    "other",
 ]
 Unit = Literal["ft", "sqft", "percent", "ratio", "stories", "count", "days", "boolean", "text"]
 
@@ -27,6 +37,7 @@ PARAMETERS: dict[str, Unit] = {
     "height_max_ft": "ft",
     "stories_max": "stories",
     "rfa_ratio": "ratio",
+    "rfa_max_pct_lot_area": "percent",
     "rfa_bonus_pct": "percent",
     "lot_coverage_max_pct": "percent",
     "rfa_parking_exempt_sqft": "sqft",
@@ -64,6 +75,8 @@ PARAMETERS: dict[str, Unit] = {
     "rebuild_max_pct_prior": "percent",
     "rebuild_bluff_setback_ft": "ft",
     "sb9_suspended": "boolean",
+    "dwelling_units_max": "count",
+    "lot_area_per_unit_sqft": "sqft",
     "other": "text",
 }
 
