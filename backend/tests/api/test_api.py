@@ -478,3 +478,54 @@ def test_report_audit_never_holds_the_link(client):
         with connect() as conn:
             conn.execute("DELETE FROM report WHERE token = %s", (token,))
             conn.commit()
+
+
+def test_human_re_review_records_the_person_and_the_earlier_ai_decision(tmp_path):
+    from app.extract import human_review
+
+    with connect() as conn:
+        last = conn.execute("SELECT coalesce(max(id), 0) AS m FROM audit_log").fetchone()["m"]
+        ids = [
+            r["id"]
+            for r in conn.execute(
+                "SELECT id FROM rule_fragment WHERE status = 'approved' AND reviewed_by = 'ai-review' ORDER BY id LIMIT 3"
+            ).fetchall()
+        ]
+        before = {
+            r["id"]: r
+            for r in conn.execute(
+                "SELECT id, status, reviewed_by, reviewed_at, review_note FROM rule_fragment WHERE id = ANY(%s)", (ids,)
+            ).fetchall()
+        }
+    sheet = tmp_path / "decisions.csv"
+    sheet.write_text(
+        "Fragment id,Your decision,Your note\n"
+        f"{ids[0]},approve,\n{ids[1]},edit,Should be 6 ft\n{ids[2]},edit,\n99999999,approve,\n"
+    )
+    try:
+        counts = human_review.apply(sheet, "Test Person")
+        assert counts == {"approved": 1, "rejected": 0, "edit": 1, "unchanged": 0, "skipped": 2}
+        with connect() as conn:
+            now = {
+                r["id"]: r
+                for r in conn.execute(
+                    "SELECT id, status, reviewed_by, review_note FROM rule_fragment WHERE id = ANY(%s)", (ids,)
+                ).fetchall()
+            }
+            audit = conn.execute(
+                "SELECT actor, object_id, detail FROM audit_log WHERE id > %s ORDER BY id", (last,)
+            ).fetchall()
+        assert now[ids[0]]["status"] == "approved" and now[ids[0]]["reviewed_by"] == "Test Person"
+        assert now[ids[1]]["status"] == "rejected" and "Should be 6 ft" in now[ids[1]]["review_note"]
+        assert now[ids[2]]["reviewed_by"] == "ai-review"  # an edit with no correction is skipped
+        assert [a["detail"]["from_reviewer"] for a in audit] == ["ai-review", "ai-review"]
+        assert human_review.apply(sheet, "Test Person")["unchanged"] == 2
+    finally:
+        with connect() as conn:
+            for b in before.values():
+                conn.execute(
+                    "UPDATE rule_fragment SET status=%s, reviewed_by=%s, reviewed_at=%s, review_note=%s WHERE id=%s",
+                    (b["status"], b["reviewed_by"], b["reviewed_at"], b["review_note"], b["id"]),
+                )
+            conn.commit()
+        _drop_audit_after(last)
