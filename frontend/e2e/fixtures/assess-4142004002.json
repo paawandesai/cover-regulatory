@@ -1,7 +1,7 @@
 {
  "ai_disclosure": "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the engine does not model. In this demo that review was an AI review applied on the project owner's instruction, not a person's; each value's source panel says which. No AI model is used to compute this assessment.",
  "disclaimers": [
-  "Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS before relying on it.",
+  "Decision support for licensed professionals, not a zoning determination. Confirm every result with the jurisdiction before relying on it: LA City Planning and LADBS in the City, LA County Regional Planning and Public Works in unincorporated areas.",
   "Parcel boundaries and attributes come from the Los Angeles County Assessor's open parcel data, provided for informational purposes; it may not be suitable for legal, engineering, or surveying use."
  ],
  "generated_at": "2026-10-17T00:00:00Z",
@@ -307,7 +307,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -320,7 +320,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -333,7 +333,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -346,7 +346,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     }
@@ -374,7 +374,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -387,7 +387,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -400,7 +400,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -413,13 +413,13 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     }
    ],
    "coverage": 1.0,
-   "explanation": "5 ft on each interior side for Zone R-1 (Table 22.18.040-A). On a corner lot the street side yard is 5 ft, and more on a reversed corner lot (Table 22.18.040-A); corner lots are not detected here. Read from a copy of Title 22 whose edition is not stated (2019 numbering, before the County's 2020 ADU amendments); later amendments may change this.",
+   "explanation": "5 ft on each interior side for Zone R-1 (Table 22.18.040-A). This lot was read as an interior lot, so there is no street side yard. Read from a copy of Title 22 whose edition is not stated (2019 numbering, before the County's 2020 ADU amendments); later amendments may change this.",
    "family": "county_r1_envelope",
    "id": "side_yard",
    "label": "interpretive",
@@ -441,7 +441,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -454,7 +454,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -467,7 +467,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -480,7 +480,7 @@
      "quote_start": 275,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     }
@@ -508,7 +508,7 @@
      "quote_start": 95,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.18.040 B",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     }
@@ -536,7 +536,7 @@
      "quote_start": 1996,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.110.130 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     },
@@ -549,7 +549,7 @@
      "quote_start": 1453,
      "retrieved_at": "2026-10-17 16:10:17.389339+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LACC 22.110.130 A",
      "source_url": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances"
     }
@@ -577,7 +577,7 @@
      "quote_start": 1428,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66323(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
     },
@@ -590,7 +590,7 @@
      "quote_start": 1163,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66323(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
     },
@@ -603,13 +603,13 @@
      "quote_start": 1244,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66321(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
     }
    ],
    "coverage": null,
-   "explanation": "One detached new ADU up to 800 sq ft, with side and rear setbacks of no more than 4 ft and a height of at least 16 ft allowed, on a lot with an existing or proposed single-family home. State law requires counties as well as cities to approve it ministerially (Gov. Code 66323). The County's own ADU ordinance is not in the copy loaded here, which predates it.",
+   "explanation": "One detached new ADU up to 800 sq ft, with side and rear setbacks of no more than 4 ft and a height of at least 16 ft allowed, on a lot with an existing or proposed single-family home. State law requires counties as well as cities to approve it ministerially (Gov. Code 66323). The County's own ordinance allows more (next item).",
    "family": "adu",
    "id": "adu_state_detached",
    "label": "derived",
@@ -623,6 +623,86 @@
   {
    "citations": [
     {
+     "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-a#1",
+     "code_chapter": "T22",
+     "fragment_id": 922,
+     "quote": "The maximum floor area of an accessory dwelling unit shall be 1,200 square feet",
+     "quote_end": 285,
+     "quote_start": 206,
+     "retrieved_at": "2026-10-17 18:56:38.6841+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.140.640 G.1.a",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/205125.pdf#page=12"
+    },
+    {
+     "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-b#1",
+     "code_chapter": "T22",
+     "fragment_id": 925,
+     "quote": "The maximum height of an attached or detached accessory dwelling unit on a lot with an existing or proposed single-family or multi-family residence shall be 25 feet.",
+     "quote_end": 179,
+     "quote_start": 14,
+     "retrieved_at": "2026-10-17 18:56:38.6841+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.140.640 G.1.b",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/205125.pdf#page=14"
+    },
+    {
+     "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-c#1",
+     "code_chapter": "T22",
+     "fragment_id": 931,
+     "quote": "Any new accessory dwelling unit, or expanded portion of an existing structure that is part of a proposed accessory dwelling unit, shall be at least four feet from the rear, interior side, and corner side lot lines",
+     "quote_end": 1068,
+     "quote_start": 855,
+     "retrieved_at": "2026-10-17 18:56:38.6841+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.140.640 G.1.c",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/205125.pdf#page=16"
+    },
+    {
+     "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-e#1",
+     "code_chapter": "T22",
+     "fragment_id": 916,
+     "quote": "One proposed or existing 1 attached to or within a single- 1",
+     "quote_end": 498,
+     "quote_start": 438,
+     "retrieved_at": "2026-10-17 18:56:38.6841+00",
+     "review_status": "pending",
+     "reviewed_by": null,
+     "section_id": "LACC 22.140.640 E",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/205125.pdf#page=11"
+    },
+    {
+     "chunk_id": "lacounty_adu_ord_2025#lacc-22-140-640-g-1-d#1",
+     "code_chapter": "T22",
+     "fragment_id": 935,
+     "quote": "No parking shall be required for an accessory dwelling unit that is located outside of a Very High Fire Hazard Severity Zone.",
+     "quote_end": 194,
+     "quote_start": 69,
+     "retrieved_at": "2026-10-17 18:56:38.6841+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LACC 22.140.640 G.1.d",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/205125.pdf#page=18"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "An ADU of up to 1,200 sq ft (22.140.640 G.1.a) and up to 25 ft tall, attached or detached (G.1.b), at least 4 ft from the rear, interior side and corner side lot lines (G.1.c). On a single-family lot the County allows one ADU attached to or within the home or an accessory building, one detached ADU and one JADU (Table 22.140.640-A). A Community Standards District may set a lower height, but not below 16 ft for a detached ADU. No parking is required outside a Very High Fire Hazard Severity Zone (G.1.d.i). From the County's ADU ordinance (Ord. 2025-0029, adopted 2025-07-29). In December 2025 the state housing department (HCD) found parts of it out of line with state ADU law: it leaves out units state law allows, and its height limits inside Community Standards Districts leave out the 25 ft state law allows for an attached ADU. The County planned to amend it. Where state law allows more, state law applies.",
+   "family": "adu",
+   "id": "county_adu",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "COUNTY_ADU",
+   "source": null,
+   "title": "ADU under the County's ordinance",
+   "unit": "sqft",
+   "value": 1200.0
+  },
+  {
+   "citations": [
+    {
      "chunk_id": "gov_66310_article1#gov--code-66313-d#1",
      "code_chapter": null,
      "fragment_id": 123,
@@ -631,7 +711,7 @@
      "quote_start": 4,
      "retrieved_at": "2026-10-15 15:58:41.877473+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66313(d)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66313"
     },
@@ -644,7 +724,7 @@
      "quote_start": 0,
      "retrieved_at": "2026-10-15 15:58:41.883036+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66333(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66333"
     }
@@ -686,7 +766,7 @@
      "quote_start": 15,
      "retrieved_at": "2026-10-15 15:58:41.890592+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 65852.21(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
     },
@@ -699,7 +779,7 @@
      "quote_start": 262,
      "retrieved_at": "2026-10-15 15:58:41.890592+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 65852.21(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
     },
@@ -712,20 +792,20 @@
      "quote_start": 790,
      "retrieved_at": "2026-10-15 15:58:41.890592+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 65852.21(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
     },
     {
-     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#7",
      "code_chapter": null,
-     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
-     "quote_end": 1136,
-     "quote_start": 736,
-     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A) (i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section 30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local\ncoastal program or a certified land use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of se",
+     "quote_end": 1410,
+     "quote_start": 1010,
+     "retrieved_at": "2026-10-17 20:38:22.024854+00",
      "review_status": "code-cited",
      "section_id": "Gov. Code 65913.4(a)",
-     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65913.4"
     }
    ],
    "coverage": 1.0,
@@ -751,7 +831,7 @@
      "quote_start": 315,
      "retrieved_at": "2026-10-15 15:58:41.893331+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66411.7(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
@@ -764,7 +844,7 @@
      "quote_start": 563,
      "retrieved_at": "2026-10-15 15:58:41.893331+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66411.7(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
@@ -777,7 +857,7 @@
      "quote_start": 1061,
      "retrieved_at": "2026-10-15 15:58:41.893331+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66411.7(c)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
@@ -793,15 +873,15 @@
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
     {
-     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#7",
      "code_chapter": null,
-     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
-     "quote_end": 1136,
-     "quote_start": 736,
-     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A) (i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section 30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local\ncoastal program or a certified land use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of se",
+     "quote_end": 1410,
+     "quote_start": 1010,
+     "retrieved_at": "2026-10-17 20:38:22.024854+00",
      "review_status": "code-cited",
      "section_id": "Gov. Code 65913.4(a)",
-     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65913.4"
     }
    ],
    "coverage": 1.0,
@@ -815,6 +895,65 @@
    "title": "SB 9 lot split",
    "unit": null,
    "value": true
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lacounty_south_bay_pasd#lacc-22-318-060-f-1#1",
+     "code_chapter": "T22",
+     "quote": "five and one-half feet, provided that no more than 42 inches of the fence or wall consist\nof solid view-obscuring materials. Fifty percent of the wall above 42 inches shall be\nopen and unobstructed. When located more than 10 feet from said property line, fences\nand walls shall not exceed six feet in height.\n\nFIGURE 22.318.060-A: FENCES AND WALLS",
+     "quote_end": 1142,
+     "quote_start": 795,
+     "retrieved_at": "2026-10-17 19:31:21.593729+00",
+     "review_status": "code-cited",
+     "section_id": "LACC 22.318.060 F.1",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/200967.pdf#page=14"
+    },
+    {
+     "chunk_id": "lacounty_south_bay_pasd#lacc-22-318-060-c#1",
+     "code_chapter": "T22",
+     "quote": "rooftop equipment, elevator shafts, and stairwells shall\nbe excluded from the maximum permitted height limits stated by this Title 22.",
+     "quote_end": 239,
+     "quote_start": 105,
+     "retrieved_at": "2026-10-17 19:31:21.593729+00",
+     "review_status": "code-cited",
+     "section_id": "LACC 22.318.060 C",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/200967.pdf#page=13"
+    },
+    {
+     "chunk_id": "lacounty_south_bay_pasd#lacc-22-318-070-c-1#1",
+     "code_chapter": "T22",
+     "quote": "fully shielded to\navoid light trespass.\ni. Outdoor Lighting. All exterior light fixtures shall be\nenergy efficient, avoid light pollution, avoid spill-over to neighboring properties, and\n(with the exception of architectural or landscape lighting) be pedestrian scaled, fully\nshielded, and directed toward the ground.\nii. The type and location of outdoor site and building\nlighting shall preclude dire",
+     "quote_end": 611,
+     "quote_start": 211,
+     "retrieved_at": "2026-10-17 19:31:21.593729+00",
+     "review_status": "code-cited",
+     "section_id": "LACC 22.318.070 C.1",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/200967.pdf#page=18"
+    },
+    {
+     "chunk_id": "lacounty_south_bay_pasd#lacc-22-318-090#1",
+     "code_chapter": "T22",
+     "quote": "prohibited.",
+     "quote_end": 116,
+     "quote_start": 105,
+     "retrieved_at": "2026-10-17 19:31:21.593729+00",
+     "review_status": "code-cited",
+     "section_id": "LACC 22.318.090",
+     "source_url": "https://file.lacounty.gov/SDSInter/bos/supdocs/200967.pdf#page=32"
+    }
+   ],
+   "coverage": null,
+   "explanation": "This lot is in the South Bay Planning Area Standards District (Chapter 22.318, adopted 2025-03-11), whose standards apply with the zone's and govern where they differ. For homes it adds: fences and walls within 10 ft of the front property line at most 5.5 ft tall, with no more than 42 inches solid and half the part above that open, and at most 6 ft elsewhere in the front yard (22.318.060 F.1.b); drought-tolerant front-yard planting (F.1.a); rooftop equipment, elevator shafts and stairwells left out of the height limit (22.318.060 C); and shielded outdoor lighting and screened mechanical equipment (22.318.070 C.1). The Del Aire and Wiseburn community standards districts prohibit accessory commercial units (22.318.090, 22.318.150). It sets no yards or height for Zone R-1, and it does not limit ADU floor area or height (22.140.640 G.1.a). Not checked against a project here.",
+   "family": "flag",
+   "id": "flag_county_pasd",
+   "label": "flag",
+   "label_text": "Flag, not evaluated",
+   "rule_id": "FLAG_COUNTY_PASD",
+   "source": null,
+   "title": "South Bay Planning Area Standards District",
+   "unit": null,
+   "value": "Adds site standards; the yards and height above are unchanged"
   }
  ],
  "notes": [
@@ -919,12 +1058,12 @@
  "status": "ok",
  "summary": {
   "answer": "A single-family home up to 35 ft high, with yards of 20 ft front, 5 ft each side and 15 ft rear. Plus one ADU (detached, 800 sq ft that the County must approve) and one JADU of up to 500 sq ft inside the home (Gov. Code 66323). SB 9 may also allow two homes or a lot split, to confirm.",
-  "confidence": "7 values to confirm with the County.",
+  "confidence": "8 values to confirm with the County.",
   "counts": {
    "approximate": 2,
    "derived": 2,
-   "flag": 1,
-   "interpretive": 7
+   "flag": 2,
+   "interpretive": 8
   },
   "paths": []
  }

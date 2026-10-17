@@ -1,7 +1,7 @@
 {
  "ai_disclosure": "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the engine does not model. In this demo that review was an AI review applied on the project owner's instruction, not a person's; each value's source panel says which. No AI model is used to compute this assessment.",
  "disclaimers": [
-  "Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS before relying on it.",
+  "Decision support for licensed professionals, not a zoning determination. Confirm every result with the jurisdiction before relying on it: LA City Planning and LADBS in the City, LA County Regional Planning and Public Works in unincorporated areas.",
   "Parcel boundaries and attributes come from the Los Angeles County Assessor's open parcel data, provided for informational purposes; it may not be suitable for legal, engineering, or surveying use."
  ],
  "generated_at": "2026-10-17T00:00:00Z",
@@ -258,7 +258,7 @@
      "quote_start": 15,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.1",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -271,7 +271,7 @@
      "quote_start": 15,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.1",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     }
@@ -299,7 +299,7 @@
      "quote_start": 134,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.1",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -312,7 +312,7 @@
      "quote_start": 377,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.1",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -325,7 +325,7 @@
      "quote_start": 695,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.1",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     }
@@ -353,7 +353,7 @@
      "quote_start": 65,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.2",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -366,7 +366,7 @@
      "quote_start": 203,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.2",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -379,7 +379,7 @@
      "quote_start": 203,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.2",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -392,7 +392,7 @@
      "quote_start": 374,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.2",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -405,7 +405,7 @@
      "quote_start": 990,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.2",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     }
@@ -433,7 +433,7 @@
      "quote_start": 224,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.21.1",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -446,7 +446,7 @@
      "quote_start": 224,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.21.1",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     }
@@ -474,7 +474,7 @@
      "quote_start": 14,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.3",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     }
@@ -502,7 +502,7 @@
      "quote_start": 139,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.5(a)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -515,7 +515,7 @@
      "quote_start": 213,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.03(b)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -528,7 +528,7 @@
      "quote_start": 674,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.03(b)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -541,7 +541,7 @@
      "quote_start": 1199,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.03(b)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -554,7 +554,7 @@
      "quote_start": 966,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.03(b)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -567,7 +567,7 @@
      "quote_start": 1071,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.03(b)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -580,7 +580,7 @@
      "quote_start": 190,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.03(c)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -593,7 +593,7 @@
      "quote_start": 190,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.03(c)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     }
@@ -621,7 +621,7 @@
      "quote_start": 59,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.4",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -634,7 +634,7 @@
      "quote_start": 59,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 C.4",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     }
@@ -662,7 +662,7 @@
      "quote_start": 152,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.08 A.7",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -701,7 +701,7 @@
      "quote_start": 1428,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66323(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
     },
@@ -714,7 +714,7 @@
      "quote_start": 1163,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66323(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
     },
@@ -727,7 +727,7 @@
      "quote_start": 1244,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66321(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
     }
@@ -755,7 +755,7 @@
      "quote_start": 1390,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66321(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
     },
@@ -797,7 +797,7 @@
      "quote_start": 384,
      "retrieved_at": "2026-10-15 16:10:41.456963+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "LAMC 12.22 A.33(d)",
      "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
     },
@@ -810,7 +810,7 @@
      "quote_start": 977,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66314(d)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66314"
     },
@@ -823,7 +823,7 @@
      "quote_start": 1462,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66314(d)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66314"
     },
@@ -836,7 +836,7 @@
      "quote_start": 1244,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66321(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
     }
@@ -864,7 +864,7 @@
      "quote_start": 808,
      "retrieved_at": "2026-10-15 15:58:41.880421+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66314(d)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66314"
     },
@@ -903,7 +903,7 @@
      "quote_start": 4,
      "retrieved_at": "2026-10-15 15:58:41.877473+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66313(d)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66313"
     },
@@ -916,7 +916,7 @@
      "quote_start": 0,
      "retrieved_at": "2026-10-15 15:58:41.883036+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66333(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66333"
     }
@@ -944,7 +944,7 @@
      "quote_start": 15,
      "retrieved_at": "2026-10-15 15:58:41.890592+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 65852.21(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
     },
@@ -957,7 +957,7 @@
      "quote_start": 262,
      "retrieved_at": "2026-10-15 15:58:41.890592+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 65852.21(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
     },
@@ -970,20 +970,20 @@
      "quote_start": 790,
      "retrieved_at": "2026-10-15 15:58:41.890592+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 65852.21(b)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
     },
     {
-     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#7",
      "code_chapter": null,
-     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
-     "quote_end": 1136,
-     "quote_start": 736,
-     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A) (i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section 30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local\ncoastal program or a certified land use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of se",
+     "quote_end": 1410,
+     "quote_start": 1010,
+     "retrieved_at": "2026-10-17 20:38:22.024854+00",
      "review_status": "code-cited",
      "section_id": "Gov. Code 65913.4(a)",
-     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65913.4"
     }
    ],
    "coverage": 1.0,
@@ -1009,7 +1009,7 @@
      "quote_start": 315,
      "retrieved_at": "2026-10-15 15:58:41.893331+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66411.7(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
@@ -1022,7 +1022,7 @@
      "quote_start": 563,
      "retrieved_at": "2026-10-15 15:58:41.893331+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66411.7(a)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
@@ -1035,7 +1035,7 @@
      "quote_start": 1061,
      "retrieved_at": "2026-10-15 15:58:41.893331+00",
      "review_status": "approved",
-     "reviewed_by": "ai-review",
+     "reviewed_by": "Paawan",
      "section_id": "Gov. Code 66411.7(c)",
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
@@ -1051,15 +1051,15 @@
      "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
     },
     {
-     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#7",
      "code_chapter": null,
-     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
-     "quote_end": 1136,
-     "quote_start": 736,
-     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A) (i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section 30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local\ncoastal program or a certified land use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of se",
+     "quote_end": 1410,
+     "quote_start": 1010,
+     "retrieved_at": "2026-10-17 20:38:22.024854+00",
      "review_status": "code-cited",
      "section_id": "Gov. Code 65913.4(a)",
-     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65913.4"
     }
    ],
    "coverage": 1.0,

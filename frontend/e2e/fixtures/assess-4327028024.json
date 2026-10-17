@@ -1,14 +1,14 @@
 {
  "ai_disclosure": "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the engine does not model. In this demo that review was an AI review applied on the project owner's instruction, not a person's; each value's source panel says which. No AI model is used to compute this assessment.",
  "disclaimers": [
-  "Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS before relying on it.",
+  "Decision support for licensed professionals, not a zoning determination. Confirm every result with the jurisdiction before relying on it: LA City Planning and LADBS in the City, LA County Regional Planning and Public Works in unincorporated areas.",
   "Parcel boundaries and attributes come from the Los Angeles County Assessor's open parcel data, provided for informational purposes; it may not be suitable for legal, engineering, or surveying use."
  ],
  "generated_at": "2026-10-17T00:00:00Z",
  "geometry": null,
  "items": [],
  "notes": [
-  "Outside the City of Los Angeles (Beverly Hills). This tool models City zoning only."
+  "Outside the City of Los Angeles (Beverly Hills). This tool models the City and unincorporated LA County only."
  ],
  "parcel": {
   "apn": "4327028024",
