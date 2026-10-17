@@ -2,7 +2,11 @@
 
 Clients are keyed by a salted hash of their IP held only in this process's memory; the IP is never logged or
 stored. Behind the bundled Caddy proxy set TRUST_PROXY_HEADERS=true so the client IP comes from the last
-X-Forwarded-For entry (the one Caddy wrote), not from the proxy's own address."""
+X-Forwarded-For entry (the one Caddy wrote), not from the proxy's own address. Behind CloudFront and an ALB also set
+TRUSTED_PROXY_HOPS=2: CloudFront writes the viewer's address and the ALB then appends CloudFront's.
+
+Counts live in each process, so with several API tasks a client gets the limit once per task; in the AWS setup
+the WAF's rate rules are the shared limit (infra/aws/waf.tf)."""
 
 import hashlib
 import secrets
@@ -33,7 +37,8 @@ def client_key(request: Request) -> str:
     if get_settings().trust_proxy_headers:
         fwd = request.headers.get("x-forwarded-for")
         if fwd:
-            ip = fwd.split(",")[-1].strip()
+            hops = fwd.split(",")
+            ip = hops[-min(get_settings().trusted_proxy_hops, len(hops))].strip()
     return hashlib.sha256(_SALT + ip.encode()).hexdigest()[:24]
 
 

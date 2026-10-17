@@ -46,3 +46,11 @@ frontend/dist/
 
 # Test reports
 *-junit.xml
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+terraform.tfvars
+backend.hcl

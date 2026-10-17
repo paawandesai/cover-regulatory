@@ -117,7 +117,7 @@ State ADU law (Gov. Code 66310-66342) and the geometry, labels, citations and re
 
 ## Scaling beyond the PoC
 
-How this would run in production on AWS. Nothing below is built; the PoC runs as one Docker Compose host.
+How this would run in production on AWS. The PoC runs as one Docker Compose host. The serving part (CloudFront and WAF, ALB, the API on ECS Fargate with autoscaling, RDS Multi-AZ with backups, scheduled jobs, alarms) is written as Terraform in `infra/aws/` and checked in CI, but not applied; `infra/aws/README.md` has the runbook and a cost estimate. The ingestion queue, SSO and the Redis cache below are not written yet.
 
 ```
   EventBridge schedule ──► SQS "ingest" queue ──► Ingestion workers (ECS Fargate)
