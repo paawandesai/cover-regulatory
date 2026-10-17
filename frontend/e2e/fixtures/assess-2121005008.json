@@ -1,0 +1,1206 @@
+{
+ "ai_disclosure": "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the engine does not model. In this demo that review was an AI review applied on the project owner's instruction, not a person's; each value's source panel says which. No AI model is used to compute this assessment.",
+ "disclaimers": [
+  "Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS before relying on it.",
+  "Parcel boundaries and attributes come from the Los Angeles County Assessor's open parcel data, provided for informational purposes; it may not be suitable for legal, engineering, or surveying use."
+ ],
+ "generated_at": "2026-10-17T00:00:00Z",
+ "geometry": {
+  "buildings": [],
+  "envelope": {
+   "coordinates": [
+    [
+     [
+      -118.52465438721423,
+      34.20347399152644
+     ],
+     [
+      -118.52498515047348,
+      34.2034736958618
+     ],
+     [
+      -118.52498531440177,
+      34.203600100235526
+     ],
+     [
+      -118.52465455064186,
+      34.20360039590064
+     ],
+     [
+      -118.52465438721423,
+      34.20347399152644
+     ]
+    ]
+   ],
+   "type": "Polygon"
+  },
+  "envelope_area_sqft": 4601,
+  "front_mid": [
+   -118.5250513777483,
+   34.20353683997945
+  ],
+  "label": "illustrative, not survey-grade",
+  "lot": {
+   "coordinates": [
+    [
+     [
+      -118.52460502838841,
+      34.20361967403778
+     ],
+     [
+      -118.52505148048701,
+      34.20361927609017
+     ],
+     [
+      -118.52505144019541,
+      34.2035918246563
+     ],
+     [
+      -118.52505127077355,
+      34.2034544024737
+     ],
+     [
+      -118.52460475341195,
+      34.20345480070737
+     ],
+     [
+      -118.52460495499874,
+      34.20359219526885
+     ],
+     [
+      -118.52460502838841,
+      34.20361967403778
+     ]
+    ]
+   ],
+   "type": "Polygon"
+  },
+  "yards": [
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.52460502838841,
+        34.20361967403778
+       ],
+       [
+        -118.52460495499874,
+        34.20359219526885
+       ],
+       [
+        -118.52460475341195,
+        34.20345480070737
+       ],
+       [
+        -118.52465436234544,
+        34.20345475654422
+       ],
+       [
+        -118.52465457550953,
+        34.20361962995494
+       ],
+       [
+        -118.52460502838841,
+        34.20361967403778
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "rear"
+   },
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.52498533934674,
+        34.20361933514942
+       ],
+       [
+        -118.52498512552944,
+        34.20345446157039
+       ],
+       [
+        -118.52505127077355,
+        34.2034544024737
+       ],
+       [
+        -118.52505144019541,
+        34.2035918246563
+       ],
+       [
+        -118.52505148048701,
+        34.20361927609017
+       ],
+       [
+        -118.52498533934674,
+        34.20361933514942
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "front"
+   },
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.52498512552944,
+        34.20345446157039
+       ],
+       [
+        -118.52498515047348,
+        34.2034736958618
+       ],
+       [
+        -118.52465438721423,
+        34.20347399152644
+       ],
+       [
+        -118.52465436234544,
+        34.20345475654422
+       ],
+       [
+        -118.52498512552944,
+        34.20345446157039
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "side"
+   },
+   {
+    "geometry": {
+     "coordinates": [
+      [
+       [
+        -118.52465457550953,
+        34.20361962995494
+       ],
+       [
+        -118.52465455064186,
+        34.20360039590064
+       ],
+       [
+        -118.52498531440177,
+        34.203600100235526
+       ],
+       [
+        -118.52498533934674,
+        34.20361933514942
+       ],
+       [
+        -118.52465457550953,
+        34.20361962995494
+       ]
+      ]
+     ],
+     "type": "Polygon"
+    },
+    "kind": "side"
+   }
+  ],
+  "yards_ft": {
+   "front": 20.0,
+   "rear": 15.0,
+   "side": 7.0
+  }
+ },
+ "items": [
+  {
+   "citations": [],
+   "coverage": null,
+   "explanation": "Computed from the County parcel outline: a fitted rectangle, with the front taken as the street-facing side. Illustrative, not survey-grade.",
+   "family": "parcel",
+   "id": "lot_dimensions",
+   "label": "approximate",
+   "label_text": "Approximate",
+   "rule_id": "GEOM_ORIENTED_RECTANGLE",
+   "source": {
+    "dataset": "lacounty_parcels",
+    "fetched_at": "2026-10-15T15:48:19.862891+00:00"
+   },
+   "title": "Lot width x depth (from parcel shape)",
+   "unit": "ft",
+   "value": "60 x 135"
+  },
+  {
+   "citations": [],
+   "coverage": null,
+   "explanation": "Approximate outlines traced from imagery by machine learning; they can miss, merge or misplace buildings and may predate recent demolition or construction. Not a survey.",
+   "family": "parcel",
+   "id": "existing_footprint",
+   "label": "approximate",
+   "label_text": "Approximate",
+   "rule_id": null,
+   "source": {
+    "attribution": "Building footprints \u00a9 Microsoft, ODbL",
+    "dataset": "ms_global_building_footprints",
+    "fetched_at": "2026-10-17T16:09:56.201147+00:00"
+   },
+   "title": "Existing buildings (outline)",
+   "unit": null,
+   "value": "None found"
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+     "code_chapter": "I",
+     "fragment_id": 1,
+     "quote": "There shall be a front yard of not less than 20% of the depth of the lot, but such front yard need not exceed 20 feet",
+     "quote_end": 132,
+     "quote_start": 15,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.1",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+     "code_chapter": "I",
+     "fragment_id": 2,
+     "quote": "There shall be a front yard of not less than 20% of the depth of the lot, but such front yard need not exceed 20 feet",
+     "quote_end": 132,
+     "quote_start": 15,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.1",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "The lesser of 20.0% of lot depth (135 ft) and 20.0 ft. Where the block has a prevailing setback, the average of neighbouring front yards applies instead (up to 40 ft); see the estimate below.",
+   "family": "r1_envelope",
+   "id": "front_yard",
+   "label": "derived",
+   "label_text": "Derived from rule R1_FRONT_YARD",
+   "rule_id": "R1_FRONT_YARD",
+   "source": null,
+   "title": "Front yard (minimum)",
+   "unit": "ft",
+   "value": 20.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+     "code_chapter": "I",
+     "fragment_id": 3,
+     "quote": "provided, however that where all of the developed lots which have front yards that vary in depth by not more than ten feet comprise 40% or more of the frontage, the minimum front yard shall be the average depth of the front yard of such lots.",
+     "quote_end": 376,
+     "quote_start": 134,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.1",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+     "code_chapter": "I",
+     "fragment_id": 4,
+     "quote": "Where there are two or more possible combinations of developed lots comprising 40% or more of the frontage, each of which as front yards that vary in depth by not more than ten feet, the minimum front yard depth shall be the average depth of the front yards of that combination which has the shallowest average depth.",
+     "quote_end": 694,
+     "quote_start": 377,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.1",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-1#1",
+     "code_chapter": "I",
+     "fragment_id": 5,
+     "quote": "In determining the required front yard, buildings located on key lots, entirely on the rear half of lots, or on lots in the \u201cC\u201d or \u201cM\u201d Zones, shall not be counted; provided, however, that nothing contained in this paragraph shall be deemed to require front yards which exceed 40 feet in depth.",
+     "quote_end": 988,
+     "quote_start": 695,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.1",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "9 developed lots whose front yards are within 10 ft of each other make up 44% of the frontage, so the minimum front yard is their average, 16.6 ft (the shallowest such group). If confirmed on a survey this replaces the front yard above. Block frontage of about 1077 ft (18 lots on this side of the street, found from parcel outlines; at most 600 ft each way). 17 developed lots counted, measured to the nearest building outline that is not entirely on the rear half. Not counted: the lot being assessed: 2121005008. Building outlines are machine-learned and approximate.",
+   "family": "r1_envelope",
+   "id": "prevailing_front_yard",
+   "label": "approximate",
+   "label_text": "Approximate",
+   "rule_id": "R1_PREVAILING_FRONT",
+   "source": null,
+   "title": "Prevailing front yard on the block (estimate)",
+   "unit": "ft",
+   "value": 16.6
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+     "code_chapter": "I",
+     "fragment_id": 8,
+     "quote": "For a main building not more than two stories in height, there shall be a side yard on each side of the building of not less than 5 feet",
+     "quote_end": 201,
+     "quote_start": 65,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.2",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+     "code_chapter": "I",
+     "fragment_id": 9,
+     "quote": "except that where the lot is less than 50 feet in width, the side yard may be reduced to 10 percent of the width of the lot, but in no event to less than 3 feet in width.",
+     "quote_end": 373,
+     "quote_start": 203,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.2",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+     "code_chapter": "I",
+     "fragment_id": 10,
+     "quote": "except that where the lot is less than 50 feet in width, the side yard may be reduced to 10 percent of the width of the lot, but in no event to less than 3 feet in width.",
+     "quote_end": 373,
+     "quote_start": 203,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.2",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+     "code_chapter": "I",
+     "fragment_id": 11,
+     "quote": "For a building more than two stories in height, 1 foot shall be added to the width of each yard for each additional story above the second story.",
+     "quote_end": 519,
+     "quote_start": 374,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.2",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-2#1",
+     "code_chapter": "I",
+     "fragment_id": 13,
+     "quote": "In lieu of the additional one-foot side yard for each story above the second story as required above, for new construction of a main building or a ground floor addition to the main building on a lot not located in a Hillside Area or Coastal Zone, one-foot shall be added to each required side yard for each increment of ten feet or fraction thereof above the first 18 feet.",
+     "quote_end": 1363,
+     "quote_start": 990,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.2",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "Lot is 60 ft wide (50 ft or more): 5.0 ft for a building up to two stories and 18 ft. New construction adds 1 ft for each 10 ft (or part) of height above 18 ft (LAMC 12.08 C.2(b)), so this shows 7 ft for a 33 ft house (the maximum). By height: 5 ft up to 18 ft, 6 ft up to 28 ft, 7 ft up to 33 ft. Walls over 14 ft high and 45 ft long need a 5 ft deep, 10 ft long plane break (enter a wall length under Your project to check it).",
+   "family": "r1_envelope",
+   "id": "side_yard",
+   "label": "derived",
+   "label_text": "Derived from rule R1_SIDE_YARD",
+   "rule_id": "R1_SIDE_YARD",
+   "source": null,
+   "title": "Side yards (each, minimum, for a 33 ft house)",
+   "unit": "ft",
+   "value": 7.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+     "code_chapter": "I",
+     "fragment_id": 229,
+     "quote": "In the R1, RS, or RE9 Zones, no Building or Structure shall exceed 33 feet in height; except that when the roof of the uppermost Story of a Building or Structure or portion of the Building or Structure has a Slope of less than 25 percent, the maximum height shall be 28 feet.",
+     "quote_end": 499,
+     "quote_start": 224,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.21.1",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-21-1#2",
+     "code_chapter": "I",
+     "fragment_id": 230,
+     "quote": "In the R1, RS, or RE9 Zones, no Building or Structure shall exceed 33 feet in height; except that when the roof of the uppermost Story of a Building or Structure or portion of the Building or Structure has a Slope of less than 25 percent, the maximum height shall be 28 feet.",
+     "quote_end": 499,
+     "quote_start": 224,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.21.1",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "33.0 ft off the Hillside Area and Coastal Zone, or 28.0 ft where the roof is flat or slopes less than 25%. Where 40% of the homes on the block are taller, their average height may apply instead; not evaluated.",
+   "family": "r1_envelope",
+   "id": "max_height",
+   "label": "derived",
+   "label_text": "Derived from rule R1_HEIGHT",
+   "rule_id": "R1_HEIGHT",
+   "source": null,
+   "title": "Maximum height",
+   "unit": "ft",
+   "value": 33.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-3#1",
+     "code_chapter": "I",
+     "fragment_id": 16,
+     "quote": "There shall be a rear yard of not less than 15 feet in depth.",
+     "quote_end": 75,
+     "quote_start": 14,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.3",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "15 ft on every R1 lot, measured from the rear lot line.",
+   "family": "r1_envelope",
+   "id": "rear_yard",
+   "label": "derived",
+   "label_text": "Derived from rule R1_REAR_YARD",
+   "rule_id": "R1_REAR_YARD",
+   "source": null,
+   "title": "Rear yard (minimum)",
+   "unit": "ft",
+   "value": 15.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-5-a#1",
+     "code_chapter": "I",
+     "fragment_id": 30,
+     "quote": "For lots outside of a Hillside Area or Coastal Zone, the maximum Residential Floor Area contained in all buildings and accessory buildings shall not exceed 45 percent of the lot area (a Residential Floor Area ratio of 0.45).",
+     "quote_end": 363,
+     "quote_start": 139,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.5(a)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+     "code_chapter": "I",
+     "fragment_id": 269,
+     "quote": "Any floor or portion of a floor with a ceiling height greater than 14 feet shall count as twice the square footage of that area.",
+     "quote_end": 341,
+     "quote_start": 213,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.03(b)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+     "code_chapter": "I",
+     "fragment_id": 271,
+     "quote": "The total area of 200 square feet per parking space that is required to be covered, up to a maximum of 400 square feet, shall be exempted from being counted as Residential Floor Area if all of said parking, whether detached or attached, is located in accordance with the following criteria:",
+     "quote_end": 964,
+     "quote_start": 674,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.03(b)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+     "code_chapter": "I",
+     "fragment_id": 274,
+     "quote": "(b) If the parking that is required to be covered is not located in accordance with Paragraph (a) above, then only 200 square feet shall be exempted from being counted as Residential Floor Area.",
+     "quote_end": 1393,
+     "quote_start": 1199,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.03(b)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+     "code_chapter": "I",
+     "fragment_id": 272,
+     "quote": "(1) Said parking is located within the rear half of the Lot, or at least 55 feet from a Front Lot Line.",
+     "quote_end": 1069,
+     "quote_start": 966,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.03(b)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03-b#6",
+     "code_chapter": "I",
+     "fragment_id": 273,
+     "quote": "(2) On a Through Lot with no Rear Lot Line, said parking is set back from both Front Lot Lines a distance of at least 40 feet.",
+     "quote_end": 1197,
+     "quote_start": 1071,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.03(b)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03-c#1",
+     "code_chapter": "I",
+     "fragment_id": 276,
+     "quote": "Detached Accessory Buildings not exceeding 200 square feet; however, the total combined area exempted of all the Detached Accessory Buildings on a Lot shall not exceed 400 square feet.",
+     "quote_end": 374,
+     "quote_start": 190,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.03(c)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03-c#1",
+     "code_chapter": "I",
+     "fragment_id": 277,
+     "quote": "Detached Accessory Buildings not exceeding 200 square feet; however, the total combined area exempted of all the Detached Accessory Buildings on a Lot shall not exceed 400 square feet.",
+     "quote_end": 374,
+     "quote_start": 190,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.03(c)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "0.45 x lot area (8,100 sq ft), for a lot outside the Hillside Area and Coastal Zone. The encroachment plane that starts 20 ft above the front and side yards is not drawn. What counts (LAMC 12.03): area under a ceiling over 14 ft counts twice; required covered parking is not counted up to 400 sq ft when all of it is in the rear half or at least 55 ft from the front (otherwise 200 sq ft), nor detached accessory buildings of 200 sq ft or less, up to 400 sq ft in all. Lattice-roof porches and qualifying basements are not counted either.",
+   "family": "r1_envelope",
+   "id": "max_rfa",
+   "label": "derived",
+   "label_text": "Derived from rule R1_RFA",
+   "rule_id": "R1_RFA",
+   "source": null,
+   "title": "Maximum residential floor area",
+   "unit": "sqft",
+   "value": 3645
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-4#1",
+     "code_chapter": "I",
+     "fragment_id": 18,
+     "quote": "Every lot shall have a minimum width of 50 feet and a minimum area of 5,000 square feet.",
+     "quote_end": 147,
+     "quote_start": 59,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.4",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-c-4#1",
+     "code_chapter": "I",
+     "fragment_id": 17,
+     "quote": "Every lot shall have a minimum width of 50 feet and a minimum area of 5,000 square feet.",
+     "quote_end": 147,
+     "quote_start": 59,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 C.4",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "Minimum 5,000 sq ft and 50 ft wide. A smaller lot of record may still be buildable; not evaluated.",
+   "family": "r1_envelope",
+   "id": "lot_minimums",
+   "label": "derived",
+   "label_text": "Derived from rule R1_LOT_MINIMUMS",
+   "rule_id": "R1_LOT_MINIMUMS",
+   "source": null,
+   "title": "Lot meets R1 minimum area and width",
+   "unit": null,
+   "value": true
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-08-a-7#1",
+     "code_chapter": "I",
+     "fragment_id": 23,
+     "quote": "(a) No accessory living quarters nor servant\u2019s quarters are located or maintained on a lot having an area less than 10,000 square feet;",
+     "quote_end": 287,
+     "quote_start": 152,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.08 A.7",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-03#1",
+     "code_chapter": "I",
+     "quote": "ACCESSORY LIVING QUARTERS. An accessory building used solely as the temporary dwelling of guests of the occupants of the premises; such dwelling having no kitchen facilities and not rented or otherwise used as a separate dwelling unit. (Added by Ord. No. 107,884, Eff. 9/23/56.)\n\nACCESSORY USE. (Amended by Ord. No. 182,095, Eff. 5/7/12.) A use, which is customarily incidental to that of the main bu",
+     "quote_end": 2073,
+     "quote_start": 1673,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "code-cited",
+     "section_id": "LAMC 12.03",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "Allowed as an accessory use only on a lot of at least 10,000 sq ft; this lot is 8,100 sq ft. Accessory living quarters are for guests only: no kitchen, not rented, at most two stories, and they count toward the lot's floor area (LAMC 12.03, LAMC 12.08 A.7). With a kitchen or for rent it is an ADU instead (see below).",
+   "family": "guest_house",
+   "id": "guest_house",
+   "label": "derived",
+   "label_text": "Derived from rule GUEST_HOUSE",
+   "rule_id": "GUEST_HOUSE",
+   "source": null,
+   "title": "Guest house (accessory living quarters, no kitchen)",
+   "unit": null,
+   "value": false
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+     "code_chapter": null,
+     "fragment_id": 159,
+     "quote": "(A) A total floor area limitation of not more than 800 square feet of livable space.",
+     "quote_end": 1512,
+     "quote_start": 1428,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66323(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66323-a#1",
+     "code_chapter": null,
+     "fragment_id": 158,
+     "quote": "(2) One detached, new construction, accessory dwelling unit that does not exceed four-foot side and rear yard setbacks for a lot with a proposed or existing single-family dwelling.",
+     "quote_end": 1343,
+     "quote_start": 1163,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66323(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66323"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+     "code_chapter": null,
+     "fragment_id": 145,
+     "quote": "A height of 16 feet for a detached accessory dwelling unit on a lot with an existing or proposed single family or multifamily dwelling unit.",
+     "quote_end": 1384,
+     "quote_start": 1244,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66321(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
+    }
+   ],
+   "coverage": null,
+   "explanation": "One detached new ADU up to 800 sq ft, with side and rear setbacks of no more than 4 ft, and a height of at least 16 ft allowed, on a lot with an existing or proposed single-family home. The City must approve it ministerially, including in a fire hazard or Hillside Area (Gov. Code 66323). See the height the City must allow below.",
+   "family": "adu",
+   "id": "adu_state_detached",
+   "label": "derived",
+   "label_text": "Derived from rule ADU_STATE_DETACHED",
+   "rule_id": "ADU_STATE_DETACHED",
+   "source": null,
+   "title": "Detached ADU the City must approve (state law)",
+   "unit": "sqft",
+   "value": 800.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+     "code_chapter": null,
+     "fragment_id": 146,
+     "quote": "A height of 18 feet for a detached accessory dwelling unit on a lot with an existing or proposed single family or multifamily dwelling unit that is within one-half of one mile walking distance of a major transit stop or a high-quality transit corridor, as those terms are defined in Section 21155 of the Public Resources Code.",
+     "quote_end": 1716,
+     "quote_start": 1390,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66321(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+     "code_chapter": null,
+     "quote": "additional two feet in height to\naccommodate a roof pitch on the accessory dwelling unit that is aligned with the roof pitch of the primary dwelling unit.\n\n(C) A height of 18 feet for a detached accessory dwelling unit on a lot with an existing or proposed multifamily, multistory dwelling.\n\n(D) A height of 25 feet or the height limitation in the local zoning ordinance that applies to the primary d",
+     "quote_end": 2152,
+     "quote_start": 1752,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "code-cited",
+     "section_id": "Gov. Code 66321(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "The lot is within half a mile, in a straight line, of a major transit stop or high-quality transit corridor in Caltrans' layer (a frequent bus corridor). State law allows 18 ft within half a mile walking distance, plus 2 ft for a roof pitch that matches the house, so up to 20 ft. Walking distance can be longer than the straight line; confirm it, or plan for 16 ft.",
+   "family": "adu",
+   "id": "adu_height",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "ADU_TRANSIT_HEIGHT",
+   "source": {
+    "dataset": "caltrans_hqta",
+    "fetched_at": "2026-10-16T22:10:30.683135+00:00"
+   },
+   "title": "Detached ADU height the City must allow",
+   "unit": "ft",
+   "value": 18.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-22-a-33-d#1",
+     "code_chapter": "I",
+     "fragment_id": 106,
+     "quote": "(1) The Floor Area for a detached ADU shall not exceed 1,200 square feet.",
+     "quote_end": 457,
+     "quote_start": 384,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "LAMC 12.22 A.33(d)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+     "code_chapter": null,
+     "fragment_id": 132,
+     "quote": "The total floor area for a detached accessory dwelling unit shall not exceed 1,200 square feet.",
+     "quote_end": 1072,
+     "quote_start": 977,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66314(d)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66314"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+     "code_chapter": null,
+     "fragment_id": 135,
+     "quote": "a setback of no more than four feet from the side and rear lot lines",
+     "quote_end": 1530,
+     "quote_start": 1462,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66314(d)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66314"
+    },
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66321-b#1",
+     "code_chapter": null,
+     "fragment_id": 145,
+     "quote": "A height of 16 feet for a detached accessory dwelling unit on a lot with an existing or proposed single family or multifamily dwelling unit.",
+     "quote_end": 1384,
+     "quote_start": 1244,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66321(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66321"
+    }
+   ],
+   "coverage": null,
+   "explanation": "Up to 1200 sq ft, 4 ft side and rear setbacks, at most two stories, not between the house and the street. The lot's floor area limit still applies and may allow less, but never less than 800 sq ft (LAMC 12.22 A.33(d); ZA Memo 143). The City's ordinance was found out of step with state law in 2024; ZA Memo 143 says which parts apply.",
+   "family": "adu",
+   "id": "adu_local_detached",
+   "label": "derived",
+   "label_text": "Derived from rule ADU_LOCAL_DETACHED",
+   "rule_id": "ADU_LOCAL_DETACHED",
+   "source": null,
+   "title": "Larger detached ADU (City ordinance and state limits)",
+   "unit": "sqft",
+   "value": 1200.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66310_article2#gov--code-66314-d#1",
+     "code_chapter": null,
+     "fragment_id": 131,
+     "quote": "If there is an existing primary dwelling, the total floor area of an attached accessory dwelling unit shall not exceed 50 percent of the existing primary dwelling.",
+     "quote_end": 971,
+     "quote_start": 808,
+     "retrieved_at": "2026-10-15 15:58:41.880421+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66314(d)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66314"
+    },
+    {
+     "chunk_id": "lamc_chapter1#lamc-12-22-a-33-e#1",
+     "code_chapter": "I",
+     "quote": "850 square feet, or less than 1,000 square feet for an attached ADU that provides for more than one bedroom.",
+     "quote_end": 778,
+     "quote_start": 670,
+     "retrieved_at": "2026-10-15 16:10:41.456963+00",
+     "review_status": "code-cited",
+     "section_id": "LAMC 12.22 A.33(e)",
+     "source_url": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lapz/0-0-0-57924"
+    }
+   ],
+   "coverage": null,
+   "explanation": "No existing home is recorded, so the 50% cap (which applies only to an existing home) doesn't apply. At least 850 sq ft (1,000 sq ft with more than one bedroom) can't be refused; a larger attached ADU is limited by the lot's floor area.",
+   "family": "adu",
+   "id": "adu_attached",
+   "label": "derived",
+   "label_text": "Derived from rule ADU_ATTACHED",
+   "rule_id": "ADU_ATTACHED",
+   "source": null,
+   "title": "Attached ADU (floor area allowed)",
+   "unit": "sqft",
+   "value": 850
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66310_article1#gov--code-66313-d#1",
+     "code_chapter": null,
+     "fragment_id": 123,
+     "quote": "\u201cJunior accessory dwelling unit\u201d means a unit that is no more than 500 square feet of interior livable space in size and contained entirely within a single-family residence.",
+     "quote_end": 177,
+     "quote_start": 4,
+     "retrieved_at": "2026-10-15 15:58:41.877473+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66313(d)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66313"
+    },
+    {
+     "chunk_id": "gov_66310_article3#gov--code-66333-a#1",
+     "code_chapter": null,
+     "fragment_id": 174,
+     "quote": "(a) Limit the number of junior accessory dwelling units to one per residential lot zoned for single-family residences with a single-family residence built, or proposed to be built, on the lot.",
+     "quote_end": 192,
+     "quote_start": 0,
+     "retrieved_at": "2026-10-15 15:58:41.883036+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66333(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66333"
+    }
+   ],
+   "coverage": null,
+   "explanation": "One JADU of up to 500 sq ft within the single-family home. A deed restriction is required, and the owner must live on the lot if the JADU shares a bathroom with the home (Gov. Code 66333).",
+   "family": "jadu",
+   "id": "jadu",
+   "label": "derived",
+   "label_text": "Derived from rule JADU",
+   "rule_id": "JADU",
+   "source": null,
+   "title": "Junior ADU (inside the home)",
+   "unit": "sqft",
+   "value": 500.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_65852_21#gov--code-65852-21-a#1",
+     "code_chapter": null,
+     "fragment_id": 615,
+     "quote": "A proposed housing development containing no more than two residential units within a single-family residential zone shall be considered ministerially, without discretionary review or a hearing, if the proposed housing development meets all of the following requirements:",
+     "quote_end": 286,
+     "quote_start": 15,
+     "retrieved_at": "2026-10-15 15:58:41.890592+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 65852.21(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
+    },
+    {
+     "chunk_id": "gov_65852_21#gov--code-65852-21-b#1",
+     "code_chapter": null,
+     "fragment_id": 619,
+     "quote": "The local agency shall not impose objective zoning standards, objective subdivision standards, and objective design standards that would have the effect of physically precluding the construction of up to two units or that would physically preclude either of the two units from being at least 800 square feet in floor area.",
+     "quote_end": 584,
+     "quote_start": 262,
+     "retrieved_at": "2026-10-15 15:58:41.890592+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 65852.21(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
+    },
+    {
+     "chunk_id": "gov_65852_21#gov--code-65852-21-b#1",
+     "code_chapter": null,
+     "fragment_id": 621,
+     "quote": "Notwithstanding subparagraph (A), in all other circumstances not described in clause (i), a local agency may require a setback of up to four feet from the side and rear lot lines.",
+     "quote_end": 969,
+     "quote_start": 790,
+     "retrieved_at": "2026-10-15 15:58:41.890592+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 65852.21(b)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65852.21"
+    },
+    {
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "code_chapter": null,
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
+     "quote_end": 1136,
+     "quote_start": 736,
+     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "review_status": "code-cited",
+     "section_id": "Gov. Code 65913.4(a)",
+     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "Up to 2 homes on the lot, approved ministerially (Gov. Code 65852.21(a)). Local standards may not prevent two units of at least 800 sq ft each, and side and rear setbacks may be at most 4 ft (none for an existing structure rebuilt in place) (65852.21(b)). Checked: the lot is in a single-family zone (R1); no historic preservation overlay (HPOZ) is mapped here. The loaded maps show no Very High fire hazard zone, earthquake fault zone or 100-year flood plain here (Gov. Code 65913.4(a)(6)(D), (F) and (G)). Still to confirm: no demolition or alteration of rent-restricted or rent-controlled housing, or housing a tenant occupied in the last 3 years; no units withdrawn from rent under the Ellis Act in the last 15 years; the Gov. Code 65913.4(a)(6) sites not mapped here: farmland (B), wetlands (C), listed hazardous waste sites (E), a regulatory floodway (H), natural community conservation plan lands (I), protected species habitat (J) and conservation easements (K). SB 9 uses that section as it read on 2021-09-16; the copy loaded here is the 2026 text, whose (B)-(K) list the same kinds of site.",
+   "family": "sb9",
+   "id": "sb9_two_unit",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "SB9",
+   "source": null,
+   "title": "SB 9 two-unit development",
+   "unit": "units",
+   "value": 2.0
+  },
+  {
+   "citations": [
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-a#1",
+     "code_chapter": null,
+     "fragment_id": 633,
+     "quote": "(1) The parcel map subdivides an existing parcel to create no more than two new parcels of approximately equal lot area provided that one parcel shall not be smaller than 40 percent of the lot area of the original parcel proposed for subdivision.",
+     "quote_end": 561,
+     "quote_start": 315,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66411.7(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-a#1",
+     "code_chapter": null,
+     "fragment_id": 635,
+     "quote": "(2) (A) Except as provided in subparagraph (B), both newly created parcels are no smaller than 1,200 square feet.",
+     "quote_end": 676,
+     "quote_start": 563,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66411.7(a)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-c#1",
+     "code_chapter": null,
+     "fragment_id": 641,
+     "quote": "agency may require a setback of up to four feet from the side and rear lot lines.",
+     "quote_end": 1142,
+     "quote_start": 1061,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "approved",
+     "reviewed_by": "ai-review",
+     "section_id": "Gov. Code 66411.7(c)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_66411_7#gov--code-66411-7-j#1",
+     "code_chapter": null,
+     "quote": "more than two units on a parcel created through the exercise of the authority contained within this section.\n\n(2) For the purposes of this section, \u201cunit\u201d means\nany dwelling unit, including, but not limited to, a unit or units created pursuant to Section 65852.21, a primary dwelling, an accessory dwelling unit as defined in subdivision (a) of Section 66313, or a junior accessory dwelling unit as d",
+     "quote_end": 646,
+     "quote_start": 246,
+     "retrieved_at": "2026-10-15 15:58:41.893331+00",
+     "review_status": "code-cited",
+     "section_id": "Gov. Code 66411.7(j)",
+     "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=66411.7"
+    },
+    {
+     "chunk_id": "gov_65913_4#gov--code-65913-4-a#8",
+     "code_chapter": null,
+     "quote": "(6) The development is not located on a site that is any of the following:\n(A)(i) An area of the coastal zone subject to paragraph (1) or (2) of subdivision (a) of Section\n30603 of the Public Resources Code.\n(ii) An area of the coastal zone that is not subject to a certified local coastal program or a certified\nland use plan.\n(iii) An area of the coastal zone that is vulnerable to five feet of sea",
+     "quote_end": 1136,
+     "quote_start": 736,
+     "retrieved_at": "2026-10-16 23:35:11.365672+00",
+     "review_status": "code-cited",
+     "section_id": "Gov. Code 65913.4(a)",
+     "source_url": "https://codes.findlaw.com/ca/government-code/gov-sect-65913-4/"
+    }
+   ],
+   "coverage": 1.0,
+   "explanation": "Two new lots of about equal size, neither under 40% of the lot (3,240 sq ft) nor under 1,200 sq ft (Gov. Code 66411.7(a)). This 8,100 sq ft lot can be split into two lots of at least 3,240 sq ft (an equal split gives 4,050 sq ft each). Each new lot can then have up to two homes; the City need not allow more (66411.7(j)). The owner must sign an affidavit to live in one unit for 3 years, and a lot created by an earlier SB 9 split cannot be split again (66411.7). The loaded maps show no Very High fire hazard zone, earthquake fault zone or 100-year flood plain here (Gov. Code 65913.4(a)(6)(D), (F) and (G)). Still to confirm: no demolition or alteration of rent-restricted or rent-controlled housing, or housing a tenant occupied in the last 3 years; no units withdrawn from rent under the Ellis Act in the last 15 years; the Gov. Code 65913.4(a)(6) sites not mapped here: farmland (B), wetlands (C), listed hazardous waste sites (E), a regulatory floodway (H), natural community conservation plan lands (I), protected species habitat (J) and conservation easements (K). SB 9 uses that section as it read on 2021-09-16; the copy loaded here is the 2026 text, whose (B)-(K) list the same kinds of site.",
+   "family": "sb9",
+   "id": "sb9_lot_split",
+   "label": "interpretive",
+   "label_text": "Interpretation, confirm with the jurisdiction",
+   "rule_id": "SB9",
+   "source": null,
+   "title": "SB 9 lot split",
+   "unit": null,
+   "value": true
+  }
+ ],
+ "notes": [],
+ "parcel": {
+  "apn": "2121005008",
+  "items": [
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "lot_area",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_parcels",
+     "fetched_at": "2026-10-15T15:48:19.862891+00:00"
+    },
+    "title": "Lot area",
+    "unit": "sqft",
+    "value": 8100
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "zone",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacity_zoning",
+     "fetched_at": "2026-10-15T15:48:09.534285+00:00"
+    },
+    "title": "Zone",
+    "unit": null,
+    "value": "R1-1"
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "community_plan_area",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacity_community_plan_areas",
+     "fetched_at": "2026-10-15T15:48:00.277200+00:00"
+    },
+    "title": "Community Plan Area",
+    "unit": null,
+    "value": "Reseda - West Van Nuys"
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "code_regime",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacity_community_plan_areas",
+     "fetched_at": "2026-10-15T15:48:00.277200+00:00"
+    },
+    "title": "Zoning code in effect",
+    "unit": null,
+    "value": "I"
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "existing",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_parcels",
+     "fetched_at": "2026-10-15T15:48:19.862891+00:00"
+    },
+    "title": "Existing building (Assessor)",
+    "unit": null,
+    "value": {
+     "bathrooms": null,
+     "bedrooms": null,
+     "sqft_main": null,
+     "units": null,
+     "year_built": null
+    }
+   }
+  ],
+  "jurisdiction": "City of Los Angeles",
+  "matched_by": "apn"
+ },
+ "project": null,
+ "status": "ok",
+ "summary": {
+  "answer": "A single-family home of up to 3,645 sq ft and 33 ft, with yards of 20 ft front, 7 ft each side and 15 ft rear. Plus one ADU (detached, 800 sq ft that the City must approve or up to 1,200 under the City ordinance; or attached, at least 850 sq ft) and one JADU of up to 500 sq ft inside the home (Gov. Code 66323). SB 9 may also allow two homes or a lot split, to confirm.",
+  "confidence": "3 values to confirm with the City.",
+  "counts": {
+   "approximate": 3,
+   "derived": 11,
+   "interpretive": 3
+  },
+  "paths": [
+   {
+    "id": "adu_path",
+    "options": [
+     "State ADU: up to 800 sq ft, 4 ft side and rear setbacks, 16 ft, or 18 ft (plus 2 ft for a matching roof pitch) if walking distance to transit is under half a mile. The City must approve it, and the floor area limit can't stop it.",
+     "City ordinance ADU: up to 1,200 sq ft and two stories, within the lot's floor area limit."
+    ],
+    "title": "State ADU or City ADU"
+   },
+   {
+    "id": "guest_or_adu",
+    "options": [
+     "Guest house: not allowed on a lot under 10,000 sq ft.",
+     "ADU: a kitchen is allowed and it can be rented; the state ADU doesn't count against the floor area limit."
+    ],
+    "title": "Guest house or ADU"
+   }
+  ]
+ }
+}

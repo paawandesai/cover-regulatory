@@ -27,6 +27,7 @@ non-commercial or research-only, nothing archived or with open critical CVEs.
 | gitleaks 8.28.0 | MIT | Secret scanning (pre-commit hook and CI) |
 | pre-commit 4.7.0 | MIT | Git hook runner |
 | uv | MIT / Apache-2.0 | Python environment and lockfile |
+| @playwright/test 1.56.1 and its Chromium image | Apache-2.0 | Browser tests (CI job `e2e`) |
 
 ## Dependencies (generated)
 <!-- deps:start -->
@@ -142,4 +143,4 @@ table at load time. Summary:
 | maplibre-gl | 6.11.2 | BSD-3-Clause |
 | @fontsource/ibm-plex-sans, @fontsource/ibm-plex-mono (IBM Plex fonts) | 5.3.0 | OFL-1.1 |
 
-Dev-only tooling (vite, vitest, typescript, vue-tsc, jsdom) is not shipped in the build.
+Dev-only tooling (vite, vitest, typescript, vue-tsc, jsdom, @playwright/test) is not shipped in the build.

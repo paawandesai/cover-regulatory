@@ -1,0 +1,103 @@
+{
+ "ai_disclosure": "AI was used to read the regulation text into rule candidates. Values labeled 'Derived' come from readings that passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the engine does not model. In this demo that review was an AI review applied on the project owner's instruction, not a person's; each value's source panel says which. No AI model is used to compute this assessment.",
+ "disclaimers": [
+  "Decision support for licensed professionals, not a zoning determination. Confirm every result with LA City Planning and LADBS before relying on it.",
+  "Parcel boundaries and attributes come from the Los Angeles County Assessor's open parcel data, provided for informational purposes; it may not be suitable for legal, engineering, or surveying use."
+ ],
+ "generated_at": "2026-10-17T00:00:00Z",
+ "geometry": null,
+ "items": [],
+ "notes": [
+  "Outside the City of Los Angeles (Beverly Hills). This tool models City zoning only."
+ ],
+ "parcel": {
+  "apn": "4327028024",
+  "items": [
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "lot_area",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_parcels",
+     "fetched_at": "2026-10-15T15:48:19.862891+00:00"
+    },
+    "title": "Lot area",
+    "unit": "sqft",
+    "value": 354698
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": "Not in the loaded data.",
+    "family": "parcel",
+    "id": "zone",
+    "label": "uncited",
+    "label_text": "No cited source found",
+    "rule_id": null,
+    "source": null,
+    "title": "Zone",
+    "unit": null,
+    "value": null
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": "Not in the loaded data.",
+    "family": "parcel",
+    "id": "community_plan_area",
+    "label": "uncited",
+    "label_text": "No cited source found",
+    "rule_id": null,
+    "source": null,
+    "title": "Community Plan Area",
+    "unit": null,
+    "value": null
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": "Not in the loaded data.",
+    "family": "parcel",
+    "id": "code_regime",
+    "label": "uncited",
+    "label_text": "No cited source found",
+    "rule_id": null,
+    "source": null,
+    "title": "Zoning code in effect",
+    "unit": null,
+    "value": null
+   },
+   {
+    "citations": [],
+    "coverage": null,
+    "explanation": null,
+    "family": "parcel",
+    "id": "existing",
+    "label": "verified",
+    "label_text": "Verified parcel data",
+    "rule_id": null,
+    "source": {
+     "dataset": "lacounty_parcels",
+     "fetched_at": "2026-10-15T15:48:19.862891+00:00"
+    },
+    "title": "Existing building (Assessor)",
+    "unit": null,
+    "value": {
+     "bathrooms": null,
+     "bedrooms": null,
+     "sqft_main": null,
+     "units": null,
+     "year_built": null
+    }
+   }
+  ],
+  "jurisdiction": "Beverly Hills",
+  "matched_by": "apn"
+ },
+ "status": "outside_city"
+}
