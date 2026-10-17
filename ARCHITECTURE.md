@@ -92,7 +92,7 @@ The model never sets a label. Labels come from review status and the determinist
 
 ## Security and privacy controls
 
-- At extraction the model sees only regulation text. The follow-up chat also sends the user's question and the assessment's values, never an address or APN (10-digit numbers are scrubbed from both). The key is read from the environment; without it the chat returns 503 and nothing else changes.
+- At extraction the model sees only regulation text. The follow-up chat also sends the user's question and the assessment's values, never the parcel's address or APN (anything shaped like an APN, with or without dashes, is scrubbed from both; an address the user types into the question is not detected). The key is read from the environment; without it the chat returns 503 and nothing else changes.
 - Chat answers are checked, not trusted: a sentence survives only if every quote is verbatim in the chunk it names or it points at a real assessment value. The question is not logged or stored, and it is rate limited (30 an hour per client).
 - Client report links show nothing but the status until a reviewer signs; reports store the APN, never a typed address, and are purged with feedback.
 - Text inside documents is treated as data. Adversarial tests show that injected instructions produce at most a pending candidate. An injected exemption whose quote lacks the number is rejected; a quote that does contain it stays a candidate until review.

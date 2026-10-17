@@ -132,6 +132,13 @@ table at load time. Summary:
 | Palisades Fire perimeter 2025 | LA County Public Works | County terms |
 | Planning Area Standards Districts | LA County Regional Planning (GIS-NET) | County terms; flagging only |
 | County ordinances (ADU Ord. 2025-0029, South Bay Area Plan Ord.) | LA County Board of Supervisors (file.lacounty.gov) | Public law; text not redistributed in the repo |
+| County zoning, unincorporated boundary, Community Standards Districts, Hillside Management Areas, Setback Districts | LA County Regional Planning (GIS-NET) | County terms (informational; same disclaimer); districts used for flagging only |
+| Fire Hazard Severity Zones, CAL FIRE 2025 map (Local Responsibility Areas) | LA County Fire Department GIS, from CAL FIRE | County terms; flagging only |
+| Alquist-Priolo Earthquake Fault Zones | LA County public GIS, from the California Geological Survey | County terms; flagging only |
+| FEMA 100-year flood plain | LA County public GIS, from FEMA | County terms; FEMA data is public domain; flagging only |
+| 3DEP elevation (slope estimates) | U.S. Geological Survey | Public domain (U.S. Government work) |
+| High Quality Transit Areas | Caltrans | Public, as stated on the item |
+| Chapter 1A text, ZA Memo 143, West LA TIMP Specific Plan, Mayor's executive orders, HCD findings letter | LA City Planning, Office of the Mayor, California HCD | Public records; text not redistributed in the repo |
 | Building footprints (Global ML Building Footprints, tile 023012311) | Microsoft | ODbL 1.0, kept in a separate table and attributed (see Notes) |
 | Address geocoding fallback | US Census Geocoder | Public domain (US Government work); called at query time with the typed address only |
 | Regulation text (LAMC Chapter I, City ordinances and ZA memos, Gov. Code, LA County Title 22) | City Clerk, City Planning, State of California, LA County; LAMC via American Legal Publishing's viewer, Title 22 via a Municode copy | Enacted law and public records, but two copies come from publisher sites whose terms restrict data mining or reuse (see README, Known constraints). LAMC and Gov. Code pages were saved by hand, not crawled; Gov. Code 65913.4 is read from the Legislative Counsel's official pubinfo download (`scripts/leginfo-section.py`); Title 22 is a text copy the owner supplied. The files stay out of git (`data/manual/`); short quotes appear in `frontend/e2e/fixtures/` |
