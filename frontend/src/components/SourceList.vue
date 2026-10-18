@@ -37,8 +37,8 @@ const detail = (r: SourceRow) => {
 <template>
   <div>
     <p class="small muted intro">
-      Downloadable sources are re-fetched weekly. When one changes, every rule whose text changed goes back to review (or is retired if its quote is
-      gone). Hand-saved sources are never fetched; they are listed as due after 90 days.
+      Downloadable sources are re-fetched weekly. When one changes, every approved rule whose text changed goes back to review, rejected ones stay
+      rejected, and either is retired if its quote is gone. Hand-saved sources are never fetched; they are listed as due after 90 days.
     </p>
     <p v-if="error" class="small err">{{ error }}</p>
     <div class="card scroll">

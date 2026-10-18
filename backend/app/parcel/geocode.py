@@ -48,7 +48,7 @@ def census_geocode(address: str) -> tuple[float, float] | None:
             CENSUS_URL,
             params={"address": address, "benchmark": "Public_AR_Current", "format": "json"},
             headers={"User-Agent": s.http_user_agent},
-            timeout=15,
+            timeout=5,
         )
         r.raise_for_status()
         matches = r.json().get("result", {}).get("addressMatches", [])

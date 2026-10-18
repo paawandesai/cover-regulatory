@@ -78,10 +78,11 @@ def sb9_items(
         name
         for kind, name in (
             ("vhfhsz", "a Very High Fire Hazard Severity Zone"),
+            ("vhfhsz_2025", "a Very High Fire Hazard Severity Zone on CAL FIRE's 2025 map (confirm its adoption)"),
             ("fault_zone", "an Alquist-Priolo earthquake fault zone"),
             ("flood_100yr", "a FEMA 100-year flood plain"),
         )
-        if kind in kinds
+        if kind in kinds and not (kind == "vhfhsz_2025" and "vhfhsz" in kinds)
     ]
     site = (
         f" The loaded maps put this lot in {', '.join(hazards)}; Gov. Code 65913.4(a)(6)(D), (F) and (G) exclude "
@@ -98,6 +99,8 @@ def sb9_items(
         confirm.insert(0, "whether the home is a contributing structure in the HPOZ (excluded if it is)")
     else:
         checked.append("no historic preservation overlay (HPOZ) is mapped here")
+    # 65852.21(a)(5)(B) also excludes individually listed resources and local landmarks, which no loaded layer maps.
+    confirm.append("that the lot is not an individually listed historic resource or a City or County landmark")
     two = rule_item(
         "sb9_two_unit",
         "sb9",

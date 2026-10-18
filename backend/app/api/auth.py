@@ -81,7 +81,9 @@ def require_admin(request: Request, credentials: Annotated[HTTPBasicCredentials 
             who = s.admin_username
     if who is None:
         ratelimit.record(request, "auth_fail")
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "invalid credentials", {"WWW-Authenticate": "Basic"})
+        # No "WWW-Authenticate: Basic": it would make browsers show their own sign-in prompt and cache what is typed
+        # there, which the app's Sign out cannot clear.
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "invalid credentials")
     return who
 
 

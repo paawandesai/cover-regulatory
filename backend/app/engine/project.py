@@ -188,7 +188,8 @@ def _second_unit(by: dict, p: ProjectInputs) -> list[dict]:
                 "Allowed on this lot. Guests only, not rented, at most two stories, and it counts toward the floor "
                 "area limit."
                 if allowed
-                else "Not allowed on this lot (it is under 10,000 sq ft). With a kitchen it would be an ADU instead."
+                else "Not allowed on this lot (it is under the zone's minimum lot area for one; see the guest house value). "
+                "With a kitchen it would be an ADU instead."
                 if allowed is False
                 else "Not determined.",
             )
@@ -223,8 +224,10 @@ def _second_unit(by: dict, p: ProjectInputs) -> list[dict]:
                 else "Not determined.",
             )
         ]
-    # Detached: pick the path the size needs. The state path must be approved; the City path is larger.
-    st, lo = by.get("adu_state_detached"), by.get("adu_local_detached")
+    # Detached: pick the path the size needs. The state path must be approved; the local ordinance path is larger.
+    county = "county_adu" in by
+    who = "County" if county else "City"
+    st, lo = by.get("adu_state_detached"), by.get("county_adu" if county else "adu_local_detached")
     st_max, lo_max = _num(st), _num(lo)
     if size is None:
         return [_check("adu_detached", "Detached ADU", st, None, "Enter a size to pick a path.")]
@@ -235,7 +238,7 @@ def _second_unit(by: dict, p: ProjectInputs) -> list[dict]:
                 f"Detached ADU {size:,.0f} sq ft",
                 st,
                 True,
-                f"Fits the state ADU (up to {st_max:,.0f} sq ft), which the City must approve ministerially.",
+                f"Fits the state ADU (up to {st_max:,.0f} sq ft), which the {who} must approve ministerially.",
             )
         ]
     if lo_max is not None:
@@ -245,10 +248,15 @@ def _second_unit(by: dict, p: ProjectInputs) -> list[dict]:
                 f"Detached ADU {size:,.0f} sq ft",
                 lo,
                 size <= lo_max,
-                f"Above the state ADU's {st_max:,.0f} sq ft, so the City ordinance path applies (up to {lo_max:,.0f} "
-                "sq ft, two stories, and the lot's floor area limit)."
+                (
+                    f"Above the state ADU's {st_max:,.0f} sq ft, so the County ordinance path applies (up to "
+                    f"{lo_max:,.0f} sq ft; an interpretation of the County code)."
+                    if county
+                    else f"Above the state ADU's {st_max:,.0f} sq ft, so the City ordinance path applies (up to "
+                    f"{lo_max:,.0f} sq ft, two stories, and the lot's floor area limit)."
+                )
                 if st_max is not None
-                else f"City ordinance path: up to {lo_max:,.0f} sq ft.",
+                else f"{who} ordinance path: up to {lo_max:,.0f} sq ft.",
             )
         ]
     return [_check("adu_detached", f"Detached ADU {size:,.0f} sq ft", st, None, "Not determined.")]
@@ -304,13 +312,14 @@ def summarize(items, ctx) -> dict:
             if missing
             else "Some envelope values are not determined."
         )
-    st, lo, j = _num(by.get("adu_state_detached")), _num(by.get("adu_local_detached")), _num(by.get("jadu"))
+    st, j = _num(by.get("adu_state_detached")), _num(by.get("jadu"))
+    lo = _num(by.get("county_adu" if county else "adu_local_detached"))
     at = _num(by.get("adu_attached"))
     kinds_of_adu = []
     if st is not None:
         kinds_of_adu.append(
             f"detached, {st:,.0f} sq ft that {who} must approve"
-            + (f" or up to {lo:,.0f} under the City ordinance" if lo else "")
+            + (f" or up to {lo:,.0f} under the {'County' if county else 'City'} ordinance" if lo else "")
         )
     if at is not None:
         kinds_of_adu.append(f"attached, at least {at:,.0f} sq ft")
@@ -340,6 +349,9 @@ def summarize(items, ctx) -> dict:
         parts.append(f"{confirm} value{'s' if confirm != 1 else ''} to confirm with {who}")
     if withheld:
         parts.append(f"{withheld} not modeled here")
+    loose = counts.get("uncited", 0) + counts.get("approximate", 0)
+    if loose:
+        parts.append(f"{loose} approximate or without a cited rule")
     confidence = (
         "Every rule value is derived from reviewed text."
         if not parts
@@ -379,7 +391,7 @@ def summarize(items, ctx) -> dict:
                 "options": [
                     "Guest house: guests only, no kitchen, not rented, counts toward floor area."
                     if g.value
-                    else "Guest house: not allowed on a lot under 10,000 sq ft.",
+                    else "Guest house: not allowed; the lot is under the zone's minimum lot area for one.",
                     (
                         "ADU: a kitchen is allowed and it can be rented; the state ADU doesn't count against the floor "
                         "area limit."

@@ -19,7 +19,6 @@ from datetime import UTC, datetime
 import httpx
 
 from app.api.reviewers import record
-from app.config import get_settings
 from app.db.connection import connect
 from app.extract.validate import locate_quote
 from app.ingest.regtext import ingest as I
@@ -31,14 +30,13 @@ MANUAL_RECHECK_DAYS = int(os.environ.get("MANUAL_RECHECK_DAYS", "90"))
 def _download(doc: dict) -> bytes:
     if any(h in doc["url"] for h in I.NEVER_FETCH):
         raise ValueError("automated fetch from this host is not allowed")
-    s = get_settings()
-    r = httpx.get(doc["url"], headers={"User-Agent": s.http_user_agent}, timeout=120, follow_redirects=True)
-    r.raise_for_status()
-    return r.content
+    return I.fetch_allowed(doc["url"]).content
 
 
 def send_back_to_review(conn, document_id: str) -> dict:
-    """Decided fragments of this document whose chunk text changed: back to pending if the quote survived."""
+    """Decided fragments of this document whose chunk text changed: approved ones go back to pending if the quote
+    survived; rejected ones stay rejected (the engine reads pending values, so a text change must never bring back a
+    value a reviewer turned down). Either is retired if its quote is gone."""
     rows = conn.execute(
         """SELECT f.id, f.status, f.source_quote, c.text, c.content_hash FROM rule_fragment f
            JOIN reg_chunk c ON c.id = f.chunk_id
@@ -46,11 +44,18 @@ def send_back_to_review(conn, document_id: str) -> dict:
            FOR UPDATE OF f""",
         (document_id,),
     ).fetchall()
-    out = {"to_pending": 0, "retired": 0}
+    out = {"to_pending": 0, "retired": 0, "kept_rejected": 0}
     for r in rows:
         span = locate_quote(r["source_quote"], r["text"])
         note = f"Source text changed on {datetime.now(UTC).date()}; was {r['status']}."
-        if span:
+        if span and r["status"] == "rejected":
+            conn.execute(
+                """UPDATE rule_fragment SET chunk_hash = %s, quote_start = %s, quote_end = %s,
+                       review_note = left(coalesce(review_note || ' ', '') || %s, 2000) WHERE id = %s""",
+                (r["content_hash"], span[0], span[1], note + " Quote still present; stays rejected.", r["id"]),
+            )
+            out["kept_rejected"] += 1
+        elif span:
             conn.execute(
                 """UPDATE rule_fragment SET status = 'pending', chunk_hash = %s, quote_start = %s, quote_end = %s,
                        review_note = left(coalesce(review_note || ' ', '') || %s, 2000) WHERE id = %s""",

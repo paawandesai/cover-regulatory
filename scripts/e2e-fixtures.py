@@ -8,6 +8,7 @@ assessment already cites, so no hand-saved code text beyond those quotes is comm
 
 import json
 import sys
+import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
@@ -38,7 +39,8 @@ def main() -> None:
                 cid = cit.get("chunk_id")
                 if not cid:
                     continue
-                full = c.get(f"/api/chunks/{cid}").json()
+                # Chunk ids contain "#", so they must be encoded as the app does (encodeURIComponent).
+                full = c.get(f"/api/chunks/{urllib.parse.quote(cid, safe='')}").json()
                 quotes = chunks.get(cid, {}).get("_quotes", [])
                 quotes.append(cit.get("quote") or "")
                 chunks[cid] = full | {"_quotes": quotes}

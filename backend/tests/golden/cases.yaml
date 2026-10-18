@@ -87,7 +87,7 @@ cases:
       eo1_footprint: null     # vacant: no building outline loaded, so no footprint to scale
       max_lot_coverage: 4717  # 12.21 C.10(e): 40% x 11,793 (68 ft wide, so not the 45% substandard-lot row)
       guest_house: true       # 11,793 >= 10,000 (12.08 A.7)
-      side_yard: 7.0          # 5 ft, + 1 ft per 10 ft over 18 ft (Table 12.21 C.10-1) for 33 ft
+      side_yard: 5.0          # Coastal Zone: 12.21 C.10(a)(9)(ii) replaces Table C.10-1's height step with +1 ft per story above two
       rear_yard: 15.0
       lot_minimums: true      # 11,793 >= 5,000 and 68 >= 50 (12.08 C.4 is not a flat-land-only rule)
       adu_state_detached: 800.0  # Gov. Code 66323(a)(2): up to 800 sq ft must be approved

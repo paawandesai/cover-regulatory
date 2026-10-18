@@ -55,7 +55,7 @@ Prerequisites: an AWS account, a Route 53 hosted zone for the domain, the AWS CL
 3. `terraform apply -var api_image_tag=bootstrap -target=aws_ecr_repository.api -target=aws_ecr_repository.dbtool -target=aws_secretsmanager_secret.admin_password_scrypt -target=aws_secretsmanager_secret.invite_code` creates the image repositories and the empty secrets.
 4. Fill the secrets that `terraform output secrets_to_fill` lists. Create the admin hash with `cd backend && uv run python -m app.api.auth`. Then put each value in with `aws secretsmanager put-secret-value --secret-id <name> --secret-string file://value.txt`, and delete the file afterwards.
 5. `./deploy.sh` builds and pushes the images, creates everything else, runs the migrations, starts the API and publishes the web app.
-6. `./restore.sh /path/to/regengine.dump` loads the regulation data (`scripts/db-dump.sh` makes the dump). After that, `/api/health` shows the rule and chunk counts.
+6. `./restore.sh /path/to/regengine.dump` loads the regulation data (`scripts/db-dump.sh` makes the dump). Reviewer accounts, client reports, feedback and source checks already in the database are kept (`deploy/restore-keeping-live-data.sh`). After that, `/api/health` shows the rule and chunk counts.
 7. Confirm the alarm email subscription.
 
 ## Routine work

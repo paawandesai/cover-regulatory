@@ -60,3 +60,10 @@ def test_proxy_hops_pick_the_viewer_behind_cloudfront_and_the_alb(monkeypatch):
 
 def test_key_is_a_hash_not_the_ip():
     assert "203.0.113.5" not in ratelimit.client_key(req())
+
+
+def test_ipv6_clients_are_limited_per_64():
+    same = ratelimit.client_key(req("2001:db8:1:2::1")), ratelimit.client_key(req("2001:db8:1:2:ffff::9"))
+    assert same[0] == same[1]
+    assert ratelimit.client_key(req("2001:db8:1:3::1")) != same[0]
+    assert ratelimit.client_key(req("::ffff:203.0.113.5")) == ratelimit.client_key(req("203.0.113.5"))
