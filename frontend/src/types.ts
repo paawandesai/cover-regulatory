@@ -163,6 +163,7 @@ export interface ChatAnswer {
     text: string
     citations: { chunk_id: string; section_id: string; quote: string; source_url: string | null }[]
     items: string[]
+    restated?: boolean
   }[]
   answer: string | null
   dropped: number

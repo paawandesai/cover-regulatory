@@ -4,7 +4,9 @@ The engine answers one question for a City of Los Angeles parcel, or one in unin
 what may be built here, and what text says so. It is built around one design choice. **The AI reads the regulations once, at
 ingestion, and a review step approves what it read (in this demo, an AI review applied on the owner's
 instruction, recorded as `reviewed_by = 'ai-review'`). Answering a question is plain, deterministic code.** That
-keeps answers repeatable, citable and fast, and it keeps the model away from addresses and user input.
+keeps answers repeatable, citable and fast, and it keeps the model off the assessment path entirely. The one
+query-time model call, the optional follow-up chat, sees the user's question as typed but never gets the APN or
+address from the server.
 
 ```
                          INGESTION (offline, run by an operator)
@@ -67,11 +69,11 @@ keeps answers repeatable, citable and fast, and it keeps the model away from add
 | Deterministic checks | `backend/app/extract/validate.py` | Rejects a fragment whose quote is not verbatim in the chunk, whose number is not in the quote, or whose unit doesn't match. Re-running marks fragments stale when their chunk's text changes. |
 | Parcel resolution | `backend/app/parcel/` | APN, then County address points, then County situs, then the Census geocoder. Then point-in-City, code regime from the Community Plan Area, and zone parsing. |
 | Lot geometry | `backend/app/engine/geometry.py` | Minimum rotated rectangle in State Plane feet. Rays from each side find street (40 ft or more gap), alley (10 to 40 ft) or unknown, which sets the front. The envelope is the rectangle shrunk by the yards, labeled illustrative. |
-| Rule catalogue | `backend/app/engine/rules.py` | Each rule lists the fragment inputs it needs. A rule is "derived" only if every input is approved, and "interpretive" (with a coverage share) if any input is still pending. |
+| Rule catalogue | `backend/app/engine/rules.py` | Each rule lists the fragment inputs it needs. A rule is "derived" only if every input is approved, and "interpretive" (with a coverage share) if any input is still pending. The coverage share is the fraction of the rule's inputs found in loaded text, which is how retrieval coverage is measured here; no model confidence is used. |
 | Assessment | `backend/app/engine/assess.py`, `zones.py` | Stops early where needed, computes values (R1 in `assess.py`, R2 and RE in `zones.py`, specific plans that have been read in `plans.py`, the Chapter 1A zone string and density in `ch1a.py`), applies the Hillside Area (with slope bands from `app/ingest/slope.py`), Coastal Zone and R1 variation tables, withholds what is not modeled, adds flags and disclaimers. |
 | SB 9 and fire orders | `backend/app/engine/orders.py` | SB 9 two-unit and lot-split tests, Executive Order 9's suspension, and the EO 1 like-for-like and EO 8 Coastal Zone rebuild limits. |
 | Client reports | `backend/app/api/reports.py`, `report` table | Freezes an assessment into a report keyed by an unguessable token. The public link returns only the status until an admin signs with name and license; withdrawn reports return 404. |
-| Follow-up chat | `backend/app/api/chat.py` | Builds the prompt from the assessment's values (10-digit numbers scrubbed) and retrieved chunks as delimited data; the model returns sentences with quotes or item ids (structured output, no tools). Each quote is checked verbatim against its chunk; failing sentences are dropped. |
+| Follow-up chat | `backend/app/api/chat.py` | Builds the prompt from the assessment's values (10-digit numbers scrubbed) and retrieved chunks as delimited data; the model returns sentences with quotes or item ids (structured output, no tools). Each quote is checked verbatim against its chunk and each number (digits or words) against the quotes and values; failing sentences are dropped. A sentence with no quote is rewritten from the values it names, and one that lifts a requirement must reproduce the quote that does. |
 | API | `backend/app/api/` | FastAPI. Access logs are off and the middleware logs only the route template. Admin routes use HTTP Basic auth with scrypt, against named reviewer accounts (`reviewer` table, managed with `python -m app.api.reviewers`) or the bootstrap `ADMIN_USERNAME`. Every review action writes an `audit_log` row in the same transaction; a trigger refuses edits and deletes (the app connects as the table owner, so this guards against app bugs, not against the owner role), and report entries hold a hash of the link token, never the link. The optional invite gate is for the hosted demo. |
 | Web app | `frontend/` | Vue 3 + TypeScript + MapLibre with the Forge design tokens. Assessment page, source-text panel, feedback, rule review and stop states. |
 | Packaging | `docker-compose.yml`, `*/Dockerfile`, `deploy/` | Database (PostGIS + pgvector), API with the embedding model built in, Caddy serving the app, and a daily feedback purge. |
@@ -93,9 +95,10 @@ The model never sets a label. Labels come from review status and the determinist
 ## Security and privacy controls
 
 - At extraction the model sees only regulation text. The follow-up chat also sends the user's question and the assessment's values, never the parcel's address or APN (anything shaped like an APN, with or without dashes, is scrubbed from both; an address the user types into the question is not detected). The key is read from the environment; without it the chat returns 503 and nothing else changes.
-- Chat answers are checked, not trusted: a sentence survives only if every quote is verbatim in the chunk it names or it points at a real assessment value. The question is not logged or stored, and it is rate limited (30 an hour per client).
+- Chat answers are checked, not trusted: a sentence survives only if every quote is verbatim in the chunk it names or it points at a real assessment value, and every number it states is backed. A sentence with no quote is shown in the server's words, never the model's; a sentence that says something is exempt, waived, reduced or does not apply must reproduce the quote that says so. The question is not logged or stored, and it is rate limited (30 an hour per client). The form tells the user, before they ask, that the question goes to the model as typed.
 - Client report links show nothing but the status until a reviewer signs; reports store the APN, never a typed address, and are purged with feedback.
-- Text inside documents is treated as data. Adversarial tests show that injected instructions produce at most a pending candidate. An injected exemption whose quote lacks the number is rejected; a quote that does contain it stays a candidate until review.
+- Text inside documents is treated as data. Adversarial tests show that injected instructions produce at most a pending candidate. An injected exemption whose quote lacks the number is rejected; a quote that does contain it stays a candidate until review. A pending candidate can be shown, labelled Interpretation, where no approved reading exists, but it never outranks an approved reading and is never labelled Derived.
+- Downloads are limited to official City, County and State hosts (https only, redirects checked); publisher sites are refused by name as well.
 - Feedback goes into a queue. It never edits rules, prompts or retrieval, and it is deleted after `FEEDBACK_RETENTION_DAYS` (1 day on the hosted demo).
 - No access logs with query strings, plus `noindex` headers. Admin credentials are held in browser memory only.
 - Secrets never enter the repo. A gitleaks scan runs in pre-commit and CI.
@@ -117,6 +120,8 @@ Zone R-1) was added second, in wave 9, and the table says what each part took fo
 | Golden cases | `backend/tests/golden/cases.yaml` | Parcels with expected values worked out from that code | Six Del Aire parcels |
 
 State ADU law (Gov. Code 66310-66342) and the geometry, labels, citations and review flow carry over unchanged to any California city.
+
+Outside California the state-law layer changes too. ADU, lot-split and rebuild rules come from that state's statutes (or none), so the `adu_state` and `sb9` families, their rules and their golden cases are per state, keyed by a state code on the jurisdiction row. The rest of the pipeline (chunk metadata, extraction schema, review, labels, citations, the jurisdiction scope in search) is not California-specific. What is not general yet: the code-regime table assumes one code per area, the zone parsers are written per jurisdiction, and the County parcel roll is the only parcel source. A new region needs its own open parcel and zoning layers with licenses recorded, and code text from an official publisher that may be fetched.
 
 ## Scaling beyond the PoC
 

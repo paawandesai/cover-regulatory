@@ -93,6 +93,8 @@ def load_group(conn, prefixes: list[str]) -> list[dict]:
 
 def run_group(client: anthropic.Anthropic, name: str, prefixes: list[str]) -> dict:
     settings = get_settings()
+    if not settings.llm_model_id:
+        raise SystemExit("set LLM_MODEL_ID (a model id is configuration, never a default)")
     with connect() as conn:
         chunks = load_group(conn, prefixes)
         if not chunks:

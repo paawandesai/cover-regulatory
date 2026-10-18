@@ -12,10 +12,16 @@ out=$(mktemp)
     echo
     echo "### Frontend (npm, via license-checker)"
     echo
-    echo '```'
-    (cd frontend && npx --yes license-checker --summary --production)
-    echo '```'
+    echo "Production dependencies only (what ships in the built app), one row per package:"
+    echo
+    echo "| Package | License | Repository |"
+    echo "|---|---|---|"
+    (cd frontend && npx --yes license-checker --production --csv) | tail -n +2 \
+      | python3 -c 'import csv,sys; [print(f"| {r[0]} | {r[1]} | {r[2]} |") for r in csv.reader(sys.stdin)]'
   fi
+  echo
+  echo "Locked but not installed on Linux, so not listed above: colorama (BSD-3-Clause), win32-setctime (MIT) and"
+  echo "tzdata (Apache-2.0), Windows-only; httpx2-jsfetch (BSD-3-Clause), for Pyodide only."
 } > "$out"
 python3 - "$out" <<'PY'
 import sys, re, pathlib

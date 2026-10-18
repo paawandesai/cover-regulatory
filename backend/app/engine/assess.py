@@ -38,7 +38,7 @@ AI_DISCLOSURE = (
     "passed review; values labeled 'Interpretation' come from readings not yet reviewed, or depend on a condition the "
     "engine does not model. In this "
     "demo the review was first an AI review applied on the project owner's instruction; the project owner then "
-    "approved most of the rules the engine reads, and the rest rest on the AI review alone. Each value's source "
+    "approved most of the rules the engine reads, in bulk from a review sheet, and the rest rest on the AI review alone. Each value's source "
     "panel says which. No AI model is used to compute this assessment."
 )
 

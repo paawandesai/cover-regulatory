@@ -62,6 +62,8 @@ def sample(conn, n: int, document: str | None = None) -> list[dict]:
 
 def main(n: int, qset: str = "holdout") -> None:
     document, out_path = SETS[qset]
+    if not get_settings().eval_model_id:
+        raise SystemExit("set EVAL_MODEL_ID (a model id is configuration, never a default)")
     client = anthropic.Anthropic(api_key=get_settings().anthropic_api_key.get_secret_value())
     out = []
     with connect() as conn:

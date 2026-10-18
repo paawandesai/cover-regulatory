@@ -12,9 +12,11 @@ class Settings(BaseSettings):
     database_url: str = "postgresql://postgres@localhost:5432/regengine"
 
     llm_provider: str = "anthropic"
-    llm_model_id: str = "claude-opus-5-5"
+    # Model ids are configuration (LLM_MODEL_ID, EVAL_MODEL_ID), never constants: unset means the chat is off and
+    # extraction refuses to run. Check the provider's deprecations page before changing them.
+    llm_model_id: str | None = None
     # Writes the retrieval holdout questions: a different model from the one that wrote the search code and dev set.
-    eval_model_id: str = "claude-sonnet-5-5"
+    eval_model_id: str | None = None
     # The project environment provides ANTHROPIC_COVER_API_KEY; ANTHROPIC_API_KEY also works locally.
     anthropic_api_key: SecretStr | None = Field(
         default=None, validation_alias=AliasChoices("ANTHROPIC_COVER_API_KEY", "ANTHROPIC_API_KEY")
@@ -34,7 +36,12 @@ class Settings(BaseSettings):
     # How many proxies in front of the API append to X-Forwarded-For: 1 for Caddy, 2 for CloudFront then the ALB.
     trusted_proxy_hops: int = Field(default=1, ge=1)
 
-    @field_validator("anthropic_api_key", "admin_password_scrypt", "demo_invite_code", mode="before")
+    # Swagger UI and the OpenAPI schema at /api/docs (API_DOCS=true). Off by default, so a deployment shows neither.
+    api_docs: bool = False
+
+    @field_validator(
+        "anthropic_api_key", "admin_password_scrypt", "demo_invite_code", "llm_model_id", "eval_model_id", mode="before"
+    )
     @classmethod
     def _empty_is_unset(cls, v):
         # docker compose passes unset variables as "", which must mean "not configured", not an empty secret.

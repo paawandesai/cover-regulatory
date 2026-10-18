@@ -5,7 +5,8 @@ import { authority } from '../format'
 import type { ChatAnswer, Item } from '../types'
 
 // A follow-up question about this parcel. The server answers only with sentences whose quotes it found in the
-// regulation text, or whose values come from this assessment; it never sends the APN or address to the model.
+// regulation text, or rewrites from this assessment's values; it never adds the APN or address to what the model sees.
+// The question itself is sent as typed, so the form says so before it is asked.
 const props = defineProps<{ apn: string; items: Item[] }>()
 const question = ref('')
 const answer = ref<ChatAnswer | null>(null)
@@ -52,7 +53,12 @@ async function ask() {
         rows="2"
         maxlength="500"
         placeholder="e.g. Can the guest house have a kitchen?"
+        aria-describedby="chatnote"
       />
+      <p id="chatnote" class="small muted">
+        Your question is sent to an AI model (Anthropic's Claude) as typed, with this assessment's values and the
+        regulation text. Don't include names, addresses or other personal information.
+      </p>
       <button type="submit" class="btn btn-secondary" :disabled="busy || question.trim().length < 3">
         {{ busy ? 'Checking…' : 'Ask' }}
       </button>
@@ -60,7 +66,7 @@ async function ask() {
       <div v-if="answer" class="ans" aria-live="polite">
         <p v-if="answer.answer">{{ answer.answer }}</p>
         <div v-for="(s, n) in answer.sentences" :key="n" class="sent">
-          <p>{{ s.text }}</p>
+          <p>{{ s.text }}<span v-if="s.restated" class="small muted"> (restated from this assessment)</span></p>
           <blockquote v-for="c in s.citations" :key="c.chunk_id + c.quote" class="small">
             "{{ c.quote }}"
             <a v-if="c.source_url" :href="c.source_url" target="_blank" rel="noopener" class="mono">{{ c.section_id }}</a>
