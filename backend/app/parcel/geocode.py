@@ -54,7 +54,8 @@ def census_geocode(address: str) -> tuple[float, float] | None:
         matches = r.json().get("result", {}).get("addressMatches", [])
     except (httpx.HTTPError, ValueError):
         return None
-    if not matches:
+    try:
+        c = matches[0]["coordinates"]
+        return float(c["x"]), float(c["y"])
+    except (KeyError, TypeError, ValueError, IndexError):  # a malformed reply is a miss, not a server error
         return None
-    c = matches[0]["coordinates"]
-    return float(c["x"]), float(c["y"])

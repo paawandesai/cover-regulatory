@@ -1,4 +1,4 @@
-"""In-memory, per-client limits on failed sign-ins, wrong invite codes and feedback posts.
+"""In-memory, per-client limits on failed sign-ins, wrong invite codes, feedback, reports, chat, assessments and search.
 
 Clients are keyed by a salted hash of their IP held only in this process's memory; the IP is never logged or
 stored. Behind the bundled Caddy proxy set TRUST_PROXY_HEADERS=true so the client IP comes from the last
@@ -30,6 +30,9 @@ LIMITS = {
     "feedback": (30, 60 * 60),
     "report": (20, 60 * 60),
     "chat": (30, 60 * 60),
+    # Generous for a person using the page; it stops a script from relaying lookups or hogging the embedder.
+    "assess": (600, 60 * 60),
+    "search": (300, 60 * 60),
 }
 
 

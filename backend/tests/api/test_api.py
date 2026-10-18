@@ -27,6 +27,8 @@ PASSWORD = "correct horse battery staple"
 def client(monkeypatch):
     monkeypatch.setenv("ADMIN_USERNAME", "reviewer")
     monkeypatch.setenv("ADMIN_PASSWORD_SCRYPT", hash_password(PASSWORD))
+    monkeypatch.setenv("LLM_MODEL_ID", "test-model-id")
+    monkeypatch.setenv("DEMO_INVITE_CODE", "")
     get_settings.cache_clear()
     ratelimit.reset()
     with connect() as conn:
@@ -302,7 +304,7 @@ def test_report_locked_until_signed(client):
 
 
 def test_report_needs_an_apn_not_an_address(client):
-    assert client.post("/api/reports", json={"apn": "7100 Reseda Blvd"}).status_code == 422
+    assert client.post("/api/reports", json={"apn": "123 Example Street"}).status_code == 422
     assert client.get("/api/reports/short").status_code == 422
 
 
@@ -318,7 +320,7 @@ def test_chat_needs_a_key(monkeypatch, client):
     get_settings.cache_clear()
     r = client.post("/api/chat", json={"apn": "2121005008", "question": "Can I build a guest house?"})
     assert r.status_code == 503 and r.json()["detail"] == "chat_not_configured"
-    assert client.post("/api/chat", json={"apn": "7100 Reseda Blvd", "question": "hi there"}).status_code == 422
+    assert client.post("/api/chat", json={"apn": "123 Example Street", "question": "hi there"}).status_code == 422
 
 
 def test_chat_keeps_only_checked_quotes_and_never_sends_the_apn(monkeypatch, client):
@@ -353,7 +355,8 @@ def test_chat_keeps_only_checked_quotes_and_never_sends_the_apn(monkeypatch, cli
     r = client.post("/api/chat", json={"apn": "2121005008", "question": "What about parcel 2121005008 height?"})
     assert r.status_code == 200
     body = r.json()
-    assert [s["text"] for s in body["sentences"]] == ["Grounded.", "Restates a value."]
+    # The value-only sentence is shown in the server's words, never the model's.
+    assert [s["text"] for s in body["sentences"]] == ["Grounded.", "Maximum height: 33 ft."]
     assert body["dropped"] == 3 and body["sentences"][0]["citations"][0]["section_id"]
     prompt = sent["messages"][0]["content"] + sent["system"]
     assert "2121005008" not in prompt and "Reseda" not in prompt
@@ -544,3 +547,44 @@ def test_county_adu_in_a_fire_zone_flags_the_access_rule_and_keeps_state_adus():
     flag = next(i for i in inside if i.id == "flag_county_adu_fire")
     assert flag.label == "interpretive" and flag.citations
     assert "two separate" in flag.explanation and "22.140.640 H" in flag.explanation
+
+
+def test_purge_deletes_only_feedback_and_reports_past_retention(monkeypatch, client):
+    # Retention is a guardrail: stored notes and reports go after FEEDBACK_RETENTION_DAYS, newer ones stay.
+    from app.api.purge import purge
+
+    monkeypatch.setenv("FEEDBACK_RETENTION_DAYS", "1")
+    get_settings.cache_clear()
+    old = client.post("/api/feedback", json={"apn": "2121005008", "kind": "other", "comment": "old note"}).json()["id"]
+    new = client.post("/api/feedback", json={"apn": "2121005008", "kind": "other", "comment": "new note"}).json()["id"]
+    old_report = client.post("/api/reports", json={"apn": "2121005008"}).json()["token"]
+    new_report = client.post("/api/reports", json={"apn": "2121005008"}).json()["token"]
+    with connect() as conn:
+        conn.execute("UPDATE feedback SET created_at = now() - interval '2 days' WHERE id = %s", (old,))
+        conn.execute("UPDATE report SET created_at = now() - interval '2 days' WHERE token = %s", (old_report,))
+        conn.commit()
+    try:
+        assert purge() >= 2
+        with connect() as conn:
+            ids = {r["id"] for r in conn.execute("SELECT id FROM feedback WHERE id = ANY(%s)", ([old, new],))}
+            tokens = {
+                r["token"]
+                for r in conn.execute("SELECT token FROM report WHERE token = ANY(%s)", ([old_report, new_report],))
+            }
+        assert ids == {new} and tokens == {new_report}
+    finally:
+        with connect() as conn:
+            conn.execute("DELETE FROM feedback WHERE id = ANY(%s)", ([old, new],))
+            conn.execute("DELETE FROM report WHERE token = ANY(%s)", ([old_report, new_report],))
+            conn.commit()
+
+
+def test_assess_and_search_are_rate_limited(monkeypatch, client):
+    monkeypatch.setitem(ratelimit.LIMITS, "assess", (2, 3600))
+    assert client.get("/api/assess", params={"q": "2121005008"}).status_code == 200
+    assert client.get("/api/assess", params={"q": "2121005008"}).status_code == 200
+    assert client.get("/api/assess", params={"q": "2121005008"}).status_code == 429
+
+
+def test_api_docs_are_off_by_default(client):
+    assert client.get("/api/docs").status_code == 404 and client.get("/api/openapi.json").status_code == 404

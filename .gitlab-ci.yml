@@ -52,7 +52,10 @@ db-tests:
       "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/regengine-db/$DB_DUMP_VERSION/regengine.dump"
     - pg_restore --no-owner --no-privileges -U regengine -h localhost -d regengine /tmp/regengine.dump
     - rm /tmp/regengine.dump
-    - curl -LsSf https://astral.sh/uv/0.11.32/install.sh | sh > /dev/null && export PATH="$HOME/.local/bin:$PATH"
+    # uv from its release archive, checked against a pinned SHA-256 (no piped install script).
+    - curl -sSLf -o /tmp/uv.tgz https://github.com/astral-sh/uv/releases/download/0.11.32/uv-x86_64-unknown-linux-gnu.tar.gz
+    - echo "aab924fd522efd06f1c5f3b93a243864fc453132c94b2dc49f1371b528a4b967  /tmp/uv.tgz" | sha256sum -c -
+    - tar xzf /tmp/uv.tgz -C /usr/local/bin --strip-components=1 && rm /tmp/uv.tgz
     - cd backend && uv sync --frozen --python 3.13 && uv run python -m app.db.migrate
   script:
     # Fail instead of skipping if the database is somehow unreachable.

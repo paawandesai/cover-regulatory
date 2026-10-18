@@ -43,14 +43,24 @@ REPO = HERE.parents[3]
 # Downloaded PDFs; the scheduled refresh in the API image points this at a writable directory.
 RAW = Path(os.environ.get("REGTEXT_RAW_DIR") or REPO / "data" / "raw" / "regtext")
 NEVER_FETCH = ("amlegal.com", "municode.com", "upcodes.com", "iccsafe.org", "findlaw.com")
+# Only official publishers are fetched: the City, the County and the State. Anything else, including a redirect to a
+# publisher site or a look-alike host, is refused.
+OFFICIAL_HOSTS = ("lacity.gov", "lacity.org", "lacounty.gov", "ca.gov")
+
+
+def host_allowed(host: str) -> bool:
+    host = host.lower().rstrip(".")
+    if any(h in host for h in NEVER_FETCH):
+        return False
+    return any(host == d or host.endswith("." + d) for d in OFFICIAL_HOSTS)
 
 
 def fetch_allowed(url: str) -> httpx.Response:
-    """GET an allowed source, following redirects only to allowed hosts (a redirect is checked like the first URL)."""
+    """GET an official source, following redirects only to official hosts (a redirect is checked like the first URL)."""
     s = get_settings()
 
     def check(req: httpx.Request) -> None:
-        if any(h in req.url.host for h in NEVER_FETCH):
+        if req.url.scheme != "https" or not host_allowed(req.url.host):
             raise ValueError(f"automated fetch from {req.url.host} is not allowed")
 
     with httpx.Client(

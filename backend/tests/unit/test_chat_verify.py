@@ -29,3 +29,14 @@ def test_a_number_not_in_the_quote_is_dropped():
 def test_a_restated_value_keeps_its_own_number_only():
     assert _one("The height limit is 33 ft.", items=["height"])
     assert _one("The height limit is 45 ft.", items=["height"]) == []
+
+
+def test_a_number_in_words_must_be_backed_too():
+    q = Quote(chunk_id="c1", quote="not less than 20 feet in depth")
+    assert _one("The front yard must be twenty feet deep.", [q])
+    assert _one("The front yard must be five feet deep.", [q]) == []
+
+
+def test_a_sentence_without_quotes_is_shown_in_the_servers_words():
+    kept = _one("Great news, the height can reach 33 ft here!", items=["height"])
+    assert [k["text"] for k in kept] == ["Height: 33 ft."] and kept[0]["restated"]

@@ -23,8 +23,12 @@ from app.config import get_settings
 from app.db.connection import connect
 
 log = logging.getLogger("app.api")
+_docs = get_settings().api_docs
 app = FastAPI(
-    title="Home Building Regulatory Engine (PoC)", docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url=None
+    title="Home Building Regulatory Engine (PoC)",
+    docs_url="/api/docs" if _docs else None,
+    openapi_url="/api/openapi.json" if _docs else None,
+    redoc_url=None,
 )
 app.include_router(reports_router)
 app.include_router(chat_router)
@@ -158,12 +162,14 @@ def get_chunk(chunk_id: str):
 
 @app.get("/api/search")
 def search_chunks(
+    request: Request,
     q: str = Query(min_length=2, max_length=300),
     k: int = Query(8, ge=1, le=25),
     jurisdiction: str | None = Query(None, pattern="^(city|county)$"),
 ):
     from app.search.search import search  # loads the embedding model on first use
 
+    ratelimit.hit(request, "search")
     return [h.__dict__ for h in search(q, k=k, jurisdiction=jurisdiction)]
 
 
@@ -172,6 +178,7 @@ def search_chunks(
 
 @app.get("/api/assess")
 def assess_parcel(
+    request: Request,
     q: str = Query(min_length=3, max_length=200, description="APN or street address"),
     height_ft: float | None = Query(None, gt=0, le=100, description="Proposed house height"),
     floor_area_sqft: float | None = Query(None, gt=0, le=100_000, description="Proposed residential floor area"),
@@ -191,6 +198,7 @@ def assess_parcel(
     from app.engine.project import ProjectInputs
     from app.parcel.resolve import ParcelNotFound
 
+    ratelimit.hit(request, "assess")  # each address lookup can reach the Census geocoder
     project = ProjectInputs(
         height_ft,
         floor_area_sqft,

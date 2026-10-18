@@ -119,7 +119,9 @@ const coverage = computed(() => {
             {{
               current.review_status === 'approved' && current.reviewed_by === 'ai-review'
                 ? "Approved in an AI review (three-way check), on the project owner's instruction"
-                : (REVIEW[current.review_status] ?? current.review_status)
+                : current.review_status === 'approved' && current.reviewed_by
+                  ? `Approved by ${current.reviewed_by}`
+                  : (REVIEW[current.review_status] ?? current.review_status)
             }}
           </dd>
         </div>
